@@ -41,6 +41,7 @@ def compare_coordinate(
             return False
     return True
 
+
 def exact_match(
     ground_truth: str,
     answer: str,
