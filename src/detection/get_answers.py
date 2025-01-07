@@ -136,6 +136,6 @@ if __name__ == "__main__":
         temperature=0.1,
         max_tokens=3200,
         json=False,
-        timeout=30,
+        # timeout=30,
     )
     print(result)
