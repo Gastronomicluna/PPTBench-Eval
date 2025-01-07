@@ -40,9 +40,9 @@ def call_vision_model(
     prompt: str = "",
     temperature: float = 0.1,
     max_tokens: int = 3200,
-    image_paths: str | List[str] | None = None,
+    images: str | List[str] | bytes | List[bytes] | None = None,
     json: bool = False,
-    timeout: Optional[int] = None,  # Add timeout parameter
+    timeout: Optional[int] = None,
 ) -> str:
     """
     Routes the call to the appropriate vision model provider and returns the response.
@@ -53,23 +53,32 @@ def call_vision_model(
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        image_paths (str | list[str] | None): Path to image file or list of image paths.
+        images (str | list[str] | bytes | list[bytes] | None): Image file paths, bytes,
+            or lists of either. File paths should be strings, image data should be bytes.
         json (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
 
     Returns:
         str: The generated response from the vision model.
     """
-    if image_paths is None:
+    if images is None:
         raise ValueError("At least one image must be provided for the vision model.")
 
-    # Convert single string path to list
-    if isinstance(image_paths, str):
-        image_paths = [image_paths]
+    # Convert single items to list
+    if isinstance(images, (str, bytes)):
+        images = [images]
 
-    for image_path in image_paths:
-        if not os.path.exists(image_path):
-            raise ValueError(f"Image file not found: {image_path}")
+    # Validate all images
+    processed_images = []
+    for img in images:
+        if isinstance(img, str):
+            if not os.path.exists(img):
+                raise ValueError(f"Image file not found: {img}")
+            processed_images.append(img)
+        elif isinstance(img, bytes):
+            processed_images.append(img)
+        else:
+            raise ValueError(f"Invalid image type: {type(img)}. Expected str or bytes.")
 
     if provider == "ollama":
         return generate_with_image_ollama(
@@ -77,9 +86,9 @@ def call_vision_model(
             prompt=prompt,
             temperature=temperature,
             max_tokens=max_tokens,
-            image_paths=image_paths,
+            images=processed_images,
             json=json,
-            timeout=timeout,  # Pass the timeout parameter
+            timeout=timeout,
         )
     elif provider == "api":
         return generate_with_api(
@@ -87,9 +96,9 @@ def call_vision_model(
             prompt=prompt,
             temperature=temperature,
             max_tokens=max_tokens,
-            image_paths=image_paths,
+            images=processed_images,
             json=json,
-            timeout=timeout,  # Pass the timeout parameter
+            timeout=timeout,
         )
     elif provider == "openai":
         raise NotImplementedError("OpenAI API integration is not implemented yet.")
@@ -104,7 +113,7 @@ def generate_with_image_ollama(
     prompt: str,
     temperature: float,
     max_tokens: int,
-    image_paths: List[str],
+    images: List[str | bytes],
     json: bool,
     timeout: int = 30,  # Default 30 seconds
 ) -> str:
@@ -116,7 +125,7 @@ def generate_with_image_ollama(
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        image_paths (list[str]): Paths to the image files to include.
+        images (list[str | bytes]): Paths to the image files or image data to include.
         json (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
 
@@ -133,7 +142,7 @@ def generate_with_image_ollama(
             return ollama.generate(
                 model=model_name,
                 prompt=prompt,
-                images=image_paths,
+                images=images,
                 options=options,
                 format="json" if json else "",
             )["response"]
@@ -158,7 +167,7 @@ def generate_with_api(
     prompt: str,
     temperature: float,
     max_tokens: int,
-    image_paths: List[str],
+    images: List[str | bytes],
     json: bool,
     timeout: int = 30,  # Default 30 seconds
 ) -> str:
@@ -170,7 +179,7 @@ def generate_with_api(
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        image_paths (list[str]): Paths to the image files to include.
+        images (list[str | bytes]): Paths to the image files or image data to include.
         json (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
 
@@ -178,7 +187,7 @@ def generate_with_api(
         str: The generated response from the API.
     """
     try:
-        messages = generate_api_messages(image_paths=image_paths, prompt=prompt)
+        messages = generate_api_messages(images=images, prompt=prompt)
 
         def api_call() -> str:
             return (
@@ -209,21 +218,23 @@ def generate_with_api(
 
 
 def generate_api_messages(
-    image_paths: List[str],
+    images: List[str | bytes],
     prompt: str,
 ) -> List[Dict[str, Any]]:
     """
     Prepares the messages payload for the API call with images and a prompt.
 
     Args:
-        image_paths (list[str]): Paths to the image files to include.
+        images (list[str | bytes]): List of image file paths or bytes objects.
         prompt (str): The text prompt for the model.
 
     Returns:
         list[dict]: A list of messages formatted for the API call.
     """
-    if len(image_paths) == 1:
-        base64_image = encode_image(image_paths[0])
+    if len(images) == 1:
+        base64_image = (
+            encode_image(images[0]) if isinstance(images[0], str) else base64.b64encode(images[0]).decode("utf-8")
+        )
         messages = [
             {
                 "role": "user",
@@ -240,7 +251,10 @@ def generate_api_messages(
             }
         ]
     else:
-        base64_images = [encode_image(image_path) for image_path in image_paths]
+        base64_images = [
+            encode_image(img) if isinstance(img, str) else base64.b64encode(img).decode("utf-8")
+            for img in images
+        ]
         content = [
             {
                 "type": "text",
