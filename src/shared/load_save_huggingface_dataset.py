@@ -36,11 +36,17 @@ def load_save_huggingface_dataset(
         except Exception as e:
             logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
             raise
-
-    return dataset if return_dataset else None
+    
+    if return_dataset:
+        try:
+            return dataset["train"]
+        except KeyError:
+            return dataset
+    return None
 
 
 if __name__ == "__main__":
+    import pandas as pd
     try:
         dataset = load_save_huggingface_dataset(
             dataset_name="tyrionhuu/PPTBench-Detection",
@@ -48,6 +54,9 @@ if __name__ == "__main__":
             return_dataset=True,
         )
         if dataset:
-            logger.info(f"Dataset loaded successfully with {len(dataset)} examples")
+            logger.info(f"Dataset loaded successfully")
+            # print(dataset.shape)
+            df = dataset.to_pandas()
+            logger.info(f"Dataset converted to DataFrame with shape {df.shape}")
     except Exception as e:
         logger.error(f"Failed to load dataset: {str(e)}")
