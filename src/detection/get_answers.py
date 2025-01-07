@@ -1,9 +1,14 @@
-from src.shared.llm import call_vision_model, generate_api_messages
 import logging
-from .prompts import build_prompt
+from typing import Any, Dict, List
+
 import dask.dataframe as dd
 import pandas as pd
-from typing import Any, Dict, List
+
+from src.shared.llm import call_vision_model, generate_api_messages
+
+from .prompts import build_prompt
+
+
 def get_answers(
     df: dd.DataFrame,
 ) -> pd.DataFrame:
@@ -19,17 +24,18 @@ def get_answers(
     result_df = pd.DataFrame()
     if "hash" not in df.columns:
         raise ValueError("The input DataFrame must contain a 'hash' column.")
-    
+
     result_data = []
-    
+
     # Convert Dask DataFrame to Pandas for iteration
     pandas_df = df.compute()
-    
+
     for _, row in pandas_df.iterrows():
         get_answer_single(row, result_data)
-    
+
     result_df = pd.DataFrame(result_data)
     return result_df
+
 
 def get_answer_single(row: pd.Series, result_data: List[Dict[str, Any]]) -> None:
     """
