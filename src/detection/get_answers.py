@@ -78,9 +78,14 @@ def get_answer_single(
         hash_value = row["hash"]
         task = row["task"]
         description = row["description"]
-        image_path = row["image_path"]
+        image_data = row["image"]
         json_content = row["json_content"]
         ground_truth = row.get("ground_truth", "")
+
+        # Extract image bytes from dictionary format
+        image_bytes = (
+            image_data["bytes"] if isinstance(image_data, dict) else image_data
+        )
 
         prompt = build_prompt(description, json_content)
         llm_answer = call_vision_model(
@@ -89,7 +94,7 @@ def get_answer_single(
             prompt=prompt,
             temperature=temperature,
             max_tokens=max_tokens,
-            image_paths=image_path,
+            images=image_bytes,  # Pass image bytes directly
             json=json,
             timeout=timeout,
         )
