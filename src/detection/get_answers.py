@@ -1,4 +1,5 @@
 import logging
+import traceback
 from typing import Any, Dict
 
 import pandas as pd
@@ -6,7 +7,7 @@ import pandas as pd
 from src.shared.llm import call_vision_model
 
 from .prompts import build_prompt
-import traceback
+
 
 def get_answers(
     df: pd.DataFrame,
