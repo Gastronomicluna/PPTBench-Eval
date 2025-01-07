@@ -56,4 +56,4 @@ def exact_match(
     Returns:
         bool: Whether the answer is correct.
     """
-    pass
+    return ground_truth.strip().lower() == answer.strip().lower()
