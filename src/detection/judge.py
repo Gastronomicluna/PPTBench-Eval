@@ -22,9 +22,9 @@ def fuzzy_match(
     return ratio >= threshold
 
 
-def compare_coordinates(
-    ground_truth: List[Dict[str, Any]],
-    answer: List[Dict[str, Any]],
+def compare_coordinate(
+    ground_truth: List[int],
+    answer: List[int],
 ) -> bool:
     """
     Compare the ground truth coordinates with the detected coordinates.
@@ -36,8 +36,10 @@ def compare_coordinates(
     Returns:
         bool: Whether the coordinates match.
     """
-    pass
-
+    for gt, ans in zip(ground_truth, answer):
+        if gt != ans:
+            return False
+    return True
 
 def exact_match(
     ground_truth: str,

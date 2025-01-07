@@ -1,7 +1,7 @@
-from .judge import compare_coordinates, exact_match, fuzzy_match
+from .judge import compare_coordinate, exact_match, fuzzy_match
 
 SUBCATEGORY_JUDGE_FUNCTION_MAP = {
     "content extraction": fuzzy_match,
-    "layout detection": compare_coordinates,
+    "layout detection": compare_coordinate,
     "style detection": exact_match,
 }
