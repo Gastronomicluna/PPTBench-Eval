@@ -1,6 +1,7 @@
 import logging
 import traceback
-from typing import Any, Dict
+import time
+from typing import Any, Dict, Optional
 
 import pandas as pd
 
@@ -17,6 +18,7 @@ def get_answers(
     max_tokens: int = 3200,
     json: bool = False,
     timeout: int = 30,
+    retry: Optional[int] = None,
 ) -> pd.DataFrame:
     """
     Get answers to the questions in the DataFrame.
@@ -29,6 +31,7 @@ def get_answers(
         max_tokens (int): Maximum tokens in response.
         json (bool): Whether to return JSON format.
         timeout (int): Request timeout in seconds.
+        retry (Optional[int]): Number of retries on timeout. None for no retries.
 
     Returns:
         pd.DataFrame: The DataFrame with the answers.
@@ -45,6 +48,7 @@ def get_answers(
             max_tokens=max_tokens,
             json=json,
             timeout=timeout,
+            retry=retry,
         )
         for _, row in df.iterrows()
     ]
@@ -59,6 +63,7 @@ def get_answer_single(
     max_tokens: int,
     json: bool,
     timeout: int = 30,
+    retry: Optional[int] = None,
 ) -> Dict[str, Any]:
     """
     Get the answer to a single description and return the result.
@@ -71,49 +76,66 @@ def get_answer_single(
         max_tokens (int): Maximum tokens in response.
         json (bool): Whether to return JSON format.
         timeout (int): Request timeout in seconds.
+        retry (Optional[int]): Number of retries on timeout. None for no retries.
 
     Returns:
         Dict[str, Any]: Dictionary containing hash, ground_truth, and llm_answer.
     """
-    try:
-        hash_value = row["hash"]
-        task = row["task"]
-        description = row["description"]
-        image_data = row["image"]
-        json_data = row["json_data"]
-        ground_truth = row.get("ground_truth", "")
+    attempts = 0
+    max_attempts = retry if retry is not None else 0
+    
+    while attempts <= max_attempts:
+        try:
+            hash_value = row["hash"]
+            task = row["task"]
+            description = row["description"]
+            image_data = row["image"]
+            json_data = row["json_data"]
+            ground_truth = row.get("ground_truth", "")
 
-        # Extract image bytes from dictionary format
-        image_bytes = (
-            image_data["bytes"] if isinstance(image_data, dict) else image_data
-        )
+            # Extract image bytes from dictionary format
+            image_bytes = (
+                image_data["bytes"] if isinstance(image_data, dict) else image_data
+            )
 
-        prompt = build_prompt(description, json_data)
-        llm_answer = call_vision_model(
-            model_name=model_name,
-            provider=provider,
-            prompt=prompt,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            images=image_bytes,  # Pass image bytes directly
-            json=json,
-            timeout=timeout,
-        )
+            prompt = build_prompt(description, json_data)
+            llm_answer = call_vision_model(
+                model_name=model_name,
+                provider=provider,
+                prompt=prompt,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                images=image_bytes,  # Pass image bytes directly
+                json=json,
+                timeout=timeout,
+            )
 
-        return {
-            "hash": hash_value,
-            "task": task,
-            "ground_truth": ground_truth,
-            "llm_answer": llm_answer,
-        }
-    except Exception as e:
-        logging.error(f"Error in get_answer_single: {str(e)}")
-        traceback.print_exc()
-        return {
-            "hash": row["hash"],
-            "ground_truth": row.get("ground_truth", ""),
-            "llm_answer": str(e),
-        }
+            return {
+                "hash": hash_value,
+                "task": task,
+                "ground_truth": ground_truth,
+                "llm_answer": llm_answer,
+            }
+        except TimeoutError as e:
+            attempts += 1
+            if attempts <= max_attempts:
+                logging.warning(f"Timeout occurred, attempt {attempts} of {max_attempts}")
+                time.sleep(1)  # Add a small delay between retries
+                continue
+            logging.error(f"All retry attempts failed: {str(e)}")
+            return {
+                "hash": row["hash"],
+                "ground_truth": row.get("ground_truth", ""),
+                "llm_answer": f"Timeout error after {max_attempts} attempts: {str(e)}",
+            }
+        except Exception as e:
+            logging.error(f"Error in get_answer_single: {str(e)}")
+            traceback.print_exc()
+            return {
+                "hash": row["hash"],
+                "ground_truth": row.get("ground_truth", ""),
+                "llm_answer": str(e),
+            }
 
 
 if __name__ == "__main__":
