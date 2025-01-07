@@ -37,7 +37,7 @@ def get_answers(
         raise ValueError("The input DataFrame must contain a 'hash' column.")
 
     pandas_df = df.compute()
-    
+
     result_data = [
         get_answer_single(
             row,
@@ -46,8 +46,9 @@ def get_answers(
             temperature=temperature,
             max_tokens=max_tokens,
             json=json,
-            timeout=timeout
-        ) for _, row in pandas_df.iterrows()
+            timeout=timeout,
+        )
+        for _, row in pandas_df.iterrows()
     ]
     return pd.DataFrame(result_data)
 
@@ -77,12 +78,12 @@ def get_answer_single(
         Dict[str, Any]: Dictionary containing hash, ground_truth, and llm_answer.
     """
     try:
-        hash_value = row['hash']
-        description = row['description']
-        image_path = row['image_path']
-        json_content = row['json_content']
-        ground_truth = row.get('ground_truth', '')
-        
+        hash_value = row["hash"]
+        description = row["description"]
+        image_path = row["image_path"]
+        json_content = row["json_content"]
+        ground_truth = row.get("ground_truth", "")
+
         prompt = build_prompt(description, json_content)
         llm_answer = call_vision_model(
             model_name=model_name,
@@ -92,18 +93,18 @@ def get_answer_single(
             max_tokens=max_tokens,
             image_paths=image_path,
             json=json,
-            timeout=timeout
+            timeout=timeout,
         )
 
         return {
-            'hash': hash_value,
-            'ground_truth': ground_truth,
-            'llm_answer': llm_answer
+            "hash": hash_value,
+            "ground_truth": ground_truth,
+            "llm_answer": llm_answer,
         }
     except Exception as e:
         logging.error(f"Error in get_answer_single: {str(e)}")
         return {
-            'hash': row['hash'],
-            'ground_truth': row.get('ground_truth', ''),
-            'llm_answer': str(e)
+            "hash": row["hash"],
+            "ground_truth": row.get("ground_truth", ""),
+            "llm_answer": str(e),
         }
