@@ -16,6 +16,7 @@ pre-commit = "^4.0.1"
 pipenv = "^2024.2.0"
 flake8 = "^7.1.1"
 openai = "^1.59.3"
+ollama = "^0.4.5"
 
 
 [[tool.poetry.source]]
