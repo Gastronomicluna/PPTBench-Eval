@@ -26,3 +26,21 @@ Slide: {slide_json}
 Answer:
 """
     return prompt
+
+if __name__ == "__main__":
+    from src.shared.load_save_huggingface_dataset import load_save_huggingface_dataset_df
+    import random
+    import pandas as pd
+    dataset_name="tyrionhuu/PPTBench-Detection"
+    dataset_path="data/PPTBench-Detection"
+    df = load_save_huggingface_dataset_df(
+        dataset_name=dataset_name,
+        dataset_path=dataset_path,
+    )
+    
+    random.seed(42)
+    row = df.sample()
+    description = row["description"]
+    json_content = row["json_content"]
+    prompt = build_prompt(description, json_content)
+    print(prompt)
