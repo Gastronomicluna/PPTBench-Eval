@@ -40,7 +40,7 @@ def call_vision_model(
     prompt: str = "",
     temperature: float = 0.1,
     max_tokens: int = 3200,
-    image_paths: List[str] | None = None,
+    image_paths: str | List[str] | None = None,
     json: bool = False,
     timeout: Optional[int] = None,  # Add timeout parameter
 ) -> str:
@@ -53,15 +53,19 @@ def call_vision_model(
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        image_paths (list[str] | None): Paths to the image files to include.
+        image_paths (str | list[str] | None): Path to image file or list of image paths.
         json (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
 
     Returns:
         str: The generated response from the vision model.
     """
-    if image_paths is None or len(image_paths) == 0:
+    if image_paths is None:
         raise ValueError("At least one image must be provided for the vision model.")
+
+    # Convert single string path to list
+    if isinstance(image_paths, str):
+        image_paths = [image_paths]
 
     for image_path in image_paths:
         if not os.path.exists(image_path):
