@@ -266,6 +266,7 @@ def generate_api_messages(
         ]
     return messages
 
+
 if __name__ == "__main__":
     from src.shared.load_save_huggingface_dataset import (
         load_save_huggingface_dataset_df,
@@ -280,9 +281,7 @@ if __name__ == "__main__":
     )
     row = df.sample(random_state=1).iloc[0]
     image_data = row["image"]
-    image_bytes = (
-        image_data["bytes"] if isinstance(image_data, dict) else image_data
-    )
+    image_bytes = image_data["bytes"] if isinstance(image_data, dict) else image_data
     call_vision_model(
         model_name="gpt-4o",
         provider="api",
