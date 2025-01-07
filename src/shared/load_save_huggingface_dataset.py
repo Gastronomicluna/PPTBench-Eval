@@ -46,7 +46,6 @@ def load_save_huggingface_dataset(
 
 
 if __name__ == "__main__":
-    import pandas as pd
     try:
         dataset = load_save_huggingface_dataset(
             dataset_name="tyrionhuu/PPTBench-Detection",
