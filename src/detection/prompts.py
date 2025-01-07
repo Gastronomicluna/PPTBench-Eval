@@ -15,7 +15,7 @@ def build_prompt(
     Returns:
         str: The prompt text.
     """
-    divider = "#" * 10
+    divider = "#" * 80
     prompt = f"""
 {divider}
 Task: You are given a slide from a presentation in the form of an image and json data.
