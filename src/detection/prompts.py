@@ -30,10 +30,6 @@ Answer:
 
 
 if __name__ == "__main__":
-    import random
-
-    import pandas as pd
-
     from src.shared.load_save_huggingface_dataset import (
         load_save_huggingface_dataset_df,
     )
