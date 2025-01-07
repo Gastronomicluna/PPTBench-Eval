@@ -1,5 +1,5 @@
 from typing import Any, Dict
-
+import json
 
 def build_prompt(
     query: str,
@@ -43,10 +43,12 @@ if __name__ == "__main__":
         dataset_name=dataset_name,
         dataset_path=dataset_path,
     )
-
+    # Print complete header
+    # print(df.columns)
     random.seed(42)
     row = df.sample()
     description = row["description"]
     json_data = row["json_data"]
-    prompt = build_prompt(description, json_data)
+    print(json_data)
+    prompt = build_prompt(description.values[0], json_data)
     print(prompt)
