@@ -6,7 +6,7 @@ import pandas as pd
 from src.shared.llm import call_vision_model
 
 from .prompts import build_prompt
-
+import traceback
 
 def get_answers(
     df: pd.DataFrame,
@@ -79,7 +79,7 @@ def get_answer_single(
         task = row["task"]
         description = row["description"]
         image_data = row["image"]
-        json_content = row["json_content"]
+        json_data = row["json_data"]
         ground_truth = row.get("ground_truth", "")
 
         # Extract image bytes from dictionary format
@@ -87,7 +87,7 @@ def get_answer_single(
             image_data["bytes"] if isinstance(image_data, dict) else image_data
         )
 
-        prompt = build_prompt(description, json_content)
+        prompt = build_prompt(description, json_data)
         llm_answer = call_vision_model(
             model_name=model_name,
             provider=provider,
@@ -107,6 +107,7 @@ def get_answer_single(
         }
     except Exception as e:
         logging.error(f"Error in get_answer_single: {str(e)}")
+        traceback.print_exc()
         return {
             "hash": row["hash"],
             "ground_truth": row.get("ground_truth", ""),
