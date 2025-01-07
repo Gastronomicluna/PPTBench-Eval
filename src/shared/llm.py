@@ -20,6 +20,7 @@ client = OpenAI(
     timeout=60.0,  # Set default timeout to 30 seconds
 )
 
+
 def encode_image(image_path: str) -> str:
     """Encodes an image file to a base64 string.
 
@@ -64,9 +65,7 @@ def call_vision_model(
     """
     if image_paths is None or len(image_paths) == 0:
         # logging.error("No image paths provided.")
-        raise ValueError(
-            "At least one image must be provided for the vision model."
-        )
+        raise ValueError("At least one image must be provided for the vision model.")
 
     for image_path in image_paths:
         if not os.path.exists(image_path):
@@ -96,13 +95,9 @@ def call_vision_model(
             timeout=timeout,  # Pass the timeout parameter
         )
     elif provider == "openai":
-        raise NotImplementedError(
-            "OpenAI API integration is not implemented yet."
-        )
+        raise NotImplementedError("OpenAI API integration is not implemented yet.")
     elif provider == "anthropic":
-        raise NotImplementedError(
-            "Anthropic API integration is not implemented yet."
-        )
+        raise NotImplementedError("Anthropic API integration is not implemented yet.")
     else:
         raise ValueError(f"Unsupported provider: {provider}")
 
@@ -186,9 +181,7 @@ def generate_with_api(
         str: The generated response from the API.
     """
     try:
-        messages = generate_api_messages(
-            image_paths=image_paths, prompt=prompt
-        )
+        messages = generate_api_messages(image_paths=image_paths, prompt=prompt)
 
         def api_call() -> str:
             return (
@@ -211,9 +204,7 @@ def generate_with_api(
                 return future.result(timeout=timeout)
             except concurrent.futures.TimeoutError:
                 executor._threads.clear()
-                raise TimeoutError(
-                    f"API call timed out after {timeout} seconds"
-                )
+                raise TimeoutError(f"API call timed out after {timeout} seconds")
 
     except Exception as e:
         logging.error(f"Error in generate_with_api: {str(e)}")
@@ -246,17 +237,13 @@ def generate_api_messages(
                     },
                     {
                         "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{base64_image}"
-                        },
+                        "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
                     },
                 ],
             }
         ]
     else:
-        base64_images = [
-            encode_image(image_path) for image_path in image_paths
-        ]
+        base64_images = [encode_image(image_path) for image_path in image_paths]
         content = [
             {
                 "type": "text",
@@ -267,9 +254,7 @@ def generate_api_messages(
             [
                 {
                     "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpeg;base64,{base64_image}"
-                    },
+                    "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
                 }
                 for base64_image in base64_images
             ]
