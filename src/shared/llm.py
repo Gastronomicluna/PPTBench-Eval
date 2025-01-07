@@ -179,7 +179,7 @@ def generate_with_api(
     """
     try:
         messages = generate_api_messages(images=images, prompt=prompt)
-        
+
         try:
             response = client.chat.completions.create(
                 model=model_name,
