@@ -17,6 +17,7 @@ pipenv = "^2024.2.0"
 flake8 = "^7.1.1"
 openai = "^1.59.3"
 ollama = "^0.4.5"
+dask = "^2024.12.1"
 
 
 [[tool.poetry.source]]
