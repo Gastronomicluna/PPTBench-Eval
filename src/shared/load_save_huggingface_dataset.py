@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_save_huggingface_dataset(
-    dataset_name: str, dataset_path: str, return_dataset: bool = False
+    dataset_name: str, dataset_path: str, return_dataset: bool = True
 ) -> Optional[Dataset]:
     """
     Load and save a Hugging Face dataset to disk.
