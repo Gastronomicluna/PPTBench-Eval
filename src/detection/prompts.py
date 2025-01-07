@@ -1,5 +1,6 @@
-from typing import Any, Dict
 import json
+from typing import Any, Dict
+
 
 def build_prompt(
     query: str,
