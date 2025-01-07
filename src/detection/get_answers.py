@@ -1,6 +1,6 @@
 import logging
-import traceback
 import time
+import traceback
 from typing import Any, Dict, Optional
 
 import pandas as pd
@@ -83,7 +83,7 @@ def get_answer_single(
     """
     attempts = 0
     max_attempts = retry if retry is not None else 0
-    
+
     while attempts <= max_attempts:
         try:
             hash_value = row["hash"]
@@ -122,7 +122,9 @@ def get_answer_single(
         except TimeoutError as e:
             attempts += 1
             if attempts <= max_attempts:
-                logging.warning(f"Timeout occurred, attempt {attempts} of {max_attempts}")
+                logging.warning(
+                    f"Timeout occurred, attempt {attempts} of {max_attempts}"
+                )
                 time.sleep(1)  # Add a small delay between retries
                 continue
             logging.error(f"All retry attempts failed: {str(e)}")
