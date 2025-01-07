@@ -1,4 +1,6 @@
 from typing import Any, Dict, List
+
+
 def build_prompt(
     query: str,
     slide_json: Dict[str, Any],
@@ -24,4 +26,3 @@ Slide: {slide_json}
 Answer:
 """
     return prompt
-
