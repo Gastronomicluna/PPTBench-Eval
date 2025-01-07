@@ -121,14 +121,14 @@ if __name__ == "__main__":
         force_download=False,
     )
     row = df.sample(random_state=42).iloc[0]
-    print(row)
-    # result = get_answer_single(
-    #     row,
-    #     model_name="llama3.2-vision:11b",
-    #     provider="ollama",
-    #     temperature=0.1,
-    #     max_tokens=3200,
-    #     json=False,
-    #     timeout=30,
-    # )
-    # print(result)
+    # print(row)
+    result = get_answer_single(
+        row,
+        model_name="llama3.2-vision:latest",
+        provider="ollama",
+        temperature=0.1,
+        max_tokens=3200,
+        json=False,
+        timeout=30,
+    )
+    print(result)
