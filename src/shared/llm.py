@@ -279,9 +279,12 @@ if __name__ == "__main__":
         dataset_path=dataset_path,
         force_download=False,
     )
-    row = df.sample(random_state=1).iloc[0]
+    row = df.sample(random_state=10).iloc[0]
     image_data = row["image"]
     image_bytes = image_data["bytes"] if isinstance(image_data, dict) else image_data
+    # Reder image bytes
+    # with open("image.jpg", "wb") as f:
+    #     f.write(image_bytes)
     result = call_vision_model(
         model_name="gpt-4o",
         provider="api",
