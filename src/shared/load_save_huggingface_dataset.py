@@ -9,9 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_save_huggingface_dataset(
-    dataset_name: str, 
-    dataset_path: str,
-    force_download: bool = False
+    dataset_name: str, dataset_path: str, force_download: bool = False
 ) -> Optional[Dataset]:
     """
     Load and save a Hugging Face dataset to disk.
@@ -43,7 +41,9 @@ def load_save_huggingface_dataset(
                 logger.info(f"Dataset not found. Downloading {dataset_name}")
                 dataset = load_dataset(dataset_name)
                 dataset.save_to_disk(dataset_path)
-                logger.info(f"Successfully downloaded and saved dataset to {dataset_path}")
+                logger.info(
+                    f"Successfully downloaded and saved dataset to {dataset_path}"
+                )
             except Exception as e:
                 logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
                 raise
@@ -70,14 +70,14 @@ def load_save_huggingface_dataset_df(
         force_download (bool): If True, download and replace existing dataset.
 
     Returns:
-        Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if successful, 
+        Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if successful,
         None otherwise.
     """
     try:
         dataset = load_save_huggingface_dataset(
-            dataset_name=dataset_name, 
+            dataset_name=dataset_name,
             dataset_path=dataset_path,
-            force_download=force_download
+            force_download=force_download,
         )
         if dataset:
             df = dataset.to_pandas()
