@@ -1,7 +1,6 @@
 import logging
 from typing import Any, Dict
 
-import dask.dataframe as dd
 import pandas as pd
 
 from src.shared.llm import call_vision_model
@@ -10,7 +9,7 @@ from .prompts import build_prompt
 
 
 def get_answers(
-    df: dd.DataFrame,
+    df: pd.DataFrame,
     model_name: str = "llama3.2-vision:11b",
     provider: str = "ollama",
     temperature: float = 0.1,
@@ -22,7 +21,7 @@ def get_answers(
     Get answers to the questions in the DataFrame.
 
     Args:
-        df (dd.DataFrame): The DataFrame containing the questions.
+        df (pd.DataFrame): The DataFrame containing the questions.
         model_name (str): Name of the model to use.
         provider (str): Provider of the model (ollama, api, etc.).
         temperature (float): Sampling temperature.
@@ -36,8 +35,6 @@ def get_answers(
     if "hash" not in df.columns:
         raise ValueError("The input DataFrame must contain a 'hash' column.")
 
-    pandas_df = df.compute()
-
     result_data = [
         get_answer_single(
             row,
@@ -48,7 +45,7 @@ def get_answers(
             json=json,
             timeout=timeout,
         )
-        for _, row in pandas_df.iterrows()
+        for _, row in df.iterrows()
     ]
     return pd.DataFrame(result_data)
 
@@ -110,3 +107,28 @@ def get_answer_single(
             "ground_truth": row.get("ground_truth", ""),
             "llm_answer": str(e),
         }
+
+if __name__ == "__main__":
+    from src.shared.load_save_huggingface_dataset import (
+        load_save_huggingface_dataset_df,
+    )
+
+    dataset_name = "tyrionhuu/PPTBench-Detection"
+    dataset_path = "data/PPTBench-Detection"
+    df = load_save_huggingface_dataset_df(
+        dataset_name=dataset_name,
+        dataset_path=dataset_path,
+        force_download=False,
+    )
+    row = df.sample(random_state=42).iloc[0]
+    print(row)
+    # result = get_answer_single(
+    #     row,
+    #     model_name="llama3.2-vision:11b",
+    #     provider="ollama",
+    #     temperature=0.1,
+    #     max_tokens=3200,
+    #     json=False,
+    #     timeout=30,
+    # )
+    # print(result)
