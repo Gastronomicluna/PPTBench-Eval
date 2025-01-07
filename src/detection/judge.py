@@ -1,5 +1,5 @@
 from typing import Any, Dict, List
-
+from thefuzz import fuzz
 
 def fuzzy_match(
     ground_truth: str,
@@ -16,7 +16,8 @@ def fuzzy_match(
     Returns:
         bool: Whether the answer is correct.
     """
-    pass
+    ratio = fuzz.ratio(ground_truth, answer) / 100
+    return ratio >= threshold
 
 
 def compare_coordinates(
