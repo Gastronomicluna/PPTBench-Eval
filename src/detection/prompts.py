@@ -47,6 +47,6 @@ if __name__ == "__main__":
     random.seed(42)
     row = df.sample()
     description = row["description"]
-    json_content = row["json_content"]
-    prompt = build_prompt(description, json_content)
+    json_data = row["json_data"]
+    prompt = build_prompt(description, json_data)
     print(prompt)
