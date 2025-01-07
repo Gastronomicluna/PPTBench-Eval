@@ -13,7 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 def get_dataset_info(dataset_name: str) -> Tuple[str, datetime]:
-    """Get dataset version and last modified date from Hugging Face Hub."""
+    """Get dataset version and last modified date from Hugging Face Hub.
+
+    Args:
+        dataset_name (str): The name of the dataset.
+
+    Returns:
+        Tuple[str, datetime]: The SHA of the dataset and the last modified date.
+    """
     try:
         api = HfApi()
         dataset_info = api.dataset_info(dataset_name)
@@ -24,7 +31,15 @@ def get_dataset_info(dataset_name: str) -> Tuple[str, datetime]:
 
 
 def is_dataset_current(dataset_path: str, dataset_name: str) -> bool:
-    """Check if local dataset is up to date with Hugging Face version."""
+    """Check if local dataset is up to date with Hugging Face version.
+
+    Args:
+        dataset_path (str): The path to the local dataset.
+        dataset_name (str): The name of the dataset.
+
+    Returns:
+        bool: True if the local dataset is up to date, False otherwise.
+    """
     metadata_path = os.path.join(dataset_path, "dataset_metadata.json")
 
     if not os.path.exists(metadata_path):
@@ -54,6 +69,9 @@ def load_save_huggingface_dataset(
         dataset_name (str): The name of the dataset to load.
         dataset_path (str): The path to save the dataset to.
         force_update (bool): Force update regardless of version.
+
+    Returns:
+        Optional[Dataset]: The loaded dataset if successful, None otherwise.
     """
     should_download = force_update or not os.path.exists(dataset_path)
 
@@ -100,7 +118,8 @@ def load_save_huggingface_dataset_df(
         dataset_path (str): The path to save the dataset to.
 
     Returns:
-        Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if return_dataset is True, None otherwise.
+        Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if 
+        successful, None otherwise.
     """
     try:
         dataset = load_save_huggingface_dataset(
