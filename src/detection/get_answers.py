@@ -17,7 +17,7 @@ def get_answers(
     temperature: float = 0.1,
     max_tokens: int = 3200,
     json: bool = False,
-    timeout: int = 30,
+    timeout: Optional[int] = None,
     retry: Optional[int] = None,
 ) -> pd.DataFrame:
     """
@@ -30,7 +30,7 @@ def get_answers(
         temperature (float): Sampling temperature.
         max_tokens (int): Maximum tokens in response.
         json (bool): Whether to return JSON format.
-        timeout (int): Request timeout in seconds.
+        timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
 
     Returns:
@@ -62,7 +62,7 @@ def get_answer_single(
     temperature: float,
     max_tokens: int,
     json: bool,
-    timeout: int = 30,
+    timeout: Optional[int] = None,
     retry: Optional[int] = None,
 ) -> Dict[str, Any]:
     """
@@ -75,7 +75,7 @@ def get_answer_single(
         temperature (float): Sampling temperature.
         max_tokens (int): Maximum tokens in response.
         json (bool): Whether to return JSON format.
-        timeout (int): Request timeout in seconds.
+        timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
 
     Returns:
@@ -99,16 +99,19 @@ def get_answer_single(
             )
 
             prompt = build_prompt(description, json_data)
-            llm_answer = call_vision_model(
-                model_name=model_name,
-                provider=provider,
-                prompt=prompt,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                images=image_bytes,  # Pass image bytes directly
-                json=json,
-                timeout=timeout,
-            )
+            kwargs = {
+                "model_name": model_name,
+                "provider": provider,
+                "prompt": prompt,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+                "images": image_bytes,
+                "json": json,
+            }
+            if timeout is not None:
+                kwargs["timeout"] = timeout
+
+            llm_answer = call_vision_model(**kwargs)
 
             return {
                 "hash": hash_value,
