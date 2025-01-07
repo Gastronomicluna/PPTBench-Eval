@@ -58,7 +58,7 @@ def get_answer_single(
     temperature: float,
     max_tokens: int,
     json: bool,
-    timeout: int,
+    timeout: int = 30,
 ) -> Dict[str, Any]:
     """
     Get the answer to a single description and return the result.
@@ -132,8 +132,8 @@ if __name__ == "__main__":
     # print(row)
     result = get_answer_single(
         row,
-        model_name="llama3.2-vision:latest",
-        provider="ollama",
+        model_name="gpt-4o",
+        provider="api",
         temperature=0.1,
         max_tokens=3200,
         json=False,
