@@ -128,7 +128,7 @@ if __name__ == "__main__":
         dataset_path=dataset_path,
         force_download=False,
     )
-    row = df.sample(random_state=42).iloc[0]
+    row = df.sample(random_state=1).iloc[0]
     # print(row)
     result = get_answer_single(
         row,
