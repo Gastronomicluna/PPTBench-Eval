@@ -1,12 +1,11 @@
 # llm.py
 import base64
-import concurrent.futures
 import logging
 import os
-from concurrent.futures import TimeoutError
 from typing import Any, Dict, List, Literal, Optional
 
 import ollama
+import requests.exceptions
 from ollama import Options
 from openai import OpenAI
 
@@ -136,27 +135,19 @@ def generate_with_image_ollama(
         options = Options(
             temperature=temperature,
             num_ctx=max_tokens,
+            request_timeout=timeout,  # Add timeout to options
         )
 
-        def generate() -> str:
-            return ollama.generate(
-                model=model_name,
-                prompt=prompt,
-                images=images,
-                options=options,
-                format="json" if json else "",
-            )["response"]
+        return ollama.generate(
+            model=model_name,
+            prompt=prompt,
+            images=images,
+            options=options,
+            format="json" if json else "",
+        )["response"]
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(generate)
-            try:
-                return future.result(timeout=timeout)
-            except concurrent.futures.TimeoutError:
-                executor._threads.clear()
-                raise TimeoutError(
-                    f"Ollama generate call timed out after {timeout} seconds"
-                )
-
+    except requests.exceptions.Timeout:
+        raise TimeoutError(f"Request timed out after {timeout} seconds")
     except Exception as e:
         logging.error(f"Error in generate_with_image_ollama: {str(e)}")
         raise
@@ -188,29 +179,20 @@ def generate_with_api(
     """
     try:
         messages = generate_api_messages(images=images, prompt=prompt)
-
-        def api_call() -> str:
-            return (
-                client.chat.completions.create(
-                    model=model_name,
-                    messages=messages,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    response_format={"type": "json_object"} if json else None,
-                    seed=42,
-                    timeout=timeout,  # Add timeout to API call
-                )
-                .choices[0]
-                .message.content
+        
+        try:
+            response = client.chat.completions.create(
+                model=model_name,
+                messages=messages,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                response_format={"type": "json_object"} if json else None,
+                seed=42,
+                timeout=timeout,
             )
-
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(api_call)
-            try:
-                return future.result(timeout=timeout)
-            except concurrent.futures.TimeoutError:
-                executor._threads.clear()
-                raise TimeoutError(f"API call timed out after {timeout} seconds")
+            return response.choices[0].message.content
+        except requests.exceptions.Timeout:
+            raise TimeoutError(f"API request timed out after {timeout} seconds")
 
     except Exception as e:
         logging.error(f"Error in generate_with_api: {str(e)}")
