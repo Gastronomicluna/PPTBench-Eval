@@ -1,4 +1,6 @@
 from typing import Any, Dict, List
+
+
 def fuzzy_match(
     ground_truth: str,
     answer: str,
@@ -15,6 +17,7 @@ def fuzzy_match(
     """
     pass
 
+
 def compare_coordinates(
     ground_truth: List[Dict[str, Any]],
     answer: List[Dict[str, Any]],
@@ -30,6 +33,8 @@ def compare_coordinates(
         bool: Whether the coordinates match.
     """
     pass
+
+
 def exact_match(
     ground_truth: str,
     answer: str,
