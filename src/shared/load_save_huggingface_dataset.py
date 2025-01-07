@@ -1,6 +1,6 @@
 import logging
 from typing import Optional
-
+import pandas as pd
 from datasets import Dataset, load_dataset, load_from_disk
 
 logging.basicConfig(level=logging.INFO)
@@ -8,7 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 def load_save_huggingface_dataset(
-    dataset_name: str, dataset_path: str, return_dataset: bool = True
+    dataset_name: str, 
+    dataset_path: str
 ) -> Optional[Dataset]:
     """
     Load and save a Hugging Face dataset to disk.
@@ -16,7 +17,6 @@ def load_save_huggingface_dataset(
     Args:
         dataset_name (str): The name of the dataset to load.
         dataset_path (str): The path to save the dataset to.
-        return_dataset (bool): Whether to return the loaded dataset.
 
     Returns:
         Optional[Dataset]: The loaded dataset if return_dataset is True, None otherwise.
@@ -37,7 +37,7 @@ def load_save_huggingface_dataset(
             logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
             raise
 
-    if return_dataset:
+    if dataset is not None:
         try:
             return dataset["train"]
         except KeyError:
@@ -45,17 +45,30 @@ def load_save_huggingface_dataset(
     return None
 
 
-if __name__ == "__main__":
+def load_save_huggingface_dataset_df(
+    dataset_name: str, 
+    dataset_path: str, 
+) -> Optional[pd.DataFrame]:
+    """
+    Load and save a Hugging Face dataset to disk as a pandas DataFrame.
+    
+    Args:
+        dataset_name (str): The name of the dataset to load.
+        dataset_path (str): The path to save the dataset to.
+        
+    Returns:
+        Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if return_dataset is True, None otherwise.
+    """
     try:
         dataset = load_save_huggingface_dataset(
-            dataset_name="tyrionhuu/PPTBench-Detection",
-            dataset_path="data/PPTBench-Detection",
-            return_dataset=True,
+            dataset_name=dataset_name, 
+            dataset_path=dataset_path
         )
         if dataset:
-            logger.info(f"Dataset loaded successfully")
-            # print(dataset.shape)
             df = dataset.to_pandas()
             logger.info(f"Dataset converted to DataFrame with shape {df.shape}")
+            return df
     except Exception as e:
-        logger.error(f"Failed to load dataset: {str(e)}")
+        logger.error(f"Error loading dataset: {str(e)}")
+        raise
+    return None
