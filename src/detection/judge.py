@@ -4,6 +4,7 @@ from typing import Any, Dict, List
 def fuzzy_match(
     ground_truth: str,
     answer: str,
+    threshold: float = 0.9,
 ) -> bool:
     """
     Fuzzy matching function to compare the ground truth and the answer.
@@ -11,7 +12,7 @@ def fuzzy_match(
     Args:
         ground_truth (str): The ground truth answer.
         answer (str): The answer from the model.
-
+        threshold (float): The threshold for the fuzzy matching
     Returns:
         bool: Whether the answer is correct.
     """
