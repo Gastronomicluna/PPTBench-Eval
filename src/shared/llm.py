@@ -62,10 +62,6 @@ def call_vision_model(
     Returns:
         str: The generated response from the vision model.
     """
-    # logging.info(
-    #     f"Calling vision model with provider: {provider}, model: {model_name}"
-    # )
-
     if image_paths is None or len(image_paths) == 0:
         # logging.error("No image paths provided.")
         raise ValueError(
@@ -100,17 +96,14 @@ def call_vision_model(
             timeout=timeout,  # Pass the timeout parameter
         )
     elif provider == "openai":
-        # logging.warning("OpenAI provider is not implemented.")
         raise NotImplementedError(
             "OpenAI API integration is not implemented yet."
         )
     elif provider == "anthropic":
-        # logging.warning("Anthropic provider is not implemented.")
         raise NotImplementedError(
             "Anthropic API integration is not implemented yet."
         )
     else:
-        # logging.error(f"Unsupported provider: {provider}")
         raise ValueError(f"Unsupported provider: {provider}")
 
 
@@ -139,13 +132,10 @@ def generate_with_image_ollama(
         str: The generated response from the model.
     """
     try:
-        # logging.info(f"Generating response with Ollama model: {model_name}")
         options = Options(
             temperature=temperature,
             num_ctx=max_tokens,
         )
-        # logging.debug(f"Options set: {options}")
-        # logging.debug(f"Images provided: {image_paths}")
 
         def generate() -> str:
             return ollama.generate(
@@ -195,7 +185,6 @@ def generate_with_api(
     Returns:
         str: The generated response from the API.
     """
-    # logging.info("Generating response with OpenAI API.")
     try:
         messages = generate_api_messages(
             image_paths=image_paths, prompt=prompt
@@ -245,7 +234,6 @@ def generate_api_messages(
     Returns:
         list[dict]: A list of messages formatted for the API call.
     """
-    # logging.info("Generating API messages with images.")
     if len(image_paths) == 1:
         base64_image = encode_image(image_paths[0])
         messages = [
@@ -292,39 +280,4 @@ def generate_api_messages(
                 "content": content,
             }
         ]
-    # logging.debug(f"Generated API messages: {messages}")
     return messages
-
-
-if __name__ == "__main__":
-    import json
-
-    from pptbench.understanding_task.prompts import (
-        format_question_answering_prompt,
-    )
-
-    json_file_name = "XJXUGZ467OJNAGFX7G4HSIHXVAYDTWGD-page-21_question.json"
-    file_hash = json_file_name.split("-")[0]
-    slide_number = json_file_name.split("-")[2].split("_")[0]
-
-    image_dir = "dataset/png"
-    image_path = os.path.join(
-        image_dir, f"{file_hash}/{file_hash}-page-{slide_number}.png"
-    )
-    json_path = os.path.join("dataset/qa/chart", json_file_name)
-    with open(json_path, "r") as file:
-        json_data = json.load(file)
-
-    prompt = format_question_answering_prompt(json_data)
-    print(prompt)
-
-    model_name = "gemini-2.0-flash-exp"
-    provider = "api"
-    response = call_vision_model(
-        model_name=model_name,
-        provider=provider,
-        prompt=prompt,
-        image_paths=[image_path],
-        json=True,
-    )
-    print(response)
