@@ -1,5 +1,6 @@
 import logging
 from typing import Optional
+
 import pandas as pd
 from datasets import Dataset, load_dataset, load_from_disk
 
@@ -8,8 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_save_huggingface_dataset(
-    dataset_name: str, 
-    dataset_path: str
+    dataset_name: str, dataset_path: str
 ) -> Optional[Dataset]:
     """
     Load and save a Hugging Face dataset to disk.
@@ -46,23 +46,22 @@ def load_save_huggingface_dataset(
 
 
 def load_save_huggingface_dataset_df(
-    dataset_name: str, 
-    dataset_path: str, 
+    dataset_name: str,
+    dataset_path: str,
 ) -> Optional[pd.DataFrame]:
     """
     Load and save a Hugging Face dataset to disk as a pandas DataFrame.
-    
+
     Args:
         dataset_name (str): The name of the dataset to load.
         dataset_path (str): The path to save the dataset to.
-        
+
     Returns:
         Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if return_dataset is True, None otherwise.
     """
     try:
         dataset = load_save_huggingface_dataset(
-            dataset_name=dataset_name, 
-            dataset_path=dataset_path
+            dataset_name=dataset_name, dataset_path=dataset_path
         )
         if dataset:
             df = dataset.to_pandas()
@@ -73,9 +72,9 @@ def load_save_huggingface_dataset_df(
         raise
     return None
 
+
 if __name__ == "__main__":
     load_save_huggingface_dataset_df(
         dataset_name="tyrionhuu/PPTBench-Detection",
         dataset_path="data/PPTBench-Detection",
     )
-    
