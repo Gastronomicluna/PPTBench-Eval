@@ -17,7 +17,6 @@ key = "sk-f1fCP1wFI4K1pQYJORkJF3K9tg1MINok28GAsCsSFIjvajjS"
 client = OpenAI(
     base_url="https://api2.aigcbest.top/v1",
     api_key=key,
-    timeout=60.0,  # Set default timeout to 30 seconds
 )
 
 
@@ -30,10 +29,8 @@ def encode_image(image_path: str) -> str:
     Returns:
         str: The base64 encoded string of the image.
     """
-    # logging.debug(f"Encoding image: {image_path}")
     with open(image_path, "rb") as image_file:
         encoded = base64.b64encode(image_file.read()).decode("utf-8")
-    # logging.debug(f"Encoded image length: {len(encoded)}")
     return encoded
 
 
@@ -42,7 +39,7 @@ def call_vision_model(
     provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
     prompt: str = "",
     temperature: float = 0.1,
-    max_tokens: int = 1000,
+    max_tokens: int = 3200,
     image_paths: List[str] | None = None,
     json: bool = False,
     timeout: Optional[int] = None,  # Add timeout parameter
@@ -64,16 +61,13 @@ def call_vision_model(
         str: The generated response from the vision model.
     """
     if image_paths is None or len(image_paths) == 0:
-        # logging.error("No image paths provided.")
         raise ValueError("At least one image must be provided for the vision model.")
 
     for image_path in image_paths:
         if not os.path.exists(image_path):
-            # logging.error(f"Image file not found: {image_path}")
             raise ValueError(f"Image file not found: {image_path}")
 
     if provider == "ollama":
-        # logging.info("Using Ollama provider.")
         return generate_with_image_ollama(
             model_name=model_name,
             prompt=prompt,
@@ -84,7 +78,6 @@ def call_vision_model(
             timeout=timeout,  # Pass the timeout parameter
         )
     elif provider == "api":
-        # logging.info("Using API provider.")
         return generate_with_api(
             model_name=model_name,
             prompt=prompt,
