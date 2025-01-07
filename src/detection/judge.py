@@ -1,5 +1,7 @@
 from typing import Any, Dict, List
+
 from thefuzz import fuzz
+
 
 def fuzzy_match(
     ground_truth: str,
