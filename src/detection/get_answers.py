@@ -21,53 +21,44 @@ def get_answers(
     Returns:
         pd.DataFrame: The DataFrame with the answers.
     """
-    result_df = pd.DataFrame()
     if "hash" not in df.columns:
         raise ValueError("The input DataFrame must contain a 'hash' column.")
 
-    result_data = []
-
     # Convert Dask DataFrame to Pandas for iteration
     pandas_df = df.compute()
-
-    for _, row in pandas_df.iterrows():
-        get_answer_single(row, result_data)
-
-    result_df = pd.DataFrame(result_data)
-    return result_df
+    
+    result_data = [get_answer_single(row) for _, row in pandas_df.iterrows()]
+    return pd.DataFrame(result_data)
 
 
-def get_answer_single(row: pd.Series, result_data: List[Dict[str, Any]]) -> None:
+def get_answer_single(row: pd.Series) -> Dict[str, Any]:
     """
-    Get the answer to a single question and append it to the result data.
+    Get the answer to a single question and return the result.
 
     Args:
-        row (pd.Series): The row containing the question data.
-        result_data (list[dict]): The list to append the result data to.
+        row (pd.Series): The row containing the question and image data.
+
+    Returns:
+        Dict[str, Any]: Dictionary containing hash, ground_truth, and llm_answer.
     """
     try:
-        query = row["query"]
-        slide_json = row["slide_json"]
-        prompt = build_prompt(query, slide_json)
-        image_paths = [row["image_path"]]
-        messages = generate_api_messages(image_paths, prompt)
-        response = call_vision_model(messages)
-        result_data.append(
-            {
-                "hash": row["hash"],
-                "query": query,
-                "slide_json": slide_json,
-                "response": response,
-            }
-        )
+        hash_value = row['hash']
+        question = row['question']
+        image_path = row['image_path']
+        ground_truth = row.get('ground_truth', '')
+
+        messages = generate_api_messages([image_path], question)
+        llm_answer = call_vision_model(messages)
+
+        return {
+            'hash': hash_value,
+            'ground_truth': ground_truth,
+            'llm_answer': llm_answer
+        }
     except Exception as e:
         logging.error(f"Error in get_answer_single: {str(e)}")
-        result_data.append(
-            {
-                "hash": row["hash"],
-                "query": query,
-                "slide_json": slide_json,
-                "response": str(e),
-            }
-        )
-        return
+        return {
+            'hash': row['hash'],
+            'ground_truth': row.get('ground_truth', ''),
+            'llm_answer': str(e)
+        }
