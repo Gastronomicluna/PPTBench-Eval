@@ -233,7 +233,9 @@ def generate_api_messages(
     """
     if len(images) == 1:
         base64_image = (
-            encode_image(images[0]) if isinstance(images[0], str) else base64.b64encode(images[0]).decode("utf-8")
+            encode_image(images[0])
+            if isinstance(images[0], str)
+            else base64.b64encode(images[0]).decode("utf-8")
         )
         messages = [
             {
@@ -252,7 +254,11 @@ def generate_api_messages(
         ]
     else:
         base64_images = [
-            encode_image(img) if isinstance(img, str) else base64.b64encode(img).decode("utf-8")
+            (
+                encode_image(img)
+                if isinstance(img, str)
+                else base64.b64encode(img).decode("utf-8")
+            )
             for img in images
         ]
         content = [
