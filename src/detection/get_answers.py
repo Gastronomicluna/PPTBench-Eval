@@ -79,6 +79,7 @@ def get_answer_single(
     """
     try:
         hash_value = row["hash"]
+        task = row["task"]
         description = row["description"]
         image_path = row["image_path"]
         json_content = row["json_content"]
@@ -98,6 +99,7 @@ def get_answer_single(
 
         return {
             "hash": hash_value,
+            "task": task,
             "ground_truth": ground_truth,
             "llm_answer": llm_answer,
         }
