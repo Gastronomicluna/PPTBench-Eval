@@ -1,0 +1,32 @@
+# Python bytecode
+*.pyc
+
+# Logs
+*.log
+
+# Virtualenv
+venv/
+
+# Build
+build/
+dist/
+__pycache__/
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Generated files
+data/
+
+
+# Cache
+.mypy_cache/
+.pytest_cache
+layoutprompter.egg-info
+.ipynb_checkpoints
+
+# My things
+presentations
+
