@@ -282,7 +282,7 @@ if __name__ == "__main__":
     row = df.sample(random_state=1).iloc[0]
     image_data = row["image"]
     image_bytes = image_data["bytes"] if isinstance(image_data, dict) else image_data
-    call_vision_model(
+    result = call_vision_model(
         model_name="gpt-4o",
         provider="api",
         prompt="describe the image",
@@ -292,3 +292,4 @@ if __name__ == "__main__":
         json=False,
         timeout=30,
     )
+    print(result)
