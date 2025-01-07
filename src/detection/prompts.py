@@ -43,13 +43,14 @@ if __name__ == "__main__":
     df = load_save_huggingface_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
+        force_download=True,
     )
     # Print complete header
-    # print(df.columns)
-    random.seed(42)
-    row = df.sample()
-    description = row["description"]
-    json_data = row["json_data"]
-    print(json_data)
-    prompt = build_prompt(description.values[0], json_data)
-    print(prompt)
+    print(df.columns)
+    # random.seed(42)
+    # row = df.sample()
+    # description = row["description"]
+    # json_data = row["json_data"]
+    # print(json_data)
+    # prompt = build_prompt(description.values[0], json_data)
+    # print(prompt)
