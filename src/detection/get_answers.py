@@ -207,15 +207,28 @@ if __name__ == "__main__":
         dataset_path=dataset_path,
         force_download=False,
     )
+    sampled_df = df.sample(n=2, random_state=42)
     
     results = get_answers(
-        df,
+        sampled_df,
         model_name="gpt-4o",
         provider="api",
         temperature=0.1,
         max_tokens=3200,
         json=False,
         csv_path=csv_path,
-        overwrite=True,  # Set to True to rewrite existing results
     )
-    print(f"Processed {len(results)} entries")
+    
+    print(results)
+    
+    # results = get_answers(
+    #     df,
+    #     model_name="gpt-4o",
+    #     provider="api",
+    #     temperature=0.1,
+    #     max_tokens=3200,
+    #     json=False,
+    #     csv_path=csv_path,
+    #     overwrite=True,  # Set to True to rewrite existing results
+    # )
+    # print(f"Processed {len(results)} entries")
