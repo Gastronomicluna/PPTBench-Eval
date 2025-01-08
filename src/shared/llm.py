@@ -19,7 +19,7 @@ API_LLM_MODELS = [
     ("api", "gemini-2.0-flash-thinking-exp"),
     ("api", "qwen-vl-max-0809"),
     ("api", "llama-3.2-90b-vision-instruct"),
-    ("ollama", "llama3.2-vision:latest"),
+    ("ollama", "llama3.2-vision:11b"),
 ]
 
 # API key and model directory configuration
@@ -27,12 +27,6 @@ key = "sk-f1fCP1wFI4K1pQYJORkJF3K9tg1MINok28GAsCsSFIjvajjS"
 
 if key.strip() == "":
     key = input("Please enter your API key: ")
-
-# Initialize OpenAI client with timeout
-client = OpenAI(
-    base_url="https://api2.aigcbest.top/v1",
-    api_key=key,
-)
 
 
 def encode_image(image_path: str) -> str:
@@ -203,6 +197,11 @@ def generate_with_api(
         str: The generated response from the API.
     """
     try:
+        # Initialize OpenAI client with timeout
+        client = OpenAI(
+            base_url="https://api2.aigcbest.top/v1",
+            api_key=key,
+        )
         messages = generate_api_messages(images=images, prompt=prompt)
 
         try:
@@ -292,7 +291,7 @@ def generate_api_messages(
     return messages
 
 
-if __name__ == "__main__":
+def main() -> None:
     from src.shared.load_save_dataset import load_save_huggingface_dataset_df
 
     dataset_name = "tyrionhuu/PPTBench-Detection"
