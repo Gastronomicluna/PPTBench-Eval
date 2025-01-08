@@ -3,6 +3,7 @@ import time
 import traceback
 from typing import Any, Dict, Optional
 from pathlib import Path
+import csv  # Add this import
 
 import pandas as pd
 
@@ -23,7 +24,12 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     if not csv_path.exists():
         return {}
     
-    df = pd.read_csv(csv_path)
+    df = pd.read_csv(
+        csv_path,
+        quoting=csv.QUOTE_ALL,  # Quote all fields
+        escapechar='\\',  # Use backslash as escape character
+        encoding='utf-8'
+    )
     return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
 
 def get_answers(
@@ -97,7 +103,10 @@ def get_answers(
                 csv_path,
                 mode='a',
                 header=not csv_path.exists(),
-                index=False
+                index=False,
+                quoting=csv.QUOTE_ALL,  # Quote all fields
+                escapechar='\\',  # Use backslash as escape character
+                encoding='utf-8'
             )
 
     return pd.DataFrame(result_data)
