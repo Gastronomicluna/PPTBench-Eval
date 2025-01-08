@@ -3,7 +3,7 @@ import logging
 import time
 import traceback
 from pathlib import Path
-from typing import Any, Dict, Optional, Literal
+from typing import Any, Dict, Literal, Optional
 
 import pandas as pd
 from tqdm import tqdm
@@ -27,7 +27,7 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     df = csv_to_df(csv_path)
     if df is None:
         return {}
-    
+
     return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
 
 

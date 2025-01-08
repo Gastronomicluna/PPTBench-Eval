@@ -13,10 +13,8 @@ SUBCATEGORY_JUDGE_FUNCTION = {
     "style detection": exact_match,
 }
 
-def csv_to_df(
-    csv_path: Path, 
-    encoding: str = "utf-8"
-) -> Optional[pd.DataFrame]:
+
+def csv_to_df(csv_path: Path, encoding: str = "utf-8") -> Optional[pd.DataFrame]:
     """
     Convert CSV file to pandas DataFrame with proper error handling.
 
@@ -44,6 +42,7 @@ def csv_to_df(
     except Exception as e:
         logging.error(f"Error reading CSV {csv_path}: {str(e)}")
         return None
+
 
 def df_to_csv(
     df: pd.DataFrame,
