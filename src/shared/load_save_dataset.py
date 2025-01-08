@@ -117,7 +117,7 @@ def load_save_modelscope_dataset(
         logger.info(f"Loading dataset {dataset_name} with download_mode={download_mode}")
         dataset = MsDataset.load(
             dataset_name,
-            subset_name="train",
+            subset_name="default",
             download_mode=download_mode,
             cache_dir=dataset_path if dataset_path else None,
         )
@@ -200,6 +200,7 @@ def load_save_dataset_df(
 if __name__ == "__main__":
     df = load_save_dataset_df(
         dataset_name="tyrionhuu/PPTBench-Detection",
+        dataset_path="data/PPTBench-Detection",
         force_download=False,
         source="modelscope",
     )
