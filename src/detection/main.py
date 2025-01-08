@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 def get_project_root() -> Path:
     """Get the absolute path to the project root directory.
-    
+
     Returns:
         Path: Absolute path to the project root directory.
     """
@@ -34,7 +34,7 @@ def main() -> None:
     non_magic_mode = False
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
-    
+
     # Update results_dir to be relative to project root
     project_root = get_project_root()
     results_dir = project_root / "data" / "detection_results"

@@ -1,15 +1,15 @@
 # llm.py
 import base64
+import io
 import logging
 import os
 from typing import Any, Dict, List, Literal, Optional, Union
-import io
-from PIL import Image
 
 import ollama
 import requests.exceptions
 from ollama import Options
 from openai import OpenAI
+from PIL import Image
 
 API_LLM_MODELS = [
     ("api", "claude-3-5-sonnet-20241022"),
@@ -55,7 +55,9 @@ def call_vision_model(
     prompt: str = "",
     temperature: float = 0.1,
     max_tokens: int = 3200,
-    images: Union[str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None] = None,
+    images: Union[
+        str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None
+    ] = None,
     json: bool = False,
     timeout: Optional[int] = None,
 ) -> str:
@@ -95,7 +97,7 @@ def call_vision_model(
         elif isinstance(img, Image.Image):
             # Convert PIL Image to bytes
             img_byte_arr = io.BytesIO()
-            img.save(img_byte_arr, format=img.format or 'PNG')
+            img.save(img_byte_arr, format=img.format or "PNG")
             processed_images.append(img_byte_arr.getvalue())
         else:
             raise ValueError(
