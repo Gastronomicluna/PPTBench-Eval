@@ -5,8 +5,6 @@ from typing import Optional
 
 import pandas as pd
 
-from .judge import compare_coordinate, exact_match, fuzzy_match
-
 
 def csv_to_df(csv_path: Path, encoding: str = "utf-8") -> Optional[pd.DataFrame]:
     """
