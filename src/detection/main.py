@@ -12,7 +12,12 @@ from src.shared.load_save_dataset import load_save_dataset_df
 logging.basicConfig(level=logging.INFO)
 
 
-def main():
+def main() -> None:
+    """Main entry point for the detection pipeline.
+
+    This function sets up the environment, loads the dataset,
+    and processes, evaluates, and saves detection results.
+    """
     ollama_mode = True
     test_mode = True
     non_magic_mode = True
@@ -63,7 +68,7 @@ def main():
             max_tokens=3200,
             json=False,
             timeout=60,
-            csv_path=results_dir / f"{model_name}.csv",
+            csv_path=os.path.join(results_dir, f"{model_name}.csv"),
             overwrite=True,
         )
         print(f"Processed {len(results_df)} entries")
@@ -73,8 +78,8 @@ def main():
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
         results_df = judge_answer_df(
-            df=results_dir / f"{model_name}.csv",
-            csv_path=results_dir / f"{model_name}_judged.csv",
+            df=os.path.join(results_dir, f"{model_name}.csv"),
+            csv_path=os.path.join(results_dir, f"{model_name}_judged.csv"),
             overwrite=True,
         )
         print(f"Judged {len(results_df)} entries")
@@ -84,14 +89,14 @@ def main():
     # Evaluate answers and combine results
     evaluation_results = []
     for _, model_name in models_to_run:
-        judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
+        judged_df = pd.read_csv(os.path.join(results_dir, f"{model_name}_judged.csv"))
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
         evaluation_results.append(eval_df)
 
     # Combine all results and save
     combined_results = pd.concat(evaluation_results, ignore_index=True)
-    combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
+    combined_results.to_csv(os.path.join(results_dir, "evaluation_results.csv"), index=False)
     logging.info("Evaluation complete. Results saved to evaluation_results.csv")
 
 
