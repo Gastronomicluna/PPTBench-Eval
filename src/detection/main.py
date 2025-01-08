@@ -14,6 +14,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def main():
+    ollama_mode = True
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
     results_dir = Path("data/detection_results")
@@ -24,10 +25,18 @@ def main():
         dataset_path=dataset_path,
     )
     # print(df.head())
-
+    if ollama_mode:
+        models_to_run = [
+            (provider, model_name)
+            for provider, model_name in API_LLM_MODELS
+            if provider == "ollama"
+        ]
+    else:
+        models_to_run = API_LLM_MODELS
+        
     logging.info("Generating answers...")
 
-    for provider, model_name in API_LLM_MODELS:
+    for provider, model_name in models_to_run:
         print(f"Processing {model_name}...")
         results_df = get_answers(
             df=df,
@@ -45,7 +54,7 @@ def main():
     logging.info("Judging answers...")
 
     # Judge answers and save to CSV
-    for _, model_name in API_LLM_MODELS:
+    for _, model_name in models_to_run:
         results_df = judge_answer_df(
             df=results_dir / f"{model_name}.csv",
             csv_path=results_dir / f"{model_name}_judged.csv",
@@ -57,7 +66,7 @@ def main():
 
     # Evaluate answers and combine results
     evaluation_results = []
-    for _, model_name in API_LLM_MODELS:
+    for _, model_name in models_to_run:
         judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
