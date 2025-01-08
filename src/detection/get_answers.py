@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 import pandas as pd
+from tqdm import tqdm
 
 from src.shared.llm import call_vision_model
 
@@ -84,45 +85,51 @@ def get_answers(
         load_existing_answers(csv_path) if csv_path and not overwrite else {}
     )
     result_data = []
+    total = len(df)
+    
+    # Add progress bar with model name in description
+    with tqdm(total=total, desc=f"Processing with {model_name}") as pbar:
+        for _, row in df.iterrows():
+            hash_value = row["hash"]
+            if not overwrite and hash_value in existing_answers:
+                result_data.append(existing_answers[hash_value])
+                pbar.update(1)
+                continue
 
-    for _, row in df.iterrows():
-        hash_value = row["hash"]
-        if not overwrite and hash_value in existing_answers:
-            result_data.append(existing_answers[hash_value])
-            continue
-
-        result = get_answer_single(
-            row,
-            model_name=model_name,
-            provider=provider,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            json=json,
-            timeout=timeout,
-            retry=retry,
-        )
-        result_data.append(result)
-
-        # Save incrementally if csv_path provided
-        if csv_path:
-            try:
-                # Convert newlines to literal \n in the text
-                safe_result = {
-                    k: str(v).replace("\n", "\\n") if isinstance(v, str) else v
-                    for k, v in result.items()
-                }
-                pd.DataFrame([safe_result]).to_csv(
-                    csv_path,
-                    mode="a",
-                    header=not csv_path.exists(),
-                    index=False,
-                    quoting=csv.QUOTE_ALL,  # Quote all fields
-                    escapechar="\\",  # Use backslash as escape character
-                    encoding="utf-8",
-                    lineterminator="\n",
-                )
-            except Exception as e:
-                logging.error(f"Error writing to CSV: {str(e)}")
+            result = get_answer_single(
+                row,
+                model_name=model_name,
+                provider=provider,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                json=json,
+                timeout=timeout,
+                retry=retry,
+            )
+            result_data.append(result)
+            
+            # Save incrementally if csv_path provided
+            if csv_path:
+                try:
+                    # Convert newlines to literal \n in the text
+                    safe_result = {
+                        k: str(v).replace("\n", "\\n") if isinstance(v, str) else v
+                        for k, v in result.items()
+                    }
+                    pd.DataFrame([safe_result]).to_csv(
+                        csv_path,
+                        mode="a",
+                        header=not csv_path.exists(),
+                        index=False,
+                        quoting=csv.QUOTE_ALL,  # Quote all fields
+                        escapechar="\\",  # Use backslash as escape character
+                        encoding="utf-8",
+                        lineterminator="\n",
+                    )
+                except Exception as e:
+                    logging.error(f"Error writing to CSV: {str(e)}")
+            
+            pbar.update(1)
 
     return pd.DataFrame(result_data)
 
@@ -236,7 +243,7 @@ if __name__ == "__main__":
 
     results = get_answers(
         sampled_df,
-        model_name="gpt-4o",
+        model_name="claude-3-5-sonnet-20241022",
         provider="api",
         temperature=0.1,
         max_tokens=3200,
