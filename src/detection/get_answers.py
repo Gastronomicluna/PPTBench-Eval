@@ -86,7 +86,7 @@ def get_answers(
     )
     result_data = []
     total = len(df)
-    
+
     # Add progress bar with model name in description
     with tqdm(total=total, desc=f"Processing with {model_name}") as pbar:
         for _, row in df.iterrows():
@@ -107,7 +107,7 @@ def get_answers(
                 retry=retry,
             )
             result_data.append(result)
-            
+
             # Save incrementally if csv_path provided
             if csv_path:
                 try:
@@ -128,7 +128,7 @@ def get_answers(
                     )
                 except Exception as e:
                     logging.error(f"Error writing to CSV: {str(e)}")
-            
+
             pbar.update(1)
 
     return pd.DataFrame(result_data)
