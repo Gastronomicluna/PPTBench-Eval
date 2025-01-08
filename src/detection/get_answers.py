@@ -30,6 +30,20 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
 
 
+def get_image_bytes(image_data: dict | bytes) -> bytes:
+    """Extract image bytes from dataset row.
+    
+    Args:
+        image_data: Image data from dataset row, either dict or bytes
+        
+    Returns:
+        bytes: Raw image bytes
+    """
+    if isinstance(image_data, dict):
+        return image_data["bytes"]
+    return image_data
+
+
 def get_answers(
     df: pd.DataFrame,
     model_name: str = "llama3.2-vision:11b",
@@ -159,9 +173,7 @@ def get_answer_single(
             ground_truth = row.get("ground_truth", "")
 
             # Extract image bytes from dictionary format
-            image_bytes = (
-                image_data["bytes"] if isinstance(image_data, dict) else image_data
-            )
+            image_bytes = get_image_bytes(image_data)
 
             prompt = build_prompt(description, json_data)
             kwargs = {
