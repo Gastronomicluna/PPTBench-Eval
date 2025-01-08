@@ -1,10 +1,11 @@
 import logging
-from typing import Optional, Literal
+from typing import Literal, Optional
 
 import pandas as pd
 from datasets import Dataset, load_dataset, load_from_disk
 from modelscope import MsDataset
 from modelscope.utils.constant import DownloadMode
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -89,10 +90,9 @@ def load_save_huggingface_dataset_df(
         raise
     return None
 
+
 def load_save_modelscope_dataset(
-    dataset_name: str, 
-    dataset_path: str, 
-    force_download: bool = False
+    dataset_name: str, dataset_path: str, force_download: bool = False
 ) -> Optional[Dataset]:
     """
     Load and save a ModelScope dataset to disk.
@@ -107,7 +107,8 @@ def load_save_modelscope_dataset(
     """
     try:
         download_mode = (
-            DownloadMode.FORCE_REDOWNLOAD if force_download 
+            DownloadMode.FORCE_REDOWNLOAD
+            if force_download
             else DownloadMode.REUSE_DATASET_IF_EXISTS
         )
         logger.info(
@@ -120,14 +121,15 @@ def load_save_modelscope_dataset(
             cache_dir=dataset_path,
         )
         logger.info(f"Successfully loaded dataset from {dataset_path}")
-        
+
         if dataset is not None:
             return dataset
     except Exception as e:
         logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
         raise
-    
+
     return None
+
 
 def load_save_modelscope_dataset_df(
     dataset_name: str,
@@ -161,6 +163,7 @@ def load_save_modelscope_dataset_df(
         raise
     return None
 
+
 def load_save_dataset_df(
     dataset_name: str,
     dataset_path: str,
@@ -174,7 +177,7 @@ def load_save_dataset_df(
         dataset_path (str): The path to save the dataset to.
         force_download (bool): If True, download and replace existing dataset.
         source (str): The source of the dataset ("huggingface" or "modelscope").
-        
+
     Returns:
         Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if successful,
         None otherwise.
@@ -193,9 +196,10 @@ def load_save_dataset_df(
         )
     else:
         raise ValueError(f"Unsupported source: {source}")
-    
+
+
 if __name__ == "__main__":
-    df = load_save_dataset_df(   
+    df = load_save_dataset_df(
         dataset_name="tyrionhuu/PPTBench-Detection",
         dataset_path="data/PPTBench-Detection",
         force_download=False,
