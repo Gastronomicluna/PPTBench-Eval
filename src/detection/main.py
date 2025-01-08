@@ -26,12 +26,12 @@ def main():
 
     logging.info("Generating answers...")
 
-    for model_name in API_LLM_MODELS:
+    for provider, model_name in API_LLM_MODELS:
         print(f"Processing {model_name}...")
         results_df = get_answers(
             df=df,
             model_name=model_name,
-            provider="api",
+            provider=provider,
             temperature=0.0,
             max_tokens=3200,
             json=False,
@@ -44,7 +44,7 @@ def main():
     logging.info("Judging answers...")
 
     # Judge answers and save to CSV
-    for model_name in API_LLM_MODELS:
+    for _, model_name in API_LLM_MODELS:
         results_df = judge_answer_df(
             df=results_dir / f"{model_name}.csv",
             csv_path=results_dir / f"{model_name}_judged.csv",
@@ -56,7 +56,7 @@ def main():
     
     # Evaluate answers and combine results
     evaluation_results = []
-    for model_name in API_LLM_MODELS:
+    for _, model_name in API_LLM_MODELS:
         judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
         eval_df = evaluate_answers(judged_df)
         eval_df['model'] = model_name
