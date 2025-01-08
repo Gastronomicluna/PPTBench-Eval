@@ -3,7 +3,8 @@ from typing import Optional
 
 import pandas as pd
 from datasets import Dataset, load_dataset, load_from_disk
-
+from modelscope import MsDataset
+from modelscope.utils.constant import DownloadMode
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -88,6 +89,48 @@ def load_save_huggingface_dataset_df(
         raise
     return None
 
+def load_save_modelscope_dataset(
+    dataset_name: str, 
+    dataset_path: str, 
+    force_download: bool = False
+) -> Optional[Dataset]:
+    """
+    Load and save a ModelScope dataset to disk.
+
+    Args:
+        dataset_name (str): The name of the dataset to load.
+        dataset_path (str): The path to save the dataset to.
+        force_download (bool): If True, download and replace existing dataset.
+
+    Returns:
+        Optional[Dataset]: The loaded dataset if successful, None otherwise.
+    """
+    try:
+        download_mode = (
+            DownloadMode.FORCE_REDOWNLOAD if force_download 
+            else DownloadMode.REUSE_DATASET_IF_EXISTS
+        )
+        logger.info(
+            f"Loading dataset {dataset_name} with download_mode={download_mode}"
+        )
+        dataset = MsDataset.load(
+            dataset_name,
+            subset_name="train",
+            download_mode=download_mode,
+            cache_dir=dataset_path,
+        )
+        logger.info(f"Successfully loaded dataset from {dataset_path}")
+        
+        if dataset is not None:
+            try:
+                return dataset["train"]
+            except KeyError:
+                return dataset
+    except Exception as e:
+        logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
+        raise
+    
+    return None
 
 if __name__ == "__main__":
     df = load_save_huggingface_dataset_df(
