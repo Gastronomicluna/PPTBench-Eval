@@ -53,20 +53,20 @@ def main():
 
     logging.info("Generating answers...")
 
-    for provider, model_name in models_to_run:
-        print(f"Processing {model_name}...")
-        results_df = get_answers(
-            df=df,
-            model_name=model_name,
-            provider=provider,
-            temperature=0.0,
-            max_tokens=3200,
-            json=False,
-            timeout=60,
-            csv_path=results_dir / f"{model_name}.csv",
-            overwrite=False,
-        )
-        print(f"Processed {len(results_df)} entries")
+    # for provider, model_name in models_to_run:
+    #     print(f"Processing {model_name}...")
+    #     results_df = get_answers(
+    #         df=df,
+    #         model_name=model_name,
+    #         provider=provider,
+    #         temperature=0.0,
+    #         max_tokens=3200,
+    #         json=False,
+    #         timeout=60,
+    #         csv_path=results_dir / f"{model_name}.csv",
+    #         overwrite=False,
+    #     )
+    #     print(f"Processed {len(results_df)} entries")
 
     logging.info("Judging answers...")
 
