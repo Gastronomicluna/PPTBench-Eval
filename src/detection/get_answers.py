@@ -186,8 +186,10 @@ def get_answer_single(
             traceback.print_exc()
             return {
                 "hash": row["hash"],
+                "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": str(e),
+                "subcategory": row.get("subcategory", ""),
             }
 
 
