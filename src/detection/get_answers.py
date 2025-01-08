@@ -32,10 +32,10 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
 
 def get_image_bytes(image_data: dict | bytes) -> bytes:
     """Extract image bytes from dataset row.
-    
+
     Args:
         image_data: Image data from dataset row, either dict or bytes
-        
+
     Returns:
         bytes: Raw image bytes
     """
