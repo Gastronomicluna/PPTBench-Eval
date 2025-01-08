@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Optional, Literal
 
 import pandas as pd
 from datasets import Dataset, load_dataset, load_from_disk
@@ -129,10 +129,76 @@ def load_save_modelscope_dataset(
     
     return None
 
+def load_save_modelscope_dataset_df(
+    dataset_name: str,
+    dataset_path: str,
+    force_download: bool = False,
+) -> Optional[pd.DataFrame]:
+    """
+    Load and save a ModelScope dataset to disk as a pandas DataFrame.
+
+    Args:
+        dataset_name (str): The name of the dataset to load.
+        dataset_path (str): The path to save the dataset to.
+        force_download (bool): If True, download and replace existing dataset.
+
+    Returns:
+        Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if successful,
+        None otherwise.
+    """
+    try:
+        dataset = load_save_modelscope_dataset(
+            dataset_name=dataset_name,
+            dataset_path=dataset_path,
+            force_download=force_download,
+        )
+        if dataset:
+            df = pd.DataFrame(dataset)
+            logger.info(f"Dataset converted to DataFrame with shape {df.shape}")
+            return df
+    except Exception as e:
+        logger.error(f"Error loading dataset: {str(e)}")
+        raise
+    return None
+
+def load_save_dataset_df(
+    dataset_name: str,
+    dataset_path: str,
+    force_download: bool = False,
+    source: Literal["modelscope", "huggingface"] = "huggingface",
+) -> Optional[pd.DataFrame]:
+    """
+    Load and save a dataset to disk as a pandas DataFrame.
+    Args:
+        dataset_name (str): The name of the dataset to load.
+        dataset_path (str): The path to save the dataset to.
+        force_download (bool): If True, download and replace existing dataset.
+        source (str): The source of the dataset ("huggingface" or "modelscope").
+        
+    Returns:
+        Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if successful,
+        None otherwise.
+    """
+    if source == "huggingface":
+        return load_save_huggingface_dataset_df(
+            dataset_name=dataset_name,
+            dataset_path=dataset_path,
+            force_download=force_download,
+        )
+    elif source == "modelscope":
+        return load_save_modelscope_dataset_df(
+            dataset_name=dataset_name,
+            dataset_path=dataset_path,
+            force_download=force_download,
+        )
+    else:
+        raise ValueError(f"Unsupported source: {source}")
+    
 if __name__ == "__main__":
-    df = load_save_huggingface_dataset_df(
+    df = load_save_dataset_df(   
         dataset_name="tyrionhuu/PPTBench-Detection",
         dataset_path="data/PPTBench-Detection",
-        force_download=False,  # Change to True to force download
+        force_download=False,
+        source="modelscope",
     )
-    print(df.columns)
+    print(df.info())
