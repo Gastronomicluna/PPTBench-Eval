@@ -2,6 +2,7 @@ import logging
 import time
 import traceback
 from typing import Any, Dict, Optional
+from pathlib import Path
 
 import pandas as pd
 
@@ -9,6 +10,21 @@ from src.shared.llm import call_vision_model
 
 from .prompts import build_prompt
 
+def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
+    """
+    Load existing answers from CSV file.
+
+    Args:
+        csv_path (Path): Path to the CSV file.
+
+    Returns:
+        Dict[str, Dict[str, Any]]: Dictionary of existing answers keyed by hash.
+    """
+    if not csv_path.exists():
+        return {}
+    
+    df = pd.read_csv(csv_path)
+    return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
 
 def get_answers(
     df: pd.DataFrame,
@@ -19,6 +35,7 @@ def get_answers(
     json: bool = False,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
+    csv_path: Optional[Path] = None,
 ) -> pd.DataFrame:
     """
     Get answers to the questions in the DataFrame.
@@ -32,6 +49,8 @@ def get_answers(
         json (bool): Whether to return JSON format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
+        csv_path (Optional[Path]): Path to save/load results. If provided, 
+            will skip existing entries and save new results incrementally.
 
     Returns:
         pd.DataFrame: The DataFrame with the answers.
@@ -39,8 +58,17 @@ def get_answers(
     if "hash" not in df.columns:
         raise ValueError("The input DataFrame must contain a 'hash' column.")
 
-    result_data = [
-        get_answer_single(
+    # Load existing results if csv_path provided
+    existing_answers = load_existing_answers(csv_path) if csv_path else {}
+    result_data = []
+
+    for _, row in df.iterrows():
+        hash_value = row["hash"]
+        if hash_value in existing_answers:
+            result_data.append(existing_answers[hash_value])
+            continue
+
+        result = get_answer_single(
             row,
             model_name=model_name,
             provider=provider,
@@ -50,8 +78,17 @@ def get_answers(
             timeout=timeout,
             retry=retry,
         )
-        for _, row in df.iterrows()
-    ]
+        result_data.append(result)
+
+        # Save incrementally if csv_path provided
+        if csv_path:
+            pd.DataFrame([result]).to_csv(
+                csv_path,
+                mode='a',
+                header=not csv_path.exists(),
+                index=False
+            )
+
     return pd.DataFrame(result_data)
 
 
@@ -150,20 +187,21 @@ if __name__ == "__main__":
 
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
+    csv_path = Path("data/detection_results.csv")
+    
     df = load_save_huggingface_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
         force_download=False,
     )
-    row = df.sample(random_state=1).iloc[0]
-    # print(row)
-    result = get_answer_single(
-        row,
+    
+    results = get_answers(
+        df,
         model_name="gpt-4o",
         provider="api",
         temperature=0.1,
         max_tokens=3200,
         json=False,
-        # timeout=30,
+        csv_path=csv_path,
     )
-    print(result)
+    print(f"Processed {len(results)} entries")
