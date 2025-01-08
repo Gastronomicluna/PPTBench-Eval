@@ -1,15 +1,16 @@
+import csv  # Add this import
 import logging
 import time
 import traceback
-from typing import Any, Dict, Optional
 from pathlib import Path
-import csv  # Add this import
+from typing import Any, Dict, Optional
 
 import pandas as pd
 
 from src.shared.llm import call_vision_model
 
 from .prompts import build_prompt
+
 
 def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     """
@@ -23,20 +24,21 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     """
     if not csv_path.exists():
         return {}
-    
+
     try:
         df = pd.read_csv(
             csv_path,
             quoting=csv.QUOTE_ALL,  # Quote all fields
-            escapechar='\\',  # Use backslash as escape character
-            encoding='utf-8',
-            lineterminator='\n',  # Explicit line terminator
-            on_bad_lines='warn'   # Don't fail on bad lines
+            escapechar="\\",  # Use backslash as escape character
+            encoding="utf-8",
+            lineterminator="\n",  # Explicit line terminator
+            on_bad_lines="warn",  # Don't fail on bad lines
         )
         return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
     except Exception as e:
         logging.error(f"Error reading CSV: {str(e)}")
         return {}
+
 
 def get_answers(
     df: pd.DataFrame,
@@ -62,7 +64,7 @@ def get_answers(
         json (bool): Whether to return JSON format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
-        csv_path (Optional[Path]): Path to save/load results. If provided, 
+        csv_path (Optional[Path]): Path to save/load results. If provided,
             will skip existing entries and save new results incrementally.
         overwrite (bool): If True, overwrites existing entries in CSV.
             If False, skips existing entries. Defaults to False.
@@ -76,12 +78,10 @@ def get_answers(
     # Handle CSV file setup
     if csv_path and csv_path.exists() and overwrite:
         csv_path.unlink()  # Delete existing file if overwrite is True
-    
+
     # Load existing results if csv_path provided and not overwriting
     existing_answers = (
-        load_existing_answers(csv_path) 
-        if csv_path and not overwrite 
-        else {}
+        load_existing_answers(csv_path) if csv_path and not overwrite else {}
     )
     result_data = []
 
@@ -108,18 +108,18 @@ def get_answers(
             try:
                 # Convert newlines to literal \n in the text
                 safe_result = {
-                    k: str(v).replace('\n', '\\n') if isinstance(v, str) else v
+                    k: str(v).replace("\n", "\\n") if isinstance(v, str) else v
                     for k, v in result.items()
                 }
                 pd.DataFrame([safe_result]).to_csv(
                     csv_path,
-                    mode='a',
+                    mode="a",
                     header=not csv_path.exists(),
                     index=False,
                     quoting=csv.QUOTE_ALL,  # Quote all fields
-                    escapechar='\\',  # Use backslash as escape character
-                    encoding='utf-8',
-                    lineterminator='\n',
+                    escapechar="\\",  # Use backslash as escape character
+                    encoding="utf-8",
+                    lineterminator="\n",
                 )
             except Exception as e:
                 logging.error(f"Error writing to CSV: {str(e)}")
@@ -225,14 +225,14 @@ if __name__ == "__main__":
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
     csv_path = Path("data/detection_results.csv")
-    
+
     df = load_save_huggingface_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
         force_download=False,
     )
     sampled_df = df.sample(n=2, random_state=42)
-    
+
     results = get_answers(
         sampled_df,
         model_name="gpt-4o",
@@ -243,9 +243,9 @@ if __name__ == "__main__":
         csv_path=csv_path,
         overwrite=True,
     )
-    
+
     print(results)
-    
+
     # results = get_answers(
     #     df,
     #     model_name="gpt-4o",

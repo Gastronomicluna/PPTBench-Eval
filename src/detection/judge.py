@@ -1,9 +1,11 @@
 from typing import List
 
+import pandas as pd
 from thefuzz import fuzz
 
 from src.detection.utils import SUBCATEGORY_JUDGE_FUNCTION
-import pandas as pd
+
+
 def judge_answer_df(
     answers_df: pd.DataFrame,
 ) -> pd.DataFrame:
@@ -16,14 +18,23 @@ def judge_answer_df(
     Returns:
         pd.DataFrame: The DataFrame with the judged results.
     """
-    if "subcategory" not in answers_df.columns or "ground_truth" not in answers_df.columns or "llm_answer" not in answers_df.columns:
-        raise ValueError("The input DataFrame must contain 'subcategory', 'ground_truth', and 'llm_answer' columns.")
-    
+    if (
+        "subcategory" not in answers_df.columns
+        or "ground_truth" not in answers_df.columns
+        or "llm_answer" not in answers_df.columns
+    ):
+        raise ValueError(
+            "The input DataFrame must contain 'subcategory', 'ground_truth', and 'llm_answer' columns."
+        )
+
     answers_df["is_correct"] = answers_df.apply(
-        lambda row: judge_answer(row["subcategory"], row["ground_truth"], row["llm_answer"]),
+        lambda row: judge_answer(
+            row["subcategory"], row["ground_truth"], row["llm_answer"]
+        ),
         axis=1,
     )
     return answers_df
+
 
 def judge_answer(
     subcategory: str,
@@ -44,6 +55,7 @@ def judge_answer(
     if subcategory not in SUBCATEGORY_JUDGE_FUNCTION:
         raise ValueError(f"Unknown subcategory: {subcategory}")
     return SUBCATEGORY_JUDGE_FUNCTION[subcategory](ground_truth, answer)
+
 
 def fuzzy_match(
     ground_truth: str,
