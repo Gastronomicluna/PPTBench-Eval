@@ -23,6 +23,9 @@ API_LLM_MODELS = {
 # API key and model directory configuration
 key = "sk-f1fCP1wFI4K1pQYJORkJF3K9tg1MINok28GAsCsSFIjvajjS"
 
+if not key:
+    key = input("Please enter your API key: ")
+
 # Initialize OpenAI client with timeout
 client = OpenAI(
     base_url="https://api2.aigcbest.top/v1",
