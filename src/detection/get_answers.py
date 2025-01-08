@@ -11,7 +11,7 @@ from tqdm import tqdm
 from src.shared.llm import call_vision_model
 
 from .prompts import build_prompt
-from .utils import csv_to_df
+from .utils import csv_to_df, df_to_csv
 
 
 def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
@@ -106,18 +106,15 @@ def get_answers(
                         k: str(v).replace("\n", "\\n") if isinstance(v, str) else v
                         for k, v in result.items()
                     }
-                    pd.DataFrame([safe_result]).to_csv(
+                    success = df_to_csv(
+                        pd.DataFrame([safe_result]),
                         csv_path,
                         mode="a",
-                        header=not csv_path.exists(),
-                        index=False,
-                        quoting=csv.QUOTE_ALL,  # Quote all fields
-                        escapechar="\\",  # Use backslash as escape character
-                        encoding="utf-8",
-                        lineterminator="\n",
                     )
+                    if not success:
+                        logging.warning(f"Failed to save result for hash {hash_value}")
                 except Exception as e:
-                    logging.error(f"Error writing to CSV: {str(e)}")
+                    logging.error(f"Error preparing data for CSV: {str(e)}")
 
             pbar.update(1)
 

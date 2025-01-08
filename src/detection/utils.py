@@ -44,3 +44,38 @@ def csv_to_df(
     except Exception as e:
         logging.error(f"Error reading CSV {csv_path}: {str(e)}")
         return None
+
+def df_to_csv(
+    df: pd.DataFrame,
+    csv_path: Path,
+    mode: str = "w",
+    encoding: str = "utf-8",
+) -> bool:
+    """
+    Save DataFrame to CSV file with proper error handling.
+
+    Args:
+        df (pd.DataFrame): DataFrame to save.
+        csv_path (Path): Path to save the CSV file.
+        mode (str): Write mode ('w' for write, 'a' for append).
+            Defaults to 'w'.
+        encoding (str): File encoding. Defaults to "utf-8".
+
+    Returns:
+        bool: True if successful, False if failed.
+    """
+    try:
+        df.to_csv(
+            csv_path,
+            mode=mode,
+            header=(mode == "w" or not csv_path.exists()),
+            index=False,
+            quoting=csv.QUOTE_ALL,
+            escapechar="\\",
+            encoding=encoding,
+            lineterminator="\n",
+        )
+        return True
+    except Exception as e:
+        logging.error(f"Error writing CSV {csv_path}: {str(e)}")
+        return False

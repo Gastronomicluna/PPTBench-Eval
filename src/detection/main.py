@@ -38,8 +38,9 @@ def main():
         
     logging.info("Judging answers...")
     
-    # Load the results from the CSV file
+    # Evaluate and save results
     
+
 
 
 if __name__ == "__main__":
