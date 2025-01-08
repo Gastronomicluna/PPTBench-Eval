@@ -27,7 +27,9 @@ def load_save_huggingface_dataset(
     """
     if force_download or dataset_path is None:
         try:
-            logger.info(f"{'Force downloading' if force_download else 'Loading'} dataset {dataset_name}")
+            logger.info(
+                f"{'Force downloading' if force_download else 'Loading'} dataset {dataset_name}"
+            )
             dataset = load_dataset(dataset_name)
             if dataset_path:
                 dataset.save_to_disk(dataset_path)
@@ -45,7 +47,9 @@ def load_save_huggingface_dataset(
                 logger.info(f"Dataset not found. Downloading {dataset_name}")
                 dataset = load_dataset(dataset_name)
                 dataset.save_to_disk(dataset_path)
-                logger.info(f"Successfully downloaded and saved dataset to {dataset_path}")
+                logger.info(
+                    f"Successfully downloaded and saved dataset to {dataset_path}"
+                )
             except Exception as e:
                 logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
                 raise
@@ -93,9 +97,7 @@ def load_save_huggingface_dataset_df(
 
 
 def load_save_modelscope_dataset(
-    dataset_name: str, 
-    dataset_path: Optional[str] = None, 
-    force_download: bool = False
+    dataset_name: str, dataset_path: Optional[str] = None, force_download: bool = False
 ) -> Optional[Dataset]:
     """
     Load and save a ModelScope dataset to disk.
@@ -111,10 +113,13 @@ def load_save_modelscope_dataset(
     """
     try:
         download_mode = (
-            DownloadMode.FORCE_REDOWNLOAD if force_download 
+            DownloadMode.FORCE_REDOWNLOAD
+            if force_download
             else DownloadMode.REUSE_DATASET_IF_EXISTS
         )
-        logger.info(f"Loading dataset {dataset_name} with download_mode={download_mode}")
+        logger.info(
+            f"Loading dataset {dataset_name} with download_mode={download_mode}"
+        )
         dataset = MsDataset.load(
             dataset_name,
             subset_name="default",
