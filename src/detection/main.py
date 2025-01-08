@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 
 import pandas as pd
 
@@ -10,6 +11,16 @@ from src.shared.llm import API_LLM_MODELS
 from src.shared.load_save_dataset import load_save_dataset_df
 
 logging.basicConfig(level=logging.INFO)
+
+
+def get_project_root() -> Path:
+    """Get the absolute path to the project root directory.
+    
+    Returns:
+        Path: Absolute path to the project root directory.
+    """
+    current_file = Path(__file__).resolve()
+    return current_file.parent.parent.parent
 
 
 def main() -> None:
@@ -23,7 +34,10 @@ def main() -> None:
     non_magic_mode = True
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
-    results_dir = "data/detection_results"
+    
+    # Update results_dir to be relative to project root
+    project_root = get_project_root()
+    results_dir = project_root / "data" / "detection_results"
 
     os.makedirs(results_dir, exist_ok=True)
 
@@ -68,7 +82,7 @@ def main() -> None:
             max_tokens=3200,
             json=False,
             timeout=60,
-            csv_path=os.path.join(results_dir, f"{model_name}.csv"),
+            csv_path=results_dir / f"{model_name}.csv",
             overwrite=True,
         )
         print(f"Processed {len(results_df)} entries")
@@ -78,8 +92,8 @@ def main() -> None:
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
         results_df = judge_answer_df(
-            df=os.path.join(results_dir, f"{model_name}.csv"),
-            csv_path=os.path.join(results_dir, f"{model_name}_judged.csv"),
+            df=results_dir / f"{model_name}.csv",
+            csv_path=results_dir / f"{model_name}_judged.csv",
             overwrite=True,
         )
         print(f"Judged {len(results_df)} entries")
@@ -89,16 +103,14 @@ def main() -> None:
     # Evaluate answers and combine results
     evaluation_results = []
     for _, model_name in models_to_run:
-        judged_df = pd.read_csv(os.path.join(results_dir, f"{model_name}_judged.csv"))
+        judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
         evaluation_results.append(eval_df)
 
     # Combine all results and save
     combined_results = pd.concat(evaluation_results, ignore_index=True)
-    combined_results.to_csv(
-        os.path.join(results_dir, "evaluation_results.csv"), index=False
-    )
+    combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
     logging.info("Evaluation complete. Results saved to evaluation_results.csv")
 
 
