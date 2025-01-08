@@ -3,7 +3,7 @@ import logging
 import time
 import traceback
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Literal
 
 import pandas as pd
 from tqdm import tqdm
@@ -11,11 +11,12 @@ from tqdm import tqdm
 from src.shared.llm import call_vision_model
 
 from .prompts import build_prompt
+from .utils import csv_to_df
 
 
 def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     """
-    Load existing answers from CSV file.
+    Load existing answers from CSV file using the utility function.
 
     Args:
         csv_path (Path): Path to the CSV file.
@@ -23,28 +24,17 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     Returns:
         Dict[str, Dict[str, Any]]: Dictionary of existing answers keyed by hash.
     """
-    if not csv_path.exists():
+    df = csv_to_df(csv_path)
+    if df is None:
         return {}
-
-    try:
-        df = pd.read_csv(
-            csv_path,
-            quoting=csv.QUOTE_ALL,  # Quote all fields
-            escapechar="\\",  # Use backslash as escape character
-            encoding="utf-8",
-            lineterminator="\n",  # Explicit line terminator
-            on_bad_lines="warn",  # Don't fail on bad lines
-        )
-        return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
-    except Exception as e:
-        logging.error(f"Error reading CSV: {str(e)}")
-        return {}
+    
+    return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
 
 
 def get_answers(
     df: pd.DataFrame,
     model_name: str = "llama3.2-vision:11b",
-    provider: str = "ollama",
+    provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
     temperature: float = 0.1,
     max_tokens: int = 3200,
     json: bool = False,
