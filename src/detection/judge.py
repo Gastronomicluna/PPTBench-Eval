@@ -3,25 +3,47 @@ from typing import List
 from thefuzz import fuzz
 
 from src.detection.utils import SUBCATEGORY_JUDGE_FUNCTION
+import pandas as pd
+def judge_answer_df(
+    answers_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Judge the answers in the DataFrame.
+
+    Args:
+        answers_df (pd.DataFrame): The DataFrame containing the answers.
+
+    Returns:
+        pd.DataFrame: The DataFrame with the judged results.
+    """
+    if "subcategory" not in answers_df.columns or "ground_truth" not in answers_df.columns or "llm_answer" not in answers_df.columns:
+        raise ValueError("The input DataFrame must contain 'subcategory', 'ground_truth', and 'llm_answer' columns.")
+    
+    answers_df["is_correct"] = answers_df.apply(
+        lambda row: judge_answer(row["subcategory"], row["ground_truth"], row["llm_answer"]),
+        axis=1,
+    )
+    return answers_df
+
 def judge_answer(
-    task: str,
+    subcategory: str,
     ground_truth: str,
     answer: str,
 ) -> bool:
     """
-    Judge the answer based on the task and the ground truth.
+    Judge the answer based on the subcategory and the ground truth.
 
     Args:
-        task (str): The task type.
+        subcategory (str): The subcategory type.
         ground_truth (str): The ground truth answer.
         answer (str): The answer from the model.
 
     Returns:
         bool: Whether the answer is correct.
     """
-    if task not in SUBCATEGORY_JUDGE_FUNCTION:
-        raise ValueError(f"Unknown task: {task}")
-    return SUBCATEGORY_JUDGE_FUNCTION[task](ground_truth, answer)
+    if subcategory not in SUBCATEGORY_JUDGE_FUNCTION:
+        raise ValueError(f"Unknown subcategory: {subcategory}")
+    return SUBCATEGORY_JUDGE_FUNCTION[subcategory](ground_truth, answer)
 
 def fuzzy_match(
     ground_truth: str,
