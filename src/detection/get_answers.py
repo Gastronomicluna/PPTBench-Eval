@@ -211,9 +211,10 @@ def get_answer_single(
             return {
                 "hash": row["hash"],
                 "task": row.get("task", ""),
+                "category": row.get("category", ""),
+                "subcategory": row.get("subcategory", ""),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": str(e),
-                "subcategory": row.get("subcategory", ""),
             }
 
 
