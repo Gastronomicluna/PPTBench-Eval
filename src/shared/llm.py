@@ -2,7 +2,9 @@
 import base64
 import logging
 import os
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, Union
+import io
+from PIL import Image
 
 import ollama
 import requests.exceptions
@@ -53,7 +55,7 @@ def call_vision_model(
     prompt: str = "",
     temperature: float = 0.1,
     max_tokens: int = 3200,
-    images: str | List[str] | bytes | List[bytes] | None = None,
+    images: Union[str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None] = None,
     json: bool = False,
     timeout: Optional[int] = None,
 ) -> str:
@@ -66,8 +68,8 @@ def call_vision_model(
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        images (str | list[str] | bytes | list[bytes] | None): Image file paths, bytes,
-            or lists of either. File paths should be strings, image data should be bytes.
+        images (Union[str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None]):
+            Image file paths, bytes, PIL Images, or lists of any of these.
         json (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
 
@@ -78,10 +80,10 @@ def call_vision_model(
         raise ValueError("At least one image must be provided for the vision model.")
 
     # Convert single items to list
-    if isinstance(images, (str, bytes)):
+    if not isinstance(images, list):
         images = [images]
 
-    # Validate all images
+    # Validate and process all images
     processed_images = []
     for img in images:
         if isinstance(img, str):
@@ -90,8 +92,15 @@ def call_vision_model(
             processed_images.append(img)
         elif isinstance(img, bytes):
             processed_images.append(img)
+        elif isinstance(img, Image.Image):
+            # Convert PIL Image to bytes
+            img_byte_arr = io.BytesIO()
+            img.save(img_byte_arr, format=img.format or 'PNG')
+            processed_images.append(img_byte_arr.getvalue())
         else:
-            raise ValueError(f"Invalid image type: {type(img)}. Expected str or bytes.")
+            raise ValueError(
+                f"Invalid image type: {type(img)}. Expected str, bytes, or PIL Image."
+            )
 
     if provider == "ollama":
         return generate_with_image_ollama(
