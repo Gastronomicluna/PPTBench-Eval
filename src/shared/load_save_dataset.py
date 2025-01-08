@@ -122,10 +122,7 @@ def load_save_modelscope_dataset(
         logger.info(f"Successfully loaded dataset from {dataset_path}")
         
         if dataset is not None:
-            try:
-                return dataset["train"]
-            except KeyError:
-                return dataset
+            return dataset
     except Exception as e:
         logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
         raise
