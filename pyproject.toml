@@ -21,6 +21,7 @@ pandas = "^2.2.3"
 thefuzz = "^0.22.1"
 datasets = "^3.2.0"
 modelscope = "^1.22.0"
+addict = "^2.4.0"
 
 
 [[tool.poetry.source]]
