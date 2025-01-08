@@ -1,8 +1,7 @@
 import logging
-from pathlib import Path
 
 import pandas as pd
-
+import os
 from src.detection.evaluation import evaluate_answers
 from src.detection.get_answers import get_answers
 from src.detection.judge import judge_answer_df
@@ -18,10 +17,9 @@ def main():
     non_magic_mode = True
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
-    results_dir = Path("data/detection_results")
+    results_dir = "data/detection_results"
 
-    if not results_dir.exists():
-        results_dir.mkdir(parents=True)
+    os.makedirs(results_dir, exist_ok=True)
 
     if non_magic_mode:
         df = load_save_dataset_df(
