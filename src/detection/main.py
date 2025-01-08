@@ -15,22 +15,22 @@ logging.basicConfig(level=logging.INFO)
 def main():
     ollama_mode = True
     test_mode = True
-    
+
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
     results_dir = Path("data/detection_results")
-    
+
     if not results_dir.exists():
         results_dir.mkdir(parents=True)
-        
+
     df = load_save_huggingface_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
     )
-    
+
     if test_mode:
         df = df.sample(n=100, random_state=42)
-    
+
     # print(df.head())
     if ollama_mode:
         models_to_run = [

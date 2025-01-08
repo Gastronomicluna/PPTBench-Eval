@@ -3,8 +3,6 @@ from typing import List
 import pandas as pd
 from thefuzz import fuzz
 
-from src.detection.utils import SUBCATEGORY_JUDGE_FUNCTION
-
 
 def judge_answer_df(
     answers_df: pd.DataFrame,
@@ -52,9 +50,14 @@ def judge_answer(
     Returns:
         bool: Whether the answer is correct.
     """
-    if subcategory not in SUBCATEGORY_JUDGE_FUNCTION:
+    judge_function = {
+        "content extraction": fuzzy_match,
+        "layout detection": compare_coordinate,
+        "style detection": exact_match,
+    }
+    if subcategory not in judge_function:
         raise ValueError(f"Unknown subcategory: {subcategory}")
-    return SUBCATEGORY_JUDGE_FUNCTION[subcategory](ground_truth, answer)
+    return judge_function[subcategory](ground_truth, answer)
 
 
 def fuzzy_match(
