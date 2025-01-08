@@ -69,31 +69,31 @@ def main():
         )
         print(f"Processed {len(results_df)} entries")
 
-    # logging.info("Judging answers...")
+    logging.info("Judging answers...")
 
-    # # Judge answers and save to CSV
-    # for _, model_name in models_to_run:
-    #     results_df = judge_answer_df(
-    #         df=results_dir / f"{model_name}.csv",
-    #         csv_path=results_dir / f"{model_name}_judged.csv",
-    #         overwrite=True,
-    #     )
-    #     print(f"Judged {len(results_df)} entries")
+    # Judge answers and save to CSV
+    for _, model_name in models_to_run:
+        results_df = judge_answer_df(
+            df=results_dir / f"{model_name}.csv",
+            csv_path=results_dir / f"{model_name}_judged.csv",
+            overwrite=True,
+        )
+        print(f"Judged {len(results_df)} entries")
 
-    # logging.info("Evaluating answers...")
+    logging.info("Evaluating answers...")
 
-    # # Evaluate answers and combine results
-    # evaluation_results = []
-    # for _, model_name in models_to_run:
-    #     judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
-    #     eval_df = evaluate_answers(judged_df)
-    #     eval_df["model"] = model_name
-    #     evaluation_results.append(eval_df)
+    # Evaluate answers and combine results
+    evaluation_results = []
+    for _, model_name in models_to_run:
+        judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
+        eval_df = evaluate_answers(judged_df)
+        eval_df["model"] = model_name
+        evaluation_results.append(eval_df)
 
-    # # Combine all results and save
-    # combined_results = pd.concat(evaluation_results, ignore_index=True)
-    # combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
-    # logging.info("Evaluation complete. Results saved to evaluation_results.csv")
+    # Combine all results and save
+    combined_results = pd.concat(evaluation_results, ignore_index=True)
+    combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
+    logging.info("Evaluation complete. Results saved to evaluation_results.csv")
 
 
 if __name__ == "__main__":
