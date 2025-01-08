@@ -1,7 +1,8 @@
 import logging
+import os
 
 import pandas as pd
-import os
+
 from src.detection.evaluation import evaluate_answers
 from src.detection.get_answers import get_answers
 from src.detection.judge import judge_answer_df
