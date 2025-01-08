@@ -32,7 +32,7 @@ def main():
         ]
     else:
         models_to_run = API_LLM_MODELS
-        
+
     logging.info("Generating answers...")
 
     for provider, model_name in models_to_run:
