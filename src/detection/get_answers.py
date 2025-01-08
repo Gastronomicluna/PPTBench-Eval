@@ -217,6 +217,7 @@ if __name__ == "__main__":
         max_tokens=3200,
         json=False,
         csv_path=csv_path,
+        overwrite=True,
     )
     
     print(results)
