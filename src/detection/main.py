@@ -40,7 +40,7 @@ def main():
 
     # only get category == "content extraction"
     if test_mode:
-        df = df[df["category"] == "content extraction"]
+        df = df[df["subcategory"] == "content extraction"]
 
     # print(df.head())
     if ollama_mode:
