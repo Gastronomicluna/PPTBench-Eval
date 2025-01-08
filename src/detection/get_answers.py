@@ -24,13 +24,19 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     if not csv_path.exists():
         return {}
     
-    df = pd.read_csv(
-        csv_path,
-        quoting=csv.QUOTE_ALL,  # Quote all fields
-        escapechar='\\',  # Use backslash as escape character
-        encoding='utf-8'
-    )
-    return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
+    try:
+        df = pd.read_csv(
+            csv_path,
+            quoting=csv.QUOTE_ALL,  # Quote all fields
+            escapechar='\\',  # Use backslash as escape character
+            encoding='utf-8',
+            lineterminator='\n',  # Explicit line terminator
+            on_bad_lines='warn'   # Don't fail on bad lines
+        )
+        return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
+    except Exception as e:
+        logging.error(f"Error reading CSV: {str(e)}")
+        return {}
 
 def get_answers(
     df: pd.DataFrame,
@@ -99,15 +105,24 @@ def get_answers(
 
         # Save incrementally if csv_path provided
         if csv_path:
-            pd.DataFrame([result]).to_csv(
-                csv_path,
-                mode='a',
-                header=not csv_path.exists(),
-                index=False,
-                quoting=csv.QUOTE_ALL,  # Quote all fields
-                escapechar='\\',  # Use backslash as escape character
-                encoding='utf-8'
-            )
+            try:
+                # Convert newlines to literal \n in the text
+                safe_result = {
+                    k: str(v).replace('\n', '\\n') if isinstance(v, str) else v
+                    for k, v in result.items()
+                }
+                pd.DataFrame([safe_result]).to_csv(
+                    csv_path,
+                    mode='a',
+                    header=not csv_path.exists(),
+                    index=False,
+                    quoting=csv.QUOTE_ALL,  # Quote all fields
+                    escapechar='\\',  # Use backslash as escape character
+                    encoding='utf-8',
+                    lineterminator='\n',
+                )
+            except Exception as e:
+                logging.error(f"Error writing to CSV: {str(e)}")
 
     return pd.DataFrame(result_data)
 
