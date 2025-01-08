@@ -7,7 +7,7 @@ from src.detection.evaluation import evaluate_answers
 from src.detection.get_answers import get_answers
 from src.detection.judge import judge_answer_df
 from src.shared.llm import API_LLM_MODELS
-from src.shared.load_save_huggingface_dataset import load_save_huggingface_dataset_df
+from src.shared.load_save_dataset import load_save_huggingface_dataset_df
 
 logging.basicConfig(level=logging.INFO)
 
