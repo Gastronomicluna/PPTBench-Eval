@@ -2,6 +2,26 @@ from typing import List
 
 from thefuzz import fuzz
 
+from src.detection.utils import SUBCATEGORY_JUDGE_FUNCTION
+def judge_answer(
+    task: str,
+    ground_truth: str,
+    answer: str,
+) -> bool:
+    """
+    Judge the answer based on the task and the ground truth.
+
+    Args:
+        task (str): The task type.
+        ground_truth (str): The ground truth answer.
+        answer (str): The answer from the model.
+
+    Returns:
+        bool: Whether the answer is correct.
+    """
+    if task not in SUBCATEGORY_JUDGE_FUNCTION:
+        raise ValueError(f"Unknown task: {task}")
+    return SUBCATEGORY_JUDGE_FUNCTION[task](ground_truth, answer)
 
 def fuzzy_match(
     ground_truth: str,
