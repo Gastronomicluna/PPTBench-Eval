@@ -9,7 +9,6 @@ import requests.exceptions
 from ollama import Options
 from openai import OpenAI
 
-
 API_LLM_MODELS = {
     "claude": "claude-3-5-sonnet-20241022",
     "gpt": "gpt-4o-2024-11-20",
