@@ -65,7 +65,7 @@ def main():
             json=False,
             timeout=60,
             csv_path=results_dir / f"{model_name}.csv",
-            overwrite=False,
+            overwrite=True,
         )
         print(f"Processed {len(results_df)} entries")
 
@@ -76,7 +76,7 @@ def main():
         results_df = judge_answer_df(
             df=results_dir / f"{model_name}.csv",
             csv_path=results_dir / f"{model_name}_judged.csv",
-            overwrite=False,
+            overwrite=True,
         )
         print(f"Judged {len(results_df)} entries")
 
