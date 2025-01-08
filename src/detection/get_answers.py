@@ -36,6 +36,7 @@ def get_answers(
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
     csv_path: Optional[Path] = None,
+    overwrite: bool = False,
 ) -> pd.DataFrame:
     """
     Get answers to the questions in the DataFrame.
@@ -51,6 +52,8 @@ def get_answers(
         retry (Optional[int]): Number of retries on timeout. None for no retries.
         csv_path (Optional[Path]): Path to save/load results. If provided, 
             will skip existing entries and save new results incrementally.
+        overwrite (bool): If True, overwrites existing entries in CSV.
+            If False, skips existing entries. Defaults to False.
 
     Returns:
         pd.DataFrame: The DataFrame with the answers.
@@ -58,13 +61,21 @@ def get_answers(
     if "hash" not in df.columns:
         raise ValueError("The input DataFrame must contain a 'hash' column.")
 
-    # Load existing results if csv_path provided
-    existing_answers = load_existing_answers(csv_path) if csv_path else {}
+    # Handle CSV file setup
+    if csv_path and csv_path.exists() and overwrite:
+        csv_path.unlink()  # Delete existing file if overwrite is True
+    
+    # Load existing results if csv_path provided and not overwriting
+    existing_answers = (
+        load_existing_answers(csv_path) 
+        if csv_path and not overwrite 
+        else {}
+    )
     result_data = []
 
     for _, row in df.iterrows():
         hash_value = row["hash"]
-        if hash_value in existing_answers:
+        if not overwrite and hash_value in existing_answers:
             result_data.append(existing_answers[hash_value])
             continue
 
@@ -203,5 +214,6 @@ if __name__ == "__main__":
         max_tokens=3200,
         json=False,
         csv_path=csv_path,
+        overwrite=True,  # Set to True to rewrite existing results
     )
     print(f"Processed {len(results)} entries")
