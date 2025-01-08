@@ -9,15 +9,15 @@ import requests.exceptions
 from ollama import Options
 from openai import OpenAI
 
-API_LLM_MODELS = {
-    "claude": "claude-3-5-sonnet-20241022",
-    "gpt": "gpt-4o-2024-11-20",
-    "o1": "o1-2024-12-17",
-    "gemini_exp": "gemini-2.0-flash-exp",
-    "gemini_thinking_exp": "gemini-2.0-flash-thinking-exp",
-    "qwen": "qwen-vl-max-0809",
-    "llama": "llama-3.2-90b-vision-instruct",
-}
+API_LLM_MODELS = [
+    "claude-3-5-sonnet-20241022",
+    "gpt-4o-2024-11-20",
+    "o1-2024-12-17",
+    "gemini-2.0-flash-exp",
+    "gemini-2.0-flash-thinking-exp",
+    "qwen-vl-max-0809",
+    "llama-3.2-90b-vision-instruct",
+]
 
 # API key and model directory configuration
 key = "sk-f1fCP1wFI4K1pQYJORkJF3K9tg1MINok28GAsCsSFIjvajjS"
