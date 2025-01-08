@@ -1,11 +1,12 @@
 import csv
 import logging
-import pandas as pd
 from pathlib import Path
 
+import pandas as pd
+
+from src.detection.evaluation import evaluate_answers
 from src.detection.get_answers import get_answers
 from src.detection.judge import judge_answer_df
-from src.detection.evaluation import evaluate_answers
 from src.shared.llm import API_LLM_MODELS
 from src.shared.load_save_huggingface_dataset import load_save_huggingface_dataset_df
 
@@ -51,17 +52,17 @@ def main():
             overwrite=False,
         )
         print(f"Judged {len(results_df)} entries")
-        
+
     logging.info("Evaluating answers...")
-    
+
     # Evaluate answers and combine results
     evaluation_results = []
     for _, model_name in API_LLM_MODELS:
         judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
         eval_df = evaluate_answers(judged_df)
-        eval_df['model'] = model_name
+        eval_df["model"] = model_name
         evaluation_results.append(eval_df)
-    
+
     # Combine all results and save
     combined_results = pd.concat(evaluation_results, ignore_index=True)
     combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
