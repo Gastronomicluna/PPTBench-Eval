@@ -1,5 +1,7 @@
 import csv
 import logging
+import pandas as pd
+from pathlib import Path
 
 from src.detection.get_answers import get_answers
 from src.detection.judge import judge_answer_df
@@ -13,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 def main():
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
-    results_dir = "data/detection_results"
+    results_dir = Path("data/detection_results")
     if not results_dir.exists():
         results_dir.mkdir(parents=True)
     df = load_save_huggingface_dataset_df(
@@ -50,8 +52,21 @@ def main():
         )
         print(f"Judged {len(results_df)} entries")
         
-    # Calculate accuracy and save to CSV
+    logging.info("Evaluating answers...")
     
+    # Evaluate answers and combine results
+    evaluation_results = []
+    for model_name in API_LLM_MODELS:
+        judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
+        eval_df = evaluate_answers(judged_df)
+        eval_df['model'] = model_name
+        evaluation_results.append(eval_df)
+    
+    # Combine all results and save
+    combined_results = pd.concat(evaluation_results, ignore_index=True)
+    combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
+    logging.info("Evaluation complete. Results saved to evaluation_results.csv")
+
 
 if __name__ == "__main__":
     main()
