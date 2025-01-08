@@ -1,4 +1,3 @@
-import csv  # Add this import
 import logging
 import time
 import traceback
