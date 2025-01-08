@@ -31,6 +31,7 @@ def evaluate_answers(
     evaluation_df = pd.DataFrame(evaluation_metrics)
     return evaluation_df
 
+
 def calculate_accuracy(
     answers_df: pd.DataFrame,
 ) -> float:
