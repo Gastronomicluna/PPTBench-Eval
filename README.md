@@ -15,3 +15,5 @@ PPTBench is a benchmark for evaluating the performance of Large Language Models 
    ```bash
    poetry install
    ```
+
+   Note: If you encounter the issue that `poetry install` stuck at pending, refer to [this issue](https://github.com/python-poetry/poetry/issues/8623).
