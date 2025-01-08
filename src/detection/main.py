@@ -96,7 +96,9 @@ def main() -> None:
 
     # Combine all results and save
     combined_results = pd.concat(evaluation_results, ignore_index=True)
-    combined_results.to_csv(os.path.join(results_dir, "evaluation_results.csv"), index=False)
+    combined_results.to_csv(
+        os.path.join(results_dir, "evaluation_results.csv"), index=False
+    )
     logging.info("Evaluation complete. Results saved to evaluation_results.csv")
 
 
