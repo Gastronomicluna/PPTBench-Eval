@@ -31,7 +31,7 @@ def main() -> None:
     """
     ollama_mode = True
     test_mode = True
-    non_magic_mode = True
+    non_magic_mode = False
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
     
