@@ -127,7 +127,7 @@ def load_save_modelscope_dataset(
             cache_dir=dataset_path if dataset_path else None,
         )
         logger.info("Successfully loaded dataset")
-        return dataset
+        return dataset["train"]
     except Exception as e:
         logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
         raise
@@ -209,4 +209,4 @@ if __name__ == "__main__":
         force_download=False,
         source="modelscope",
     )
-    print(df.info())
+    print(df.columns)
