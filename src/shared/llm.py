@@ -17,6 +17,7 @@ API_LLM_MODELS = [
     ("api", "gemini-2.0-flash-thinking-exp"),
     ("api", "qwen-vl-max-0809"),
     ("api", "llama-3.2-90b-vision-instruct"),
+    ("ollama", "llama3.2-vision:11b"),
 ]
 
 # API key and model directory configuration
