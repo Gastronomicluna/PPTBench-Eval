@@ -250,7 +250,7 @@ def main() -> None:
         provider="ollama",
         temperature=0.0,
         max_tokens=3200,
-        json=False,
+        json=True,
         timeout=60,
         csv_path=Path(csv_path),
         overwrite=True,
