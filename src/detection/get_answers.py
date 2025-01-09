@@ -8,14 +8,11 @@ import pandas as pd
 from tqdm import tqdm
 
 from ..shared.llm import call_vision_model
-
-from .prompts import build_prompt
 from ..shared.utils import csv_to_df, df_to_csv, get_image_bytes
+from .prompts import build_prompt
 
 
-def load_existing_answers(
-    csv_path: Path
-) -> Dict[str, Dict[str, Any]]:
+def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     """
     Load existing answers from CSV file using the utility function.
 
@@ -30,8 +27,6 @@ def load_existing_answers(
         return {}
 
     return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
-
-
 
 
 def get_answers(
@@ -221,6 +216,7 @@ def get_answer_single(
 
 def main() -> None:
     from src.shared.load_save_dataset import load_save_dataset_df
+
     target_subcategories = [
         "content extraction",
         "layout detection",

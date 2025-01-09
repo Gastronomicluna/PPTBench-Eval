@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Optional
 
 import pandas as pd
+
+
 def get_image_bytes(image_data: dict | bytes) -> bytes:
     """Extract image bytes from dataset row.
 
@@ -16,6 +18,7 @@ def get_image_bytes(image_data: dict | bytes) -> bytes:
     if isinstance(image_data, dict):
         return image_data["bytes"]
     return image_data
+
 
 def csv_to_df(csv_path: Path, encoding: str = "utf-8") -> Optional[pd.DataFrame]:
     """
