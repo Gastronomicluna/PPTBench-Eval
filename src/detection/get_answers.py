@@ -232,14 +232,14 @@ def get_answer_single(
 def main() -> None:
     from src.shared.load_save_dataset import load_save_dataset_df
     target_subcategories = [
-        "content_extraction",
-        "layout_detection",
-        "style_detection",
+        "content extraction",
+        "layout detection",
+        "style detection",
     ]
     target_subcategory = target_subcategories[1]
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
-    csv_path = "data/" + target_subcategory + "_results.csv"
+    csv_path = "data/" + target_subcategory + " results.csv"
 
     df = load_save_dataset_df(
         dataset_name=dataset_name,
