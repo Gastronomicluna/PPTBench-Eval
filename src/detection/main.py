@@ -165,8 +165,7 @@ def main(
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
         results_df = judge_answer_df(
-            df=results_dir / f"{model_name}.csv",
-            csv_path=results_dir / f"{model_name}_judged.csv",
+            csv_path=results_dir / f"{model_name}.csv",
             overwrite=True,
         )
         print(f"Judged {len(results_df)} entries")
@@ -176,7 +175,7 @@ def main(
     # Evaluate answers and combine results
     evaluation_results = []
     for _, model_name in models_to_run:
-        judged_df = pd.read_csv(results_dir / f"{model_name}_judged.csv")
+        judged_df = pd.read_csv(results_dir / f"{model_name}.csv")
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
         evaluation_results.append(eval_df)
