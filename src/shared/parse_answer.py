@@ -9,7 +9,7 @@ def parse_answer(
     Parse the answer from the model into a dictionary.
 
     Args:
-        answer (str): The answer from the model.
+        answer (str): The answer from the model, potentially escaped JSON string.
 
     Returns:
         Dict[str, Any]: The parsed answer.
@@ -17,7 +17,12 @@ def parse_answer(
     try:
         parsed_answer = json.loads(answer)
     except json.JSONDecodeError:
-        parsed_answer = {"error": "Failed to parse the answer."}
+        # Try unescaping the string first
+        try:
+            unescaped_answer = answer.encode().decode('unicode_escape')
+            parsed_answer = json.loads(unescaped_answer)
+        except (json.JSONDecodeError, UnicodeError):
+            parsed_answer = {"error": "Failed to parse the answer."}
 
     return parsed_answer
 
