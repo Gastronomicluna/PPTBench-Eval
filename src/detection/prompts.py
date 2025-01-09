@@ -129,7 +129,7 @@ Answer:
     return prompt
 
 
-if __name__ == "__main__":
+def main() -> None:
     from src.shared.load_save_dataset import load_save_huggingface_dataset_df
 
     dataset_name = "tyrionhuu/PPTBench-Detection"
@@ -149,3 +149,7 @@ if __name__ == "__main__":
     # print(json_data)
     prompt = build_prompt(description, json_data)
     print(prompt)
+
+
+if __name__ == "__main__":
+    main()
