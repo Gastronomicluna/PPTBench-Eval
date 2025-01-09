@@ -20,14 +20,8 @@ def build_prompt(
     prompt = f"""
 {divider}
 Task: You are given a slide from a presentation in the form of an image and JSON data.
-{question}. Only return the requested information in the following JSON format:
-{{
-    "left": <integer>,
-    "top": <integer>,
-    "width": <integer>,
-    "height": <integer>
-}}
-Ensure that all values are integers and the JSON is properly formatted.
+
+
 {divider}
 Slide: {slide_json}
 {divider}
