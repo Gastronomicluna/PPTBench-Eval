@@ -206,8 +206,8 @@ def main() -> None:
     df = load_save_dataset_df(
         dataset_name="tyrionhuu/PPTBench-Understanding",
         dataset_path="data/PPTBench-Understanding",
-        force_download=False,
-        source="modelscope",
+        force_download=True,
+        source="huggingface",
     )
     print(df.columns)
 
