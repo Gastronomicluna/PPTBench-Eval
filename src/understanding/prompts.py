@@ -65,9 +65,9 @@ def main() -> None:
     row = df.sample(random_state=seed).iloc[0]
     question = row["question"]
     options = row["options"]
-    json_data = row["json_data"]
-    # print(json_data)
-    prompt = build_prompt(question, options, json_data)
+    json_content = row["json_content"]
+    # print(json_content)
+    prompt = build_prompt(question, options, json_content)
     print(prompt)
 
 
