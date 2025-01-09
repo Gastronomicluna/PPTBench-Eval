@@ -166,6 +166,7 @@ def get_answer_single(
     while attempts <= max_attempts:
         try:
             hash_value = row["hash"]
+            subcategory = row["subcategory"]
             task = row["task"]
             description = row["description"]
             image_data = row["image"]
@@ -175,7 +176,12 @@ def get_answer_single(
             # Extract image bytes from dictionary format
             image_bytes = get_image_bytes(image_data)
 
-            prompt = build_prompt(description, json_data)
+            prompt = build_prompt(
+                query=description,
+                subcategory=subcategory,
+                slide_json=json_data,
+            )
+            
             kwargs = {
                 "model_name": model_name,
                 "provider": provider,
@@ -243,7 +249,7 @@ def main() -> None:
 
     results_df = get_answers(
         df=sample_df,
-        model_name="ollama/llama-vision-base",
+        model_name="llama3.2-vision:11b",
         provider="ollama",
         temperature=0.0,
         max_tokens=3200,
