@@ -1,5 +1,29 @@
 from ..shared.parse_answer import parse_json_answer
+from ..shared.utils import csv_to_df
+from pathlib import Path
 from typing import Dict, Any, Union, Literal
+
+def format_answer_csv(
+    csv_path: Path,
+) -> None:
+    """
+    Format the answers in the CSV file.
+
+    Args:
+        csv_path (Path): Path to the CSV file.
+    """
+    df = csv_to_df(csv_path)
+    if df is None:
+        raise ValueError("The CSV file is empty.")
+
+    df["answer"] = df.apply(
+        lambda row: format_answer(row["llm_answer"], row["subcategory"]),
+        axis=1,
+    )
+
+    df.to_csv(csv_path, index=False)
+    
+    return
 
 def format_answer(
     answer: str,
