@@ -207,7 +207,7 @@ def main() -> None:
         dataset_name="tyrionhuu/PPTBench-Understanding",
         dataset_path="data/PPTBench-Understanding",
         force_download=True,
-        source="modelscope",
+        source="huggingface",
     )
     print(df.columns)
 
