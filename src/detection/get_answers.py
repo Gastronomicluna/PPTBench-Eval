@@ -40,6 +40,7 @@ def get_answers(
     retry: Optional[int] = None,
     csv_path: Optional[Path] = None,
     overwrite: bool = False,
+    pure_text: bool = False,
 ) -> pd.DataFrame:
     """
     Get answers to the questions in the DataFrame.
@@ -57,6 +58,7 @@ def get_answers(
             will skip existing entries and save new results incrementally.
         overwrite (bool): If True, overwrites existing entries in CSV.
             If False, skips existing entries. Defaults to False.
+        pure_text (bool): If True, only use text data without images.
 
     Returns:
         pd.DataFrame: The DataFrame with the answers.
@@ -93,6 +95,7 @@ def get_answers(
                 json=json,
                 timeout=timeout,
                 retry=retry,
+                pure_text=pure_text,
             )
             result_data.append(result)
 
@@ -128,6 +131,7 @@ def get_answer_single(
     json: bool,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
+    pure_text: bool = False,
 ) -> Dict[str, Any]:
     """
     Get the answer to a single description and return the result.
@@ -141,6 +145,7 @@ def get_answer_single(
         json (bool): Whether to return JSON format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
+        pure_text (bool): If True, only use text data without images.
 
     Returns:
         Dict[str, Any]: Dictionary containing hash, ground_truth, and llm_answer.
@@ -159,7 +164,7 @@ def get_answer_single(
             ground_truth = row.get("ground_truth", "")
 
             # Extract image bytes from dictionary format
-            image_bytes = get_image_bytes(image_data)
+            image_bytes = get_image_bytes(image_data) if not pure_text else None
 
             prompt = build_prompt(
                 query=description,
@@ -173,11 +178,12 @@ def get_answer_single(
                 "prompt": prompt,
                 "temperature": temperature,
                 "max_tokens": max_tokens,
-                "images": image_bytes,
                 "json": json,
             }
             if timeout is not None:
                 kwargs["timeout"] = timeout
+            if not pure_text:
+                kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
 
@@ -248,6 +254,7 @@ def main() -> None:
         timeout=60,
         csv_path=Path(csv_path),
         overwrite=True,
+        pure_text=False,
     )
     print(results_df)
 
