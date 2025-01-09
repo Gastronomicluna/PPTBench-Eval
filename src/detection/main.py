@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Union
 
 import pandas as pd
+import httpx
 
 from ..shared.evaluation import evaluate_answers
 from ..shared.llm import API_LLM_MODELS
@@ -87,6 +88,9 @@ def process_model(
         )
         print(f"Processed {len(results_df)} entries")
         return results_df
+    except httpx.ConnectError as e:
+        logging.error("Ollama not running. Please start the server. %s", e)
+        return pd.DataFrame()
     except Exception as e:
         logging.error(f"Error processing {model_name}: {str(e)}")
         return pd.DataFrame()  # Return empty DataFrame on error
