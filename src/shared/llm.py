@@ -304,7 +304,7 @@ def generate_api_messages(
 
 
 def main() -> None:
-    from src.shared.load_save_dataset import load_save_huggingface_dataset_df
+    from ..shared.load_save_dataset import load_save_huggingface_dataset_df
 
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
