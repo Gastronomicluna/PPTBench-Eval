@@ -301,15 +301,15 @@ def main() -> None:
         dataset_path=dataset_path,
         force_download=False,
     )
-    row = df.sample(random_state=10).iloc[0]
+    row = df.sample(random_state=20).iloc[0]
     image_data = row["image"]
     image_bytes = image_data["bytes"] if isinstance(image_data, dict) else image_data
     # Reder image bytes
     # with open("image.jpg", "wb") as f:
     #     f.write(image_bytes)
     result = call_vision_model(
-        model_name="gpt-4o",
-        provider="api",
+        model_name="llama3.2-vision:11b",
+        provider="ollama",
         prompt="describe the image",
         temperature=0.7,
         max_tokens=1000,
@@ -318,3 +318,7 @@ def main() -> None:
         timeout=30,
     )
     print(result)
+
+
+if __name__ == "__main__":
+    main()
