@@ -1,6 +1,7 @@
 import json
 from typing import Any, Dict
 
+
 def parse_answer(
     answer: str,
 ) -> Dict[str, Any]:
@@ -20,11 +21,13 @@ def parse_answer(
 
     return parsed_answer
 
+
 def main():
     # Test the parse_answer function
     answer = '{"dominant_font": "Arial"}'
     parsed_answer = parse_answer(answer)
     print(parsed_answer)
-    
+
+
 if __name__ == "__main__":
     main()
