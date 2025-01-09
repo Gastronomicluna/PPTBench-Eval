@@ -23,11 +23,13 @@ def parse_answer(
 
 
 def main():
-    from .utils import csv_to_df
     from pathlib import Path
+
+    from .utils import csv_to_df
+
     # Test the parse_answer function
     csv_path = Path("data/style detection results.csv")
-    
+
     df = csv_to_df(csv_path)
     answers = df["llm_answer"]
     for answer in answers:
@@ -36,6 +38,7 @@ def main():
             print(parsed_answer)
         except Exception as e:
             print(f"Error parsing answer: {str(e)}")
+
 
 if __name__ == "__main__":
     main()
