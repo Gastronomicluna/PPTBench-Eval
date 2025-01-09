@@ -320,7 +320,7 @@ def main() -> None:
     # with open("image.jpg", "wb") as f:
     #     f.write(image_bytes)
     result = call_vision_model(
-        model_name="llama3.2-vision:latest",
+        model_name="llama3.2-vision:11b",
         provider="ollama",
         prompt="describe the image",
         temperature=0.7,

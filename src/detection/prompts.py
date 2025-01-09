@@ -60,6 +60,7 @@ If the query is "title_extraction" and the ground truth is "Emergency Clean Wate
 {divider}
 Slide JSON:
 {slide_json}
+
 {divider}
 Answer:
 """
@@ -85,8 +86,10 @@ def build_prompt_for_style_detection(
 {divider}
 Task: You are given a slide from a presentation in the form of an image and json data.
 {query}. Only return the requested information.
+
 {divider}
 Slide: {slide_json}
+
 {divider}
 Answer:
 """
@@ -120,8 +123,10 @@ Task: You are given a slide from a presentation in the form of an image and JSON
     "height": <integer>
 }}
 Ensure that all values are integers and the JSON is properly formatted.
+
 {divider}
 Slide: {slide_json}
+
 {divider}
 Answer:
 """
