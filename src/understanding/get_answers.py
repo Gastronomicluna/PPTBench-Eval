@@ -236,7 +236,7 @@ def main() -> None:
         dataset_name=dataset_name,
         dataset_path=dataset_path,
         force_download=True,
-        source="modelscope",
+        source="huggingface",
     )
 
     df = df[df["task"] == target_task]
