@@ -245,10 +245,9 @@ def main() -> None:
 
     # sample from subcategory == "content extraction"
     df = df[df["subcategory"] == "content extraction"]
-    sample_df = df.sample(5, random_state=42)
 
     results_df = get_answers(
-        df=sample_df,
+        df=df,
         model_name="llama3.2-vision:11b",
         provider="ollama",
         temperature=0.0,
