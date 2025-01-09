@@ -105,6 +105,7 @@ Answer:
 Slide JSON: {slide_json}
 
 {divider}
+Query: {query}
 Answer:
 """
     return prompt
