@@ -115,7 +115,18 @@ def compare_coordinate(
 
     Returns:
         bool: Whether the coordinates match.
+
+    Raises:
+        ValueError: If ground_truth contains invalid keys.
     """
+    valid_keys = {"top", "left", "width", "height"}
+    invalid_keys = set(ground_truth.keys()) - valid_keys
+    if invalid_keys:
+        return False
+        # raise ValueError(
+        #     f"Ground truth contains invalid keys: {invalid_keys}"
+        # )
+
     if ground_truth["top"] != answer["top"]:
         return False
     if ground_truth["left"] != answer["left"]:
