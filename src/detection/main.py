@@ -4,11 +4,11 @@ from pathlib import Path
 
 import pandas as pd
 
-from ..detection.get_answers import get_answers
-from ..detection.judge import judge_answer_df
 from ..shared.evaluation import evaluate_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
+from .get_answers import get_answers
+from .judge import judge_answer_df
 
 logging.basicConfig(level=logging.INFO)
 
