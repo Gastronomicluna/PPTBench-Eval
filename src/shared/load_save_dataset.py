@@ -202,7 +202,7 @@ def load_save_dataset_df(
         raise ValueError(f"Unsupported source: {source}")
 
 
-if __name__ == "__main__":
+def main() -> None:
     df = load_save_dataset_df(
         dataset_name="tyrionhuu/PPTBench-Detection",
         dataset_path="data/PPTBench-Detection",
@@ -210,3 +210,7 @@ if __name__ == "__main__":
         source="modelscope",
     )
     print(df.columns)
+
+
+if __name__ == "__main__":
+    main()
