@@ -1,17 +1,18 @@
+import concurrent.futures
 import logging
 import os
 from pathlib import Path
-import concurrent.futures
-from typing import Tuple, Optional, Union, Any
+from typing import Any, Optional, Tuple, Union
 
 import pandas as pd
 
 from ..shared.evaluation import evaluate_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
+from .format_answers import format_answer_csv
 from .get_answers import get_answers
 from .judge import judge_answer_df
-from .format_answers import format_answer_csv
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -89,7 +90,7 @@ def main(
         ollama_mode: Whether to only run OLLAMA models. Defaults to True.
         test_mode: Whether to run in test mode. Defaults to False.
         non_magic_mode: Whether to run in non-magic mode. Defaults to False.
-        
+
     Returns:
         None
     """
@@ -155,16 +156,16 @@ def main(
             ): (provider, model_name)
             for provider, model_name in models_to_run
         }
-        
+
         for future in concurrent.futures.as_completed(future_to_model):
             provider, model_name = future_to_model[future]
             try:
                 results[model_name] = future.result()
             except Exception as e:
                 logging.error(f"Model {model_name} failed: {str(e)}")
-    
+
     logging.info("Formatting answers...")
-    
+
     # Format answers with file existence check
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name}.csv"
@@ -175,7 +176,7 @@ def main(
             )
         else:
             logging.warning(f"Results file not found for {model_name}")
-    
+
     logging.info("Judging answers...")
 
     # Judge answers and save to CSV
