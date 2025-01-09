@@ -93,7 +93,6 @@ Answer:
     return prompt
 
 
-
 def build_prompt_for_layout_detection(
     query: str,
     slide_json: Dict[str, Any],
