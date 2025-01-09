@@ -44,14 +44,27 @@ def build_prompt_for_content_extraction(
     divider = "#" * 80
     prompt = f"""
 {divider}
-Task: You are given a slide from a presentation in the form of an image and json data.
-{query}. Only return the requested information.
+Task: You are given a slide from a presentation in the form of an image and JSON data.
+{query}
+
+**Instructions:**
+- Extract **only** the requested information based on the query.
+- Do **not** include any additional text, explanations, or labels.
+- Provide the response in plain text without any formatting.
+
+**Example:**
+If the query is "title_extraction" and the ground truth is "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021",
+**Do not respond with:** "The title of the slide is: Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021."
+**Instead, respond with:** "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021."
+
 {divider}
-Slide: {slide_json}
+Slide JSON:
+{slide_json}
 {divider}
 Answer:
 """
     return prompt
+
 
 
 def build_prompt_for_layout_detection(
