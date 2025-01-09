@@ -20,9 +20,6 @@ def build_prompt(
     """
     divider = "#" * 80
 
-    # Format the slide JSON for better readability
-    slide_formatted = json.dumps(slide_json, indent=4)
-
     # Handle options being either a string or dict
     if isinstance(options, str):
         options_dict = json.loads(options)
@@ -41,15 +38,16 @@ Task: You are provided with a slide from a presentation and a multiple-choice qu
 
 {divider}
 Slide Content:
-{slide_formatted}
+{slide_json}
+
 {divider}
 Question:
 {question}
-
 Options:
 {options_formatted}
+
 {divider}
-Answer (Please provide **only** the letter of the correct option, without any additional text):
+Answer (Please provide a JSON object with the key "answer" and the value being the letter of the correct option, without any additional text):
 """
 
     return prompt
