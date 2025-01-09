@@ -76,7 +76,7 @@ def call_vision_model(
         str: The generated response from the vision model.
     """
     processed_images = []
-    
+
     if images is not None:
         # Convert single items to list
         if not isinstance(images, list):
@@ -166,7 +166,7 @@ def generate_with_image_ollama(
             "options": options,
             "format": "json" if json else "",
         }
-        
+
         if images:  # Only include images if list is not None and not empty
             kwargs["images"] = images
 
