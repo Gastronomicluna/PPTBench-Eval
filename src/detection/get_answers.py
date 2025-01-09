@@ -181,7 +181,7 @@ def get_answer_single(
                 subcategory=subcategory,
                 slide_json=json_data,
             )
-            
+
             kwargs = {
                 "model_name": model_name,
                 "provider": provider,

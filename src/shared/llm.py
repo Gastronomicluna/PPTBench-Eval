@@ -5,6 +5,9 @@ import logging
 import os
 from typing import Any, Dict, List, Literal, Optional, Union
 
+# Disable httpx logging
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 import ollama
 import requests.exceptions
 from ollama import Options
