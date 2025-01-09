@@ -73,11 +73,11 @@ def build_prompt_for_style_detection(
 ) -> str:
     """
     Builds a prompt for the model based on the query and slide JSON, instructing the model to return the answer in JSON format.
-    
+
     Args:
         query (str): The query text.
         slide_json (dict): The JSON data for the slide.
-    
+
     Returns:
         str: The prompt text.
     """
@@ -109,7 +109,6 @@ Query: {query}
 Answer:
 """
     return prompt
-
 
 
 def build_prompt_for_layout_detection(
