@@ -7,10 +7,10 @@ from typing import Any, Dict, Literal, Optional
 import pandas as pd
 from tqdm import tqdm
 
-from src.shared.llm import call_vision_model
+from ..shared.llm import call_vision_model
 
 from .prompts import build_prompt
-from ..shared.utils import csv_to_df, df_to_csv
+from ..shared.utils import csv_to_df, df_to_csv, get_image_bytes
 
 
 def load_existing_answers(
@@ -32,18 +32,6 @@ def load_existing_answers(
     return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
 
 
-def get_image_bytes(image_data: dict | bytes) -> bytes:
-    """Extract image bytes from dataset row.
-
-    Args:
-        image_data: Image data from dataset row, either dict or bytes
-
-    Returns:
-        bytes: Raw image bytes
-    """
-    if isinstance(image_data, dict):
-        return image_data["bytes"]
-    return image_data
 
 
 def get_answers(
