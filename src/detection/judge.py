@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import Dict
 
 import pandas as pd
 from thefuzz import fuzz
@@ -103,22 +103,27 @@ def fuzzy_match(
 
 
 def compare_coordinate(
-    ground_truth: List[int],
-    answer: List[int],
+    ground_truth: Dict[str, int],
+    answer: Dict[str, int],
 ) -> bool:
     """
     Compare the ground truth coordinates with the detected coordinates.
 
     Args:
-        ground_truth (list[dict]): The ground truth coordinates.
-        answer (list[dict]): The detected coordinates.
+        ground_truth (Dict[str, int]): The ground truth coordinates.
+        answer (Dict[str, int]): The detected coordinates.
 
     Returns:
         bool: Whether the coordinates match.
     """
-    for gt, ans in zip(ground_truth, answer):
-        if gt != ans:
-            return False
+    if ground_truth["top"] != answer["top"]:
+        return False
+    if ground_truth["left"] != answer["left"]:
+        return False
+    if ground_truth["width"] != answer["width"]:
+        return False
+    if ground_truth["height"] != answer["height"]:
+        return False
     return True
 
 
