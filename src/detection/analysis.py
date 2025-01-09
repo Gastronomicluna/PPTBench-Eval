@@ -59,3 +59,11 @@ def analyze_fuzzy_match_distribution(
 
     print(f"Analysis complete. Plot saved to {output_path}")
     print(f"\nStatistics:\n{stats_text}")
+
+
+def main() -> None:
+    result_csv_path = Path("data/detection_results.csv")
+    analyze_fuzzy_match_distribution(result_csv_path)
+    
+if __name__ == "__main__":
+    main()
