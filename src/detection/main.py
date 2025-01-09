@@ -1,6 +1,8 @@
 import logging
 import os
 from pathlib import Path
+import concurrent.futures
+from typing import Tuple
 
 import pandas as pd
 
@@ -21,6 +23,32 @@ def get_project_root() -> Path:
     """
     current_file = Path(__file__).resolve()
     return current_file.parent.parent.parent
+
+
+def process_model(args: Tuple[pd.DataFrame, str, str, Path]) -> pd.DataFrame:
+    """Process a single model's answers.
+
+    Args:
+        args: Tuple containing (df, model_name, provider, results_dir)
+
+    Returns:
+        pd.DataFrame: Results dataframe
+    """
+    df, model_name, provider, results_dir = args
+    print(f"Processing {model_name}...")
+    results_df = get_answers(
+        df=df,
+        model_name=model_name,
+        provider=provider,
+        temperature=0.0,
+        max_tokens=3200,
+        json=False,
+        timeout=60,
+        csv_path=results_dir / f"{model_name}.csv",
+        overwrite=True,
+    )
+    print(f"Processed {len(results_df)} entries")
+    return results_df
 
 
 def main() -> None:
@@ -72,20 +100,16 @@ def main() -> None:
 
     logging.info("Generating answers...")
 
-    for provider, model_name in models_to_run:
-        print(f"Processing {model_name}...")
-        results_df = get_answers(
-            df=df,
-            model_name=model_name,
-            provider=provider,
-            temperature=0.0,
-            max_tokens=3200,
-            json=False,
-            timeout=60,
-            csv_path=results_dir / f"{model_name}.csv",
-            overwrite=True,
-        )
-        print(f"Processed {len(results_df)} entries")
+    # Process models in parallel
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        futures = [
+            executor.submit(
+                process_model, 
+                (df, model_name, provider, results_dir)
+            )
+            for provider, model_name in models_to_run
+        ]
+        concurrent.futures.wait(futures)
     
     logging.info("Formatting answers...")
     
