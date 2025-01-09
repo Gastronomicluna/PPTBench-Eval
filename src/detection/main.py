@@ -9,7 +9,7 @@ from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from .get_answers import get_answers
 from .judge import judge_answer_df
-
+from .format_answers import format_answer_csv
 logging.basicConfig(level=logging.INFO)
 
 
@@ -86,7 +86,16 @@ def main() -> None:
             overwrite=True,
         )
         print(f"Processed {len(results_df)} entries")
-
+    
+    logging.info("Formatting answers...")
+    
+    # Format answers to be in the correct JSON format
+    for _, model_name in models_to_run:
+        format_answer_csv(
+            csv_path=results_dir / f"{model_name}.csv",
+            overwrite=True,
+        )
+    
     logging.info("Judging answers...")
 
     # Judge answers and save to CSV
