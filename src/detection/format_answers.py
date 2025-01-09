@@ -1,7 +1,9 @@
+from pathlib import Path
+from typing import Any, Dict, Literal, Union
+
 from ..shared.parse_answer import parse_json_answer
 from ..shared.utils import csv_to_df
-from pathlib import Path
-from typing import Dict, Any, Union, Literal
+
 
 def format_answer_csv(
     csv_path: Path,
@@ -31,8 +33,9 @@ def format_answer_csv(
     )
 
     df.to_csv(csv_path, index=False)
-    
+
     return
+
 
 def format_answer(
     answer: str,
@@ -57,6 +60,7 @@ def format_answer(
     else:
         raise ValueError(f"Unknown subcategory: {subcategory}")
 
+
 def format_content_extraction_answer(
     answer: str,
 ) -> str:
@@ -73,6 +77,7 @@ def format_content_extraction_answer(
     answer = json_answer["answer"]
     return answer
 
+
 def format_style_detection_answer(
     answer: str,
 ) -> Union[str, int]:
@@ -88,6 +93,7 @@ def format_style_detection_answer(
     json_answer = parse_json_answer(answer)
     answer = json_answer["answer"]
     return answer
+
 
 def format_layout_detection_answer(
     answer: str,
