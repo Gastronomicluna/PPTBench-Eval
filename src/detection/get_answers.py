@@ -250,6 +250,9 @@ def main() -> None:
         json=False,
         timeout=60,
         csv_path=Path(csv_path),
-        overwrite=False,
+        overwrite=True,
     )
     print(results_df)
+
+if __name__ == "__main__":
+    main()
