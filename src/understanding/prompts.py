@@ -51,8 +51,8 @@ Answer (Please provide **only** the letter of the correct option, without any ad
 def main() -> None:
     from src.shared.load_save_dataset import load_save_huggingface_dataset_df
 
-    dataset_name = "tyrionhuu/PPTBench-Detection"
-    dataset_path = "data/PPTBench-Detection"
+    dataset_name = "tyrionhuu/PPTBench-Understanding"
+    dataset_path = "data/PPTBench-Understanding"
 
     df = load_save_huggingface_dataset_df(
         dataset_name=dataset_name,
@@ -63,10 +63,11 @@ def main() -> None:
     # print(df.columns)
     seed = 42
     row = df.sample(random_state=seed).iloc[0]
-    description = row["description"]
+    question = row["question"]
+    options = row["options"]
     json_data = row["json_data"]
     # print(json_data)
-    prompt = build_prompt(description, json_data)
+    prompt = build_prompt(question, options, json_data)
     print(prompt)
 
 
