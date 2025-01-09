@@ -237,7 +237,7 @@ def main() -> None:
         dataset_name=dataset_name,
         dataset_path=dataset_path,
         force_download=False,
-        source="modelscope",
+        source="huggingface",
     )
 
     df = df[df["subcategory"] == target_subcategory]
