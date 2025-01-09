@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any, Union
+from typing import Any, Dict, Union
 
 
 def build_prompt(
@@ -30,7 +30,9 @@ def build_prompt(
         options_dict = options
 
     # Format the options
-    options_formatted = "\n".join([f"{key}. {value}" for key, value in options_dict.items()])
+    options_formatted = "\n".join(
+        [f"{key}. {value}" for key, value in options_dict.items()]
+    )
 
     # Construct the prompt with emphasis on returning only the option letter
     prompt = f"""
@@ -51,7 +53,6 @@ Answer (Please provide **only** the letter of the correct option, without any ad
 """
 
     return prompt
-
 
 
 def main() -> None:
