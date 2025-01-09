@@ -6,26 +6,21 @@ from thefuzz import fuzz
 
 
 def judge_answer_df(
-    df: Path | str | pd.DataFrame,
-    csv_path: Path | str | None = None,
+    csv_path: Path | str,
     overwrite: bool = False,
 ) -> pd.DataFrame:
     """
-    Judge the answers in the DataFrame or CSV file.
+    Judge the answers in the CSV file and save results back to the same file.
 
     Args:
-        df (Union[Path, str, pd.DataFrame]): Input DataFrame or path to CSV file.
-        csv_path (Union[Path, str, None]): Path to save the judged results.
+        csv_path (Union[Path, str]): Path to CSV file for input and output.
         overwrite (bool): Whether to overwrite existing output file.
 
     Returns:
         pd.DataFrame: The DataFrame with the judged results.
     """
-    # Handle input
-    if isinstance(df, (str, Path)):
-        answers_df = pd.read_csv(df)
-    else:
-        answers_df = df
+    csv_path = Path(csv_path)
+    answers_df = pd.read_csv(csv_path)
 
     if (
         "subcategory" not in answers_df.columns
@@ -45,14 +40,12 @@ def judge_answer_df(
         axis=1,
     )
 
-    # Save results if path provided
-    if csv_path is not None:
-        csv_path = Path(csv_path)
-        if csv_path.exists() and not overwrite:
-            raise FileExistsError(
-                f"Output file {csv_path} already exists. Set overwrite=True to overwrite."
-            )
-        answers_df.to_csv(csv_path, index=False)
+    # Save results
+    if not overwrite and csv_path.exists():
+        raise FileExistsError(
+            f"Output file {csv_path} already exists. Set overwrite=True to overwrite."
+        )
+    answers_df.to_csv(csv_path, index=False)
 
     return answers_df
 
