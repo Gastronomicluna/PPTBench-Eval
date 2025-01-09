@@ -84,11 +84,19 @@ def build_prompt_for_style_detection(
     divider = "#" * 80
     prompt = f"""
 {divider}
-Task: You are given a slide from a presentation in the form of an image and json data.
-{query}. Only return the requested information.
+Task: You are given a slide from a presentation in the form of an image and JSON data.
+
+{query}. Provide only the requested information without any additional text or explanations.
+
+Examples:
+Query: Identify the dominant font in the slide.
+Answer: Arial
+
+Query: Identify the difference of the largest and the smallest font size excluding the notes section.
+Answer: 2.0
 
 {divider}
-Slide: {slide_json}
+Slide JSON: {slide_json}
 
 {divider}
 Answer:
