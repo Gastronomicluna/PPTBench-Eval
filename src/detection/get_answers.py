@@ -10,10 +10,12 @@ from tqdm import tqdm
 from src.shared.llm import call_vision_model
 
 from .prompts import build_prompt
-from .utils import csv_to_df, df_to_csv
+from ..shared.utils import csv_to_df, df_to_csv
 
 
-def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
+def load_existing_answers(
+    csv_path: Path
+) -> Dict[str, Dict[str, Any]]:
     """
     Load existing answers from CSV file using the utility function.
 
