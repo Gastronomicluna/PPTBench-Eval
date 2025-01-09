@@ -1,9 +1,9 @@
 import concurrent.futures
 import logging
 import os
+from datetime import datetime
 from pathlib import Path
 from typing import Union
-from datetime import datetime
 
 import pandas as pd
 
@@ -14,6 +14,7 @@ from .format_answers import format_answer_csv
 from .get_answers import get_answers
 from .judge import judge_answer_df
 
+
 def setup_logging(log_dir: Path) -> None:
     """Set up logging configuration.
 
@@ -23,15 +24,16 @@ def setup_logging(log_dir: Path) -> None:
     os.makedirs(log_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_file = log_dir / f"detection_{timestamp}.log"
-    
+
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
             logging.FileHandler(log_file),
-            logging.StreamHandler()  # Also keep console output
-        ]
+            logging.StreamHandler(),  # Also keep console output
+        ],
     )
+
 
 def get_project_root() -> Path:
     """Get the absolute path to the project root directory.
@@ -115,7 +117,7 @@ def main(
     project_root = get_project_root()
     log_dir = project_root / "log"
     setup_logging(log_dir)
-    
+
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
 
