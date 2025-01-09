@@ -204,10 +204,10 @@ def load_save_dataset_df(
 
 def main() -> None:
     df = load_save_dataset_df(
-        dataset_name="tyrionhuu/PPTBench-Detection",
-        dataset_path="data/PPTBench-Detection",
+        dataset_name="tyrionhuu/PPTBench-Understanding",
+        dataset_path="data/PPTBench-Understanding",
         force_download=False,
-        source="modelscope",
+        source="huggingface",
     )
     print(df.columns)
 
