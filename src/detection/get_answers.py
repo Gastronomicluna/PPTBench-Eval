@@ -235,14 +235,15 @@ def main() -> None:
     )
 
     df = df[df["subcategory"] == target_subcategory]
-
+    sample_size = 20
+    df = df.sample(sample_size, random_state=42)
     results_df = get_answers(
         df=df,
         model_name="llama3.2-vision:11b",
         provider="ollama",
         temperature=0.0,
         max_tokens=3200,
-        json=False,
+        json=True,
         timeout=60,
         csv_path=Path(csv_path),
         overwrite=True,
