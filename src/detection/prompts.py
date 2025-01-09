@@ -72,12 +72,12 @@ def build_prompt_for_style_detection(
     slide_json: Dict[str, Any],
 ) -> str:
     """
-    Builds a prompt for the model based on the query and slide JSON.
-
+    Builds a prompt for the model based on the query and slide JSON, instructing the model to return the answer in JSON format.
+    
     Args:
         query (str): The query text.
         slide_json (dict): The JSON data for the slide.
-
+    
     Returns:
         str: The prompt text.
     """
@@ -86,14 +86,20 @@ def build_prompt_for_style_detection(
 {divider}
 Task: You are given a slide from a presentation in the form of an image and JSON data.
 
-{query}. Provide only the requested information without any additional text or explanations.
+{query}. Provide only the requested information in JSON format without any additional text or explanations.
 
 Examples:
 Query: Identify the dominant font in the slide.
-Answer: Arial
+Answer:
+{{
+    "dominant_font": "Arial"
+}}
 
 Query: Identify the difference of the largest and the smallest font size excluding the notes section.
-Answer: 2.0
+Answer:
+{{
+    "font_size_difference": 2.0
+}}
 
 {divider}
 Slide JSON: {slide_json}
@@ -102,6 +108,7 @@ Slide JSON: {slide_json}
 Answer:
 """
     return prompt
+
 
 
 def build_prompt_for_layout_detection(
