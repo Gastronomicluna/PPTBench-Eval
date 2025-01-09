@@ -6,7 +6,7 @@ PPTBench is a benchmark for evaluating the performance of Large Language Models 
 
 ## Tasks
 
-## How to Use
+## Requirements
 
 1. Ensure you have Python 3.11 installed.
 2. We use Poetry for dependency management. Install it from [here](https://python-poetry.org/docs/#installation).
@@ -17,3 +17,5 @@ PPTBench is a benchmark for evaluating the performance of Large Language Models 
    ```
 
    Note: If you encounter the issue that `poetry install` stuck at pending, refer to [this issue](https://github.com/python-poetry/poetry/issues/8623).
+4. If you don't have real Internet, refer to [HF-Mirror](https://hf-mirror.com) 🤗
+
