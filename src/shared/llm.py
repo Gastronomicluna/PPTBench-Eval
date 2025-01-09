@@ -133,8 +133,8 @@ def generate_with_image_ollama(
     prompt: str,
     temperature: float,
     max_tokens: int,
-    images: List[str | bytes],
-    json: bool,
+    images: Optional[List[str | bytes]] = None,
+    json: bool = False,
     timeout: int = 30,  # Default 30 seconds
 ) -> str:
     """
@@ -145,8 +145,8 @@ def generate_with_image_ollama(
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        images (list[str | bytes]): Paths to the image files or image data to include.
-            Empty list for text-only mode.
+        images (Optional[List[str | bytes]]): Paths to image files or image data.
+            If None or empty list, runs in text-only mode.
         json (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
 
@@ -167,7 +167,7 @@ def generate_with_image_ollama(
             "format": "json" if json else "",
         }
         
-        if images:  # Only include images if the list is not empty
+        if images:  # Only include images if list is not None and not empty
             kwargs["images"] = images
 
         return ollama.generate(**kwargs)["response"]
@@ -325,7 +325,7 @@ def main() -> None:
         prompt="describe the image",
         temperature=0.7,
         max_tokens=1000,
-        images=image_bytes,
+        # images=image_bytes,
         json=False,
         timeout=30,
     )
