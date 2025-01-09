@@ -5,16 +5,25 @@ from typing import Dict, Any, Union, Literal
 
 def format_answer_csv(
     csv_path: Path,
+    overwrite: bool = False,
 ) -> None:
     """
     Format the answers in the CSV file.
 
     Args:
         csv_path (Path): Path to the CSV file.
+        overwrite (bool, optional): Whether to overwrite existing answers.
+            If False and answer column exists with values, skip processing.
+            Defaults to False.
     """
     df = csv_to_df(csv_path)
     if df is None:
         raise ValueError("The CSV file is empty.")
+
+    if "answer" in df.columns and not overwrite:
+        # Check if answer column has any non-null values
+        if not df["answer"].isna().all():
+            return
 
     df["answer"] = df.apply(
         lambda row: format_answer(row["llm_answer"], row["subcategory"]),
