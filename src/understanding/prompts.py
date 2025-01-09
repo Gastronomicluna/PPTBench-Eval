@@ -1,38 +1,39 @@
-# from typing import Any, Dict
+from typing import Any, Dict
 
 
-# def build_prompt(
-#     query: str,
-#     slide_json: Dict[str, Any],
-# ) -> str:
-#     """
-#     Builds a prompt for the model based on the query and slide JSON.
+def build_prompt(
+    question: str,
+    options: Dict[str, Any],
+    slide_json: Dict[str, Any],
+) -> str:
+    """
+    Builds a prompt for the model based on the question and slide JSON.
 
-#     Args:
-#         query (str): The query text.
-#         slide_json (dict): The JSON data for the slide.
+    Args:
+        question (str): The question text.
+        slide_json (dict): The JSON data for the slide.
 
-#     Returns:
-#         str: The prompt text.
-#     """
-#     divider = "#" * 80
-#     prompt = f"""
-# {divider}
-# Task: You are given a slide from a presentation in the form of an image and JSON data.
-# {query}. Only return the requested information in the following JSON format:
-# {{
-#     "left": <integer>,
-#     "top": <integer>,
-#     "width": <integer>,
-#     "height": <integer>
-# }}
-# Ensure that all values are integers and the JSON is properly formatted.
-# {divider}
-# Slide: {slide_json}
-# {divider}
-# Answer:
-# """
-#     return prompt
+    Returns:
+        str: The prompt text.
+    """
+    divider = "#" * 80
+    prompt = f"""
+{divider}
+Task: You are given a slide from a presentation in the form of an image and JSON data.
+{question}. Only return the requested information in the following JSON format:
+{{
+    "left": <integer>,
+    "top": <integer>,
+    "width": <integer>,
+    "height": <integer>
+}}
+Ensure that all values are integers and the JSON is properly formatted.
+{divider}
+Slide: {slide_json}
+{divider}
+Answer:
+"""
+    return prompt
 
 
 # def main() -> None:
