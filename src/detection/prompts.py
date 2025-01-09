@@ -50,19 +50,20 @@ Task: You are given a slide from a presentation in the form of an image and JSON
 **Instructions:**
 - Extract **only** the requested information based on the query.
 - Do **not** include any additional text, explanations, or labels.
-- Provide the response in plain text without any formatting.
+- Provide the response in JSON format with the key "answer" and the value being the extracted content.
 
 **Example:**
 If the query is "title_extraction" and the ground truth is "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021",
-**Do not respond with:** "The title of the slide is: Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021."
-**Instead, respond with:** "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021."
-
+Answer:
+{{
+    "answer": "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021"
+}}
 {divider}
 Slide JSON:
 {slide_json}
 
 {divider}
-Answer:
+Answer (Please provide a JSON object with the key "answer" and the value being the extracted content, without any additional text):
 """
     return prompt
 
@@ -92,13 +93,13 @@ Examples:
 Query: Identify the dominant font in the slide.
 Answer:
 {{
-    "dominant_font": "Arial"
+    "answer": "Arial"
 }}
 
 Query: Identify the difference of the largest and the smallest font size excluding the notes section.
 Answer:
 {{
-    "font_size_difference": 2.0
+    "answer": 2.0
 }}
 
 {divider}
@@ -106,7 +107,7 @@ Slide JSON: {slide_json}
 
 {divider}
 Query: {query}
-Answer:
+Answer (Please provide a JSON object with the key "answer" and the value being the answer to the query, without any additional text):
 """
     return prompt
 
@@ -143,6 +144,7 @@ Ensure that all values are integers and the JSON is properly formatted.
 Slide: {slide_json}
 
 {divider}
+Query: {query}
 Answer:
 """
     return prompt
