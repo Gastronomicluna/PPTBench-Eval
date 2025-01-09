@@ -19,7 +19,7 @@ def parse_answer(
     except json.JSONDecodeError:
         # Try unescaping the string first
         try:
-            unescaped_answer = answer.encode().decode('unicode_escape')
+            unescaped_answer = answer.encode().decode("unicode_escape")
             parsed_answer = json.loads(unescaped_answer)
         except (json.JSONDecodeError, UnicodeError):
             parsed_answer = {"error": "Failed to parse the answer."}
