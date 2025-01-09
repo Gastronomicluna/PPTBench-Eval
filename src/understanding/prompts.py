@@ -1,10 +1,10 @@
 import json
-from typing import Dict, Any
+from typing import Dict, Any, Union
 
 
 def build_prompt(
     question: str,
-    options: Dict[str, Any],
+    options: Union[str, Dict[str, Any]],
     slide_json: Dict[str, Any],
 ) -> str:
     """
@@ -12,7 +12,7 @@ def build_prompt(
 
     Args:
         question (str): The question text.
-        options (dict): A dictionary of option labels to their descriptions.
+        options (Union[str, Dict[str, Any]]): Options as string or dictionary.
         slide_json (dict): The JSON data for the slide.
 
     Returns:
@@ -23,9 +23,14 @@ def build_prompt(
     # Format the slide JSON for better readability
     slide_formatted = json.dumps(slide_json, indent=4)
 
+    # Handle options being either a string or dict
+    if isinstance(options, str):
+        options_dict = json.loads(options)
+    else:
+        options_dict = options
+
     # Format the options
-    # print(options)
-    options_formatted = "\n".join([f"{key}. {value}" for key, value in options.items()])
+    options_formatted = "\n".join([f"{key}. {value}" for key, value in options_dict.items()])
 
     # Construct the prompt with emphasis on returning only the option letter
     prompt = f"""
