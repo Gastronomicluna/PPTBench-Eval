@@ -30,7 +30,7 @@ def main() -> None:
     and processes, evaluates, and saves detection results.
     """
     ollama_mode = True
-    test_mode = True
+    test_mode = False
     non_magic_mode = False
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
