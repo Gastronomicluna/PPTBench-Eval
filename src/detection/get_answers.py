@@ -231,12 +231,13 @@ def main() -> None:
         dataset_name=dataset_name,
         dataset_path=dataset_path,
         force_download=False,
-        source="huggingface",
+        source="modelscope",
     )
 
     df = df[df["subcategory"] == target_subcategory]
     sample_size = 20
     df = df.sample(sample_size, random_state=42)
+    
     results_df = get_answers(
         df=df,
         model_name="llama3.2-vision:11b",
