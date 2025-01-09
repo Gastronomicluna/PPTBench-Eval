@@ -240,7 +240,7 @@ def main() -> None:
     # sample from subcategory == "content extraction"
     df = df[df["subcategory"] == "content extraction"]
     sample_df = df.sample(5, random_state=42)
-    
+
     results_df = get_answers(
         df=sample_df,
         model_name="ollama/llama-vision-base",
@@ -253,6 +253,7 @@ def main() -> None:
         overwrite=True,
     )
     print(results_df)
+
 
 if __name__ == "__main__":
     main()
