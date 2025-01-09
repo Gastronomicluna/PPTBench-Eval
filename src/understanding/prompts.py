@@ -24,6 +24,7 @@ def build_prompt(
     slide_formatted = json.dumps(slide_json, indent=4)
 
     # Format the options
+    # print(options)
     options_formatted = "\n".join([f"{key}. {value}" for key, value in options.items()])
 
     # Construct the prompt with emphasis on returning only the option letter
