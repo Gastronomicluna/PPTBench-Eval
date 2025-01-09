@@ -2,7 +2,7 @@ import json
 from typing import Any, Dict
 
 
-def parse_answer(
+def parse_json_answer(
     answer: str,
 ) -> Dict[str, Any]:
     """
@@ -39,7 +39,7 @@ def main():
     answers = df["llm_answer"]
     for answer in answers:
         try:
-            parsed_answer = parse_answer(answer)
+            parsed_answer = parse_json_answer(answer)
             print(parsed_answer)
         except Exception as e:
             print(f"Error parsing answer: {str(e)}")
