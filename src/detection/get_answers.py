@@ -231,10 +231,15 @@ def get_answer_single(
 
 def main() -> None:
     from src.shared.load_save_dataset import load_save_dataset_df
-
+    target_subcategories = [
+        "content_extraction",
+        "layout_detection",
+        "style_detection",
+    ]
+    target_subcategory = target_subcategories[1]
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
-    csv_path = "data/detection_results.csv"
+    csv_path = "data/" + target_subcategory + "_results.csv"
 
     df = load_save_dataset_df(
         dataset_name=dataset_name,
@@ -243,8 +248,7 @@ def main() -> None:
         source="huggingface",
     )
 
-    # sample from subcategory == "content extraction"
-    df = df[df["subcategory"] == "content extraction"]
+    df = df[df["subcategory"] == target_subcategory]
 
     results_df = get_answers(
         df=df,
