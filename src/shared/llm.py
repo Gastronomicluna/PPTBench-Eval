@@ -5,13 +5,12 @@ import logging
 import os
 from typing import Any, Dict, List, Literal, Optional, Union
 
-
-
 import ollama
 import requests.exceptions
 from ollama import Options
 from openai import OpenAI
 from PIL import Image
+
 logging.getLogger("httpx").setLevel(logging.WARNING)
 API_LLM_MODELS = [
     ("api", "claude-3-5-sonnet-20241022"),
