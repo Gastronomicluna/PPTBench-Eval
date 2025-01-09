@@ -66,8 +66,7 @@ Answer:
     return prompt
 
 
-
-def build_prompt_for_layout_detection(
+def build_prompt_for_style_detection(
     query: str,
     slide_json: Dict[str, Any],
 ) -> str:
@@ -94,7 +93,8 @@ Answer:
     return prompt
 
 
-def build_prompt_for_style_detection(
+
+def build_prompt_for_layout_detection(
     query: str,
     slide_json: Dict[str, Any],
 ) -> str:
