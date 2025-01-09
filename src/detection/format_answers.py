@@ -1,5 +1,29 @@
 from ..shared.parse_answer import parse_json_answer
-from typing import Dict, Any, Union
+from typing import Dict, Any, Union, Literal
+
+def format_answer(
+    answer: str,
+    subcategory: Literal["content extraction", "layout detection", "style detection"],
+) -> Union[str, Dict[str, Any]]:
+    """
+    Format the extracted content for the detection tasks.
+
+    Args:
+        answer (str): The extracted content.
+        subcategory (str): The subcategory type.
+
+    Returns:
+        Union[str, Dict[str, Any]]: The formatted answer.
+    """
+    if subcategory == "content extraction":
+        return format_content_extraction_answer(answer)
+    elif subcategory == "layout detection":
+        return format_layout_detection_answer(answer)
+    elif subcategory == "style detection":
+        return format_style_detection_answer(answer)
+    else:
+        raise ValueError(f"Unknown subcategory: {subcategory}")
+
 def format_content_extraction_answer(
     answer: str,
 ) -> str:
