@@ -82,6 +82,12 @@ def main(
     Args:
         max_workers: Maximum number of concurrent workers for parallel processing.
             Defaults to 4.
+        ollama_mode: Whether to only run OLLAMA models. Defaults to True.
+        test_mode: Whether to run in test mode. Defaults to False.
+        non_magic_mode: Whether to run in non-magic mode. Defaults to False.
+        
+    Returns:
+        None
     """
     ollama_mode = ollama_mode
     test_mode = test_mode
