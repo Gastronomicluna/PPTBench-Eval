@@ -228,7 +228,7 @@ def main() -> None:
         "layout detection",
         "style detection",
     ]
-    target_subcategory = target_subcategories[1]
+    target_subcategory = target_subcategories[2]
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
     csv_path = "data/" + target_subcategory + " results.csv"
@@ -250,7 +250,7 @@ def main() -> None:
         provider="ollama",
         temperature=0.0,
         max_tokens=3200,
-        json=True,
+        json=False,
         timeout=60,
         csv_path=Path(csv_path),
         overwrite=True,
