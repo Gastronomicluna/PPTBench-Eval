@@ -30,17 +30,17 @@ def judge_answer_df(
     if (
         "subcategory" not in answers_df.columns
         or "ground_truth" not in answers_df.columns
-        or "llm_answer" not in answers_df.columns
+        or "answer" not in answers_df.columns
     ):
         raise ValueError(
             "The input DataFrame must contain 'subcategory', 'ground_truth', "
-            "and 'llm_answer' columns."
+            "and 'answer' columns."
         )
 
     # Process answers
     answers_df["is_correct"] = answers_df.apply(
         lambda row: judge_answer(
-            row["subcategory"], row["ground_truth"], row["llm_answer"]
+            row["subcategory"], row["ground_truth"], row["answer"]
         ),
         axis=1,
     )
