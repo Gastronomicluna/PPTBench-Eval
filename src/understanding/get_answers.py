@@ -235,7 +235,7 @@ def main() -> None:
     df = load_save_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
-        force_download=True,
+        force_download=False,
         source="huggingface",
     )
 
