@@ -68,38 +68,37 @@ def call_vision_model(
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
         images (Union[str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None]):
-            Image file paths, bytes, PIL Images, or lists of any of these.
+            Image file paths, bytes, PIL Images, or lists of any of these. If None, runs in text-only mode.
         json (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
 
     Returns:
         str: The generated response from the vision model.
     """
-    if images is None:
-        raise ValueError("At least one image must be provided for the vision model.")
-
-    # Convert single items to list
-    if not isinstance(images, list):
-        images = [images]
-
-    # Validate and process all images
     processed_images = []
-    for img in images:
-        if isinstance(img, str):
-            if not os.path.exists(img):
-                raise ValueError(f"Image file not found: {img}")
-            processed_images.append(img)
-        elif isinstance(img, bytes):
-            processed_images.append(img)
-        elif isinstance(img, Image.Image):
-            # Convert PIL Image to bytes
-            img_byte_arr = io.BytesIO()
-            img.save(img_byte_arr, format=img.format or "PNG")
-            processed_images.append(img_byte_arr.getvalue())
-        else:
-            raise ValueError(
-                f"Invalid image type: {type(img)}. Expected str, bytes, or PIL Image."
-            )
+    
+    if images is not None:
+        # Convert single items to list
+        if not isinstance(images, list):
+            images = [images]
+
+        # Validate and process all images
+        for img in images:
+            if isinstance(img, str):
+                if not os.path.exists(img):
+                    raise ValueError(f"Image file not found: {img}")
+                processed_images.append(img)
+            elif isinstance(img, bytes):
+                processed_images.append(img)
+            elif isinstance(img, Image.Image):
+                # Convert PIL Image to bytes
+                img_byte_arr = io.BytesIO()
+                img.save(img_byte_arr, format=img.format or "PNG")
+                processed_images.append(img_byte_arr.getvalue())
+            else:
+                raise ValueError(
+                    f"Invalid image type: {type(img)}. Expected str, bytes, or PIL Image."
+                )
 
     if provider == "ollama":
         return generate_with_image_ollama(
@@ -139,7 +138,7 @@ def generate_with_image_ollama(
     timeout: int = 30,  # Default 30 seconds
 ) -> str:
     """
-    Generates a response using the Ollama model with images.
+    Generates a response using the Ollama model with optional images.
 
     Args:
         model_name (str): The name of the model to use.
@@ -147,6 +146,7 @@ def generate_with_image_ollama(
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
         images (list[str | bytes]): Paths to the image files or image data to include.
+            Empty list for text-only mode.
         json (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
 
@@ -157,16 +157,20 @@ def generate_with_image_ollama(
         options = Options(
             temperature=temperature,
             num_ctx=max_tokens,
-            request_timeout=timeout,  # Add timeout to options
+            request_timeout=timeout,
         )
 
-        return ollama.generate(
-            model=model_name,
-            prompt=prompt,
-            images=images,
-            options=options,
-            format="json" if json else "",
-        )["response"]
+        kwargs = {
+            "model": model_name,
+            "prompt": prompt,
+            "options": options,
+            "format": "json" if json else "",
+        }
+        
+        if images:  # Only include images if the list is not empty
+            kwargs["images"] = images
+
+        return ollama.generate(**kwargs)["response"]
 
     except requests.exceptions.Timeout:
         raise TimeoutError(f"Request timed out after {timeout} seconds")
@@ -180,19 +184,20 @@ def generate_with_api(
     prompt: str,
     temperature: float,
     max_tokens: int,
-    images: List[str | bytes],
-    json: bool,
+    images: Optional[List[str | bytes]] = None,
+    json: bool = False,
     timeout: int = 30,  # Default 30 seconds
 ) -> str:
     """
-    Generates a response using the API with images.
+    Generates a response using the API with optional images.
 
     Args:
         model_name (str): The name of the model to use.
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        images (list[str | bytes]): Paths to the image files or image data to include.
+        images (Optional[list[str | bytes]]): Paths to image files or image data.
+            If None, runs in text-only mode.
         json (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
 
@@ -227,19 +232,23 @@ def generate_with_api(
 
 
 def generate_api_messages(
-    images: List[str | bytes],
     prompt: str,
+    images: Optional[List[str | bytes]] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Prepares the messages payload for the API call with images and a prompt.
+    Prepares the messages payload for the API call with optional images and a prompt.
 
     Args:
-        images (list[str | bytes]): List of image file paths or bytes objects.
         prompt (str): The text prompt for the model.
+        images (Optional[list[str | bytes]]): List of image file paths or bytes objects.
+            If None, returns text-only message format.
 
     Returns:
         list[dict]: A list of messages formatted for the API call.
     """
+    if not images:
+        return [{"role": "user", "content": prompt}]
+
     if len(images) == 1:
         base64_image = (
             encode_image(images[0])
