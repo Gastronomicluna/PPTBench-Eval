@@ -1,4 +1,5 @@
-from typing import Any, Dict
+import json
+from typing import Dict, Any
 
 
 def build_prompt(
@@ -11,46 +12,63 @@ def build_prompt(
 
     Args:
         question (str): The question text.
+        options (dict): A dictionary of option labels to their descriptions.
         slide_json (dict): The JSON data for the slide.
 
     Returns:
         str: The prompt text.
     """
     divider = "#" * 80
+
+    # Format the slide JSON for better readability
+    slide_formatted = json.dumps(slide_json, indent=4)
+
+    # Format the options
+    options_formatted = "\n".join([f"{key}. {value}" for key, value in options.items()])
+
+    # Construct the prompt with emphasis on returning only the option letter
     prompt = f"""
 {divider}
-Task: You are given a slide from a presentation in the form of an image and JSON data.
-
+Task: You are provided with a slide from a presentation and a multiple-choice question related to it. Analyze the slide content and select the most appropriate option that answers the question.
 
 {divider}
-Slide: {slide_json}
+Slide Content:
+{slide_formatted}
 {divider}
-Answer:
+Question:
+{question}
+
+Options:
+{options_formatted}
+{divider}
+Answer (Please provide **only** the letter of the correct option, without any additional text):
 """
+
     return prompt
 
 
-# def main() -> None:
-#     from src.shared.load_save_dataset import load_save_huggingface_dataset_df
 
-#     dataset_name = "tyrionhuu/PPTBench-Detection"
-#     dataset_path = "data/PPTBench-Detection"
+def main() -> None:
+    from src.shared.load_save_dataset import load_save_huggingface_dataset_df
 
-#     df = load_save_huggingface_dataset_df(
-#         dataset_name=dataset_name,
-#         dataset_path=dataset_path,
-#         force_download=False,
-#     )
-#     # Print complete header
-#     # print(df.columns)
-#     seed = 42
-#     row = df.sample(random_state=seed).iloc[0]
-#     description = row["description"]
-#     json_data = row["json_data"]
-#     # print(json_data)
-#     prompt = build_prompt(description, json_data)
-#     print(prompt)
+    dataset_name = "tyrionhuu/PPTBench-Detection"
+    dataset_path = "data/PPTBench-Detection"
+
+    df = load_save_huggingface_dataset_df(
+        dataset_name=dataset_name,
+        dataset_path=dataset_path,
+        force_download=False,
+    )
+    # Print complete header
+    # print(df.columns)
+    seed = 42
+    row = df.sample(random_state=seed).iloc[0]
+    description = row["description"]
+    json_data = row["json_data"]
+    # print(json_data)
+    prompt = build_prompt(description, json_data)
+    print(prompt)
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
