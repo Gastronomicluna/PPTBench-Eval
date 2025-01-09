@@ -2,7 +2,7 @@ import logging
 import os
 from pathlib import Path
 import concurrent.futures
-from typing import Tuple
+from typing import Tuple, Optional, Union, Any
 
 import pandas as pd
 
@@ -25,41 +25,67 @@ def get_project_root() -> Path:
     return current_file.parent.parent.parent
 
 
-def process_model(args: Tuple[pd.DataFrame, str, str, Path]) -> pd.DataFrame:
+def process_model(
+    df: pd.DataFrame,
+    model_name: str,
+    provider: str,
+    temperature: float,
+    max_tokens: int,
+    json: bool,
+    timeout: int,
+    csv_path: Union[str, Path],
+    overwrite: bool,
+) -> pd.DataFrame:
     """Process a single model's answers.
 
     Args:
-        args: Tuple containing (df, model_name, provider, results_dir)
+        df: Input dataframe containing questions
+        model_name: Name of the model to use
+        provider: Provider of the model
+        temperature: Sampling temperature
+        max_tokens: Maximum tokens in response
+        json: Whether to return JSON format
+        timeout: Timeout in seconds
+        csv_path: Path to save results
+        overwrite: Whether to overwrite existing results
 
     Returns:
         pd.DataFrame: Results dataframe
     """
-    df, model_name, provider, results_dir = args
     print(f"Processing {model_name}...")
     results_df = get_answers(
         df=df,
         model_name=model_name,
         provider=provider,
-        temperature=0.0,
-        max_tokens=3200,
-        json=False,
-        timeout=60,
-        csv_path=results_dir / f"{model_name}.csv",
-        overwrite=True,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        json=json,
+        timeout=timeout,
+        csv_path=csv_path,
+        overwrite=overwrite,
     )
     print(f"Processed {len(results_df)} entries")
     return results_df
 
 
-def main() -> None:
+def main(
+    max_workers: int = 4,
+    ollama_mode: bool = True,
+    test_mode: bool = False,
+    non_magic_mode: bool = False,
+) -> None:
     """Main entry point for the detection pipeline.
 
     This function sets up the environment, loads the dataset,
     and processes, evaluates, and saves detection results.
+
+    Args:
+        max_workers: Maximum number of concurrent workers for parallel processing.
+            Defaults to 4.
     """
-    ollama_mode = True
-    test_mode = False
-    non_magic_mode = False
+    ollama_mode = ollama_mode
+    test_mode = test_mode
+    non_magic_mode = non_magic_mode
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
 
@@ -101,11 +127,19 @@ def main() -> None:
     logging.info("Generating answers...")
 
     # Process models in parallel
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = [
             executor.submit(
-                process_model, 
-                (df, model_name, provider, results_dir)
+                process_model,
+                df=df,
+                model_name=model_name,
+                provider=provider,
+                temperature=0.0,
+                max_tokens=3200,
+                json=False,
+                timeout=60,
+                csv_path=results_dir / f"{model_name}.csv",
+                overwrite=True,
             )
             for provider, model_name in models_to_run
         ]
@@ -148,4 +182,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    main(
+        max_workers=4,
+        ollama_mode=True,
+        test_mode=False,
+    )
