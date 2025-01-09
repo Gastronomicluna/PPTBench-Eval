@@ -325,7 +325,7 @@ def main() -> None:
         prompt="describe the image",
         temperature=0.7,
         max_tokens=1000,
-        # images=image_bytes,
+        images=image_bytes,
         json=False,
         timeout=30,
     )
