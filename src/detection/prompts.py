@@ -8,12 +8,12 @@ def build_prompt(
 ) -> str:
     """
     Builds a prompt for the model based on the query and slide JSON.
-    
+
     Args:
         query (str): The query text.
         slide_json (dict): The JSON data for the slide.
         subcategory (str): The subcategory of the detection task.
-        
+
     Returns:
         str: The prompt text.
     """
@@ -25,6 +25,7 @@ def build_prompt(
         return build_prompt_for_style_detection(query, slide_json)
     else:
         raise ValueError(f"Invalid subcategory: {subcategory}")
+
 
 def build_prompt_for_content_extraction(
     query: str,
@@ -79,6 +80,7 @@ Answer:
 """
     return prompt
 
+
 def build_prompt_for_style_detection(
     query: str,
     slide_json: Dict[str, Any],
@@ -104,6 +106,7 @@ Slide: {slide_json}
 Answer:
 """
     return prompt
+
 
 if __name__ == "__main__":
     from src.shared.load_save_dataset import load_save_huggingface_dataset_df
