@@ -242,7 +242,7 @@ def main() -> None:
 
     df = df[df["subcategory"] == target_subcategory]
     sample_size = 20
-    df = df.sample(sample_size, random_state=4)
+    df = df.sample(sample_size, random_state=49)
 
     results_df = get_answers(
         df=df,

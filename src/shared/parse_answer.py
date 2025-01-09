@@ -33,7 +33,7 @@ def main():
     from .utils import csv_to_df
 
     # Test the parse_answer function
-    csv_path = Path("data/style detection results.csv")
+    csv_path = Path("data/layout detection results.csv")
 
     df = csv_to_df(csv_path)
     answers = df["llm_answer"]
