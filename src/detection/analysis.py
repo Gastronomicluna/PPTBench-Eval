@@ -118,7 +118,7 @@ def analyze_fuzzy_match_distribution(
     high_scores = len([s for s in scores if s >= 95])
     print(f"Number of scores ≥ 95%: {high_scores} ({high_scores/len(scores)*100:.2f}%)")
 
-    print(f"\nStatistics:")
+    print("\nStatistics:")
     print(f"Mean: {mean_score:.2f}%")
     print(f"Median: {median_score:.2f}%")
     print(f"Std: {std_score:.2f}%")
