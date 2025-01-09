@@ -179,7 +179,7 @@ def main(
         }
 
         for future in concurrent.futures.as_completed(future_to_model):
-            provider, model_name = future_to_model[future]
+            _, model_name = future_to_model[future]
             try:
                 results[model_name] = future.result()
             except Exception as e:
