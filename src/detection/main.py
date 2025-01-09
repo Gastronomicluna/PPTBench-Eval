@@ -52,20 +52,24 @@ def process_model(
     Returns:
         pd.DataFrame: Results dataframe
     """
-    print(f"Processing {model_name}...")
-    results_df = get_answers(
-        df=df,
-        model_name=model_name,
-        provider=provider,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        json=json,
-        timeout=timeout,
-        csv_path=csv_path,
-        overwrite=overwrite,
-    )
-    print(f"Processed {len(results_df)} entries")
-    return results_df
+    try:
+        print(f"Processing {model_name}...")
+        results_df = get_answers(
+            df=df,
+            model_name=model_name,
+            provider=provider,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            json=json,
+            timeout=timeout,
+            csv_path=csv_path,
+            overwrite=overwrite,
+        )
+        print(f"Processed {len(results_df)} entries")
+        return results_df
+    except Exception as e:
+        logging.error(f"Error processing {model_name}: {str(e)}")
+        return pd.DataFrame()  # Return empty DataFrame on error
 
 
 def main(
@@ -89,9 +93,6 @@ def main(
     Returns:
         None
     """
-    ollama_mode = ollama_mode
-    test_mode = test_mode
-    non_magic_mode = non_magic_mode
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
 
@@ -130,11 +131,16 @@ def main(
     else:
         models_to_run = API_LLM_MODELS
 
+    if not models_to_run:
+        logging.error("No models configured to run")
+        return
+
     logging.info("Generating answers...")
 
-    # Process models in parallel
+    # Process models in parallel with error handling
+    results: dict[str, pd.DataFrame] = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [
+        future_to_model = {
             executor.submit(
                 process_model,
                 df=df,
@@ -146,19 +152,29 @@ def main(
                 timeout=60,
                 csv_path=results_dir / f"{model_name}.csv",
                 overwrite=True,
-            )
+            ): (provider, model_name)
             for provider, model_name in models_to_run
-        ]
-        concurrent.futures.wait(futures)
+        }
+        
+        for future in concurrent.futures.as_completed(future_to_model):
+            provider, model_name = future_to_model[future]
+            try:
+                results[model_name] = future.result()
+            except Exception as e:
+                logging.error(f"Model {model_name} failed: {str(e)}")
     
     logging.info("Formatting answers...")
     
-    # Format answers to be in the correct JSON format
+    # Format answers with file existence check
     for _, model_name in models_to_run:
-        format_answer_csv(
-            csv_path=results_dir / f"{model_name}.csv",
-            overwrite=True,
-        )
+        csv_path = results_dir / f"{model_name}.csv"
+        if csv_path.exists():
+            format_answer_csv(
+                csv_path=csv_path,
+                overwrite=True,
+            )
+        else:
+            logging.warning(f"Results file not found for {model_name}")
     
     logging.info("Judging answers...")
 
