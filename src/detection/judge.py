@@ -139,17 +139,17 @@ def compare_coordinate(
 
 
 def exact_match(
-    ground_truth: str,
-    answer: str,
+    ground_truth: str | int,
+    answer: str | int,
 ) -> bool:
     """
     Exact matching function to compare the ground truth and the answer.
 
     Args:
-        ground_truth (str): The ground truth answer.
-        answer (str): The answer from the model.
+        ground_truth (Union[str, int]): The ground truth answer.
+        answer (Union[str, int]): The answer from the model.
 
     Returns:
         bool: Whether the answer is correct.
     """
-    return ground_truth.strip().lower() == answer.strip().lower()
+    return str(ground_truth).strip().lower() == str(answer).strip().lower()
