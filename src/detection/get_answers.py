@@ -236,7 +236,7 @@ def main() -> None:
         "layout detection",
         "style detection",
     ]
-    target_subcategory = target_subcategories[1]
+    target_subcategory = target_subcategories[2]
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
     csv_path = "data/" + target_subcategory + " results.csv"
