@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 import pandas as pd
 from thefuzz import fuzz
@@ -52,7 +52,7 @@ def judge_answer_df(
 
 def judge_answer(
     subcategory: str,
-    ground_truth: str,
+    ground_truth: Union[str, Dict[str, int]],
     answer: Optional[str],
 ) -> bool:
     """
