@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from typing import Dict, Optional
 import ast
@@ -76,7 +77,7 @@ def judge_answer(
     }
     if subcategory not in judge_function:
         raise ValueError(f"Unknown subcategory: {subcategory}")
-    
+
     if subcategory == "layout detection":
         try:
             ground_truth = ast.literal_eval(ground_truth)

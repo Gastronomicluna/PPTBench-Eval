@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, Literal, Union, Optional
+from typing import Any, Dict, Literal, Optional, Union
 
 from ..shared.parse_answer import parse_json_answer
 from ..shared.utils import csv_to_df
