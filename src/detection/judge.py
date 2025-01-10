@@ -82,7 +82,9 @@ def judge_answer(
     if subcategory == "layout detection":
         try:
             ground_truth = parse_json_answer(ground_truth)
+            # print(ground_truth)
             answer = parse_json_answer(answer)
+            print(answer)
         except (ValueError, SyntaxError):
             return False
 
