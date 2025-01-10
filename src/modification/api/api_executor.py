@@ -119,14 +119,15 @@ def add_shape(
 
     Args:
         slide: The slide to add the shape to.
-        shape_type: The type of the shape to add.
+        shape_type: The type of the shape to add (case insensitive).
         left: The left of the shape to add.
         top: The top of the shape to add.
         width: The width of the shape to add.
         height: The height of the shape to add.
         image_path: The image path of the shape to add.
     """
-    # Check if the shape type is valid
+    # Convert shape_type to uppercase and check if it's valid
+    shape_type = shape_type.upper()
     if shape_type not in MSO_SHAPE_TYPE.__members__:
         raise ValueError(f"Invalid shape type: {shape_type}")
 
