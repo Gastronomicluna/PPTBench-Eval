@@ -5,6 +5,7 @@ from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length
 
+
 def choose_slide(presentation: Presentation, slide_idx: int) -> Optional[Slide]:
     """Choose a slide from a presentation.
 
@@ -20,6 +21,7 @@ def choose_slide(presentation: Presentation, slide_idx: int) -> Optional[Slide]:
         return slide
     except Exception as e:
         raise ValueError(f"Failed to choose slide {slide_idx}: {str(e)}")
+
 
 def choose_shape(slide: Slide, shape_idx: int) -> Optional[BaseShape]:
     """Choose a shape from a slide.
