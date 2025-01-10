@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Any, Dict, Literal, Optional, Union
 
 from ..shared.parse_answer import parse_json_answer
-from ..shared.utils import csv_to_df
+from ..shared.utils import csv_to_df, df_to_csv
 
 
 def format_answer_csv(
@@ -32,9 +32,10 @@ def format_answer_csv(
         axis=1,
     )
 
-    df.to_csv(csv_path, index=False)
-
-    return
+    if df_to_csv(df, csv_path):
+        return
+    else:
+        raise ValueError("Failed to save the formatted answers.")
 
 
 def format_answer(
