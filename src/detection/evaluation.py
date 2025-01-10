@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 from ..shared.evaluation import (
     calculate_accuracy,
@@ -27,10 +28,10 @@ def evaluate_answers(
     # Calculate overall metrics
     overall_metrics = {
         "category": ["overall"],
-        "accuracy": [calculate_accuracy(answers_df)],
-        "precision": [calculate_precision(answers_df)],
-        "recall": [calculate_recall(answers_df)],
-        "f1_score": [calculate_f1_score(answers_df)],
+        "accuracy": [float(calculate_accuracy(answers_df))],
+        "precision": [float(calculate_precision(answers_df))],
+        "recall": [float(calculate_recall(answers_df))],
+        "f1_score": [float(calculate_f1_score(answers_df))],
     }
 
     # Calculate per-subcategory metrics if subcategory exists
@@ -39,10 +40,10 @@ def evaluate_answers(
         for subcategory, group in answers_df.groupby("subcategory"):
             metrics = {
                 "category": subcategory,
-                "accuracy": calculate_accuracy(group),
-                "precision": calculate_precision(group),
-                "recall": calculate_recall(group),
-                "f1_score": calculate_f1_score(group),
+                "accuracy": float(calculate_accuracy(group)),
+                "precision": float(calculate_precision(group)),
+                "recall": float(calculate_recall(group)),
+                "f1_score": float(calculate_f1_score(group)),
             }
             subcategory_metrics.append(metrics)
 
