@@ -8,7 +8,7 @@ from typing import Union
 import httpx
 import pandas as pd
 
-from ..shared.evaluation import evaluate_answers
+from .evaluation import evaluate_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from .format_answers import format_answer_csv
