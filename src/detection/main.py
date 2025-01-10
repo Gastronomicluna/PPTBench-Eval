@@ -197,10 +197,11 @@ def main(
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name}.csv"
         if csv_path.exists():
-            format_answer_csv(
+            results_df = format_answer_csv(
                 csv_path=csv_path,
-                overwrite=False,
+                overwrite=True,
             )
+            print(f"Formatted {len(results_df)} entries")
         else:
             logging.warning(f"Results file not found for {model_name}")
 
