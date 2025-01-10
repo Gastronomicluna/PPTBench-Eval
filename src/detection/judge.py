@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Dict, Optional
-import json
+import ast
 import pandas as pd
 from thefuzz import fuzz
 
@@ -68,6 +68,7 @@ def judge_answer(
     """
     if answer is None:
         return False
+        
     judge_function = {
         "content extraction": fuzzy_match,
         "layout detection": compare_coordinate,
@@ -77,8 +78,11 @@ def judge_answer(
         raise ValueError(f"Unknown subcategory: {subcategory}")
     
     if subcategory == "layout detection":
-        ground_truth = json.loads(ground_truth)
-        answer = json.loads(answer)
+        try:
+            ground_truth = ast.literal_eval(ground_truth)
+            answer = ast.literal_eval(answer)
+        except (ValueError, SyntaxError):
+            return False
         
     return judge_function[subcategory](ground_truth, answer)
 
