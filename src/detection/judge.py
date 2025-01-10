@@ -126,13 +126,13 @@ def compare_coordinate(
     Raises:
         ValueError: If ground_truth contains invalid keys.
     """
-    valid_keys = {"top", "left", "width", "height"}
+    valid_keys = {"top", "left", "width", "height", "measurement_unit"}
     invalid_keys = set(ground_truth.keys()) - valid_keys
     if invalid_keys:
-        return False
-        # raise ValueError(
-        #     f"Ground truth contains invalid keys: {invalid_keys}"
-        # )
+        # return False
+        raise ValueError(
+            f"Ground truth contains invalid keys: {invalid_keys}"
+        )
 
     if ground_truth["top"] != answer["top"]:
         return False
