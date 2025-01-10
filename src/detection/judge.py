@@ -1,10 +1,10 @@
-import json
 from pathlib import Path
 from typing import Dict, Optional
 import ast
 import pandas as pd
 from thefuzz import fuzz
 
+from ..shared.utils import csv_to_df, df_to_csv
 
 def judge_answer_df(
     csv_path: Path | str,
@@ -21,7 +21,7 @@ def judge_answer_df(
         pd.DataFrame: The DataFrame with the judged results.
     """
     csv_path = Path(csv_path)
-    answers_df = pd.read_csv(csv_path)
+    answers_df = csv_to_df(csv_path)
 
     if (
         "subcategory" not in answers_df.columns
@@ -46,10 +46,10 @@ def judge_answer_df(
         raise FileExistsError(
             f"Output file {csv_path} already exists. Set overwrite=True to overwrite."
         )
-    answers_df.to_csv(csv_path, index=False)
-
-    return answers_df
-
+    if df_to_csv(answers_df, csv_path):
+        return answers_df
+    else:
+        raise ValueError("Failed to save the judged answers.")
 
 def judge_answer(
     subcategory: str,
