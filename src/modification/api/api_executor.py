@@ -52,3 +52,35 @@ def set_height(
         shape.height = Length(height)
     except Exception as e:
         raise ValueError(f"Failed to set height of shape: {str(e)}")
+    
+    
+def set_top(
+    shape: BaseShape,
+    top: int,
+) -> None:
+    """Set the top of a shape.
+
+    Args:
+        shape: The shape to set the top of.
+        top: The top to set.
+    """
+    try:
+        shape.top = Length(top)
+    except Exception as e:
+        raise ValueError(f"Failed to set top of shape: {str(e)}")
+    
+    
+def set_left(
+    shape: BaseShape,
+    left: int,
+) -> None:
+    """Set the left of a shape.
+
+    Args:
+        shape: The shape to set the left of.
+        left: The left to set.
+    """
+    try:
+        shape.left = Length(left)
+    except Exception as e:
+        raise ValueError(f"Failed to set left of shape: {str(e)}")
