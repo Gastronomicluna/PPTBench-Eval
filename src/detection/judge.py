@@ -1,4 +1,3 @@
-import ast
 from pathlib import Path
 from typing import Dict, Optional
 
@@ -6,7 +5,7 @@ import pandas as pd
 from thefuzz import fuzz
 
 from ..shared.utils import csv_to_df, df_to_csv
-
+from ..shared.parse_answer import parse_json_answer
 
 def judge_answer_df(
     csv_path: Path | str,
@@ -82,8 +81,8 @@ def judge_answer(
 
     if subcategory == "layout detection":
         try:
-            ground_truth = ast.literal_eval(ground_truth)
-            answer = ast.literal_eval(answer)
+            ground_truth = parse_json_answer(ground_truth)
+            answer = parse_json_answer(answer)
         except (ValueError, SyntaxError):
             return False
 
