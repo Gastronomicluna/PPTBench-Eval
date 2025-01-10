@@ -1,6 +1,6 @@
 from pathlib import Path
-from typing import Dict, Optional, Union
-
+from typing import Dict, Optional
+import json
 import pandas as pd
 from thefuzz import fuzz
 
@@ -75,6 +75,11 @@ def judge_answer(
     }
     if subcategory not in judge_function:
         raise ValueError(f"Unknown subcategory: {subcategory}")
+    
+    if subcategory == "layout detection":
+        ground_truth = json.loads(ground_truth)
+        answer = json.loads(answer)
+        
     return judge_function[subcategory](ground_truth, answer)
 
 
