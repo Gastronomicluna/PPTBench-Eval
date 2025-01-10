@@ -147,17 +147,22 @@ def compare_coordinate(
 
 
 def exact_match(
-    ground_truth: str | int,
-    answer: str | int,
+    ground_truth: str | int | float,
+    answer: str | int | float,
 ) -> bool:
     """
     Exact matching function to compare the ground truth and the answer.
 
     Args:
-        ground_truth (Union[str, int]): The ground truth answer.
-        answer (Union[str, int]): The answer from the model.
+        ground_truth (Union[str, int, float]): The ground truth answer.
+        answer (Union[str, int, float]): The answer from the model.
 
     Returns:
         bool: Whether the answer is correct.
     """
-    return str(ground_truth).strip().lower() == str(answer).strip().lower()
+    # Try numeric comparison first
+    try:
+        return float(ground_truth) == float(answer)
+    except (ValueError, TypeError):
+        # Fall back to string comparison if not numeric
+        return str(ground_truth).strip().lower() == str(answer).strip().lower()
