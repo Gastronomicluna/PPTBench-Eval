@@ -1,9 +1,9 @@
 import csv
 import logging
 from pathlib import Path
-from typing import Optional, Union, Callable
-import httpx
+from typing import Callable, Optional, Union
 
+import httpx
 import pandas as pd
 
 
@@ -95,6 +95,7 @@ def get_project_root() -> Path:
     """
     current_file = Path(__file__).resolve()
     return current_file.parent.parent.parent
+
 
 def process_model(
     function: Callable,
