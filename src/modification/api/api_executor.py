@@ -4,7 +4,8 @@ from pptx.presentation import Presentation
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length
-
+from pptx.enum.shapes import MSO_SHAPE_TYPE
+import os
 
 def choose_slide(presentation: Presentation, slide_idx: int) -> Optional[Slide]:
     """Choose a slide from a presentation.
@@ -102,3 +103,44 @@ def set_left(
         shape.left = Length(left)
     except Exception as e:
         raise ValueError(f"Failed to set left of shape: {str(e)}")
+
+
+def add_shape(
+    slide: Slide,
+    shape_type: str,
+    left: int,
+    top: int,
+    width: int,
+    height: int,
+    image_path: Optional[str] = None,
+) -> None:
+    """Add a shape to a slide.
+
+    Args:
+        slide: The slide to add the shape to.
+        shape_type: The type of the shape to add.
+        left: The left of the shape to add.
+        top: The top of the shape to add.
+        width: The width of the shape to add.
+        height: The height of the shape to add.
+        image_path: The image path of the shape to add.
+    """
+    # Check if the shape type is valid
+    if shape_type not in MSO_SHAPE_TYPE.__members__:
+        raise ValueError(f"Invalid shape type: {shape_type}")
+
+    # Check if the image path is valid
+    if image_path is not None and not os.path.exists(image_path):
+        raise ValueError(f"Image path does not exist: {image_path}")
+    
+    # Add the shape to the slide
+    try:
+        shape = slide.shapes.add_shape(
+            getattr(MSO_SHAPE_TYPE, shape_type),
+            left,
+            top,
+            width,
+            height,
+        )
+    except Exception as e:
+        raise ValueError(f"Failed to add shape to slide: {str(e)}")
