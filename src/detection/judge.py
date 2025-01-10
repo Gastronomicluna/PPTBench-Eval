@@ -24,6 +24,9 @@ def judge_answer_df(
     """
     csv_path = Path(csv_path)
     answers_df = csv_to_df(csv_path)
+    
+    if answers_df is None:
+        raise ValueError("The input DataFrame is empty.")
 
     if (
         "subcategory" not in answers_df.columns
@@ -44,14 +47,10 @@ def judge_answer_df(
     )
 
     # Save results
-    if not overwrite and csv_path.exists():
-        raise FileExistsError(
-            f"Output file {csv_path} already exists. Set overwrite=True to overwrite."
-        )
-    if df_to_csv(answers_df, csv_path):
-        return answers_df
-    else:
-        raise ValueError("Failed to save the judged answers.")
+    if overwrite:
+        df_to_csv(answers_df, csv_path)
+        
+    return answers_df
 
 
 def judge_answer(
