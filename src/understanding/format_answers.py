@@ -41,21 +41,22 @@ def format_answer_csv(
         return df
     else:
         raise ValueError("Failed to save the formatted answers.")
-    
+
+
 def format_answer(
     llm_answer: Union[str, Dict[str, Any]],
 ) -> Optional[str]:
     """
     Format the LLM answer.
-    
+
     Args:
         llm_answer (Union[str, Dict[str, Any]]): The LLM answer.
-        
+
     Returns:
         Optional[str]: The formatted answer.
     """
     answer = parse_json_answer(llm_answer)
     if answer is None:
         return None
-    
+
     return answer["answer"]

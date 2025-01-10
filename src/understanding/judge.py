@@ -38,9 +38,7 @@ def judge_answer_df(
 
     # Process answers
     answers_df["is_correct"] = answers_df.apply(
-        lambda row: judge_answer(
-            row["ground_truth"], row["answer"]
-        ),
+        lambda row: judge_answer(row["ground_truth"], row["answer"]),
         axis=1,
     )
 
