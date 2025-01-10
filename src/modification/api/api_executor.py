@@ -1,8 +1,9 @@
-from typing import Optional, Union
+from typing import Optional
 
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length
+
 
 def choose_shape(slide: Slide, shape_idx: int) -> Optional[BaseShape]:
     """Choose a shape from a slide.
@@ -20,6 +21,7 @@ def choose_shape(slide: Slide, shape_idx: int) -> Optional[BaseShape]:
     except Exception as e:
         raise ValueError(f"Failed to choose shape {shape_idx}: {str(e)}")
 
+
 def set_width(
     shape: BaseShape,
     width: int,
@@ -34,3 +36,19 @@ def set_width(
         shape.width = Length(width)
     except Exception as e:
         raise ValueError(f"Failed to set width of shape: {str(e)}")
+
+
+def set_height(
+    shape: BaseShape,
+    height: int,
+) -> None:
+    """Set the height of a shape.
+
+    Args:
+        shape: The shape to set the height of.
+        height: The height to set.
+    """
+    try:
+        shape.height = Length(height)
+    except Exception as e:
+        raise ValueError(f"Failed to set height of shape: {str(e)}")
