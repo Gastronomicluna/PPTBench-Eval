@@ -52,7 +52,7 @@ def judge_answer_df(
 
 def judge_answer(
     subcategory: str,
-    ground_truth: Union[str, Dict[str, int]],
+    ground_truth: str,
     answer: Optional[str],
 ) -> bool:
     """
