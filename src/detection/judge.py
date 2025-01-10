@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Dict, Optional
-
+import json
 import pandas as pd
 from thefuzz import fuzz
 
@@ -83,9 +83,10 @@ def judge_answer(
         try:
             ground_truth = parse_json_answer(ground_truth)
             # print(ground_truth)
-            answer = parse_json_answer(answer)
+            answer = json.loads(answer)
             print(answer)
-        except (ValueError, SyntaxError):
+        except (ValueError, SyntaxError) as e:
+            print(e)
             return False
 
     return judge_function[subcategory](ground_truth, answer)
