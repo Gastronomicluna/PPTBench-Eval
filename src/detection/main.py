@@ -1,7 +1,6 @@
 import concurrent.futures
 import logging
 import os
-from pathlib import Path
 
 import pandas as pd
 
@@ -12,17 +11,6 @@ from .evaluation import evaluate_answers
 from .format_answers import format_answer_csv
 from .get_answers import get_answers
 from .judge import judge_answer_df
-
-def get_project_root() -> Path:
-    """Get the absolute path to the project root directory.
-
-    Returns:
-        Path: Absolute path to the project root directory.
-    """
-    current_file = Path(__file__).resolve()
-    return current_file.parent.parent.parent
-
-
 
 
 
