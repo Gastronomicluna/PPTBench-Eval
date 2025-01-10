@@ -1,12 +1,11 @@
-import ast
 from pathlib import Path
 from typing import Dict, Optional
-
+import json
 import pandas as pd
 from thefuzz import fuzz
 
 from ..shared.utils import csv_to_df, df_to_csv
-
+from ..shared.parse_answer import parse_json_answer
 
 def judge_answer_df(
     csv_path: Path | str,
@@ -82,9 +81,12 @@ def judge_answer(
 
     if subcategory == "layout detection":
         try:
-            ground_truth = ast.literal_eval(ground_truth)
-            answer = ast.literal_eval(answer)
-        except (ValueError, SyntaxError):
+            ground_truth = parse_json_answer(ground_truth)
+            # print(ground_truth)
+            answer = json.loads(answer)
+            print(answer)
+        except (ValueError, SyntaxError) as e:
+            print(e)
             return False
 
     return judge_function[subcategory](ground_truth, answer)
@@ -126,14 +128,17 @@ def compare_coordinate(
     Raises:
         ValueError: If ground_truth contains invalid keys.
     """
-    valid_keys = {"top", "left", "width", "height"}
+    valid_keys = {"top", "left", "width", "height", "measurement_unit"}
     invalid_keys = set(ground_truth.keys()) - valid_keys
     if invalid_keys:
+        # return False
+        raise ValueError(
+            f"Ground truth contains invalid keys: {invalid_keys}"
+        )
+    # check if the keys are present in the answer
+    if not set(ground_truth.keys()).issubset(set(answer.keys())):
         return False
-        # raise ValueError(
-        #     f"Ground truth contains invalid keys: {invalid_keys}"
-        # )
-
+    
     if ground_truth["top"] != answer["top"]:
         return False
     if ground_truth["left"] != answer["left"]:
