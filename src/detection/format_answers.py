@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Any, Dict, Literal, Optional, Union
 
 import pandas as pd
-
+import json
 from ..shared.parse_answer import parse_json_answer
 from ..shared.utils import csv_to_df, df_to_csv
 
@@ -109,8 +109,7 @@ def format_style_detection_answer(
 
 def format_layout_detection_answer(
     answer: str,
-) -> Optional[Dict[str, Any]]:
-    # ) -> str:
+) -> str:
     """
     Format the detected layout for layout detection tasks.
 
@@ -120,20 +119,8 @@ def format_layout_detection_answer(
     Returns:
         Dict[str, int]: The formatted answer.
     """
-    # try:
-    #     json_answer = parse_json_answer(answer)
-    #     # Convert the dictionary to use double quotes and ensure it's a proper JSON format
-    #     if isinstance(json_answer, dict):
-    #         # Ensure all values are integers
-    #         return {
-    #             k: int(v) if isinstance(v, (int, float)) else v
-    #             for k, v in json_answer.items()
-    #         }
-    #     return None
-    # except Exception:
-    #     return None
     try:
         json_answer = parse_json_answer(answer)
     except Exception:
         return None
-    return json_answer
+    return json.dumps(json_answer)
