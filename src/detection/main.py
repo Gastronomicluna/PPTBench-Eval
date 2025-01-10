@@ -10,32 +10,11 @@ import pandas as pd
 
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
-from ..shared.utils import get_project_root
+from ..shared.utils import get_project_root, process_model
 from .evaluation import evaluate_answers
 from .format_answers import format_answer_csv
 from .get_answers import get_answers
 from .judge import judge_answer_df
-
-
-def setup_logging(log_dir: Path) -> None:
-    """Set up logging configuration.
-
-    Args:
-        log_dir: Directory to store log files
-    """
-    os.makedirs(log_dir, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = log_dir / f"detection_{timestamp}.log"
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        handlers=[
-            logging.FileHandler(log_file),
-            logging.StreamHandler(),  # Also keep console output
-        ],
-    )
-
 
 def get_project_root() -> Path:
     """Get the absolute path to the project root directory.
@@ -47,54 +26,7 @@ def get_project_root() -> Path:
     return current_file.parent.parent.parent
 
 
-def process_model(
-    df: pd.DataFrame,
-    model_name: str,
-    provider: str,
-    temperature: float,
-    max_tokens: int,
-    json: bool,
-    timeout: int,
-    csv_path: Union[str, Path],
-    overwrite: bool,
-) -> pd.DataFrame:
-    """Process a single model's answers.
 
-    Args:
-        df: Input dataframe containing questions
-        model_name: Name of the model to use
-        provider: Provider of the model
-        temperature: Sampling temperature
-        max_tokens: Maximum tokens in response
-        json: Whether to return JSON format
-        timeout: Timeout in seconds
-        csv_path: Path to save results
-        overwrite: Whether to overwrite existing results
-
-    Returns:
-        pd.DataFrame: Results dataframe
-    """
-    try:
-        print(f"Processing {model_name}...")
-        results_df = get_answers(
-            df=df,
-            model_name=model_name,
-            provider=provider,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            json=json,
-            timeout=timeout,
-            csv_path=csv_path,
-            overwrite=overwrite,
-        )
-        print(f"Processed {len(results_df)} entries")
-        return results_df
-    except httpx.ConnectError as e:
-        logging.error("Ollama not running. Please start the server. %s", e)
-        return pd.DataFrame()
-    except Exception as e:
-        logging.error(f"Error processing {model_name}: {str(e)}")
-        return pd.DataFrame()  # Return empty DataFrame on error
 
 
 def main(
@@ -118,11 +50,7 @@ def main(
     Returns:
         None
     """
-    # Set up logging first
     project_root = get_project_root()
-    log_dir = project_root / "log"
-    setup_logging(log_dir)
-
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
 
@@ -172,6 +100,7 @@ def main(
         future_to_model = {
             executor.submit(
                 process_model,
+                function=get_answers,
                 df=df,
                 model_name=model_name,
                 provider=provider,
