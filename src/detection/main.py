@@ -9,6 +9,7 @@ import httpx
 import pandas as pd
 
 from ..shared.llm import API_LLM_MODELS
+from ..shared.utils import get_project_root
 from ..shared.load_save_dataset import load_save_dataset_df
 from .evaluation import evaluate_answers
 from .format_answers import format_answer_csv

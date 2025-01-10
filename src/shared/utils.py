@@ -84,3 +84,12 @@ def df_to_csv(
     except Exception as e:
         logging.error(f"Error writing CSV {csv_path}: {str(e)}")
         return False
+
+def get_project_root() -> Path:
+    """Get the absolute path to the project root directory.
+
+    Returns:
+        Path: Absolute path to the project root directory.
+    """
+    current_file = Path(__file__).resolve()
+    return current_file.parent.parent.parent
