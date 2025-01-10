@@ -84,9 +84,9 @@ def judge_answer(
     if subcategory == "layout detection":
         try:
             ground_truth = parse_json_answer(ground_truth)
-            print(ground_truth)
             answer = json.loads(answer)
-            print(answer)
+            # print("Ground Truth:" , ground_truth)
+            # print("Answer:", answer)
         except (ValueError, SyntaxError) as e:
             print(e)
             return False
@@ -134,10 +134,12 @@ def compare_coordinate(
     invalid_keys = set(ground_truth.keys()) - valid_keys
     
     if invalid_keys:
+        print(f"Invalid keys in ground_truth: {invalid_keys}")
         return False
     
     # check if the keys are present in the answer
     if not set(ground_truth.keys()).issubset(set(answer.keys())):
+        print(f"Keys in ground_truth not present in answer: {set(ground_truth.keys()) - set(answer.keys())}")
         return False
 
     if ground_truth["top"] != answer["top"]:
