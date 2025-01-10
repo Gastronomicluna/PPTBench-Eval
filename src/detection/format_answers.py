@@ -110,7 +110,7 @@ def format_style_detection_answer(
 def format_layout_detection_answer(
     answer: str,
 ) -> Optional[Dict[str, Any]]:
-# ) -> str:
+    # ) -> str:
     """
     Format the detected layout for layout detection tasks.
 
