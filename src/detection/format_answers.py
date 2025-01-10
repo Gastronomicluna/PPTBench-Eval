@@ -8,7 +8,7 @@ from ..shared.utils import csv_to_df, df_to_csv
 def format_answer_csv(
     csv_path: Path,
     overwrite: bool = False,
-) -> None:
+) -> bool:
     """
     Format the answers in the CSV file.
 
@@ -17,6 +17,9 @@ def format_answer_csv(
         overwrite (bool, optional): Whether to overwrite existing answers.
             If False and answer column exists with values, skip processing.
             Defaults to False.
+            
+    Returns:
+        bool: Whether the operation was successful.
     """
     df = csv_to_df(csv_path)
     if df is None:
@@ -33,9 +36,10 @@ def format_answer_csv(
     )
 
     if df_to_csv(df, csv_path):
-        return
+        return True
     else:
-        raise ValueError("Failed to save the formatted answers.")
+        print("Failed to save the formatted answers.")
+        return False
 
 
 def format_answer(
