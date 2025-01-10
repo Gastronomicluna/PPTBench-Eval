@@ -1,9 +1,10 @@
 from pptx.slide import Slide
-
+from pptx.shapes.base import Shape
+from typing import Optional
 def choose_shape(
     slide: Slide,
     shape_idx: int
-):
+) -> Optional[Shape]:
     """Choose a shape from a slide.
 
     Args:
@@ -13,4 +14,9 @@ def choose_shape(
     Returns:
         The chosen shape.
     """
-    return slide.shapes[shape_idx]
+    try:
+        shape = slide.shapes[shape_idx]
+    except Exception as e:
+        print(f"Failed to choose shape {shape_idx}: {str(e)}")
+        shape = None
+    return shape
