@@ -1,10 +1,10 @@
-from pptx.slide import Slide
-from pptx.shapes.base import Shape
 from typing import Optional
-def choose_shape(
-    slide: Slide,
-    shape_idx: int
-) -> Optional[Shape]:
+
+from pptx.shapes.base import Shape
+from pptx.slide import Slide
+
+
+def choose_shape(slide: Slide, shape_idx: int) -> Optional[Shape]:
     """Choose a shape from a slide.
 
     Args:
