@@ -1,11 +1,12 @@
+import os
 from typing import Optional
 
+from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.presentation import Presentation
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length
-from pptx.enum.shapes import MSO_SHAPE_TYPE
-import os
+
 
 def choose_slide(presentation: Presentation, slide_idx: int) -> Optional[Slide]:
     """Choose a slide from a presentation.
@@ -132,10 +133,10 @@ def add_shape(
     # Check if the image path is valid
     if image_path is not None and not os.path.exists(image_path):
         raise ValueError(f"Image path does not exist: {image_path}")
-    
+
     # Add the shape to the slide
     try:
-        shape = slide.shapes.add_shape(
+        _ = slide.shapes.add_shape(
             getattr(MSO_SHAPE_TYPE, shape_type),
             left,
             top,
