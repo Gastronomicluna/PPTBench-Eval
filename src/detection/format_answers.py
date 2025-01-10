@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Any, Dict, Literal, Optional, Union
-
+import pandas as pd
 from ..shared.parse_answer import parse_json_answer
 from ..shared.utils import csv_to_df, df_to_csv
 
@@ -8,7 +8,7 @@ from ..shared.utils import csv_to_df, df_to_csv
 def format_answer_csv(
     csv_path: Path,
     overwrite: bool = False,
-) -> bool:
+) -> pd.DataFrame:
     """
     Format the answers in the CSV file.
 
@@ -19,7 +19,7 @@ def format_answer_csv(
             Defaults to False.
             
     Returns:
-        bool: Whether the operation was successful.
+        pd.DataFrame: DataFrame with formatted answers.
     """
     df = csv_to_df(csv_path)
     if df is None:
@@ -36,10 +36,9 @@ def format_answer_csv(
     )
 
     if df_to_csv(df, csv_path):
-        return True
+        return df
     else:
-        print("Failed to save the formatted answers.")
-        return False
+        raise ValueError("Failed to save the formatted answers.")
 
 
 def format_answer(
