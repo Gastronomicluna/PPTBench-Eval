@@ -30,7 +30,7 @@ def format_answer_csv(
     if "answer" in df.columns and not overwrite:
         # Check if answer column has any non-null values
         if not df["answer"].isna().all():
-            return
+            return df
 
     df["answer"] = df.apply(
         lambda row: format_answer(row["llm_answer"], row["subcategory"]),
