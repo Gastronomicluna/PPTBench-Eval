@@ -179,7 +179,7 @@ def main(
                 json=True,
                 timeout=60,
                 csv_path=results_dir / f"{model_name}.csv",
-                overwrite=True,
+                overwrite=False,
             ): (provider, model_name)
             for provider, model_name in models_to_run
         }
@@ -199,7 +199,7 @@ def main(
         if csv_path.exists():
             format_answer_csv(
                 csv_path=csv_path,
-                overwrite=True,
+                overwrite=False,
             )
         else:
             logging.warning(f"Results file not found for {model_name}")
