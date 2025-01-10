@@ -1,71 +1,69 @@
 from pathlib import Path
+from typing import Optional
 
 import pandas as pd
 
+from ..shared.utils import csv_to_df, df_to_csv
+
 
 def judge_answer_df(
-    df: Path | str | pd.DataFrame,
-    csv_path: Path | str | None = None,
+    csv_path: Path | str,
     overwrite: bool = False,
 ) -> pd.DataFrame:
     """
-    Judge the answers in the DataFrame or CSV file.
+    Judge the answers in the CSV file and save results back to the same file.
 
     Args:
-        df (Union[Path, str, pd.DataFrame]): Input DataFrame or path to CSV file.
-        csv_path (Union[Path, str, None]): Path to save the judged results.
+        csv_path (Union[Path, str]): Path to CSV file for input and output.
         overwrite (bool): Whether to overwrite existing output file.
 
     Returns:
-        pd.DataFrame: The DataFrame with the judged results.
+        pd.DataFrame: DataFrame with judged answers.
     """
-    # Handle input
-    if isinstance(df, (str, Path)):
-        answers_df = pd.read_csv(df)
-    else:
-        answers_df = df
+    csv_path = Path(csv_path)
+    answers_df = csv_to_df(csv_path)
+
+    if answers_df is None:
+        raise ValueError("The input DataFrame is empty.")
 
     if (
-        "ground_truth" not in answers_df.columns
-        or "llm_answer" not in answers_df.columns
+        "task" not in answers_df.columns
+        or "ground_truth" not in answers_df.columns
+        or "answer" not in answers_df.columns
     ):
         raise ValueError(
-            "The input DataFrame must contain 'ground_truth' and 'llm_answer' columns."
+            "The input DataFrame must contain 'task', 'ground_truth', "
+            "and 'answer' columns."
         )
 
     # Process answers
     answers_df["is_correct"] = answers_df.apply(
         lambda row: judge_answer(
-            ground_truth=row["ground_truth"],
-            answer=row["llm_answer"],
+            row["ground_truth"], row["answer"]
         ),
         axis=1,
     )
 
-    # Save results if path provided
-    if csv_path is not None:
-        csv_path = Path(csv_path)
-        if csv_path.exists() and not overwrite:
-            raise FileExistsError(
-                f"Output file {csv_path} already exists. Set overwrite=True to overwrite."
-            )
-        answers_df.to_csv(csv_path, index=False)
+    # Save results
+    if overwrite:
+        df_to_csv(answers_df, csv_path)
 
     return answers_df
 
 
 def judge_answer(
     ground_truth: str,
-    answer: str,
+    answer: Optional[str],
 ) -> bool:
     """
-    Exact matching function to compare the ground truth and the answer.
+    Judge the answer based on the task and the ground truth.
 
     Args:
+        task (str): The task type.
         ground_truth (str): The ground truth answer.
         answer (str): The answer from the model.
 
     Returns:
         bool: Whether the answer is correct.
     """
-    return ground_truth.strip().lower() == answer.strip().lower()
+    return str(ground_truth).strip().lower() == str(answer).strip().lower()
