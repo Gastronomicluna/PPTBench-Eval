@@ -1,11 +1,13 @@
+import json
 from pathlib import Path
 from typing import Dict, Optional
-import json
+
 import pandas as pd
 from thefuzz import fuzz
 
-from ..shared.utils import csv_to_df, df_to_csv
 from ..shared.parse_answer import parse_json_answer
+from ..shared.utils import csv_to_df, df_to_csv
+
 
 def judge_answer_df(
     csv_path: Path | str,
@@ -132,13 +134,11 @@ def compare_coordinate(
     invalid_keys = set(ground_truth.keys()) - valid_keys
     if invalid_keys:
         # return False
-        raise ValueError(
-            f"Ground truth contains invalid keys: {invalid_keys}"
-        )
+        raise ValueError(f"Ground truth contains invalid keys: {invalid_keys}")
     # check if the keys are present in the answer
     if not set(ground_truth.keys()).issubset(set(answer.keys())):
         return False
-    
+
     if ground_truth["top"] != answer["top"]:
         return False
     if ground_truth["left"] != answer["left"]:
