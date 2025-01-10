@@ -5,8 +5,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Union
 
-import pandas as pd
 import httpx
+import pandas as pd
 
 from ..shared.evaluation import evaluate_answers
 from ..shared.llm import API_LLM_MODELS

@@ -1,7 +1,10 @@
-import pandas as pd
-from ...shared.utils import df_to_csv, csv_to_df
 import os
 from pathlib import Path
+
+import pandas as pd
+
+from ...shared.utils import csv_to_df, df_to_csv
+
 
 def add_subcategory_column(
     dataset_df: pd.DataFrame,
@@ -30,6 +33,7 @@ def add_subcategory_column(
     df_to_csv(df, csv_path)
     return
 
+
 def get_subcategory(
     row: pd.Series,
 ) -> str:
@@ -51,26 +55,26 @@ def get_subcategory(
         return "style detection"
     else:
         raise ValueError(f"Unknown subcategory: {subcategory}")
-    
-    
+
+
 def main() -> None:
     from src.shared.load_save_dataset import load_save_dataset_df
-    
+
     original_dataset_name = "tyrionhuu/PPTBench-Detection"
     original_dataset_path = "data/PPTBench-Detection"
     csv_dir = Path("data/detection_results")
-    
+
     df = load_save_dataset_df(
         dataset_name=original_dataset_name,
         dataset_path=original_dataset_path,
         force_download=False,
         source="huggingface",
     )
-    
+
     for file in os.listdir(csv_dir):
         csv_path = csv_dir / file
         add_subcategory_column(df, csv_path)
-    
-    
+
+
 if __name__ == "__main__":
     main()
