@@ -1,10 +1,12 @@
+import ast
 from pathlib import Path
 from typing import Dict, Optional
-import ast
+
 import pandas as pd
 from thefuzz import fuzz
 
 from ..shared.utils import csv_to_df, df_to_csv
+
 
 def judge_answer_df(
     csv_path: Path | str,
@@ -51,6 +53,7 @@ def judge_answer_df(
     else:
         raise ValueError("Failed to save the judged answers.")
 
+
 def judge_answer(
     subcategory: str,
     ground_truth: str,
@@ -69,7 +72,7 @@ def judge_answer(
     """
     if answer is None:
         return False
-        
+
     judge_function = {
         "content extraction": fuzzy_match,
         "layout detection": compare_coordinate,
@@ -84,7 +87,7 @@ def judge_answer(
             answer = ast.literal_eval(answer)
         except (ValueError, SyntaxError):
             return False
-        
+
     return judge_function[subcategory](ground_truth, answer)
 
 

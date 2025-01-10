@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Any, Dict, Literal, Optional, Union
+
 import pandas as pd
+
 from ..shared.parse_answer import parse_json_answer
 from ..shared.utils import csv_to_df, df_to_csv
 
@@ -17,7 +19,7 @@ def format_answer_csv(
         overwrite (bool, optional): Whether to overwrite existing answers.
             If False and answer column exists with values, skip processing.
             Defaults to False.
-            
+
     Returns:
         pd.DataFrame: DataFrame with formatted answers.
     """
