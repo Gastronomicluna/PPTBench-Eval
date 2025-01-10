@@ -45,11 +45,11 @@ def evaluate_answers(
                 "f1_score": calculate_f1_score(group),
             }
             subcategory_metrics.append(metrics)
-        
+
         # Combine overall and subcategory metrics
-        evaluation_df = pd.DataFrame(
-            [overall_metrics] + subcategory_metrics
-        ).explode("category")
+        evaluation_df = pd.DataFrame([overall_metrics] + subcategory_metrics).explode(
+            "category"
+        )
     else:
         evaluation_df = pd.DataFrame(overall_metrics)
 
