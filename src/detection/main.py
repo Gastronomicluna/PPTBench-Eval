@@ -199,7 +199,7 @@ def main(
         if csv_path.exists():
             results_df = format_answer_csv(
                 csv_path=csv_path,
-                overwrite=True,
+                overwrite=False,
             )
             print(f"Formatted {len(results_df)} entries")
         else:
