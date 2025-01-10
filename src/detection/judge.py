@@ -24,7 +24,7 @@ def judge_answer_df(
     """
     csv_path = Path(csv_path)
     answers_df = csv_to_df(csv_path)
-    
+
     if answers_df is None:
         raise ValueError("The input DataFrame is empty.")
 
@@ -49,7 +49,7 @@ def judge_answer_df(
     # Save results
     if overwrite:
         df_to_csv(answers_df, csv_path)
-        
+
     return answers_df
 
 
