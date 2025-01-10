@@ -27,11 +27,11 @@ def evaluate_answers(
 
     # Calculate overall metrics
     overall_metrics = {
-        "category": ["overall"],
-        "accuracy": [float(calculate_accuracy(answers_df))],
-        "precision": [float(calculate_precision(answers_df))],
-        "recall": [float(calculate_recall(answers_df))],
-        "f1_score": [float(calculate_f1_score(answers_df))],
+        "category": "overall",
+        "accuracy": float(calculate_accuracy(answers_df)),
+        "precision": float(calculate_precision(answers_df)),
+        "recall": float(calculate_recall(answers_df)),
+        "f1_score": float(calculate_f1_score(answers_df)),
     }
 
     # Calculate per-subcategory metrics if subcategory exists
@@ -48,10 +48,8 @@ def evaluate_answers(
             subcategory_metrics.append(metrics)
 
         # Combine overall and subcategory metrics
-        evaluation_df = pd.DataFrame([overall_metrics] + subcategory_metrics).explode(
-            "category"
-        )
+        evaluation_df = pd.DataFrame([overall_metrics] + subcategory_metrics)
     else:
-        evaluation_df = pd.DataFrame(overall_metrics)
+        evaluation_df = pd.DataFrame([overall_metrics])
 
     return evaluation_df
