@@ -9,7 +9,7 @@ from ..shared.utils import csv_to_df, df_to_csv
 def judge_answer_df(
     csv_path: Path | str,
     overwrite: bool = False,
-) -> pd.DataFrame:
+) -> bool:
     """
     Judge the answers in the CSV file and save results back to the same file.
 
@@ -18,7 +18,7 @@ def judge_answer_df(
         overwrite (bool): Whether to overwrite existing output file.
 
     Returns:
-        pd.DataFrame: The DataFrame with the judged results.
+        bool: Whether the operation was successful.
     """
     csv_path = Path(csv_path)
     answers_df = csv_to_df(csv_path)
@@ -47,9 +47,10 @@ def judge_answer_df(
             f"Output file {csv_path} already exists. Set overwrite=True to overwrite."
         )
     if df_to_csv(answers_df, csv_path):
-        return answers_df
+        return True
     else:
-        raise ValueError("Failed to save the judged answers.")
+        print("Failed to save the judged answers.")
+        return False
 
 def judge_answer(
     subcategory: str,
