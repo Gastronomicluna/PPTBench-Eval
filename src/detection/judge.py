@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 import pandas as pd
 from thefuzz import fuzz
@@ -53,7 +53,7 @@ def judge_answer_df(
 def judge_answer(
     subcategory: str,
     ground_truth: str,
-    answer: str,
+    answer: Optional[str],
 ) -> bool:
     """
     Judge the answer based on the subcategory and the ground truth.
@@ -66,6 +66,8 @@ def judge_answer(
     Returns:
         bool: Whether the answer is correct.
     """
+    if answer is None:
+        return False
     judge_function = {
         "content extraction": fuzzy_match,
         "layout detection": compare_coordinate,
