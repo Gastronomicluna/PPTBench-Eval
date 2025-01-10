@@ -131,15 +131,15 @@ def compare_coordinate(
         ValueError: If ground_truth contains invalid keys.
     """
     valid_keys = {"top", "left", "width", "height"}
-    invalid_keys = set(ground_truth.keys()) - valid_keys
+    invalid_keys = set(answer.keys()) - valid_keys
     
     if invalid_keys:
-        print(f"Invalid keys in ground_truth: {invalid_keys}")
+        # print(f"Invalid keys in ground_truth: {invalid_keys}")
         return False
     
-    # check if the keys are present in the answer
-    if not set(ground_truth.keys()).issubset(set(answer.keys())):
-        print(f"Keys in ground_truth not present in answer: {set(ground_truth.keys()) - set(answer.keys())}")
+    # check if the valid keys are present in the answer
+    if not valid_keys.issubset(answer.keys()):
+        # print(f"Missing keys in answer: {valid_keys - set(answer.keys())}")
         return False
 
     if ground_truth["top"] != answer["top"]:
