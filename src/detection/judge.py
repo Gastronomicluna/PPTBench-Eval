@@ -86,7 +86,7 @@ def judge_answer(
             ground_truth = parse_json_answer(ground_truth)
             # print(ground_truth)
             answer = json.loads(answer)
-            print(answer)
+            # print(answer)
         except (ValueError, SyntaxError) as e:
             print(e)
             return False
