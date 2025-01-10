@@ -134,8 +134,7 @@ def compare_coordinate(
     invalid_keys = set(ground_truth.keys()) - valid_keys
     
     if invalid_keys:
-        # return False
-        raise ValueError(f"Ground truth contains invalid keys: {invalid_keys}")
+        return False
     
     # check if the keys are present in the answer
     if not set(ground_truth.keys()).issubset(set(answer.keys())):
