@@ -74,6 +74,7 @@ def format_content_extraction_answer(
         str: The formatted answer.
     """
     json_answer = parse_json_answer(answer)
+    print(json_answer)
     answer = json_answer["answer"]
     return answer
 
