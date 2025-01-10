@@ -190,6 +190,7 @@ def get_answer_single(
             return {
                 "hash": hash_value,
                 "task": task,
+                "subcategory": subcategory,
                 "ground_truth": ground_truth,
                 "llm_answer": llm_answer,
             }
