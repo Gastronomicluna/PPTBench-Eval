@@ -1,7 +1,8 @@
 import csv
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union, Callable
+import httpx
 
 import pandas as pd
 
@@ -94,3 +95,53 @@ def get_project_root() -> Path:
     """
     current_file = Path(__file__).resolve()
     return current_file.parent.parent.parent
+
+def process_model(
+    function: Callable,
+    df: pd.DataFrame,
+    model_name: str,
+    provider: str,
+    temperature: float,
+    max_tokens: int,
+    json: bool,
+    timeout: int,
+    csv_path: Union[str, Path],
+    overwrite: bool,
+) -> pd.DataFrame:
+    """Process a single model's answers.
+
+    Args:
+        df: Input dataframe containing questions
+        model_name: Name of the model to use
+        provider: Provider of the model
+        temperature: Sampling temperature
+        max_tokens: Maximum tokens in response
+        json: Whether to return JSON format
+        timeout: Timeout in seconds
+        csv_path: Path to save results
+        overwrite: Whether to overwrite existing results
+
+    Returns:
+        pd.DataFrame: Results dataframe
+    """
+    try:
+        print(f"Processing {model_name}...")
+        results_df = function(
+            df=df,
+            model_name=model_name,
+            provider=provider,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            json=json,
+            timeout=timeout,
+            csv_path=csv_path,
+            overwrite=overwrite,
+        )
+        print(f"Processed {len(results_df)} entries")
+        return results_df
+    except httpx.ConnectError as e:
+        logging.error("Ollama not running. Please start the server. %s", e)
+        return pd.DataFrame()
+    except Exception as e:
+        logging.error(f"Error processing {model_name}: {str(e)}")
+        return pd.DataFrame()  # Return empty DataFrame on error
