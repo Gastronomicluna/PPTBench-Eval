@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, Literal, Union
+from typing import Any, Dict, Literal, Union, Optional
 
 from ..shared.parse_answer import parse_json_answer
 from ..shared.utils import csv_to_df
@@ -63,7 +63,7 @@ def format_answer(
 
 def format_content_extraction_answer(
     answer: str,
-) -> str:
+) -> Optional[str]:
     """
     Format the extracted content for content extraction tasks.
 
@@ -73,15 +73,17 @@ def format_content_extraction_answer(
     Returns:
         str: The formatted answer.
     """
-    json_answer = parse_json_answer(answer)
-    print(json_answer)
-    answer = json_answer["answer"]
+    try:
+        json_answer = parse_json_answer(answer)
+        answer = json_answer["answer"]
+    except Exception:
+        return None
     return answer
 
 
 def format_style_detection_answer(
     answer: str,
-) -> Union[str, int]:
+) -> Optional[Union[str, int]]:
     """
     Format the extracted style for style detection tasks.
 
@@ -91,14 +93,17 @@ def format_style_detection_answer(
     Returns:
         Union[str, int]: The formatted answer.
     """
-    json_answer = parse_json_answer(answer)
-    answer = json_answer["answer"]
+    try:
+        json_answer = parse_json_answer(answer)
+        answer = json_answer["answer"]
+    except Exception:
+        return None
     return answer
 
 
 def format_layout_detection_answer(
     answer: str,
-) -> Dict[str, Any]:
+) -> Optional[Dict[str, Any]]:
     """
     Format the detected layout for layout detection tasks.
 
@@ -108,5 +113,8 @@ def format_layout_detection_answer(
     Returns:
         Dict[str, int]: The formatted answer.
     """
-    json_answer = parse_json_answer(answer)
+    try:
+        json_answer = parse_json_answer(answer)
+    except Exception:
+        return None
     return json_answer
