@@ -1,4 +1,3 @@
-from pptx import Presentation
 from pptx.slide import Slide
 
 def choose_shape(
