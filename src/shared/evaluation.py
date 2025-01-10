@@ -1,9 +1,6 @@
 import pandas as pd
 
 
-
-
-
 def calculate_accuracy(
     answers_df: pd.DataFrame,
 ) -> float:

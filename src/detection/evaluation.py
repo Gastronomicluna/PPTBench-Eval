@@ -1,5 +1,12 @@
 import pandas as pd
-from ..shared.evaluation import calculate_accuracy, calculate_precision, calculate_recall, calculate_f1_score
+
+from ..shared.evaluation import (
+    calculate_accuracy,
+    calculate_f1_score,
+    calculate_precision,
+    calculate_recall,
+)
+
 
 def evaluate_answers(
     answers_df: pd.DataFrame,
