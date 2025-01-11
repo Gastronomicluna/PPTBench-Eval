@@ -1,7 +1,7 @@
 import pytest
 from pptx import Presentation
 
-from src.modification.api.api_executor import (
+from src.shared.pptx_api.api_executor import (
     choose_shape,
     choose_slide,
     set_height,
