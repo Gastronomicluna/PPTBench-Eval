@@ -113,7 +113,7 @@ def add_shape(
     top: int,
     width: int,
     height: int,
-    image_path: Optional[str] = None,
+    image_file: Optional[str] = None,
 ) -> None:
     """Add a shape to a slide.
 
@@ -124,7 +124,7 @@ def add_shape(
         top: The top of the shape to add.
         width: The width of the shape to add.
         height: The height of the shape to add.
-        image_path: The image path of the shape to add.
+        image_file: The image path of the shape to add.
     """
     # Convert shape_type to uppercase and check if it's valid
     shape_type = shape_type.upper()
@@ -132,12 +132,14 @@ def add_shape(
         raise ValueError(f"Invalid shape type: {shape_type}")
 
     # Check if the image path is valid
-    if image_path is not None and not os.path.exists(image_path):
-        raise ValueError(f"Image path does not exist: {image_path}")
+    if image_file is not None and not os.path.exists(image_file):
+        raise ValueError(f"Image path does not exist: {image_file}")
 
     # Add the shape to the slide
     try:
         if shape_type == MSO_SHAPE_TYPE.PICTURE.name:
-            slide.shapes.add_picture(image_path, left, top, width, height)
+            slide.shapes.add_picture(image_file, left, top, width, height)
+        elif shape_type == MSO_SHAPE_TYPE.TEXT_BOX.name:
+            slide.shapes.add_textbox(left, top, width, height)
     except Exception as e:
         raise ValueError(f"Failed to add shape to slide: {str(e)}")
