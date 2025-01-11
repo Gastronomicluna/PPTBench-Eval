@@ -1,11 +1,12 @@
-import pytest
-from pptx import Presentation
-from pptx.enum.shapes import MSO_SHAPE_TYPE
-from PIL import Image
 import os
 import tempfile
 from typing import Generator
+
+import pytest
+from PIL import Image
+from pptx import Presentation
 from pptx.dml.color import RGBColor
+from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from src.shared.pptx_api.api_executor import (
     add_shape,
@@ -32,19 +33,19 @@ def sample_presentation() -> Presentation:
 @pytest.fixture
 def sample_image() -> Generator[str, None, None]:
     """Create a temporary test image file.
-    
+
     Returns:
         Generator[str, None, None]: Path to the temporary image file.
     """
     # Create a temporary file
-    with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as tmp:
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
         # Create a small red image
-        img = Image.new('RGB', (100, 100), color='red')
+        img = Image.new("RGB", (100, 100), color="red")
         img.save(tmp.name)
         tmp_path = tmp.name
-    
+
     yield tmp_path
-    
+
     # Cleanup the temporary file after the test
     os.unlink(tmp_path)
 
@@ -107,18 +108,12 @@ def test_set_left(sample_presentation: Presentation) -> None:
     assert shape.left == 1500
 
 
-def test_add_shape_picture(sample_presentation: Presentation, sample_image: str) -> None:
+def test_add_shape_picture(
+    sample_presentation: Presentation, sample_image: str
+) -> None:
     """Test add_shape function with a picture."""
     slide = choose_slide(sample_presentation, 0)
-    add_shape(
-        slide,
-        "PICTURE",
-        1000,
-        1000,
-        2000,
-        1000,
-        image_file=sample_image
-    )
+    add_shape(slide, "PICTURE", 1000, 1000, 2000, 1000, image_file=sample_image)
     new_shape = choose_shape(slide, len(slide.shapes) - 1)
     assert new_shape is not None
     assert new_shape.shape_type == MSO_SHAPE_TYPE.PICTURE
@@ -191,7 +186,9 @@ def test_set_font_color(sample_presentation: Presentation) -> None:
     insert_text(shape, "Test Text")
     test_color = "FF0000"  # Red
     set_font_color(shape, test_color)
-    assert shape.text_frame.paragraphs[0].runs[0].font.color.rgb == RGBColor.from_string(test_color)
+    assert shape.text_frame.paragraphs[0].runs[
+        0
+    ].font.color.rgb == RGBColor.from_string(test_color)
 
 
 def test_add_shape_textbox(sample_presentation: Presentation) -> None:
