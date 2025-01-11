@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Literal
+from typing import Literal, Optional
 
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.presentation import Presentation
@@ -161,6 +161,7 @@ def insert_text(
     except Exception as e:
         raise ValueError(f"Failed to insert text into shape: {str(e)}")
 
+
 def set_font_size(
     shape: AutoShape,
     font_size: int,
@@ -177,9 +178,8 @@ def set_font_size(
                 run.font.size = Pt(font_size)
     except Exception as e:
         raise ValueError(f"Failed to set font size of shape: {str(e)}")
-    
 
-    
+
 def set_font_style(
     shape: AutoShape,
     font_style: Literal["bold", "italic"],
