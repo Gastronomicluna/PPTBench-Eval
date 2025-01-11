@@ -6,7 +6,7 @@ from pptx.presentation import Presentation
 from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
-from pptx.util import Length
+from pptx.util import Length, Pt
 
 
 def choose_slide(presentation: Presentation, slide_idx: int) -> Optional[Slide]:
@@ -160,3 +160,20 @@ def insert_text(
         shape.text = text
     except Exception as e:
         raise ValueError(f"Failed to insert text into shape: {str(e)}")
+
+def set_font_size(
+    shape: AutoShape,
+    font_size: int,
+) -> None:
+    """Set the font size of a shape.
+
+    Args:
+        shape: The shape to set the font size of.
+        font_size: The font size to set.
+    """
+    try:
+        for paragraph in shape.text_frame.paragraphs:
+            for run in paragraph.runs:
+                run.font.size = Pt(font_size)
+    except Exception as e:
+        raise ValueError(f"Failed to set font size of shape: {str(e)}")
