@@ -1,6 +1,9 @@
 import pytest
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
+from PIL import Image
+import os
+import tempfile
 
 from src.shared.pptx_api.api_executor import (
     add_shape,
@@ -22,6 +25,26 @@ from src.shared.pptx_api.api_executor import (
 def sample_presentation() -> Presentation:
     """Load a sample presentation."""
     return Presentation("tests/data/ZYBVMQIBRRHONKQ7M4INV3LE62ODKIN2.pptx")
+
+
+@pytest.fixture
+def sample_image() -> str:
+    """Create a temporary test image file.
+    
+    Returns:
+        str: Path to the temporary image file.
+    """
+    # Create a temporary file
+    with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as tmp:
+        # Create a small red image
+        img = Image.new('RGB', (100, 100), color='red')
+        img.save(tmp.name)
+        tmp_path = tmp.name
+    
+    yield tmp_path
+    
+    # Cleanup the temporary file after the test
+    os.unlink(tmp_path)
 
 
 def test_choose_slide(sample_presentation: Presentation) -> None:
@@ -82,7 +105,7 @@ def test_set_left(sample_presentation: Presentation) -> None:
     assert shape.left == 1500
 
 
-def test_add_shape_picture(sample_presentation: Presentation) -> None:
+def test_add_shape_picture(sample_presentation: Presentation, sample_image: str) -> None:
     """Test add_shape function with a picture."""
     slide = choose_slide(sample_presentation, 0)
     add_shape(
@@ -92,6 +115,7 @@ def test_add_shape_picture(sample_presentation: Presentation) -> None:
         1000,
         2000,
         1000,
+        image_file=sample_image
     )
     new_shape = choose_shape(slide, len(slide.shapes) - 1)
     assert new_shape is not None
@@ -173,3 +197,5 @@ def test_add_shape_textbox(sample_presentation: Presentation) -> None:
     slide = choose_slide(sample_presentation, 0)
     add_shape(slide, "TEXTBOX", 1000, 1000, 2000, 1000)
     new_shape = choose_shape(slide, len(slide.shapes) - 1)
+    assert new_shape is not None
+    assert new_shape.shape_type == MSO_SHAPE_TYPE.TEXT_BOX
