@@ -4,6 +4,7 @@ from typing import Optional
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.presentation import Presentation
 from pptx.shapes.base import BaseShape
+from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.slide import Slide
 from pptx.util import Length
 
@@ -143,3 +144,19 @@ def add_shape(
             slide.shapes.add_textbox(left, top, width, height)
     except Exception as e:
         raise ValueError(f"Failed to add shape to slide: {str(e)}")
+
+def insert_text(
+    shape: AutoShape,
+    text: str,
+) -> None:
+    """Insert text into a shape.
+
+    Args:
+        shape: The shape to insert text into.
+        text: The text to insert.
+    """
+    try:
+        shape.text = text
+    except Exception as e:
+        raise ValueError(f"Failed to insert text into shape: {str(e)}")
+    
