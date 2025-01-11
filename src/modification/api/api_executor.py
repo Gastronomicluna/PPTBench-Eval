@@ -109,7 +109,6 @@ def set_left(
 def add_shape(
     slide: Slide,
     shape_type: str,
-    placeholder_type: Optional[str],
     left: int,
     top: int,
     width: int,
