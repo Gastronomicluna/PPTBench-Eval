@@ -5,6 +5,7 @@ from PIL import Image
 import os
 import tempfile
 from typing import Generator
+from pptx.dml.color import RGBColor
 
 from src.shared.pptx_api.api_executor import (
     add_shape,
@@ -190,7 +191,7 @@ def test_set_font_color(sample_presentation: Presentation) -> None:
     insert_text(shape, "Test Text")
     test_color = "FF0000"  # Red
     set_font_color(shape, test_color)
-    assert shape.text_frame.paragraphs[0].runs[0].font.color.rgb.hexstr == test_color
+    assert shape.text_frame.paragraphs[0].runs[0].font.color.rgb == RGBColor.from_string(test_color)
 
 
 def test_add_shape_textbox(sample_presentation: Presentation) -> None:

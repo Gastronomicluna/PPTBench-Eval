@@ -227,7 +227,7 @@ def set_font_color(
 
     Args:
         shape: The shape to set the font color of.
-        font_color: The font color to set.
+        font_color: The font color to set in hex format (e.g. 'FF0000' for red)
     """
     try:
         for paragraph in shape.text_frame.paragraphs:
