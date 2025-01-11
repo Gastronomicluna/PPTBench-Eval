@@ -133,7 +133,7 @@ def test_add_shape_invalid_type(sample_presentation: Presentation) -> None:
 def test_insert_text(sample_presentation: Presentation) -> None:
     """Test insert_text function."""
     slide = choose_slide(sample_presentation, 0)
-    add_shape(slide, "TEXTBOX", 1000, 1000, 2000, 1000)
+    add_shape(slide, "TEXT_BOX", 1000, 1000, 2000, 1000)
     shape = choose_shape(slide, len(slide.shapes) - 1)
     test_text = "Test Text"
     insert_text(shape, test_text)
@@ -143,7 +143,7 @@ def test_insert_text(sample_presentation: Presentation) -> None:
 def test_set_font_size(sample_presentation: Presentation) -> None:
     """Test set_font_size function."""
     slide = choose_slide(sample_presentation, 0)
-    add_shape(slide, "TEXTBOX", 1000, 1000, 2000, 1000)
+    add_shape(slide, "TEXT_BOX", 1000, 1000, 2000, 1000)
     shape = choose_shape(slide, len(slide.shapes) - 1)
     insert_text(shape, "Test Text")
     test_size = 24
@@ -154,7 +154,7 @@ def test_set_font_size(sample_presentation: Presentation) -> None:
 def test_set_font_style_bold(sample_presentation: Presentation) -> None:
     """Test set_font_style function with bold style."""
     slide = choose_slide(sample_presentation, 0)
-    add_shape(slide, "TEXTBOX", 1000, 1000, 2000, 1000)
+    add_shape(slide, "TEXT_BOX", 1000, 1000, 2000, 1000)
     shape = choose_shape(slide, len(slide.shapes) - 1)
     insert_text(shape, "Test Text")
     set_font_style(shape, "bold")
@@ -164,7 +164,7 @@ def test_set_font_style_bold(sample_presentation: Presentation) -> None:
 def test_set_font_style_italic(sample_presentation: Presentation) -> None:
     """Test set_font_style function with italic style."""
     slide = choose_slide(sample_presentation, 0)
-    add_shape(slide, "TEXTBOX", 1000, 1000, 2000, 1000)
+    add_shape(slide, "TEXT_BOX", 1000, 1000, 2000, 1000)
     shape = choose_shape(slide, len(slide.shapes) - 1)
     insert_text(shape, "Test Text")
     set_font_style(shape, "italic")
@@ -174,7 +174,7 @@ def test_set_font_style_italic(sample_presentation: Presentation) -> None:
 def test_set_font(sample_presentation: Presentation) -> None:
     """Test set_font function."""
     slide = choose_slide(sample_presentation, 0)
-    add_shape(slide, "TEXTBOX", 1000, 1000, 2000, 1000)
+    add_shape(slide, "TEXT_BOX", 1000, 1000, 2000, 1000)
     shape = choose_shape(slide, len(slide.shapes) - 1)
     insert_text(shape, "Test Text")
     test_font = "Arial"
@@ -185,7 +185,7 @@ def test_set_font(sample_presentation: Presentation) -> None:
 def test_set_font_color(sample_presentation: Presentation) -> None:
     """Test set_font_color function."""
     slide = choose_slide(sample_presentation, 0)
-    add_shape(slide, "TEXTBOX", 1000, 1000, 2000, 1000)
+    add_shape(slide, "TEXT_BOX", 1000, 1000, 2000, 1000)
     shape = choose_shape(slide, len(slide.shapes) - 1)
     insert_text(shape, "Test Text")
     test_color = "FF0000"  # Red
@@ -196,7 +196,7 @@ def test_set_font_color(sample_presentation: Presentation) -> None:
 def test_add_shape_textbox(sample_presentation: Presentation) -> None:
     """Test add_shape function with a textbox."""
     slide = choose_slide(sample_presentation, 0)
-    add_shape(slide, "TEXTBOX", 1000, 1000, 2000, 1000)
+    add_shape(slide, "TEXT_BOX", 1000, 1000, 2000, 1000)
     new_shape = choose_shape(slide, len(slide.shapes) - 1)
     assert new_shape is not None
     assert new_shape.shape_type == MSO_SHAPE_TYPE.TEXT_BOX
