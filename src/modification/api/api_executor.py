@@ -195,5 +195,23 @@ def set_font_style(
             for run in paragraph.runs:
                 run.font.bold = font_style == "bold"
                 run.font.italic = font_style == "italic"
+                run.font.underline = font_style == "underline"
     except Exception as e:
         raise ValueError(f"Failed to set font style of shape: {str(e)}")
+
+def set_font(
+    shape: AutoShape,
+    font_name: str,
+) -> None:
+    """Set the font of a shape.
+
+    Args:
+        shape: The shape to set the font of.
+        font_name: The font name to set.
+    """
+    try:
+        for paragraph in shape.text_frame.paragraphs:
+            for run in paragraph.runs:
+                run.font.name = font_name
+    except Exception as e:
+        raise ValueError(f"Failed to set font of shape: {str(e)}")
