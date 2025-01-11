@@ -3,8 +3,8 @@ from typing import Optional
 
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.presentation import Presentation
-from pptx.shapes.base import BaseShape
 from pptx.shapes.autoshape import Shape as AutoShape
+from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length
 
@@ -145,6 +145,7 @@ def add_shape(
     except Exception as e:
         raise ValueError(f"Failed to add shape to slide: {str(e)}")
 
+
 def insert_text(
     shape: AutoShape,
     text: str,
@@ -159,4 +160,3 @@ def insert_text(
         shape.text = text
     except Exception as e:
         raise ValueError(f"Failed to insert text into shape: {str(e)}")
-    
