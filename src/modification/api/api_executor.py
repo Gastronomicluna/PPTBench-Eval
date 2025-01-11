@@ -1,13 +1,13 @@
 import os
 from typing import Literal, Optional
 
+from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.presentation import Presentation
 from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length, Pt
-from pptx.dml.color import RGBColor
 
 
 def choose_slide(presentation: Presentation, slide_idx: int) -> Optional[Slide]:
