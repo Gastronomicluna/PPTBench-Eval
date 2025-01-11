@@ -109,6 +109,7 @@ def set_left(
 def add_shape(
     slide: Slide,
     shape_type: str,
+    placeholder_type: Optional[str],
     left: int,
     top: int,
     width: int,
@@ -137,12 +138,7 @@ def add_shape(
 
     # Add the shape to the slide
     try:
-        _ = slide.shapes.add_shape(
-            getattr(MSO_SHAPE_TYPE, shape_type),
-            left,
-            top,
-            width,
-            height,
-        )
+        if shape_type == MSO_SHAPE_TYPE.PICTURE.name:
+            slide.shapes.add_picture(image_path, left, top, width, height)
     except Exception as e:
         raise ValueError(f"Failed to add shape to slide: {str(e)}")
