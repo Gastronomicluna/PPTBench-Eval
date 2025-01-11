@@ -7,6 +7,7 @@ from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length, Pt
+from pptx.dml.color import RGBColor
 
 
 def choose_slide(presentation: Presentation, slide_idx: int) -> Optional[Slide]:
@@ -199,6 +200,7 @@ def set_font_style(
     except Exception as e:
         raise ValueError(f"Failed to set font style of shape: {str(e)}")
 
+
 def set_font(
     shape: AutoShape,
     font_name: str,
@@ -215,3 +217,21 @@ def set_font(
                 run.font.name = font_name
     except Exception as e:
         raise ValueError(f"Failed to set font of shape: {str(e)}")
+
+
+def set_font_color(
+    shape: AutoShape,
+    font_color: str,
+) -> None:
+    """Set the font color of a shape.
+
+    Args:
+        shape: The shape to set the font color of.
+        font_color: The font color to set.
+    """
+    try:
+        for paragraph in shape.text_frame.paragraphs:
+            for run in paragraph.runs:
+                run.font.color.rgb = RGBColor.from_string(font_color)
+    except Exception as e:
+        raise ValueError(f"Failed to set font color of shape: {str(e)}")
