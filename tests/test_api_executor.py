@@ -4,6 +4,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 from PIL import Image
 import os
 import tempfile
+from typing import Generator
 
 from src.shared.pptx_api.api_executor import (
     add_shape,
@@ -28,11 +29,11 @@ def sample_presentation() -> Presentation:
 
 
 @pytest.fixture
-def sample_image() -> str:
+def sample_image() -> Generator[str, None, None]:
     """Create a temporary test image file.
     
     Returns:
-        str: Path to the temporary image file.
+        Generator[str, None, None]: Path to the temporary image file.
     """
     # Create a temporary file
     with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as tmp:
