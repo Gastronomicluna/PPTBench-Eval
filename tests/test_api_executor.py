@@ -92,7 +92,6 @@ def test_add_shape_picture(sample_presentation: Presentation) -> None:
         1000,
         2000,
         1000,
-        "tests/data/sample_image.jpg",
     )
     new_shape = choose_shape(slide, len(slide.shapes) - 1)
     assert new_shape is not None
