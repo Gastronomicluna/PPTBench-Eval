@@ -1,5 +1,5 @@
 import os
-from typing import Optional
+from typing import Optional, Literal
 
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.presentation import Presentation
@@ -177,3 +177,23 @@ def set_font_size(
                 run.font.size = Pt(font_size)
     except Exception as e:
         raise ValueError(f"Failed to set font size of shape: {str(e)}")
+    
+
+    
+def set_font_style(
+    shape: AutoShape,
+    font_style: Literal["bold", "italic"],
+) -> None:
+    """Set the font style of a shape.
+
+    Args:
+        shape: The shape to set the font style of.
+        font_style: The font style to set.
+    """
+    try:
+        for paragraph in shape.text_frame.paragraphs:
+            for run in paragraph.runs:
+                run.font.bold = font_style == "bold"
+                run.font.italic = font_style == "italic"
+    except Exception as e:
+        raise ValueError(f"Failed to set font style of shape: {str(e)}")
