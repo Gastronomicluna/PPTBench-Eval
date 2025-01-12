@@ -1,5 +1,5 @@
 import os
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Union
 
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE_TYPE
@@ -11,10 +11,11 @@ from pptx.util import Length, Pt
 
 # Global variables
 CURRENT_SLIDE: Optional[Slide] = None
-CURRENT_SHAPE: Optional[BaseShape] = None
+CURRENT_SHAPE: Optional[Union[AutoShape, BaseShape]] = None
 PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
+
 
 def set_presentation(
     pptx_path: str,
