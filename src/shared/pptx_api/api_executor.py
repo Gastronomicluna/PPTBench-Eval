@@ -171,17 +171,15 @@ def insert_text(
 
 
 def set_font_size(
-    shape: AutoShape,
     font_size: int,
 ) -> None:
     """Set the font size of a shape.
 
     Args:
-        shape: The shape to set the font size of.
         font_size: The font size to set.
     """
     try:
-        for paragraph in shape.text_frame.paragraphs:
+        for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
             for run in paragraph.runs:
                 run.font.size = Pt(font_size)
     except Exception as e:
