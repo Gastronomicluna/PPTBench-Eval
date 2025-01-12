@@ -50,16 +50,16 @@ def set_current_slide(
 
 
 def choose_shape(
-    shape_idx: int,
+    shape_id: int,
 ) -> None:
     """Choose a shape to work with.
 
     Args:
-        shape_idx: The index of the shape to choose.
+        shape_id: The index of the shape to choose.
     """
     global CURRENT_SHAPE
     try:
-        CURRENT_SHAPE = SHAPES[shape_idx]
+        CURRENT_SHAPE = SHAPES[shape_id]
     except Exception as e:
         raise ValueError(f"Failed to choose shape: {str(e)}")
 

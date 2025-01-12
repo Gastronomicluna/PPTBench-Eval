@@ -24,6 +24,14 @@ class API(object):
 
 api_list = [
     API(
+        name="set_current_slide",
+        parameters="slide_id: int",
+        description="Set the current slide to work with.",
+        parameters_description="It takes one parameter 'slide_id', which is the index of the slide to set as the current slide.",
+        notes="slide_id value can found with the key 'slide_id' in the JSON data.",
+        example="set_current_slide(0)",
+    ),
+    API(
         name="set_width",
         parameters="width: int",
         description="Set the width of the selected shape.",
