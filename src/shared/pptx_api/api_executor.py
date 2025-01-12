@@ -1,5 +1,5 @@
 import os
-from typing import Literal, Optional, List
+from typing import List, Literal, Optional
 
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE_TYPE
@@ -15,6 +15,7 @@ CURRENT_SHAPE: Optional[BaseShape] = None
 PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 
+
 def set_presentation(
     pptx_path: str,
 ) -> None:
@@ -29,6 +30,7 @@ def set_presentation(
         SLIDES = PRESENTATION.slides
     except Exception as e:
         raise ValueError(f"Failed to open presentation: {str(e)}")
+
 
 def choose_shape(slide: Slide, shape_idx: int) -> Optional[BaseShape]:
     """Choose a shape from a slide.
