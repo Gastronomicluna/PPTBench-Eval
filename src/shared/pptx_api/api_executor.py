@@ -3,28 +3,10 @@ from typing import Literal, Optional
 
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE_TYPE
-from pptx.presentation import Presentation
 from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length, Pt
-
-
-def choose_slide(presentation: Presentation, slide_idx: int) -> Optional[Slide]:
-    """Choose a slide from a presentation.
-
-    Args:
-        presentation: The presentation to choose the slide from.
-        slide_idx: The index of the slide to choose.
-
-    Returns:
-        The chosen slide.
-    """
-    try:
-        slide = presentation.slides[slide_idx]
-        return slide
-    except Exception as e:
-        raise ValueError(f"Failed to choose slide {slide_idx}: {str(e)}")
 
 
 def choose_shape(slide: Slide, shape_idx: int) -> Optional[BaseShape]:
