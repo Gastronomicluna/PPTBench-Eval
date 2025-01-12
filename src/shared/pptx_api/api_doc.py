@@ -29,5 +29,14 @@ shape_api_list = [
         description="Set the width of the selected shape.",
         parameters_description="It takes one parameter 'width', which is in emu units as an integer.",
         notes="The shape must be selected before calling this function.",
+        example="set_width(1000000)",
+    ),
+    API(
+        name="set_height",
+        parameters="height: int",
+        description="Set the height of the selected shape.",
+        parameters_description="It takes one parameter 'height', which is in emu units as an integer.",
+        notes="The shape must be selected before calling this function.",
+        example="set_height(1000000)",
     ),
 ]
