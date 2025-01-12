@@ -14,6 +14,7 @@ CURRENT_SLIDE: Optional[Slide] = None
 CURRENT_SHAPE: Optional[BaseShape] = None
 PRESENTATION: Optional[Presentation] = None
 
+
 def choose_shape(slide: Slide, shape_idx: int) -> Optional[BaseShape]:
     """Choose a shape from a slide.
 
