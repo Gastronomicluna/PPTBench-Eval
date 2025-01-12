@@ -31,6 +31,19 @@ def set_presentation(
     except Exception as e:
         raise ValueError(f"Failed to open presentation: {str(e)}")
 
+def set_current_slide(
+    slide_idx: int,
+) -> None:
+    """Set the current slide to work with.
+
+    Args:
+        slide_idx: The index of the slide to set as the current slide.
+    """
+    global CURRENT_SLIDE
+    try:
+        CURRENT_SLIDE = SLIDES[slide_idx]
+    except Exception as e:
+        raise ValueError(f"Failed to set current slide: {str(e)}")
 
 def choose_shape(slide: Slide, shape_idx: int) -> Optional[BaseShape]:
     """Choose a shape from a slide.
