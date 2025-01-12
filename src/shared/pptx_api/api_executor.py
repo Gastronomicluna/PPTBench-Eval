@@ -157,17 +157,15 @@ def add_shape(
 
 
 def insert_text(
-    shape: AutoShape,
     text: str,
 ) -> None:
     """Insert text into a shape.
 
     Args:
-        shape: The shape to insert text into.
         text: The text to insert.
     """
     try:
-        shape.text = text
+        CURRENT_SHAPE.text = text
     except Exception as e:
         raise ValueError(f"Failed to insert text into shape: {str(e)}")
 
