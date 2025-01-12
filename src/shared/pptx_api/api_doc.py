@@ -20,3 +20,10 @@ class API(object):
 
     def __str__(self):
         return f"{self.name}: {self.description}"
+
+
+
+# shape_api_list = [
+#     API(
+#         name="set_width",
+        parameters=["shape", "width"],
