@@ -106,17 +106,15 @@ def set_top(
 
 
 def set_left(
-    shape: BaseShape,
     left: int,
 ) -> None:
     """Set the left of a shape.
 
     Args:
-        shape: The shape to set the left of.
         left: The left to set.
     """
     try:
-        shape.left = Length(left)
+        CURRENT_SHAPE.left = Length(left)
     except Exception as e:
         raise ValueError(f"Failed to set left of shape: {str(e)}")
 
