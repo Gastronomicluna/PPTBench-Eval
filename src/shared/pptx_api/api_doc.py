@@ -39,4 +39,20 @@ shape_api_list = [
         notes="The shape must be selected before calling this function.",
         example="set_height(1000000)",
     ),
+    API(
+        name="set_top",
+        parameters="top: int",
+        description="Set the top of the selected shape.",
+        parameters_description="It takes one parameter 'top', which is in emu units as an integer.",
+        notes="The shape must be selected before calling this function.",
+        example="set_top(1000000)",
+    ),
+    API(
+        name="set_left",
+        parameters="left: int",
+        description="Set the left of the selected shape.",
+        parameters_description="It takes one parameter 'left', which is in emu units as an integer.",
+        notes="The shape must be selected before calling this function.",
+        example="set_left(1000000)",
+    ),
 ]
