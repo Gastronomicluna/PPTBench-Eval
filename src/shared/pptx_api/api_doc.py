@@ -22,7 +22,7 @@ class API(object):
         return f"{self.name}: {self.description}"
 
 
-shape_position_api_list = [
+api_list = [
     API(
         name="set_width",
         parameters="width: int",
