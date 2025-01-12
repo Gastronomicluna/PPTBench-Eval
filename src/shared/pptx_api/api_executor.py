@@ -92,17 +92,15 @@ def set_height(
 
 
 def set_top(
-    shape: BaseShape,
     top: int,
 ) -> None:
     """Set the top of a shape.
 
     Args:
-        shape: The shape to set the top of.
         top: The top to set.
     """
     try:
-        shape.top = Length(top)
+        CURRENT_SHAPE.top = Length(top)
     except Exception as e:
         raise ValueError(f"Failed to set top of shape: {str(e)}")
 
