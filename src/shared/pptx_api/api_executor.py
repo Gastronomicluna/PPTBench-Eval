@@ -64,33 +64,29 @@ def choose_shape(
 
 
 def set_width(
-    shape: BaseShape,
     width: int,
 ) -> None:
     """Set the width of a shape.
 
     Args:
-        shape: The shape to set the width of.
         width: The width to set.
     """
     try:
-        shape.width = Length(width)
+        CURRENT_SHAPE.width = Length(width)
     except Exception as e:
         raise ValueError(f"Failed to set width of shape: {str(e)}")
 
 
 def set_height(
-    shape: BaseShape,
     height: int,
 ) -> None:
     """Set the height of a shape.
 
     Args:
-        shape: The shape to set the height of.
         height: The height to set.
     """
     try:
-        shape.height = Length(height)
+        CURRENT_SHAPE.height = Length(height)
     except Exception as e:
         raise ValueError(f"Failed to set height of shape: {str(e)}")
 
