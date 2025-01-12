@@ -187,17 +187,15 @@ def set_font_size(
 
 
 def set_font_style(
-    shape: AutoShape,
     font_style: Literal["bold", "italic"],
 ) -> None:
     """Set the font style of a shape.
 
     Args:
-        shape: The shape to set the font style of.
         font_style: The font style to set.
     """
     try:
-        for paragraph in shape.text_frame.paragraphs:
+        for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
             for run in paragraph.runs:
                 run.font.bold = font_style == "bold"
                 run.font.italic = font_style == "italic"
