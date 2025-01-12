@@ -221,7 +221,7 @@ def set_font(
 
 def set_font_color(
     shape: AutoShape,
-    font_color: str,
+    font_color: str = "000000",
 ) -> None:
     """Set the font color of a shape.
 
