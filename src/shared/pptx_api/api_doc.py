@@ -1,4 +1,6 @@
-from typing import List, Any
+from typing import Any, List
+
+
 class API(object):
     def __init__(
         self,
@@ -15,6 +17,6 @@ class API(object):
         self.parameters_description = parameters_description
         self.notes = notes
         self.example = example
-        
+
     def __str__(self):
         return f"{self.name}: {self.description}"
