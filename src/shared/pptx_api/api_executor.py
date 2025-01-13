@@ -120,41 +120,33 @@ def set_left(
         raise ValueError(f"Failed to set left of shape: {str(e)}")
 
 
-def add_shape(
-    shape_type: str,
+def add_picture(
     left: int,
     top: int,
     width: int,
     height: int,
     image_file: Optional[str] = None,
 ) -> None:
-    """Add a shape to a slide.
+    """Add a picture to a slide.
 
     Args:
-        shape_type: The type of the shape to add (case insensitive).
-        left: The left of the shape to add.
-        top: The top of the shape to add.
-        width: The width of the shape to add.
-        height: The height of the shape to add.
-        image_file: The image path of the shape to add.
+        left: The left of the picture.
+        top: The top of the picture.
+        width: The width of the picture.
+        height: The height of the picture.
+        image_file: The path to the image file to add.
     """
-    # Convert shape_type to uppercase and check if it's valid
-    shape_type = shape_type.upper()
-    if shape_type not in MSO_SHAPE_TYPE.__members__:
-        raise ValueError(f"Invalid shape type: {shape_type}")
-
-    # Check if the image path is valid
-    if image_file is not None and not os.path.exists(image_file):
-        raise ValueError(f"Image path does not exist: {image_file}")
-
-    # Add the shape to the slide
     try:
-        if shape_type == MSO_SHAPE_TYPE.PICTURE.name:
-            CURRENT_SLIDE.shapes.add_picture(image_file, left, top, width, height)
-        elif shape_type == MSO_SHAPE_TYPE.TEXT_BOX.name:
-            CURRENT_SLIDE.shapes.add_textbox(left, top, width, height)
+        img_path = os.path.abspath(image_file)
+        CURRENT_SLIDE.shapes.add_picture(
+            img_path,
+            Length(left),
+            Length(top),
+            Length(width),
+            Length(height),
+        )
     except Exception as e:
-        raise ValueError(f"Failed to add shape to slide: {str(e)}")
+        raise ValueError(f"Failed to add picture to slide: {str(e)}")
 
 
 def insert_text(
