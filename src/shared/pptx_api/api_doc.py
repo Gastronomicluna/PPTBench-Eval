@@ -75,5 +75,5 @@ api_list = [
         parameters_description="It takes five parameters: 'left', 'top', 'width', 'height', and 'text'. 'left', 'top', 'width', and 'height' are in emu units as integers. 'text' is a string.",
         notes="The current slide must be set before calling this function.",
         example="add_text_box(1000000, 1000000, 1000000, 1000000, 'Hello, World!')",
-    )
+    ),
 ]
