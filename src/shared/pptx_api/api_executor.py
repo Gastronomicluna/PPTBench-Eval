@@ -120,6 +120,33 @@ def set_left(
         raise ValueError(f"Failed to set left of shape: {str(e)}")
 
 
+def add_text_box(
+    left: int,
+    top: int,
+    width: int,
+    height: int,
+    text: Optional[str] = None,
+) -> None:
+    """Add a text box to a slide.
+
+    Args:
+        left: The left of the text box.
+        top: The top of the text box.
+        width: The width of the text box.
+        height: The height of the text box.
+    """
+    try:
+        text_box: BaseShape = CURRENT_SLIDE.shapes.add_textbox(
+            Length(left),
+            Length(top),
+            Length(width),
+            Length(height),
+        )
+        text_box.text = text
+    except Exception as e:
+        raise ValueError(f"Failed to add text box to slide: {str(e)}")
+
+
 def add_picture(
     left: int,
     top: int,
