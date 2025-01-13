@@ -68,4 +68,12 @@ api_list = [
         notes="The shape must be selected before calling this function.",
         example="set_left(1000000)",
     ),
+    API(
+        name="add_text_box",
+        parameters="left: int, top: int, width: int, height: int, text: str",
+        description="Add a text box to the current slide.",
+        parameters_description="It takes five parameters: 'left', 'top', 'width', 'height', and 'text'. 'left', 'top', 'width', and 'height' are in emu units as integers. 'text' is a string.",
+        notes="The current slide must be set before calling this function.",
+        example="add_text_box(1000000, 1000000, 1000000, 1000000, 'Hello, World!')",
+    )
 ]
