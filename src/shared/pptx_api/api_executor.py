@@ -1,8 +1,7 @@
 import os
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional, Union, Dict, Any
 
 from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.presentation import Presentation
 from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
@@ -17,7 +16,7 @@ CURRENT_SHAPE: Optional[Union[AutoShape, BaseShape]] = None
 PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
-
+TEXT_DETAILS: Optional[Dict[str, Any]] = None
 
 def api_executor(
     lines: List[str],
