@@ -115,5 +115,13 @@ api_list = [
         parameters_description="It takes one parameter 'font_name', which is a string.",
         notes="The shape must be selected before calling this function.",
         example="set_font('Arial')",
-    )
+    ),
+    API(
+        name="set_font_color",
+        parameters="font_color: str",
+        description="Set the font color of the selected shape.",
+        parameters_description="It takes one parameter 'font_color', which is a string.",
+        notes="The shape must be selected before calling this function.",
+        example="set_font_color('FF0000')",
+    ),
 ]
