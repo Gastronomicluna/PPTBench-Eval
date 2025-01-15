@@ -9,7 +9,7 @@ from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length, Pt
 
-from .api_doc import api_list, API
+from .api_doc import API, api_list
 
 # Global variables
 CURRENT_SLIDE: Optional[Slide] = None
@@ -17,6 +17,7 @@ CURRENT_SHAPE: Optional[Union[AutoShape, BaseShape]] = None
 PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
+
 
 def check_if_api_in_list(
     api_name: str,
@@ -35,6 +36,7 @@ def check_if_api_in_list(
         if api_name == api.name:
             return True
     return False
+
 
 def set_presentation(
     pptx_path: str,
