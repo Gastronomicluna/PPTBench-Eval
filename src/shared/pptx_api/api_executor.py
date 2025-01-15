@@ -218,7 +218,6 @@ def add_picture(
         raise ValueError(f"Failed to add picture to slide: {str(e)}")
 
 
-
 def get_text_details(
     shape: BaseShape,
 ) -> Dict[str, Any]:
@@ -285,6 +284,7 @@ def set_text_details(
         paragraph.alignment = TEXT_DETAILS["alignment"]
     except Exception as e:
         raise ValueError(f"Failed to set text details of shape: {str(e)}")
+
 
 def insert_text(
     text: str,
