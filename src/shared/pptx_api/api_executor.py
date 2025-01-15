@@ -9,7 +9,7 @@ from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length, Pt
 
-from .api_doc import api_list
+from .api_doc import api_list, API
 
 # Global variables
 CURRENT_SLIDE: Optional[Slide] = None
@@ -18,6 +18,23 @@ PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 
+def check_if_api_in_list(
+    api_name: str,
+    api_list: List[API],
+) -> bool:
+    """Check if an API is in the API list.
+
+    Args:
+        api_name: The name of the API to check.
+        api_list: The list of APIs to check against.
+
+    Returns:
+        True if the API is in the list, False otherwise.
+    """
+    for api in api_list:
+        if api_name == api.name:
+            return True
+    return False
 
 def set_presentation(
     pptx_path: str,
