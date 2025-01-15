@@ -108,4 +108,12 @@ api_list = [
         notes="The shape must be selected before calling this function.",
         example="set_font_style('bold')",
     ),
+    API(
+        name="set_font",
+        parameters="font_name: str",
+        description="Set the font of the selected shape.",
+        parameters_description="It takes one parameter 'font_name', which is a string.",
+        notes="The shape must be selected before calling this function.",
+        example="set_font('Arial')",
+    )
 ]
