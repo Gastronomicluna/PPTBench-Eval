@@ -26,7 +26,7 @@ def api_executor(
 
     Args:
         lines: The API calls to execute
-        
+
     Returns:
         The result of the API calls.
     """
