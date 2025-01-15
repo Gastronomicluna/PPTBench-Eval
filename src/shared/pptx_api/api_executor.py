@@ -216,7 +216,66 @@ def add_picture(
     except Exception as e:
         raise ValueError(f"Failed to add picture to slide: {str(e)}")
 
+def get_fill_color(
+    shape: BaseShape,
+) -> str:
+    """Get the fill color of a shape.
 
+    Args:
+        shape_id: The index of the shape to get the fill color of.
+
+    Returns:
+        The fill color of the shape in hex format (e.g. 'FF0000' for red).
+    """
+    if shape.fill.type == 1:
+        color = shape.fill.fore_color
+        if hasattr(color, "rgb"):
+            return color.rgb
+        else:
+            return None
+
+def get_text_details(
+    shape: BaseShape,
+) -> Dict[str, Any]:
+    """Get the text details of a shape.
+
+    Args:
+        shape_id: The index of the shape to get the text details of.
+
+    Returns:
+        The text details of the shape.
+    """
+    global TEXT_DETAILS
+    try:
+        font = shape.text_frame.paragraphs[0].runs[0].font
+    except:
+        font = shape.text_frame.paragraphs[0].font
+    bold = font.bold
+    italic = font.italic
+    underline = font.underline
+    size = font.size if font.size is not None else shape.text_frame.paragraphs[0].font.size
+    try:
+        color = font.color.rgb
+    except:
+        color = None
+    font_name = font.name
+    fill_color = get_fill_color(shape)
+    line_spacing = shape.text_frame.paragraphs[0].line_spacing
+    alignment = shape.text_frame.paragraphs[0].alignment
+    
+    TEXT_DETAILS = {
+        "font": font,
+        "bold": bold,
+        "italic": italic,
+        "underline": underline,
+        "size": size,
+        "color": color,
+        "fill_color": fill_color,
+        "font_name": font_name,
+        "line_spacing": line_spacing,
+        "alignment": alignment,
+    }
+    
 def insert_text(
     text: str,
 ) -> None:
