@@ -218,27 +218,6 @@ def add_picture(
         raise ValueError(f"Failed to add picture to slide: {str(e)}")
 
 
-def get_fill_color(
-    shape: BaseShape,
-) -> str:
-    """Get the fill color of a shape.
-
-    Args:
-        shape_id: The index of the shape to get the fill color of.
-
-    Returns:
-        The fill color of the shape in hex format (e.g. 'FF0000' for red).
-    """
-    try:
-        if shape.fill.type == 1:
-            color = shape.fill.fore_color
-            if hasattr(color, "rgb"):
-                return color.rgb
-            else:
-                return None
-    except:
-        return None
-
 
 def get_text_details(
     shape: BaseShape,
@@ -267,7 +246,6 @@ def get_text_details(
     except:
         color = None
     font_name = font.name
-    fill_color = get_fill_color(shape)
     line_spacing = shape.text_frame.paragraphs[0].line_spacing
     alignment = shape.text_frame.paragraphs[0].alignment
 
@@ -278,7 +256,6 @@ def get_text_details(
         "underline": underline,
         "size": size,
         "color": color,
-        "fill_color": fill_color,
         "font_name": font_name,
         "line_spacing": line_spacing,
         "alignment": alignment,
