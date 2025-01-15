@@ -227,12 +227,15 @@ def get_fill_color(
     Returns:
         The fill color of the shape in hex format (e.g. 'FF0000' for red).
     """
-    if shape.fill.type == 1:
-        color = shape.fill.fore_color
-        if hasattr(color, "rgb"):
-            return color.rgb
-        else:
-            return None
+    try:
+        if shape.fill.type == 1:
+            color = shape.fill.fore_color
+            if hasattr(color, "rgb"):
+                return color.rgb
+            else:
+                return None
+    except:
+        return None
 
 def get_text_details(
     shape: BaseShape,
