@@ -285,6 +285,30 @@ def get_text_details(
     }
 
 
+def set_text_details(
+    shape: BaseShape,
+) -> None:
+    """Set the text details of a shape.
+
+    Args:
+        shape_id: The index of the shape to set the text details of.
+    """
+    global TEXT_DETAILS
+    try:
+        for paragraph in shape.text_frame.paragraphs:
+            for run in paragraph.runs:
+                run.font.size = TEXT_DETAILS["size"]
+                if TEXT_DETAILS["color"] is not None:
+                    run.font.color.rgb = TEXT_DETAILS["color"]
+                run.font.bold = TEXT_DETAILS["bold"]
+                run.font.italic = TEXT_DETAILS["italic"]
+                run.font.underline = TEXT_DETAILS["underline"]
+                run.font.name = TEXT_DETAILS["font_name"]
+        paragraph.line_spacing = TEXT_DETAILS["line_spacing"]
+        paragraph.alignment = TEXT_DETAILS["alignment"]
+    except Exception as e:
+        raise ValueError(f"Failed to set text details of shape: {str(e)}")
+
 def insert_text(
     text: str,
 ) -> None:
