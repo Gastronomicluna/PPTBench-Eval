@@ -83,5 +83,13 @@ api_list = [
         parameters_description="It takes five parameters: 'left', 'top', 'width', 'height', and 'image_path'. 'left', 'top', 'width', and 'height' are in emu units as integers. 'image_path' is the path to the image file to add.",
         notes="The current slide must be set before calling this function.",
         example="add_picture(1000000, 1000000, 1000000, 1000000, 'path/to/image.jpg')",
+    ),
+    API(
+        name="insert_text",
+        parameters="text: str",
+        description="Insert text into the selected shape.",
+        parameters_description="It takes one parameter 'text', which is a string.",
+        notes="The shape must be selected before calling this function.",
+        example="insert_text('Hello, World!')",
     )
 ]
