@@ -19,28 +19,10 @@ SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 
 
-def parse_apis(
-    lines: List[str],
-) -> List[API]:
-    """Parse APIs from lines.
 
-    Args:
-        lines: The lines to parse the APIs from.
-
-    Returns:
-        The parsed APIs.
-    """
-    apis = []
-    for line in lines:
-        for api in api_list:
-            if api.name == line:
-                apis.append(api)
-    return apis
-
-
-def parse_api(
+def api_in_list(
     line: str,
-) -> API:
+) -> bool:
     """Parse an API from a line.
 
     Args:
@@ -51,8 +33,8 @@ def parse_api(
     """
     for api in api_list:
         if api.name == line:
-            return api
-    raise ValueError(f"API not found: {line}")
+            return True
+    return False
 
 
 def set_presentation(
