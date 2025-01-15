@@ -5,7 +5,7 @@ class API(object):
         parameters: str,
         description: str,
         parameters_description: str,
-        notes: str,
+        notes: str = "",
         example: str = "",
     ):
         self.name = name
