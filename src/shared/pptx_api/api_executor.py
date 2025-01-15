@@ -19,6 +19,28 @@ SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 
 
+def api_executor(
+    lines: List[str],
+) -> List[str]:
+    """Execute the API calls.
+
+    Args:
+        lines: The API calls to execute
+        
+    Returns:
+        The result of the API calls.
+    """
+    errors = []
+    for line in lines:
+        try:
+            if api_in_list(line):
+                exec(line)
+            else:
+                errors.append(f"API '{line}' not found.")
+        except Exception as e:
+            errors.append(str(e))
+    return errors
+
 
 def api_in_list(
     line: str,
