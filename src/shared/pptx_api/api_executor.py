@@ -1,5 +1,5 @@
 import os
-from typing import List, Literal, Optional, Union, Dict, Any
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from pptx.dml.color import RGBColor
 from pptx.presentation import Presentation
@@ -17,6 +17,7 @@ PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 TEXT_DETAILS: Optional[Dict[str, Any]] = None
+
 
 def api_executor(
     lines: List[str],
@@ -216,6 +217,7 @@ def add_picture(
     except Exception as e:
         raise ValueError(f"Failed to add picture to slide: {str(e)}")
 
+
 def get_fill_color(
     shape: BaseShape,
 ) -> str:
@@ -237,6 +239,7 @@ def get_fill_color(
     except:
         return None
 
+
 def get_text_details(
     shape: BaseShape,
 ) -> Dict[str, Any]:
@@ -256,7 +259,9 @@ def get_text_details(
     bold = font.bold
     italic = font.italic
     underline = font.underline
-    size = font.size if font.size is not None else shape.text_frame.paragraphs[0].font.size
+    size = (
+        font.size if font.size is not None else shape.text_frame.paragraphs[0].font.size
+    )
     try:
         color = font.color.rgb
     except:
@@ -265,7 +270,7 @@ def get_text_details(
     fill_color = get_fill_color(shape)
     line_spacing = shape.text_frame.paragraphs[0].line_spacing
     alignment = shape.text_frame.paragraphs[0].alignment
-    
+
     TEXT_DETAILS = {
         "font": font,
         "bold": bold,
@@ -278,7 +283,8 @@ def get_text_details(
         "line_spacing": line_spacing,
         "alignment": alignment,
     }
-    
+
+
 def insert_text(
     text: str,
 ) -> None:
