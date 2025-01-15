@@ -18,6 +18,7 @@ PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 
+
 def parse_apis(
     lines: List[str],
 ) -> List[API]:
@@ -35,6 +36,7 @@ def parse_apis(
             if api.name == line:
                 apis.append(api)
     return apis
+
 
 def parse_api(
     line: str,
