@@ -99,5 +99,13 @@ api_list = [
         parameters_description="It takes one parameter 'font_size', which is an integer.",
         notes="The shape must be selected before calling this function.",
         example="set_font_size(24)",
-    )
+    ),
+    API(
+        name="set_font_style",
+        parameters="font_style: str",
+        description="Set the font style of the selected shape.",
+        parameters_description="It takes one parameter 'font_style', which is a string.",
+        notes="The shape must be selected before calling this function.",
+        example="set_font_style('bold')",
+    ),
 ]
