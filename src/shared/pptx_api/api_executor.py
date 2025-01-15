@@ -8,7 +8,9 @@ from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length, Pt
+
 from .api_doc import api_list
+
 # Global variables
 CURRENT_SLIDE: Optional[Slide] = None
 CURRENT_SHAPE: Optional[Union[AutoShape, BaseShape]] = None
