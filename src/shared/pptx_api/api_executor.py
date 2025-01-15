@@ -18,24 +18,21 @@ PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 
-
-def check_if_api_in_list(
-    api_name: str,
-    api_list: List[API],
-) -> bool:
-    """Check if an API is in the API list.
+def parse_api(
+    line: str,
+) -> API:
+    """Parse an API from a line.
 
     Args:
-        api_name: The name of the API to check.
-        api_list: The list of APIs to check against.
+        line: The line to parse the API from.
 
     Returns:
-        True if the API is in the list, False otherwise.
+        The parsed API.
     """
     for api in api_list:
-        if api_name == api.name:
-            return True
-    return False
+        if api.name == line:
+            return api
+    raise ValueError(f"API not found: {line}")
 
 
 def set_presentation(
