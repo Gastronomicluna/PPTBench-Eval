@@ -1,9 +1,12 @@
-import pandas as pd
-from typing import Any, Dict, Literal, Optional, Callable
-from pathlib import Path
 import logging
-from .utils import df_to_csv, get_image_bytes, load_existing_answers
+from pathlib import Path
+from typing import Any, Callable, Dict, Literal, Optional
+
+import pandas as pd
 from tqdm import tqdm
+
+from .utils import df_to_csv, get_image_bytes, load_existing_answers
+
 
 def get_answers(
     get_answer_single: Callable,

@@ -2,15 +2,15 @@ import logging
 import time
 import traceback
 from pathlib import Path
-from typing import Any, Dict, Literal, Optional, Callable
+from typing import Any, Callable, Dict, Literal, Optional
 
 import pandas as pd
 from tqdm import tqdm
 
+from ..shared.get_answer import get_answers
 from ..shared.llm import call_vision_model
 from ..shared.utils import df_to_csv, get_image_bytes, load_existing_answers
 from .prompts import build_prompt
-from ..shared.get_answer import get_answers
 
 
 def get_answer_single(
