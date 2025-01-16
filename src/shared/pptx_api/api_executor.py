@@ -2,13 +2,14 @@ import os
 from typing import Any, Dict, List, Literal, Optional, Union
 
 from pptx.dml.color import RGBColor
+from pptx import Presentation as presentation
 from pptx.presentation import Presentation
 from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length, Pt
 
-from .api_doc import API, api_list
+from .api_doc import api_list
 
 # Global variables
 CURRENT_SLIDE: Optional[Slide] = None
@@ -406,10 +407,11 @@ def set_font_color(
 
 def main() -> None:
     """Run the main function."""
-    PRESENTATION = Presentation()
+    PRESENTATION = presentation()
     create_slide()
     add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
     PRESENTATION.save("output.pptx")
+
 
 if __name__ == "__main__":
     main()
