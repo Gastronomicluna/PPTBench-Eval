@@ -134,6 +134,7 @@ def create_slide(
     except Exception as e:
         raise ValueError(f"Failed to create slide: {str(e)}")
 
+
 def choose_slide(
     slide_id: int,
 ) -> None:
@@ -149,6 +150,7 @@ def choose_slide(
         CURRENT_SLIDE = SLIDES[slide_id]
     except Exception as e:
         raise ValueError(f"Failed to choose slide: {str(e)}")
+
 
 def choose_shape(
     shape_id: int,
