@@ -1,8 +1,8 @@
 import os
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pptx.dml.color import RGBColor
 from pptx import Presentation as presentation
+from pptx.dml.color import RGBColor
 from pptx.presentation import Presentation
 from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
