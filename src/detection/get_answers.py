@@ -1,7 +1,6 @@
 import logging
 import time
 import traceback
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 import pandas as pd
@@ -114,6 +113,7 @@ def get_answer_single_detection(
 
 def main() -> None:
     from src.shared.load_save_dataset import load_save_dataset_df
+    from pathlib import Path
 
     target_subcategories = [
         "content extraction",
