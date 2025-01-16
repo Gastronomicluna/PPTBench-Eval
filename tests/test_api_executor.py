@@ -113,3 +113,38 @@ def test_set_left(sample_presentation: str) -> None:
     choose_shape(0)
     set_left(1500)
     # Success if no exception raised
+
+
+def test_api_executor(sample_presentation: str) -> None:
+    """Test api_executor function with various scenarios.
+
+    Tests:
+    1. Valid API calls
+    2. Invalid API calls
+    3. Error handling
+    """
+    from src.shared.pptx_api.api_executor import api_executor, set_presentation
+
+    # Set up
+    set_presentation(sample_presentation)
+
+    # Test case 1: Valid API calls
+    valid_commands = [
+        "choose_slide(0)",
+        "choose_shape(0)",
+        "set_width(4000)",
+    ]
+    errors = api_executor(valid_commands)
+    assert not errors, f"Expected no errors but got: {errors}"
+
+    # Test case 2: Invalid API call
+    invalid_commands = ["nonexistent_api()"]
+    errors = api_executor(invalid_commands)
+    assert len(errors) == 1
+    assert "API 'nonexistent_api()' not found." in errors[0]
+
+    # Test case 3: Error handling (invalid index)
+    error_commands = ["choose_slide(999)"]
+    errors = api_executor(error_commands)
+    assert len(errors) == 1
+    assert "Failed to choose slide" in errors[0]
