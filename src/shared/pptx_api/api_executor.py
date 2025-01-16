@@ -8,7 +8,7 @@ from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
 from pptx.slide import Slide
 from pptx.util import Length, Pt
-
+from pptx.shapes.picture import Picture
 from .api_doc import api_list
 
 # Global variables
@@ -274,6 +274,7 @@ def add_text_box(
             Length(height),
         )
         text_box.text = text
+        set_text_details(text_box)
     except Exception as e:
         raise ValueError(f"Failed to add text box to slide: {str(e)}")
 
@@ -294,15 +295,17 @@ def add_picture(
         height: The height of the picture.
         image_file: The path to the image file to add.
     """
+    global CURRENT_SLIDE, CURRENT_SHAPE
     try:
         img_path = os.path.abspath(image_file)
-        CURRENT_SLIDE.shapes.add_picture(
+        picture: Picture = CURRENT_SLIDE.shapes.add_picture(
             img_path,
             Length(left),
             Length(top),
             Length(width),
             Length(height),
         )
+        CURRENT_SHAPE = picture
     except Exception as e:
         raise ValueError(f"Failed to add picture to slide: {str(e)}")
 
