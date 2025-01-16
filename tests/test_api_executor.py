@@ -22,7 +22,7 @@ from src.shared.pptx_api.api_executor import (
 @pytest.fixture
 def sample_presentation() -> str:
     """Load a sample presentation.
-    
+
     Returns:
         str: Path to the sample presentation file.
     """
