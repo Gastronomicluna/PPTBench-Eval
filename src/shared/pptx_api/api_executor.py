@@ -415,11 +415,16 @@ def insert_text(
     Args:
         text: The text to insert.
     """
+    global CURRENT_SHAPE
     try:
-        CURRENT_SHAPE.text = text
+        if hasattr(CURRENT_SHAPE, "text"):
+            CURRENT_SHAPE.text += text
+        elif hasattr(CURRENT_SHAPE, "text_frame"):
+            CURRENT_SHAPE.text_frame.text += text
+        else:
+            raise ValueError("Shape does not have a text attribute")
     except Exception as e:
         raise ValueError(f"Failed to insert text into shape: {str(e)}")
-
 
 def set_font_size(
     font_size: int,
