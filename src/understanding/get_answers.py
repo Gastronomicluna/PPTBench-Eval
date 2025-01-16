@@ -2,14 +2,13 @@ import logging
 import time
 import traceback
 from pathlib import Path
-from typing import Any, Callable, Dict, Literal, Optional
+from typing import Any, Dict, Optional
 
 import pandas as pd
-from tqdm import tqdm
 
 from ..shared.get_answer import get_answers
 from ..shared.llm import call_vision_model
-from ..shared.utils import df_to_csv, get_image_bytes, load_existing_answers
+from ..shared.utils import get_image_bytes
 from .prompts import build_prompt
 
 
