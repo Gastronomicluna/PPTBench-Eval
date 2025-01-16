@@ -69,13 +69,5 @@ def main():
         except Exception as e:
             print(f"Error parsing answer: {str(e)}")
 
-def test() -> None:
-    string = """{
-    "function1": "choose_slide(256)",
-    "function2": "add_text_box(609480, 3327431, 7772400, 400000, "2007 California Children's Dental Disease Program")"
-}"""
-    print(escape_quotes_in_values(string))
-
 if __name__ == "__main__":
-    # main()
-    test()
+    main()
