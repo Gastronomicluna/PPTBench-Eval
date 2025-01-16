@@ -109,6 +109,7 @@ def set_current_slide(
     except Exception as e:
         raise ValueError(f"Failed to set current slide: {str(e)}")
 
+
 def create_slide(
     slide_layout: int = 1,
 ) -> None:
@@ -119,10 +120,13 @@ def create_slide(
     """
     global CURRENT_SLIDE, CURRENT_SHAPE
     try:
-        CURRENT_SLIDE = PRESENTATION.slides.add_slide(PRESENTATION.slide_layouts[slide_layout])
+        CURRENT_SLIDE = PRESENTATION.slides.add_slide(
+            PRESENTATION.slide_layouts[slide_layout]
+        )
         CURRENT_SHAPE = None
     except Exception as e:
         raise ValueError(f"Failed to create slide: {str(e)}")
+
 
 def choose_shape(
     shape_id: int,
@@ -399,9 +403,13 @@ def set_font_color(
     except Exception as e:
         raise ValueError(f"Failed to set font color of shape: {str(e)}")
 
+
 def main() -> None:
     """Run the main function."""
     PRESENTATION = Presentation()
     create_slide()
     add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
     PRESENTATION.save("output.pptx")
+
+if __name__ == "__main__":
+    main()
