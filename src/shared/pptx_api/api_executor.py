@@ -117,10 +117,10 @@ def create_slide(
     Args:
         slide_layout: The layout of the slide to create.
     """
-    global CURRENT_SLIDE, SHAPES
+    global CURRENT_SLIDE, CURRENT_SHAPE
     try:
         CURRENT_SLIDE = PRESENTATION.slides.add_slide(PRESENTATION.slide_layouts[slide_layout])
-        SHAPES = CURRENT_SLIDE.shapes
+        CURRENT_SHAPE = None
     except Exception as e:
         raise ValueError(f"Failed to create slide: {str(e)}")
 
@@ -402,5 +402,6 @@ def set_font_color(
 def main() -> None:
     """Run the main function."""
     PRESENTATION = Presentation()
-    SLIDES = PRESENTATION.slides
-    
+    create_slide()
+    add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
+    PRESENTATION.save("output.pptx")
