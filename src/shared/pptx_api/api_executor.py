@@ -69,8 +69,10 @@ def api_executor(
             api_name = line.split("(")[0]
             print(api_name)
             if api_in_list(api_name):
+                # print("API found")
                 exec(line)
             else:
+                # print("API not found")
                 errors.append(f"API '{line}' not found.")
         except Exception as e:
             errors.append(str(e))
