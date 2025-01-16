@@ -86,7 +86,7 @@ def set_presentation(
     """
     global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
     try:
-        PRESENTATION = Presentation(pptx_path)
+        PRESENTATION = presentation(pptx_path)
         SLIDES = PRESENTATION.slides
         CURRENT_SLIDE = None
         SHAPES = None
