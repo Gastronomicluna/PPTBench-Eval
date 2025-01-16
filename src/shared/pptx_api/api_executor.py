@@ -119,7 +119,11 @@ def create_slide(
     Args:
         slide_layout: The layout of the slide to create.
     """
-    global CURRENT_SLIDE, CURRENT_SHAPE
+    global CURRENT_SLIDE, CURRENT_SHAPE, SLIDES
+    if PRESENTATION is None:
+        raise ValueError("Presentation must be initialized before creating slides")
+    if SLIDES is None:
+        SLIDES = PRESENTATION.slides
     try:
         slide = SLIDES.add_slide(PRESENTATION.slide_layouts[slide_layout])
         CURRENT_SLIDE = slide
@@ -406,11 +410,15 @@ def set_font_color(
 
 def main() -> None:
     """Run the main function."""
-    PRESENTATION = presentation()
-    SLIDES = PRESENTATION.slides
-    create_slide()
-    add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
-    PRESENTATION.save("output.pptx")
+    global PRESENTATION, SLIDES
+    try:
+        PRESENTATION = presentation()
+        SLIDES = PRESENTATION.slides
+        create_slide()
+        add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
+        PRESENTATION.save("output.pptx")
+    except Exception as e:
+        print(f"Error in main: {str(e)}")
 
 
 if __name__ == "__main__":
