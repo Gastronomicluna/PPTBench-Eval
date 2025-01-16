@@ -109,6 +109,20 @@ def set_current_slide(
     except Exception as e:
         raise ValueError(f"Failed to set current slide: {str(e)}")
 
+def create_slide(
+    slide_layout: int = 1,
+) -> None:
+    """Create a new slide.
+
+    Args:
+        slide_layout: The layout of the slide to create.
+    """
+    global CURRENT_SLIDE, SHAPES
+    try:
+        CURRENT_SLIDE = PRESENTATION.slides.add_slide(PRESENTATION.slide_layouts[slide_layout])
+        SHAPES = CURRENT_SLIDE.shapes
+    except Exception as e:
+        raise ValueError(f"Failed to create slide: {str(e)}")
 
 def choose_shape(
     shape_id: int,
@@ -384,3 +398,9 @@ def set_font_color(
                 run.font.color.rgb = RGBColor.from_string(font_color)
     except Exception as e:
         raise ValueError(f"Failed to set font color of shape: {str(e)}")
+
+def main() -> None:
+    """Run the main function."""
+    PRESENTATION = Presentation()
+    SLIDES = PRESENTATION.slides
+    
