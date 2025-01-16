@@ -22,11 +22,11 @@ def build_prompt(
         str: The prompt text.
     """
     if subcategory == "element_modification":
-        return build_prompt_element_modification(query, slide_json)
+        return build_prompt_element_modification(query, slide_json, shape_to_modify)
     elif subcategory == "refinement":
         return build_prompt_refinement(query, slide_json)
     elif subcategory == "text_modification":
-        return build_prompt_text_modification(query, slide_json)
+        return build_prompt_text_modification(query, slide_json, shape_to_modify)
     else:
         raise ValueError(f"Invalid subcategory: {subcategory}")
 
