@@ -154,4 +154,3 @@ def test_api_executor(sample_presentation: str) -> None:
     errors = api_executor(invalid_commands)
     assert len(errors) == 1
     assert "API 'nonexistent_api()' not found." in errors[0]
-
