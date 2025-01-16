@@ -204,7 +204,14 @@ def choose_shape(
         if SHAPES is None:
             CURRENT_SHAPE = None
         else:
-            CURRENT_SHAPE = SHAPES[shape_id]
+            current_shape = None
+            for shape in SHAPES:
+                if shape.shape_id == shape_id:
+                    current_shape = shape
+                    break
+            if current_shape is None:
+                raise ValueError(f"Failed to choose shape: Shape with id {shape_id} not found.")
+            CURRENT_SHAPE = current_shape
     except Exception as e:
         raise ValueError(f"Failed to choose shape: {str(e)}")
 
