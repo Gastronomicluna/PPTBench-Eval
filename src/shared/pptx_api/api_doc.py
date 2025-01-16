@@ -37,6 +37,14 @@ api_list = [
         example="choose_shape(0)",
     ),
     API(
+        name="choose_slide",
+        parameters="slide_id: int",
+        description="Choose a slide to work with.",
+        parameters_description="It takes one parameter 'slide_id', which is the index of the slide to choose.",
+        notes="The slide_id value can be found with the key 'slide_id' in the JSON data.",
+        example="choose_slide(0)",
+    ),
+    API(
         name="set_width",
         parameters="width: int",
         description="Set the width of the selected shape.",
