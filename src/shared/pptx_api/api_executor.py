@@ -121,9 +121,8 @@ def create_slide(
     """
     global CURRENT_SLIDE, CURRENT_SHAPE
     try:
-        CURRENT_SLIDE = PRESENTATION.slides.add_slide(
-            PRESENTATION.slide_layouts[slide_layout]
-        )
+        slide = SLIDES.add_slide(PRESENTATION.slide_layouts[slide_layout])
+        CURRENT_SLIDE = slide
         CURRENT_SHAPE = None
     except Exception as e:
         raise ValueError(f"Failed to create slide: {str(e)}")
