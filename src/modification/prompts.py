@@ -1,7 +1,48 @@
-from typing import List
 
 from ..shared.pptx_api.api_doc import API, api_list
+from typing import Any, Dict, List
+def build_prompt(
+    query: str,
+    slide_json: Dict[str, Any],
+) -> str:
+    """
+    Builds a prompt for the model based on the query and slide JSON, instructing the model to return the answer in JSON format.
 
+    Args:
+        query (str): The query text.
+        slide_json (dict): The JSON data for the slide.
+
+    Returns:
+        str: The prompt text.
+    """
+    divider = "#" * 80
+    prompt = f"""
+{divider}
+Task: You are given a slide from a presentation in the form of an image and JSON data.
+{query}
+To achieve this task, you can use the following functions:
+{api_to_string(api_list)}
+
+Instructions:
+Return in JSON format only the requested information without any additional text or explanations.
+
+Examples:
+{{
+    "function1": "choose_slide(0)",
+    "function2": "choose_shape(1)",
+    "function3": "set_width(1000000)",
+}}
+
+{divider}
+Slide JSON: 
+{slide_json}
+
+{divider}
+Query: {query}
+
+Answer:
+"""
+    return prompt
 
 def api_to_string(
     api_list: List[API],
