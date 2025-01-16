@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Literal, Optional
 
 from ..shared.pptx_api.api_doc import API, api_list
 
+
 def build_prompt(
     query: str,
     slide_json: Dict[str, Any],
@@ -10,13 +11,13 @@ def build_prompt(
 ) -> str:
     """
     Builds a prompt for the model based on the query and slide JSON.
-    
+
     Args:
         query (str): The query text.
         slide_json (dict): The JSON data for the slide.
         subcategory (str): The subcategory of the modification task.
         shape_to_modify (dict): The shape to modify, if applicable.
-        
+
     Returns:
         str: The prompt text.
     """
@@ -29,6 +30,7 @@ def build_prompt(
     else:
         raise ValueError(f"Invalid subcategory: {subcategory}")
 
+
 def build_prompt_text_modification(
     query: str,
     slide_json: Dict[str, Any],
@@ -36,16 +38,17 @@ def build_prompt_text_modification(
 ) -> str:
     """
     Builds a prompt for the model based on the query and slide JSON, instructing the model to modify the text in the slide.
-    
+
     Args:
         query (str): The query text.
         slide_json (dict): The JSON data for the slide.
         shape_to_modify (dict): The shape to modify.
-        
+
     Returns:
         str: The prompt text.
     """
     pass
+
 
 def build_prompt_element_modification(
     query: str,
@@ -54,16 +57,17 @@ def build_prompt_element_modification(
 ) -> str:
     """
     Builds a prompt for the model based on the query and slide JSON, instructing the model to modify an element in the slide.
-    
+
     Args:
         query (str): The query text.
         slide_json (dict): The JSON data for the slide.
         shape_to_modify (dict): The shape to modify.
-        
+
     Returns:
         str: The prompt text.
     """
     pass
+
 
 def build_prompt_refinement(
     query: str,
