@@ -1,7 +1,6 @@
 import logging
 import time
 import traceback
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 import pandas as pd
@@ -109,3 +108,40 @@ def get_answer_single_modification(
                 "ground_truth": ground_truth,
                 "llm_answer": str(e),
             }
+
+
+def main() -> None:
+    from src.shared.load_save_dataset import load_save_dataset_df
+    from pathlib import Path
+
+    dataset_name = "tyrionhuu/PPTBench-Modification"
+    dataset_path = "data/PPTBench-Modification"
+    csv_path = "data/" + "modification_results.csv"
+    
+    df = load_save_dataset_df(
+        dataset_name=dataset_name,
+        dataset_path=dataset_path,
+        force_download=False,
+        source="huggingface",
+    )
+    
+    sample_size = 10
+    df = df.sample(sample_size, random_state=42)
+    
+    results = get_answers(
+        get_answer_single=get_answer_single_modification,
+        df=df,
+        model_name="llama3.2-vision:11b",
+        provider="ollama",
+        temperature=0.0,
+        max_tokens=3200,
+        json=True,
+        timeout=60,
+        csv_path=Path(csv_path),
+        overwrite=True,
+        pure_text=False,
+    )
+    print(results)
+    
+if __name__ == "__main__":
+    main()
