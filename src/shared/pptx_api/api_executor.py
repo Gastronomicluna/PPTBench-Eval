@@ -31,6 +31,7 @@ def api_executor(
     Returns:
         The result of the API calls.
     """
+    global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
     errors = []
     for line in lines:
         try:
@@ -103,7 +104,9 @@ def set_current_slide(
     Args:
         slide_idx: The index of the slide to set as the current slide.
     """
-    global CURRENT_SLIDE, SHAPES
+    global CURRENT_SLIDE, SHAPES, SLIDES
+    if SLIDES is None:
+        raise ValueError("Slides list is not initialized")
     try:
         CURRENT_SLIDE = SLIDES[slide_idx]
         SHAPES = CURRENT_SLIDE.shapes
@@ -119,7 +122,7 @@ def create_slide(
     Args:
         slide_layout: The layout of the slide to create.
     """
-    global CURRENT_SLIDE, CURRENT_SHAPE, SLIDES
+    global CURRENT_SLIDE, CURRENT_SHAPE, SLIDES, SHAPES, PRESENTATION
     if PRESENTATION is None:
         raise ValueError("Presentation must be initialized before creating slides")
     if SLIDES is None:
@@ -140,7 +143,9 @@ def choose_shape(
     Args:
         shape_id: The index of the shape to choose.
     """
-    global CURRENT_SHAPE
+    global CURRENT_SHAPE, SHAPES
+    if SHAPES is None:
+        raise ValueError("No shapes list available. Set current slide first.")
     try:
         CURRENT_SHAPE = SHAPES[shape_id]
     except Exception as e:
