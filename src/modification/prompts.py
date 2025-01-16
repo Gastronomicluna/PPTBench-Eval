@@ -19,9 +19,9 @@ def api_to_string(
     for api in api_list:
         # Format each API with essential information only
         api_str = (
-            f"{api.name}({api.parameters}) " 
-            + f"Description: {api.description} " 
-            + f"Notes: {api.notes}" 
+            f"{api.name}({api.parameters}) "
+            + f"Description: {api.description} "
+            + f"Notes: {api.notes}"
         )
 
         api_strings.append(api_str)
@@ -29,9 +29,11 @@ def api_to_string(
     # Join all API strings with clear separation
     return "\n".join(api_strings)
 
+
 def main() -> None:
     api_str = api_to_string(api_list)
     print(api_str)
-    
+
+
 if __name__ == "__main__":
     main()
