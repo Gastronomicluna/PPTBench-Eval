@@ -1,11 +1,11 @@
 import logging
 from pathlib import Path
-from typing import Any, Callable, Dict, Literal, Optional
+from typing import Callable, Literal, Optional
 
 import pandas as pd
 from tqdm import tqdm
 
-from .utils import df_to_csv, get_image_bytes, load_existing_answers
+from .utils import df_to_csv, load_existing_answers
 
 
 def get_answers(
