@@ -134,6 +134,21 @@ def create_slide(
     except Exception as e:
         raise ValueError(f"Failed to create slide: {str(e)}")
 
+def choose_slide(
+    slide_id: int,
+) -> None:
+    """Choose a slide to work with.
+
+    Args:
+        slide_id: The index of the slide to choose.
+    """
+    global CURRENT_SLIDE, SLIDES
+    if SLIDES is None:
+        raise ValueError("No slides list available. Set current presentation first.")
+    try:
+        CURRENT_SLIDE = SLIDES[slide_id]
+    except Exception as e:
+        raise ValueError(f"Failed to choose slide: {str(e)}")
 
 def choose_shape(
     shape_id: int,
