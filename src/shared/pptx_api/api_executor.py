@@ -58,6 +58,19 @@ def api_in_list(
             return True
     return False
 
+def save_presentation(
+    pptx_path: str,
+) -> None:
+    """Save the presentation.
+
+    Args:
+        pptx_path: The path to save the presentation.
+    """
+    global PRESENTATION
+    try:
+        PRESENTATION.save(pptx_path)
+    except Exception as e:
+        raise ValueError(f"Failed to save presentation: {str(e)}")
 
 def set_presentation(
     pptx_path: str,
