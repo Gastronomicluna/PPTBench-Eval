@@ -13,7 +13,7 @@ from ..shared.utils import df_to_csv, get_image_bytes, load_existing_answers
 from .prompts import build_prompt
 
 
-def get_answer_single(
+def get_answer_single_understanding(
     row: pd.Series,
     model_name: str,
     provider: str,
@@ -135,7 +135,7 @@ def main() -> None:
     df = df.sample(sample_size, random_state=42)
 
     results_df = get_answers(
-        get_answer_single=get_answer_single,
+        get_answer_single=get_answer_single_understanding,
         df=df,
         model_name="llama3.2-vision:11b",
         provider="ollama",

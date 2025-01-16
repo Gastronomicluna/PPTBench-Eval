@@ -12,7 +12,7 @@ from ..shared.utils import get_image_bytes, load_existing_answers
 from .prompts import build_prompt
 
 
-def get_answer_single(
+def get_answer_single_detection(
     row: pd.Series,
     model_name: str,
     provider: str,
@@ -136,7 +136,7 @@ def main() -> None:
     df = df.sample(sample_size, random_state=49)
 
     results_df = get_answers(
-        get_answer_single=get_answer_single,
+        get_answer_single=get_answer_single_detection,
         df=df,
         model_name="llama3.2-vision:11b",
         provider="ollama",
