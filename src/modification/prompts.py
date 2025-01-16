@@ -1,6 +1,8 @@
+from typing import Any, Dict, List
 
 from ..shared.pptx_api.api_doc import API, api_list
-from typing import Any, Dict, List
+
+
 def build_prompt(
     query: str,
     slide_json: Dict[str, Any],
@@ -43,6 +45,7 @@ Query: {query}
 Answer:
 """
     return prompt
+
 
 def api_to_string(
     api_list: List[API],
