@@ -159,10 +159,11 @@ def choose_shape(
         shape_id: The index of the shape to choose.
     """
     global CURRENT_SHAPE, SHAPES
-    if SHAPES is None:
-        raise ValueError("No shapes list available. Set current slide first.")
     try:
-        CURRENT_SHAPE = SHAPES[shape_id]
+        if SHAPES is None:
+            CURRENT_SHAPE = None
+        else:
+            CURRENT_SHAPE = SHAPES[shape_id]
     except Exception as e:
         raise ValueError(f"Failed to choose shape: {str(e)}")
 
