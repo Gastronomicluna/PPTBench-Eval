@@ -11,6 +11,7 @@ from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
 from .prompts import build_prompt
 
+
 def get_answer_single_modification(
     row: pd.Series,
     model_name: str,
@@ -41,7 +42,7 @@ def get_answer_single_modification(
     """
     attempts = 0
     max_attempts = retry if retry is not None else 0
-    
+
     while attempts <= max_attempts:
         try:
             hash_value = row["hash"]
@@ -52,14 +53,14 @@ def get_answer_single_modification(
             shape_to_modify = row["shape_to_modify"]
             json_data = row["json_data"]
             ground_truth = row["ground_truth"]
-            
+
             image_bytes = get_image_bytes(image_data) if not pure_text else None
-            
+
             prompt = build_prompt(
                 query=description,
                 slide_json=json_data,
             )
-            
+
             kwargs = {
                 "model_name": model_name,
                 "provider": provider,
@@ -72,9 +73,9 @@ def get_answer_single_modification(
                 kwargs["timeout"] = timeout
             if not pure_text:
                 kwargs["image_bytes"] = image_bytes
-                
+
             llm_answer = call_vision_model(**kwargs)
-            
+
             return {
                 "hash": hash_value,
                 "subcategory": subcategory,
