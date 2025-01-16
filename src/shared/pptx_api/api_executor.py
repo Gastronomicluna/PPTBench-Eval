@@ -67,17 +67,18 @@ def api_executor(
     for line in lines:
         try:
             api_name = line.split("(")[0]
-            print(api_name)
             if api_in_list(api_name):
-                # print("API found")
-                exec(line)
+                try:
+                    exec(line)
+                except ValueError as ve:
+                    errors.append(str(ve))
+                except Exception as e:
+                    errors.append(f"Error executing {line}: {str(e)}")
             else:
-                # print("API not found")
                 errors.append(f"API '{line}' not found.")
         except Exception as e:
-            errors.append(str(e))
+            errors.append(f"Error parsing {line}: {str(e)}")
     return errors
-
 
 def api_in_list(
     line: str,

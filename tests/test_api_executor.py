@@ -9,6 +9,8 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from src.shared.pptx_api.api_executor import (
+    get_shape_ids,
+    get_slide_ids,
     choose_shape,
     choose_slide,
     set_height,
@@ -52,7 +54,8 @@ def sample_image() -> Generator[str, None, None]:
 def test_choose_slide(sample_presentation: str) -> None:
     """Test choose_slide function."""
     set_presentation(sample_presentation)
-    choose_slide(0)
+    slide_ids = get_slide_ids(Presentation(sample_presentation))
+    choose_slide(slide_ids[0])
     # Success if no exception raised
 
 
@@ -66,15 +69,18 @@ def test_choose_slide_invalid_index(sample_presentation: str) -> None:
 def test_choose_shape(sample_presentation: str) -> None:
     """Test choose_shape function."""
     set_presentation(sample_presentation)
-    choose_slide(0)
-    choose_shape(0)
+    slide_ids = get_slide_ids(Presentation(sample_presentation))
+    choose_slide(slide_ids[0])
+    shape_ids = get_shape_ids(Presentation(sample_presentation).slides[0])
+    choose_shape(shape_ids[0])
     # Success if no exception raised
 
 
 def test_choose_shape_invalid_index(sample_presentation: str) -> None:
     """Test choose_shape with an invalid index."""
     set_presentation(sample_presentation)
-    choose_slide(0)
+    slide_ids = get_slide_ids(Presentation(sample_presentation))
+    choose_slide(slide_ids[0])
     with pytest.raises(ValueError):
         choose_shape(999)
 
@@ -82,8 +88,10 @@ def test_choose_shape_invalid_index(sample_presentation: str) -> None:
 def test_set_width(sample_presentation: str) -> None:
     """Test set_width function."""
     set_presentation(sample_presentation)
-    choose_slide(0)
-    choose_shape(0)
+    slide_ids = get_slide_ids(Presentation(sample_presentation))
+    choose_slide(slide_ids[0])
+    shape_ids = get_shape_ids(Presentation(sample_presentation).slides[0])
+    choose_shape(shape_ids[0])
     set_width(4000)
     # Success if no exception raised
 
@@ -91,8 +99,10 @@ def test_set_width(sample_presentation: str) -> None:
 def test_set_height(sample_presentation: str) -> None:
     """Test set_height function."""
     set_presentation(sample_presentation)
-    choose_slide(0)
-    choose_shape(0)
+    slide_ids = get_slide_ids(Presentation(sample_presentation))
+    choose_slide(slide_ids[0])
+    shape_ids = get_shape_ids(Presentation(sample_presentation).slides[0])
+    choose_shape(shape_ids[0])
     set_height(2000)
     # Success if no exception raised
 
@@ -100,8 +110,10 @@ def test_set_height(sample_presentation: str) -> None:
 def test_set_top(sample_presentation: str) -> None:
     """Test set_top function."""
     set_presentation(sample_presentation)
-    choose_slide(0)
-    choose_shape(0)
+    slide_ids = get_slide_ids(Presentation(sample_presentation))
+    choose_slide(slide_ids[0])
+    shape_ids = get_shape_ids(Presentation(sample_presentation).slides[0])
+    choose_shape(shape_ids[0])
     set_top(1000)
     # Success if no exception raised
 
@@ -109,42 +121,44 @@ def test_set_top(sample_presentation: str) -> None:
 def test_set_left(sample_presentation: str) -> None:
     """Test set_left function."""
     set_presentation(sample_presentation)
-    choose_slide(0)
-    choose_shape(0)
+    slide_ids = get_slide_ids(Presentation(sample_presentation))
+    choose_slide(slide_ids[0])
+    shape_ids = get_shape_ids(Presentation(sample_presentation).slides[0])
+    choose_shape(shape_ids[0])
     set_left(1500)
     # Success if no exception raised
 
 
 def test_api_executor(sample_presentation: str) -> None:
-    """Test api_executor function with various scenarios.
-
-    Tests:
-    1. Valid API calls
-    2. Invalid API calls
-    3. Error handling
-    """
+    """Test api_executor function with various scenarios."""
     from src.shared.pptx_api.api_executor import api_executor, set_presentation
 
     # Set up
+    pres = Presentation(sample_presentation)
     set_presentation(sample_presentation)
-
+    
+    # Get IDs using helper functions
+    slide_ids = get_slide_ids(pres)
+    chosen_slide_id = slide_ids[0]
+    shape_ids = get_shape_ids(pres.slides[0])
+    
     # Test case 1: Valid API calls
     valid_commands = [
-        "choose_slide(0)",
-        "choose_shape(0)",
+        f"choose_slide({chosen_slide_id})",
+        f"choose_shape({shape_ids[0]})",
         "set_width(4000)",
     ]
     errors = api_executor(valid_commands)
     assert not errors, f"Expected no errors but got: {errors}"
-
+    
     # Test case 2: Invalid API call
     invalid_commands = ["nonexistent_api()"]
     errors = api_executor(invalid_commands)
     assert len(errors) == 1
     assert "API 'nonexistent_api()' not found." in errors[0]
-
-    # Test case 3: Error handling (invalid index)
+    
+    # Test case 3: Error handling (invalid slide ID)
     error_commands = ["choose_slide(999)"]
     errors = api_executor(error_commands)
     assert len(errors) == 1
-    assert "Failed to choose slide" in errors[0]
+    assert "Slide with id 999 not found" in errors[0]
