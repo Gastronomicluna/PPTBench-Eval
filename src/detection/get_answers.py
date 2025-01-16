@@ -112,8 +112,9 @@ def get_answer_single_detection(
 
 
 def main() -> None:
-    from src.shared.load_save_dataset import load_save_dataset_df
     from pathlib import Path
+
+    from src.shared.load_save_dataset import load_save_dataset_df
 
     target_subcategories = [
         "content extraction",

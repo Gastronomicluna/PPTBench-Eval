@@ -111,23 +111,24 @@ def get_answer_single_modification(
 
 
 def main() -> None:
-    from src.shared.load_save_dataset import load_save_dataset_df
     from pathlib import Path
+
+    from src.shared.load_save_dataset import load_save_dataset_df
 
     dataset_name = "tyrionhuu/PPTBench-Modification"
     dataset_path = "data/PPTBench-Modification"
     csv_path = "data/" + "modification_results.csv"
-    
+
     df = load_save_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
         force_download=False,
         source="huggingface",
     )
-    
+
     sample_size = 10
     df = df.sample(sample_size, random_state=42)
-    
+
     results = get_answers(
         get_answer_single=get_answer_single_modification,
         df=df,
@@ -142,6 +143,7 @@ def main() -> None:
         pure_text=False,
     )
     print(results)
-    
+
+
 if __name__ == "__main__":
     main()
