@@ -94,6 +94,7 @@ def get_answer_single_understanding(
             logging.error(f"All retry attempts failed: {str(e)}")
             return {
                 "hash": row["hash"],
+                "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": f"Timeout error after {max_attempts} attempts: {str(e)}",
             }
@@ -102,7 +103,6 @@ def get_answer_single_understanding(
             traceback.print_exc()
             return {
                 "hash": row["hash"],
-                "category": row.get("category", ""),
                 "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": str(e),
