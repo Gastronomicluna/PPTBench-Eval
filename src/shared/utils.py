@@ -1,7 +1,7 @@
 import csv
 import logging
 from pathlib import Path
-from typing import Callable, Optional, Union, Dict, Any
+from typing import Any, Callable, Dict, Optional, Union
 
 import httpx
 import pandas as pd
@@ -146,6 +146,7 @@ def process_model(
     except Exception as e:
         logging.error(f"Error processing {model_name}: {str(e)}")
         return pd.DataFrame()  # Return empty DataFrame on error
+
 
 def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
     """

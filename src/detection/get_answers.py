@@ -12,9 +12,6 @@ from ..shared.utils import df_to_csv, get_image_bytes, load_existing_answers
 from .prompts import build_prompt
 
 
-
-
-
 def get_answers(
     df: pd.DataFrame,
     model_name: str = "llama3.2-vision:11b",
