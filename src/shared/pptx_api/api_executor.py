@@ -321,7 +321,7 @@ def get_text_details(
     global TEXT_DETAILS
     try:
         font = shape.text_frame.paragraphs[0].runs[0].font
-    except:
+    except Exception:
         font = shape.text_frame.paragraphs[0].font
     bold = font.bold
     italic = font.italic
@@ -331,7 +331,7 @@ def get_text_details(
     )
     try:
         color = font.color.rgb
-    except:
+    except Exception:
         color = None
     font_name = font.name
     line_spacing = shape.text_frame.paragraphs[0].line_spacing
