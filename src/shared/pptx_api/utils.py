@@ -1,6 +1,9 @@
+from typing import List
+
 from pptx.presentation import Presentation
 from pptx.slide import Slide
-from typing import List
+
+
 def get_slide_ids(
     presentation: Presentation,
 ) -> List[int]:

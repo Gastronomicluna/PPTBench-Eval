@@ -9,8 +9,6 @@ from pptx import Presentation
 from src.shared.pptx_api.api_executor import (
     choose_shape,
     choose_slide,
-    get_shape_ids,
-    get_slide_ids,
     set_height,
     set_left,
     set_presentation,
@@ -18,7 +16,7 @@ from src.shared.pptx_api.api_executor import (
     set_width,
 )
 
-
+from src.shared.pptx_api.utils import get_shape_ids, get_slide_ids
 @pytest.fixture
 def sample_presentation() -> str:
     """Load a sample presentation.
