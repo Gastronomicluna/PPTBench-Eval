@@ -36,7 +36,7 @@ Examples:
 }}
 
 {divider}
-Slide JSON: 
+Slide JSON:
 {slide_json}
 
 {divider}
