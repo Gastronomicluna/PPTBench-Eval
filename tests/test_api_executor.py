@@ -5,8 +5,6 @@ from typing import Generator
 import pytest
 from PIL import Image
 from pptx import Presentation
-from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from src.shared.pptx_api.api_executor import (
     choose_shape,
