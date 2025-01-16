@@ -5,7 +5,6 @@ from ..shared.pptx_api.api_doc import API, api_list
 
 def build_prompt(
     query: str,
-    shape_to_modify: Dict[str, Any],
     slide_json: Dict[str, Any],
 ) -> str:
     """
@@ -44,7 +43,6 @@ Slide JSON:
 
 {divider}
 Query: {query}
-Shape to Modify: {shape_to_modify}
 
 Answer:
 """
