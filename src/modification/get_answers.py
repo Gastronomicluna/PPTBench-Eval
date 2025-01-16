@@ -71,7 +71,7 @@ def get_answer_single_modification(
             if timeout is not None:
                 kwargs["timeout"] = timeout
             if not pure_text:
-                kwargs["image"] = image_bytes
+                kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
 
