@@ -1,7 +1,9 @@
 import json
-from typing import Any, Dict
 import logging
-import re 
+import re
+from typing import Any, Dict
+
+
 def parse_json_answer(
     answer: str,
 ) -> Dict[str, Any]:
@@ -46,7 +48,7 @@ def escape_quotes_in_values(decoded_str: str) -> str:
         # Remove outer quotes
         inner = full_str[1:-1]
         # Escape any unescaped " inside the value
-        inner_escaped = re.sub(r'(?<!\\)"', r'\"', inner)
+        inner_escaped = re.sub(r'(?<!\\)"', r"\"", inner)
         # Put the outer quotes back
         return f'"{inner_escaped}"'
 
@@ -69,6 +71,7 @@ def main():
             # print(parsed_answer)
         except Exception as e:
             print(f"Error parsing answer: {str(e)}")
+
 
 if __name__ == "__main__":
     main()
