@@ -33,6 +33,7 @@ Examples:
     "function1": "choose_slide(0)",
     "function2": "choose_shape(1)",
     "function3": "set_width(1000000)",
+    "function4": "insert_text('Hello, World!')",
 }}
 
 {divider}

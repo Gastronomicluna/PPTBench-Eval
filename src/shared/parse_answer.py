@@ -23,9 +23,9 @@ def parse_json_answer(
             parsed_answer = json.loads(decoded_str)
         except (json.JSONDecodeError, UnicodeError) as e:
             decoded_str = answer.encode().decode("unicode_escape")
-            print(decoded_str)
+            # print(decoded_str)
             cleaned_answer = escape_quotes_in_values(decoded_str)
-            print(cleaned_answer)
+            # print(cleaned_answer)
             try:
                 parsed_answer = json.loads(cleaned_answer)
             except json.JSONDecodeError as e:
@@ -51,6 +51,7 @@ def escape_quotes_in_values(decoded_str: str) -> str:
         return f'"{inner_escaped}"'
 
     return re.sub(pattern, replacer, decoded_str)
+
 
 def main():
     from pathlib import Path

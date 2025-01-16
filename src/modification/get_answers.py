@@ -49,7 +49,7 @@ def get_answer_single_modification(
             task = row["task"]
             description = row["description"]
             image_data = row["image"]
-            shape_to_modify = row["shape_to_modify"]
+            _ = row["shape_to_modify"]
             json_data = row["json_data"]
             ground_truth = row["ground_truth"]
 
