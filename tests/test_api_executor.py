@@ -9,10 +9,10 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from src.shared.pptx_api.api_executor import (
-    get_shape_ids,
-    get_slide_ids,
     choose_shape,
     choose_slide,
+    get_shape_ids,
+    get_slide_ids,
     set_height,
     set_left,
     set_presentation,
@@ -136,12 +136,12 @@ def test_api_executor(sample_presentation: str) -> None:
     # Set up
     pres = Presentation(sample_presentation)
     set_presentation(sample_presentation)
-    
+
     # Get IDs using helper functions
     slide_ids = get_slide_ids(pres)
     chosen_slide_id = slide_ids[0]
     shape_ids = get_shape_ids(pres.slides[0])
-    
+
     # Test case 1: Valid API calls
     valid_commands = [
         f"choose_slide({chosen_slide_id})",
@@ -150,13 +150,13 @@ def test_api_executor(sample_presentation: str) -> None:
     ]
     errors = api_executor(valid_commands)
     assert not errors, f"Expected no errors but got: {errors}"
-    
+
     # Test case 2: Invalid API call
     invalid_commands = ["nonexistent_api()"]
     errors = api_executor(invalid_commands)
     assert len(errors) == 1
     assert "API 'nonexistent_api()' not found." in errors[0]
-    
+
     # Test case 3: Error handling (invalid slide ID)
     error_commands = ["choose_slide(999)"]
     errors = api_executor(error_commands)
