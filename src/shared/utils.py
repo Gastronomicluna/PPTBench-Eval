@@ -1,7 +1,7 @@
 import csv
 import logging
 from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import Callable, Optional, Union, Dict, Any
 
 import httpx
 import pandas as pd
@@ -146,3 +146,19 @@ def process_model(
     except Exception as e:
         logging.error(f"Error processing {model_name}: {str(e)}")
         return pd.DataFrame()  # Return empty DataFrame on error
+
+def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
+    """
+    Load existing answers from CSV file using the utility function.
+
+    Args:
+        csv_path (Path): Path to the CSV file.
+
+    Returns:
+        Dict[str, Dict[str, Any]]: Dictionary of existing answers keyed by hash.
+    """
+    df = csv_to_df(csv_path)
+    if df is None:
+        return {}
+
+    return {row["hash"]: row.to_dict() for _, row in df.iterrows()}

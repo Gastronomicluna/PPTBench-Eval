@@ -8,25 +8,11 @@ import pandas as pd
 from tqdm import tqdm
 
 from ..shared.llm import call_vision_model
-from ..shared.utils import csv_to_df, df_to_csv, get_image_bytes
+from ..shared.utils import df_to_csv, get_image_bytes, load_existing_answers
 from .prompts import build_prompt
 
 
-def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
-    """
-    Load existing answers from CSV file using the utility function.
 
-    Args:
-        csv_path (Path): Path to the CSV file.
-
-    Returns:
-        Dict[str, Dict[str, Any]]: Dictionary of existing answers keyed by hash.
-    """
-    df = csv_to_df(csv_path)
-    if df is None:
-        return {}
-
-    return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
 
 
 def get_answers(
