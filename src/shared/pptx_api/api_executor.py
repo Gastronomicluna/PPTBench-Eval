@@ -407,6 +407,7 @@ def set_font_color(
 def main() -> None:
     """Run the main function."""
     PRESENTATION = presentation()
+    SLIDES = PRESENTATION.slides
     create_slide()
     add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
     PRESENTATION.save("output.pptx")
