@@ -423,6 +423,7 @@ def insert_text(
             CURRENT_SHAPE.text_frame.text += text
         else:
             raise ValueError("Shape does not have a text attribute")
+        set_text_details(CURRENT_SHAPE)
     except Exception as e:
         raise ValueError(f"Failed to insert text into shape: {str(e)}")
 
