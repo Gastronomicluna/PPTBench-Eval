@@ -95,15 +95,16 @@ def get_answer_single_detection(
             logging.error(f"All retry attempts failed: {str(e)}")
             return {
                 "hash": row["hash"],
+                "subcategory": row.get("subcategory", ""),
+                "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": f"Timeout error after {max_attempts} attempts: {str(e)}",
             }
         except Exception as e:
             logging.error(f"Error in get_answer_single: {str(e)}")
-            traceback.print_exc()
+            logging.error(traceback.format_exc())
             return {
                 "hash": row["hash"],
-                "category": row.get("category", ""),
                 "subcategory": row.get("subcategory", ""),
                 "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
