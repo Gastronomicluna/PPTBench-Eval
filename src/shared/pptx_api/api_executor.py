@@ -158,8 +158,9 @@ def choose_shape(
     Args:
         shape_id: The index of the shape to choose.
     """
-    global CURRENT_SHAPE, SHAPES
+    global CURRENT_SHAPE, SHAPES, CURRENT_SLIDE
     try:
+        SHAPES = CURRENT_SLIDE.shapes
         if SHAPES is None:
             CURRENT_SHAPE = None
         else:
