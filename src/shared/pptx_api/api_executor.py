@@ -187,14 +187,16 @@ def choose_slide(
     if SLIDES is None:
         raise ValueError("No slides list available. Set current presentation first.")
     try:
+        current_slide = None
         for slide in SLIDES:
             if slide.slide_id == slide_id:
-                CURRENT_SLIDE = slide
+                current_slide = slide
                 break
-        if CURRENT_SLIDE is None:
+        if current_slide is None:
             raise ValueError(
                 f"Failed to choose slide: Slide with id {slide_id} not found."
             )
+        CURRENT_SLIDE = current_slide
     except Exception as e:
         raise ValueError(f"Failed to choose slide: {str(e)}")
 
@@ -503,7 +505,8 @@ def main() -> None:
         SLIDES = PRESENTATION.slides
         create_slide()
         add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
-        PRESENTATION.save("output.pptx")
+        errors = api_executor(["choose_slide(999)"])
+        print(errors)
     except Exception as e:
         print(f"Error in main: {str(e)}")
 
