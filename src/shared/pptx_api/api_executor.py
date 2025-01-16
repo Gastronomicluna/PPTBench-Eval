@@ -16,7 +16,7 @@ CURRENT_SHAPE: Optional[Union[AutoShape, BaseShape]] = None
 PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
-TEXT_DETAILS: Optional[Dict[str, Any]] = None
+TEXT_DETAILS: Dict[str, Any] = {}
 
 
 def api_executor(
@@ -67,10 +67,14 @@ def set_presentation(
     Args:
         pptx_path: The path to the presentation.
     """
-    global PRESENTATION, SLIDES
+    global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
     try:
         PRESENTATION = Presentation(pptx_path)
         SLIDES = PRESENTATION.slides
+        CURRENT_SLIDE = None
+        SHAPES = None
+        CURRENT_SHAPE = None
+        TEXT_DETAILS = {}
     except Exception as e:
         raise ValueError(f"Failed to open presentation: {str(e)}")
 
