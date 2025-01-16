@@ -26,7 +26,8 @@ To achieve this task, you can use the following functions:
 {api_to_string(api_list)}
 
 Instructions:
-Return in JSON format only the requested information without any additional text or explanations.
+- Return in JSON format only the requested information without any additional text or explanations.
+- Abide by JSON formatting rules.
 
 Examples:
 {{
