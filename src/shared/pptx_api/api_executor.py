@@ -19,6 +19,21 @@ SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 TEXT_DETAILS: Dict[str, Any] = {}
 
+def get_slide_ids(
+    presentation: Presentation,
+) -> List[int]:
+    """Get the slide ids of a presentation.
+
+    Args:
+        presentation: The presentation to get the slide ids of.
+
+    Returns:
+        The slide ids of the presentation.
+    """
+    slide_ids = []
+    for slide in presentation.slides:
+        slide_ids.append(slide.slide_id)
+    return slide_ids
 
 def api_executor(
     lines: List[str],
@@ -35,7 +50,9 @@ def api_executor(
     errors = []
     for line in lines:
         try:
-            if api_in_list(line):
+            api_name = line.split("(")[0]
+            print(api_name)
+            if api_in_list(api_name):
                 exec(line)
             else:
                 errors.append(f"API '{line}' not found.")
@@ -147,7 +164,12 @@ def choose_slide(
     if SLIDES is None:
         raise ValueError("No slides list available. Set current presentation first.")
     try:
-        CURRENT_SLIDE = SLIDES[slide_id]
+        for slide in SLIDES:
+            if slide.slide_id == slide_id:
+                CURRENT_SLIDE = slide
+                break
+        if CURRENT_SLIDE is None:
+            raise ValueError(f"Failed to choose slide: Slide with id {slide_id} not found.")
     except Exception as e:
         raise ValueError(f"Failed to choose slide: {str(e)}")
 
