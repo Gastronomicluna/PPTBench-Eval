@@ -154,3 +154,9 @@ def test_api_executor(sample_presentation: str) -> None:
     errors = api_executor(invalid_commands)
     assert len(errors) == 1
     assert "API 'nonexistent_api()' not found." in errors[0]
+
+    # Test case 3: Error handling (invalid slide ID)
+    error_commands = ["choose_slide(999)"]
+    errors = api_executor(error_commands)
+    assert len(errors) == 1
+    assert "Slide with id 999 not found" in errors[0]

@@ -426,6 +426,7 @@ def insert_text(
     except Exception as e:
         raise ValueError(f"Failed to insert text into shape: {str(e)}")
 
+
 def set_font_size(
     font_size: int,
 ) -> None:
