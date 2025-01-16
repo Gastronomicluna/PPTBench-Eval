@@ -19,6 +19,7 @@ SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 TEXT_DETAILS: Dict[str, Any] = {}
 
+
 def get_slide_ids(
     presentation: Presentation,
 ) -> List[int]:
@@ -35,6 +36,7 @@ def get_slide_ids(
         slide_ids.append(slide.slide_id)
     return slide_ids
 
+
 def get_shape_ids(
     slide: Slide,
 ) -> List[int]:
@@ -50,6 +52,7 @@ def get_shape_ids(
     for shape in slide.shapes:
         shape_ids.append(shape.shape_id)
     return shape_ids
+
 
 def api_executor(
     lines: List[str],
@@ -79,6 +82,7 @@ def api_executor(
         except Exception as e:
             errors.append(f"Error parsing {line}: {str(e)}")
     return errors
+
 
 def api_in_list(
     line: str,
@@ -188,7 +192,9 @@ def choose_slide(
                 CURRENT_SLIDE = slide
                 break
         if CURRENT_SLIDE is None:
-            raise ValueError(f"Failed to choose slide: Slide with id {slide_id} not found.")
+            raise ValueError(
+                f"Failed to choose slide: Slide with id {slide_id} not found."
+            )
     except Exception as e:
         raise ValueError(f"Failed to choose slide: {str(e)}")
 
@@ -213,7 +219,9 @@ def choose_shape(
                     current_shape = shape
                     break
             if current_shape is None:
-                raise ValueError(f"Failed to choose shape: Shape with id {shape_id} not found.")
+                raise ValueError(
+                    f"Failed to choose shape: Shape with id {shape_id} not found."
+                )
             CURRENT_SHAPE = current_shape
     except Exception as e:
         raise ValueError(f"Failed to choose shape: {str(e)}")
