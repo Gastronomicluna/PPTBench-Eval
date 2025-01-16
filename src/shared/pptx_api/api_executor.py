@@ -6,9 +6,10 @@ from pptx.dml.color import RGBColor
 from pptx.presentation import Presentation
 from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
+from pptx.shapes.picture import Picture
 from pptx.slide import Slide
 from pptx.util import Length, Pt
-from pptx.shapes.picture import Picture
+
 from .api_doc import api_list
 
 # Global variables
