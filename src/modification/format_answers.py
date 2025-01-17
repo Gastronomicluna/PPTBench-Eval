@@ -64,3 +64,9 @@ def extract_functions_from_json(
     for value in json_data:
         functions.append(value["function"])
     return functions
+
+def main() -> None:
+    format_answer_csv(Path("data/modification_results.csv"), overwrite=True)
+    
+if __name__ == "__main__":
+    main()
