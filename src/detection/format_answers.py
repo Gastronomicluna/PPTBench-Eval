@@ -1,8 +1,27 @@
 import json
 from typing import Any, Dict, Literal, Optional, Union
+import pandas as pd
+from pathlib import Path
 
 from ..shared.parse_answer import parse_json_answer
 
+def format_answer_csv(
+    csv_path: Path,
+    overwrite: bool = False,
+) -> pd.DataFrame:
+    """
+    Format the answers in the CSV file.
+
+    Args:
+        csv_path (Path): Path to the CSV file.
+        overwrite (bool, optional): Whether to overwrite existing answers.
+            If False and answer column exists with values, skip processing.
+            Defaults to False.
+
+    Returns:
+        pd.DataFrame: DataFrame with formatted answers.
+    """
+    return format_answer_csv(format_answer, csv_path, overwrite)
 def format_answer(
     answer: str,
     subcategory: Literal["content extraction", "layout detection", "style detection"],
