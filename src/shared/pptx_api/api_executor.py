@@ -23,12 +23,15 @@ TEXT_DETAILS: Dict[str, Any] = {}
 
 def api_executor(
     lines: List[str],
-    pptx_path: Optional[Path] = None,
+    pptx_path: Optional[str] = None,
+    output_path: Optional[str] = None,
 ) -> List[str]:
     """Execute the API calls.
 
     Args:
         lines: The API calls to execute
+        pptx_path: Optional path to an existing presentation to modify
+        output_path: Optional path to save the modified presentation
 
     Returns:
         The result of the API calls.
@@ -53,6 +56,15 @@ def api_executor(
                 errors.append(f"API '{line}' not found.")
         except Exception as e:
             errors.append(f"Error parsing {line}: {str(e)}")
+    
+    if output_path is not None:
+        try:
+            save_presentation(output_path)
+        except ValueError as ve:
+            errors.append(f"Error saving presentation: {str(ve)}")
+        except Exception as e:
+            errors.append(f"Error saving presentation: {str(e)}")
+            
     return errors
 
 
