@@ -23,6 +23,7 @@ def format_answer(
         return []
     return functions
 
+
 def extract_functions_from_json(
     json_data: List[Dict[str, Any]],
 ) -> List[str]:
