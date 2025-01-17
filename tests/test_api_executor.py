@@ -127,35 +127,45 @@ def test_set_left(sample_presentation: str) -> None:
 
 
 def test_api_executor(sample_presentation: str) -> None:
-    """Test api_executor function with various scenarios."""
-    from src.shared.pptx_api.api_executor import api_executor, set_presentation
+    """Test api_executor function with various scenarios.
+    
+    Tests the api_executor function with both pptx_path parameter and legacy mode
+    using set_presentation.
+    
+    Args:
+        sample_presentation: Path to the sample presentation file.
+    """
+    from src.shared.pptx_api.api_executor import api_executor
+    from pathlib import Path
 
     # Set up
     pres = Presentation(sample_presentation)
-    set_presentation(sample_presentation)
-
-    # Get IDs using helper functions
+    pptx_path = Path(sample_presentation)
     slide_ids = get_slide_ids(pres)
     chosen_slide_id = slide_ids[0]
     shape_ids = get_shape_ids(pres.slides[0])
 
-    # Test case 1: Valid API calls
+    # Test case 1: Using pptx_path parameter
     valid_commands = [
         f"choose_slide({chosen_slide_id})",
         f"choose_shape({shape_ids[0]})",
         "set_width(4000)",
     ]
-    errors = api_executor(valid_commands)
+    errors = api_executor(valid_commands, pptx_path)
     assert not errors, f"Expected no errors but got: {errors}"
 
     # Test case 2: Invalid API call
     invalid_commands = ["nonexistent_api()"]
-    errors = api_executor(invalid_commands)
+    errors = api_executor(invalid_commands, pptx_path)
     assert len(errors) == 1
     assert "API 'nonexistent_api()' not found." in errors[0]
 
     # Test case 3: Error handling (invalid slide ID)
     error_commands = ["choose_slide(999)"]
-    errors = api_executor(error_commands)
+    errors = api_executor(error_commands, pptx_path)
     assert len(errors) == 1
     assert "Slide with id 999 not found" in errors[0]
+
+    # Test case 4: Test without pptx_path (should use previously set presentation)
+    errors = api_executor(valid_commands)
+    assert not errors, f"Expected no errors but got: {errors}"
