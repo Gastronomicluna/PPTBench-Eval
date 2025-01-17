@@ -1,6 +1,8 @@
+from typing import Any, Dict, List, Literal, Optional
+
 from .api_executor_json import api_executor_json
 from .api_executor_pptx import api_executor_pptx
-from typing import Any, Dict, List, Literal, Optional
+
 
 def api_executor(
     lines: List[str],
