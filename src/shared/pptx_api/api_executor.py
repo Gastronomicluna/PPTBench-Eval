@@ -1,7 +1,6 @@
 import json
 import os
-from pathlib import Path
-from typing import Any, Dict, List, Literal, Optional, TypedDict, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from pptx import Presentation as presentation
 from pptx.dml.color import RGBColor
@@ -26,16 +25,6 @@ TEXT_DETAILS: Dict[str, Any] = {}
 JSON_DATA: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SLIDE: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SHAPE: Optional[Dict[str, Any]] = None
-
-
-class FontDetails(TypedDict):
-    """Type definition for font details in JSON format."""
-
-    paragraph_index: int
-    run_index: int
-    text: str
-    font_name: str
-    font_size: float
 
 
 def api_executor(
