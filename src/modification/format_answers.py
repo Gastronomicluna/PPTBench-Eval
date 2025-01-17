@@ -1,45 +1,6 @@
 from typing import Any, Dict, List
-from pathlib import Path
-import pandas as pd
-
+import json
 from ..shared.parse_answer import parse_json_answer
-from ..shared.utils import csv_to_df, df_to_csv
-
-
-def format_answer_csv(
-    csv_path: Path,
-    overwrite: bool = False,
-) -> pd.DataFrame:
-    """
-    Format the answers in the CSV file.
-
-    Args:
-        csv_path (Path): Path to the CSV file.
-        overwrite (bool, optional): Whether to overwrite existing answers.
-            If False and answer column exists with values, skip processing.
-            Defaults to False.
-
-    Returns:
-        pd.DataFrame: DataFrame with formatted answers.
-    """
-    df = csv_to_df(csv_path)
-    if df is None:
-        raise ValueError("The CSV file is empty.")
-
-    if "answer" in df.columns and not overwrite:
-        # Check if answer column has any non-null values
-        if not df["answer"].isna().all():
-            return df
-
-    df["answer"] = df.apply(
-        lambda row: format_answer(row["llm_answer"]),
-        axis=1,
-    )
-
-    if df_to_csv(df, csv_path):
-        return df
-    else:
-        raise ValueError("Failed to save the formatted answers.")
 
 
 def format_answer(
@@ -57,9 +18,10 @@ def format_answer(
     try:
         json_answer = parse_json_answer(answer)
         functions = extract_functions_from_json(json_answer)
+        result_json = {"functions": functions}
     except Exception:
         return {}
-    return {"functions": functions}
+    return json.dumps(result_json)
 
 
 def extract_functions_from_json(
