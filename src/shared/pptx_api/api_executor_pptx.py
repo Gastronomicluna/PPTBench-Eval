@@ -1,5 +1,5 @@
 import os
-from typing import Any, Dict, List, Optional, Union, Literal
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from pptx import Presentation as presentation
 from pptx.dml.color import RGBColor
@@ -19,6 +19,7 @@ PRESENTATION: Optional[Presentation] = None
 SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 TEXT_DETAILS: Dict[str, Any] = {}
+
 
 def api_executor(
     lines: List[str],
@@ -64,6 +65,7 @@ def api_executor(
         except Exception as e:
             errors.append(f"Error saving presentation: {str(e)}")
 
+
 def api_in_list(
     line: str,
 ) -> bool:
@@ -80,6 +82,7 @@ def api_in_list(
             return True
     return False
 
+
 def save_presentation(pptx_path: str) -> None:
     """Save the presentation.
 
@@ -91,6 +94,7 @@ def save_presentation(pptx_path: str) -> None:
         PRESENTATION.save(pptx_path)
     except Exception as e:
         raise ValueError(f"Failed to save presentation: {str(e)}")
+
 
 def set_presentation(pptx_path: str) -> None:
     """Set the presentation to work with.
@@ -109,6 +113,7 @@ def set_presentation(pptx_path: str) -> None:
     except Exception as e:
         raise ValueError(f"Failed to open presentation: {str(e)}")
 
+
 def set_current_slide(slide_idx: int) -> None:
     """Set the current slide to work with.
 
@@ -123,6 +128,7 @@ def set_current_slide(slide_idx: int) -> None:
         SHAPES = CURRENT_SLIDE.shapes
     except Exception as e:
         raise ValueError(f"Failed to set current slide: {str(e)}")
+
 
 def create_slide(
     slide_layout: int = 1,
@@ -144,6 +150,7 @@ def create_slide(
     except Exception as e:
         raise ValueError(f"Failed to create slide: {str(e)}")
 
+
 def choose_slide(
     slide_id: int,
 ) -> None:
@@ -154,9 +161,7 @@ def choose_slide(
     """
     global CURRENT_SLIDE, SLIDES
     if SLIDES is None:
-        raise ValueError(
-            "No slides list available. Set current presentation first."
-        )
+        raise ValueError("No slides list available. Set current presentation first.")
     try:
         current_slide = next((s for s in SLIDES if s.slide_id == slide_id), None)
         if current_slide is None:
@@ -164,6 +169,7 @@ def choose_slide(
         CURRENT_SLIDE = current_slide
     except Exception as e:
         raise ValueError(f"Failed to choose slide: {str(e)}")
+
 
 def choose_shape(
     shape_id: int,
@@ -192,6 +198,7 @@ def choose_shape(
     except Exception as e:
         raise ValueError(f"Failed to choose shape: {str(e)}")
 
+
 def set_width(
     width: int,
 ) -> None:
@@ -204,6 +211,7 @@ def set_width(
         CURRENT_SHAPE.width = Length(width)
     except Exception as e:
         raise ValueError(f"Failed to set width of shape: {str(e)}")
+
 
 def set_height(
     height: int,
@@ -218,6 +226,7 @@ def set_height(
     except Exception as e:
         raise ValueError(f"Failed to set height of shape: {str(e)}")
 
+
 def set_top(
     top: int,
 ) -> None:
@@ -231,6 +240,7 @@ def set_top(
     except Exception as e:
         raise ValueError(f"Failed to set top of shape: {str(e)}")
 
+
 def set_left(
     left: int,
 ) -> None:
@@ -243,6 +253,7 @@ def set_left(
         CURRENT_SHAPE.left = Length(left)
     except Exception as e:
         raise ValueError(f"Failed to set left of shape: {str(e)}")
+
 
 def add_text_box(
     left: int,
@@ -271,6 +282,7 @@ def add_text_box(
         set_text_details(text_box)
     except Exception as e:
         raise ValueError(f"Failed to add text box to slide: {str(e)}")
+
 
 def add_picture(
     left: int,
@@ -301,6 +313,7 @@ def add_picture(
         CURRENT_SHAPE = picture
     except Exception as e:
         raise ValueError(f"Failed to add picture to slide: {str(e)}")
+
 
 def get_text_details(
     shape: BaseShape,
@@ -344,6 +357,7 @@ def get_text_details(
         "alignment": alignment,
     }
 
+
 def set_text_details(
     shape: BaseShape,
 ) -> None:
@@ -368,6 +382,7 @@ def set_text_details(
     except Exception as e:
         raise ValueError(f"Failed to set text details of shape: {str(e)}")
 
+
 def insert_text(
     text: str,
 ) -> None:
@@ -387,6 +402,7 @@ def insert_text(
     except Exception as e:
         raise ValueError(f"Failed to insert text into shape: {str(e)}")
 
+
 def set_font_size(
     font_size: int,
 ) -> None:
@@ -401,6 +417,7 @@ def set_font_size(
                 run.font.size = Pt(font_size)
     except Exception as e:
         raise ValueError(f"Failed to set font size of shape: {str(e)}")
+
 
 def set_font_style(
     font_style: Literal["bold", "italic"],
@@ -419,6 +436,7 @@ def set_font_style(
     except Exception as e:
         raise ValueError(f"Failed to set font style of shape: {str(e)}")
 
+
 def set_font(
     font_name: str,
 ) -> None:
@@ -433,6 +451,7 @@ def set_font(
                 run.font.name = font_name
     except Exception as e:
         raise ValueError(f"Failed to set font of shape: {str(e)}")
+
 
 def set_font_color(
     font_color: str = "000000",
@@ -449,6 +468,7 @@ def set_font_color(
     except Exception as e:
         raise ValueError(f"Failed to set font color of shape: {str(e)}")
 
+
 def main() -> None:
     """Run the main function."""
     global PRESENTATION, SLIDES
@@ -461,6 +481,7 @@ def main() -> None:
         print(errors)
     except Exception as e:
         print(f"Error in main: {str(e)}")
+
 
 if __name__ == "__main__":
     main()

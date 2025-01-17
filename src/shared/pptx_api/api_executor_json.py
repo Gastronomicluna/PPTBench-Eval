@@ -1,13 +1,15 @@
 import json
+import logging
 import os
 from typing import Any, Dict, List, Literal, Optional
-import logging
+
 from .api_doc import api_list
 
 # Global JSON variables
 JSON_DATA: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SLIDE: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SHAPE: Optional[Dict[str, Any]] = None
+
 
 def api_executor_json(
     lines: List[str],
@@ -52,13 +54,15 @@ def api_executor_json(
             errors.append(f"Error saving JSON: {str(ve)}")
         except Exception as e:
             errors.append(f"Error saving JSON: {str(e)}")
-            
+
     if errors:
         logging.error("Errors occurred during API execution:")
         for error in errors:
             logging.error(error)
-            
+
     return JSON_DATA
+
+
 def api_in_list(
     line: str,
 ) -> bool:
@@ -75,6 +79,7 @@ def api_in_list(
             return True
     return False
 
+
 def save_json(json_path: str) -> None:
     """Save the JSON data.
 
@@ -87,6 +92,7 @@ def save_json(json_path: str) -> None:
             json.dump(JSON_DATA, f, indent=4)
     except Exception as e:
         raise ValueError(f"Failed to save JSON: {str(e)}")
+
 
 def set_json(json_path: str) -> None:
     """Set the JSON data to work with.
@@ -103,6 +109,7 @@ def set_json(json_path: str) -> None:
     except Exception as e:
         raise ValueError(f"Failed to open JSON: {str(e)}")
 
+
 def set_current_slide(slide_idx: int) -> None:
     """Set the current slide to work with.
 
@@ -116,6 +123,7 @@ def set_current_slide(slide_idx: int) -> None:
         JSON_CURRENT_SLIDE = JSON_DATA["slides"][slide_idx]
     except Exception as e:
         raise ValueError(f"Failed to set current JSON slide: {str(e)}")
+
 
 def choose_slide(slide_id: int) -> None:
     """Choose a slide to work with by ID.
@@ -131,6 +139,7 @@ def choose_slide(slide_id: int) -> None:
             JSON_CURRENT_SLIDE = slide
             return
     raise ValueError(f"Slide with ID {slide_id} not found")
+
 
 def choose_shape(shape_id: int) -> None:
     """Choose a shape to work with.
@@ -152,6 +161,7 @@ def choose_shape(shape_id: int) -> None:
     except Exception as e:
         raise ValueError(f"Failed to choose shape: {str(e)}")
 
+
 def set_width(width: int) -> None:
     """Set the width of a shape.
 
@@ -161,6 +171,7 @@ def set_width(width: int) -> None:
     if JSON_CURRENT_SHAPE is None:
         raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["width"] = width
+
 
 def set_height(height: int) -> None:
     """Set the height of a shape.
@@ -172,6 +183,7 @@ def set_height(height: int) -> None:
         raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["height"] = height
 
+
 def set_top(top: int) -> None:
     """Set the top of a shape.
 
@@ -182,6 +194,7 @@ def set_top(top: int) -> None:
         raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["top"] = top
 
+
 def set_left(left: int) -> None:
     """Set the left of a shape.
 
@@ -191,6 +204,7 @@ def set_left(left: int) -> None:
     if JSON_CURRENT_SHAPE is None:
         raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["left"] = left
+
 
 def add_text_box(
     left: int,
@@ -224,6 +238,7 @@ def add_text_box(
     }
     JSON_CURRENT_SLIDE["shapes"].append(new_shape)
     JSON_CURRENT_SHAPE = new_shape
+
 
 def add_picture(
     left: int,
@@ -260,6 +275,7 @@ def add_picture(
     JSON_CURRENT_SLIDE["shapes"].append(new_shape)
     JSON_CURRENT_SHAPE = new_shape
 
+
 def insert_text(text: str) -> None:
     """Insert text into a shape.
 
@@ -269,6 +285,7 @@ def insert_text(text: str) -> None:
     if JSON_CURRENT_SHAPE is None:
         raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["text"] += text
+
 
 def set_font_size(font_size: int) -> None:
     """Set the font size of a shape.
@@ -281,6 +298,7 @@ def set_font_size(font_size: int) -> None:
     for detail in JSON_CURRENT_SHAPE["font_details"]:
         detail["font_size"] = font_size
 
+
 def set_font_style(font_style: Literal["bold", "italic"]) -> None:
     """Set the font style of a shape.
 
@@ -291,6 +309,7 @@ def set_font_style(font_style: Literal["bold", "italic"]) -> None:
         raise ValueError("No shape selected")
     for detail in JSON_CURRENT_SHAPE.get("font_details", []):
         detail[font_style] = True
+
 
 def set_font(font_name: str) -> None:
     """Set the font of a shape.
@@ -303,6 +322,7 @@ def set_font(font_name: str) -> None:
     for detail in JSON_CURRENT_SHAPE.get("font_details", []):
         detail["font_name"] = font_name
 
+
 def set_font_color(font_color: str = "000000") -> None:
     """Set the font color of a shape.
 
@@ -314,6 +334,7 @@ def set_font_color(font_color: str = "000000") -> None:
     for detail in JSON_CURRENT_SHAPE.get("font_details", []):
         detail["color"] = font_color
 
+
 def main() -> None:
     """Run the main function."""
     try:
@@ -321,6 +342,7 @@ def main() -> None:
         pass
     except Exception as e:
         print(f"Error in main: {str(e)}")
+
 
 if __name__ == "__main__":
     main()
