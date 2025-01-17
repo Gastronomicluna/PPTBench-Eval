@@ -2,7 +2,7 @@ import logging
 import time
 import traceback
 from typing import Any, Dict, Optional
-
+import json
 import pandas as pd
 
 from ..shared.get_answer import get_answers
@@ -76,13 +76,13 @@ def get_answer_single_modification(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
-
+            llm_answer_dict = json.loads(llm_answer)
             return {
                 "hash": hash_value,
                 "subcategory": subcategory,
                 "task": task,
                 "ground_truth": ground_truth,
-                "llm_answer": llm_answer,
+                "llm_answer": llm_answer_dict,
             }
         except TimeoutError as e:
             attempts += 1
@@ -133,7 +133,7 @@ def main(
     if test:
         df = df[df["subcategory"] == "refinement"]
 
-    sample_size = 10
+    sample_size = 5
     df = df.sample(sample_size, random_state=42)
 
     results = get_answers(
