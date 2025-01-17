@@ -1,7 +1,11 @@
-from .utils import csv_to_df, df_to_csv
 from pathlib import Path
-import pandas as pd
 from typing import Callable
+
+import pandas as pd
+
+from .utils import csv_to_df, df_to_csv
+
+
 def format_answer_csv(
     format_answer_function: Callable,
     csv_path: Path,

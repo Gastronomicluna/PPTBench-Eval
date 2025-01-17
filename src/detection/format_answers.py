@@ -1,9 +1,11 @@
 import json
-from typing import Any, Dict, Literal, Optional, Union
-import pandas as pd
 from pathlib import Path
+from typing import Any, Dict, Literal, Optional, Union
+
+import pandas as pd
 
 from ..shared.parse_answer import parse_json_answer
+
 
 def format_answer_csv(
     csv_path: Path,
@@ -22,6 +24,8 @@ def format_answer_csv(
         pd.DataFrame: DataFrame with formatted answers.
     """
     return format_answer_csv(format_answer, csv_path, overwrite)
+
+
 def format_answer(
     answer: str,
     subcategory: Literal["content extraction", "layout detection", "style detection"],
