@@ -15,6 +15,7 @@ def api_executor_json(
     lines: List[str],
     json_path: Optional[str] = None,
     output_path: Optional[str] = None,
+    json: Optional[Dict[str, Any]] = None,
 ) -> Optional[Dict[str, Any]]:
     """Execute the API calls for JSON mode.
 
@@ -22,13 +23,16 @@ def api_executor_json(
         lines: The API calls to execute
         json_path: Optional path to an existing JSON to modify
         output_path: Optional path to save the modified JSON
+        json: Optional JSON data to use directly instead of loading from file
 
     Returns:
         The result of the API calls.
     """
     global JSON_DATA
 
-    if json_path is not None:
+    if json is not None:
+        JSON_DATA = json
+    elif json_path is not None:
         set_json(json_path)
 
     errors = []
