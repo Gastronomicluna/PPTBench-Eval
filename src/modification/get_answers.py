@@ -132,7 +132,7 @@ def main() -> None:
     results = get_answers(
         get_answer_single=get_answer_single_modification,
         df=df,
-        model_name="gemini-2.0-flash-exp",
+        model_name="gpt-4o",
         provider="api",
         temperature=0.0,
         max_tokens=3200,
