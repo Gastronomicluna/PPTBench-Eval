@@ -1,6 +1,9 @@
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 from ..shared.parse_answer import parse_json_answer
 from ..shared.utils import csv_to_df, df_to_csv
+
+
 def extract_functions_from_json(
     json_data: List[Dict[str, Any]],
 ) -> List[str]:
