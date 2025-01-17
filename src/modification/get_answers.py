@@ -76,13 +76,12 @@ def get_answer_single_modification(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
-            llm_answer_dict = json.loads(llm_answer)
             return {
                 "hash": hash_value,
                 "subcategory": subcategory,
                 "task": task,
                 "ground_truth": ground_truth,
-                "llm_answer": llm_answer_dict,
+                "llm_answer": llm_answer,
             }
         except TimeoutError as e:
             attempts += 1
