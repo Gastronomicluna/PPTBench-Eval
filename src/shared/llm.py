@@ -12,6 +12,7 @@ from openai import OpenAI
 from PIL import Image
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
+
 API_LLM_MODELS = [
     ("api", "claude-3-5-sonnet-20241022"),
     ("api", "gpt-4o-2024-11-20"),
@@ -56,7 +57,7 @@ def call_vision_model(
     ] = None,
     json: bool = False,
     timeout: Optional[int] = None,
-) -> str:
+) -> Union[str, Dict[str, Any]]:
     """
     Routes the call to the appropriate vision model provider and returns the response.
 
@@ -135,7 +136,7 @@ def generate_with_image_ollama(
     images: Optional[List[str | bytes]] = None,
     json: bool = False,
     timeout: int = 30,  # Default 30 seconds
-) -> str:
+) -> Union[str, Dict[str, Any]]:
     """
     Generates a response using the Ollama model with optional images.
 
@@ -186,7 +187,7 @@ def generate_with_api(
     images: Optional[List[str | bytes]] = None,
     json: bool = False,
     timeout: int = 30,  # Default 30 seconds
-) -> str:
+) -> Union[str, Dict[str, Any]]:
     """
     Generates a response using the API with optional images.
 
