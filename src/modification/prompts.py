@@ -47,7 +47,36 @@ def build_prompt_element_modification(
     Returns:
         str: The prompt text.
     """
-    pass
+    divider = "#" * 80
+    prompt = f"""
+{divider}
+Task: You are given a slide from a presentation in the form of an image and JSON data.
+{query}
+To achieve this task, you can use the following functions:
+{api_to_string(api_list)}
+
+Instructions:
+- Return in JSON format only the requested information without any additional text or explanations.
+- Abide by JSON formatting rules.
+
+Examples:
+{{
+    "function1": "choose_slide(0)",
+    "function2": "choose_shape(1)",
+    "function3": "set_width(1000000)",
+    "function4": "insert_text('Hello, World!')",
+}}
+
+{divider}
+Slide JSON:
+{slide_json}
+
+{divider}
+Query: {query}
+Shape to Modify: {shape_to_modify}
+Answer:
+"""
+    return prompt
 
 
 def build_prompt_refinement(
