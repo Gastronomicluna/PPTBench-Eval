@@ -1,6 +1,7 @@
+import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, TypedDict, Union
 
 from pptx import Presentation as presentation
 from pptx.dml.color import RGBColor
@@ -10,9 +11,6 @@ from pptx.shapes.base import BaseShape
 from pptx.shapes.picture import Picture
 from pptx.slide import Slide
 from pptx.util import Length, Pt
-
-import json
-from typing import TypedDict, Literal, Optional, Union, List, Dict, Any
 
 from .api_doc import api_list
 
@@ -29,12 +27,14 @@ JSON_DATA: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SLIDE: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SHAPE: Optional[Dict[str, Any]] = None
 
+
 class FontDetails(TypedDict):
     paragraph_index: int
     run_index: int
     text: str
     font_name: str
     font_size: float
+
 
 class Shape(TypedDict):
     name: str
@@ -49,16 +49,19 @@ class Shape(TypedDict):
     font_details: List[FontDetails]
     placeholder_type: Optional[str]
 
+
 class Slide(TypedDict):
     slide_id: int
     slide_name: str
     shapes: List[Shape]
+
 
 class PresentationData(TypedDict):
     slide_width: int
     slide_height: int
     measurement_unit: str
     slide: Slide
+
 
 def api_executor(
     lines: List[str],
@@ -144,7 +147,7 @@ def save_presentation(
             raise ValueError(f"Failed to save presentation: {str(e)}")
     else:
         try:
-            with open(pptx_path, 'w') as f:
+            with open(pptx_path, "w") as f:
                 json.dump(JSON_DATA, f, indent=4)
         except Exception as e:
             raise ValueError(f"Failed to save JSON: {str(e)}")
@@ -173,7 +176,7 @@ def set_presentation(
             raise ValueError(f"Failed to open presentation: {str(e)}")
     else:
         try:
-            with open(pptx_path, 'r') as f:
+            with open(pptx_path, "r") as f:
                 JSON_DATA = json.load(f)
         except Exception as e:
             raise ValueError(f"Failed to open JSON: {str(e)}")
@@ -241,7 +244,9 @@ def choose_slide(
     global CURRENT_SLIDE, SLIDES, JSON_CURRENT_SLIDE
     if mode == "pptx":
         if SLIDES is None:
-            raise ValueError("No slides list available. Set current presentation first.")
+            raise ValueError(
+                "No slides list available. Set current presentation first."
+            )
         try:
             current_slide = next((s for s in SLIDES if s.slide_id == slide_id), None)
             if current_slide is None:
@@ -291,7 +296,10 @@ def choose_shape(
         try:
             if JSON_CURRENT_SLIDE is None:
                 raise ValueError("No current slide selected")
-            shape = next((s for s in JSON_CURRENT_SLIDE["shapes"] if s["shape_id"] == shape_id), None)
+            shape = next(
+                (s for s in JSON_CURRENT_SLIDE["shapes"] if s["shape_id"] == shape_id),
+                None,
+            )
             if shape is None:
                 raise ValueError(f"Shape with ID {shape_id} not found")
             JSON_CURRENT_SHAPE = shape
@@ -425,7 +433,7 @@ def add_text_box(
             "left": left,
             "top": top,
             "text": text or "",
-            "font_details": []
+            "font_details": [],
         }
         JSON_CURRENT_SLIDE["shapes"].append(new_shape)
         JSON_CURRENT_SHAPE = new_shape
@@ -476,7 +484,7 @@ def add_picture(
             "width": width,
             "left": left,
             "top": top,
-            "image_path": os.path.abspath(image_file)
+            "image_path": os.path.abspath(image_file),
         }
         JSON_CURRENT_SLIDE["shapes"].append(new_shape)
         JSON_CURRENT_SHAPE = new_shape
