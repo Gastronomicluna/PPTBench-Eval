@@ -128,15 +128,16 @@ def test_set_left(sample_presentation: str) -> None:
 
 def test_api_executor(sample_presentation: str) -> None:
     """Test api_executor function with various scenarios.
-    
+
     Tests the api_executor function with both pptx_path parameter and legacy mode
     using set_presentation.
-    
+
     Args:
         sample_presentation: Path to the sample presentation file.
     """
-    from src.shared.pptx_api.api_executor import api_executor
     from pathlib import Path
+
+    from src.shared.pptx_api.api_executor import api_executor
 
     # Set up
     pres = Presentation(sample_presentation)
