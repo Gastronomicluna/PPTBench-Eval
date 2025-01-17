@@ -2,6 +2,7 @@ from typing import List
 
 from pptx.presentation import Presentation
 from pptx.slide import Slide
+
 from .api_doc import api_list
 
 
@@ -37,6 +38,7 @@ def get_shape_ids(
     for shape in slide.shapes:
         shape_ids.append(shape.shape_id)
     return shape_ids
+
 
 def api_in_list(
     line: str,

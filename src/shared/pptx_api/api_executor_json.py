@@ -67,8 +67,6 @@ def api_executor_json(
     return JSON_DATA
 
 
-
-
 def save_json(json_path: str) -> None:
     """Save the JSON data.
 

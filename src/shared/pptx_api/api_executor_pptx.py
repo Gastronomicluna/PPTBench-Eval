@@ -11,6 +11,7 @@ from pptx.slide import Slide
 from pptx.util import Length, Pt
 
 from .utils import api_in_list
+
 # Global variables
 CURRENT_SLIDE: Optional[Slide] = None
 CURRENT_SHAPE: Optional[Union[AutoShape, BaseShape]] = None
@@ -63,9 +64,6 @@ def api_executor_pptx(
             errors.append(f"Error saving presentation: {str(ve)}")
         except Exception as e:
             errors.append(f"Error saving presentation: {str(e)}")
-
-
-
 
 
 def save_presentation(pptx_path: str) -> None:
