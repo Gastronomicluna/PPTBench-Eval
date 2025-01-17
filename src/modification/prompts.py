@@ -138,7 +138,7 @@ Slide JSON:
 
 {divider}
 Query: {query}
-
+Shape to Modify: {shape_to_modify}
 Answer:
 """
     return prompt
