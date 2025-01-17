@@ -118,7 +118,7 @@ def main(
     from pathlib import Path
 
     from src.shared.load_save_dataset import load_save_dataset_df
-    
+
     dataset_name = "tyrionhuu/PPTBench-Modification"
     dataset_path = "data/PPTBench-Modification"
     csv_path = "data/" + "modification_results.csv"
@@ -132,7 +132,7 @@ def main(
 
     if test:
         df = df[df["subcategory"] == "refinement"]
-    
+
     sample_size = 10
     df = df.sample(sample_size, random_state=42)
 
