@@ -22,46 +22,18 @@ SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 TEXT_DETAILS: Dict[str, Any] = {}
 
-# Add JSON-specific global variables
+# JSON-specific global variables
 JSON_DATA: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SLIDE: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SHAPE: Optional[Dict[str, Any]] = None
 
-
 class FontDetails(TypedDict):
+    """Type definition for font details in JSON format."""
     paragraph_index: int
     run_index: int
     text: str
     font_name: str
     font_size: float
-
-
-class Shape(TypedDict):
-    name: str
-    shape_id: int
-    shape_type: str
-    measurement_unit: str
-    height: int
-    width: int
-    left: int
-    top: int
-    text: str
-    font_details: List[FontDetails]
-    placeholder_type: Optional[str]
-
-
-class Slide(TypedDict):
-    slide_id: int
-    slide_name: str
-    shapes: List[Shape]
-
-
-class PresentationData(TypedDict):
-    slide_width: int
-    slide_height: int
-    measurement_unit: str
-    slide: Slide
-
 
 def api_executor(
     lines: List[str],
@@ -560,90 +532,127 @@ def set_text_details(
 
 def insert_text(
     text: str,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Insert text into a shape.
 
     Args:
         text: The text to insert.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    global CURRENT_SHAPE
-    try:
-        if hasattr(CURRENT_SHAPE, "text"):
-            CURRENT_SHAPE.text += text
-        elif hasattr(CURRENT_SHAPE, "text_frame"):
-            CURRENT_SHAPE.text_frame.text += text
-        else:
-            raise ValueError("Shape does not have a text attribute")
-        set_text_details(CURRENT_SHAPE)
-    except Exception as e:
-        raise ValueError(f"Failed to insert text into shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            if hasattr(CURRENT_SHAPE, "text"):
+                CURRENT_SHAPE.text += text
+            elif hasattr(CURRENT_SHAPE, "text_frame"):
+                CURRENT_SHAPE.text_frame.text += text
+            else:
+                raise ValueError("Shape does not have a text attribute")
+            set_text_details(CURRENT_SHAPE)
+        except Exception as e:
+            raise ValueError(f"Failed to insert text into shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        JSON_CURRENT_SHAPE["text"] += text
 
 
 def set_font_size(
     font_size: int,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the font size of a shape.
 
     Args:
         font_size: The font size to set.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    try:
-        for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
-            for run in paragraph.runs:
-                run.font.size = Pt(font_size)
-    except Exception as e:
-        raise ValueError(f"Failed to set font size of shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
+                for run in paragraph.runs:
+                    run.font.size = Pt(font_size)
+        except Exception as e:
+            raise ValueError(f"Failed to set font size of shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        for detail in JSON_CURRENT_SHAPE["font_details"]:
+            detail["font_size"] = font_size
 
 
 def set_font_style(
     font_style: Literal["bold", "italic"],
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the font style of a shape.
 
     Args:
         font_style: The font style to set.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    try:
-        for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
-            for run in paragraph.runs:
-                run.font.bold = font_style == "bold"
-                run.font.italic = font_style == "italic"
-                run.font.underline = font_style == "underline"
-    except Exception as e:
-        raise ValueError(f"Failed to set font style of shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
+                for run in paragraph.runs:
+                    run.font.bold = font_style == "bold"
+                    run.font.italic = font_style == "italic"
+                    run.font.underline = font_style == "underline"
+        except Exception as e:
+            raise ValueError(f"Failed to set font style of shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        for detail in JSON_CURRENT_SHAPE.get("font_details", []):
+            detail[font_style] = True
 
 
 def set_font(
     font_name: str,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the font of a shape.
 
     Args:
         font_name: The font name to set.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    try:
-        for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
-            for run in paragraph.runs:
-                run.font.name = font_name
-    except Exception as e:
-        raise ValueError(f"Failed to set font of shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
+                for run in paragraph.runs:
+                    run.font.name = font_name
+        except Exception as e:
+            raise ValueError(f"Failed to set font of shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        for detail in JSON_CURRENT_SHAPE.get("font_details", []):
+            detail["font_name"] = font_name
 
 
 def set_font_color(
     font_color: str = "000000",
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the font color of a shape.
 
     Args:
-        shape: The shape to set the font color of.
         font_color: The font color to set in hex format (e.g. 'FF0000' for red)
+        mode: Mode to operate in ("pptx" or "json")
     """
-    try:
-        for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
-            for run in paragraph.runs:
-                run.font.color.rgb = RGBColor.from_string(font_color)
-    except Exception as e:
-        raise ValueError(f"Failed to set font color of shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
+                for run in paragraph.runs:
+                    run.font.color.rgb = RGBColor.from_string(font_color)
+        except Exception as e:
+            raise ValueError(f"Failed to set font color of shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        for detail in JSON_CURRENT_SHAPE.get("font_details", []):
+            detail["color"] = font_color
 
 
 def main() -> None:
