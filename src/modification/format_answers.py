@@ -42,6 +42,7 @@ def format_answer(
     """
     try:
         json_answer = parse_json_answer(answer)
+        # print(json_answer)
         functions = extract_functions_from_json(json_answer)
         result_json = {"functions": functions}
     except Exception:
@@ -50,26 +51,30 @@ def format_answer(
 
 
 def extract_functions_from_json(
-    json_data: List[Dict[str, Any]],
+    json_data: Dict[str, Any],
 ) -> List[str]:
     """
     Extract the functions from the JSON data.
 
     Args:
-        json_data (List[Dict[str, Any]]): The JSON data.
+        json_data (Dict[str, Any]): The JSON data containing numbered function keys
+            (e.g., "function1", "function2", etc.) with function call strings as values.
 
     Returns:
-        List[str]: The list of functions.
+        List[str]: The list of function call strings in order.
     """
     functions = []
-    for item in json_data:
-        functions.append(item.values())
+    if isinstance(json_data, dict):
+        # Sort keys to maintain order (function1, function2, etc.)
+        for key in sorted(json_data.keys()):
+            if key.startswith("function"):
+                functions.append(json_data[key])
     return functions
 
 
 def main() -> None:
-    # format_answer_csv(Path("data/modification_results.csv"), overwrite=True)
-    pass
+    format_answer_csv(Path("data/modification_results.csv"), overwrite=True)
+    
 
 if __name__ == "__main__":
     main()
