@@ -230,28 +230,32 @@ def create_slide(
 
 def choose_slide(
     slide_id: int,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Choose a slide to work with.
 
     Args:
         slide_id: The index of the slide to choose.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    global CURRENT_SLIDE, SLIDES
-    if SLIDES is None:
-        raise ValueError("No slides list available. Set current presentation first.")
-    try:
-        current_slide = None
-        for slide in SLIDES:
-            if slide.slide_id == slide_id:
-                current_slide = slide
-                break
-        if current_slide is None:
-            raise ValueError(
-                f"Failed to choose slide: Slide with id {slide_id} not found."
-            )
-        CURRENT_SLIDE = current_slide
-    except Exception as e:
-        raise ValueError(f"Failed to choose slide: {str(e)}")
+    global CURRENT_SLIDE, SLIDES, JSON_CURRENT_SLIDE
+    if mode == "pptx":
+        if SLIDES is None:
+            raise ValueError("No slides list available. Set current presentation first.")
+        try:
+            current_slide = next((s for s in SLIDES if s.slide_id == slide_id), None)
+            if current_slide is None:
+                raise ValueError(f"Slide with ID {slide_id} not found")
+            CURRENT_SLIDE = current_slide
+        except Exception as e:
+            raise ValueError(f"Failed to choose slide: {str(e)}")
+    else:
+        if JSON_DATA is None:
+            raise ValueError("No JSON data available")
+        if JSON_DATA["slide"]["slide_id"] == slide_id:
+            JSON_CURRENT_SLIDE = JSON_DATA["slide"]
+        else:
+            raise ValueError(f"Slide with ID {slide_id} not found")
 
 
 def choose_shape(
@@ -297,58 +301,86 @@ def choose_shape(
 
 def set_width(
     width: int,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the width of a shape.
 
     Args:
         width: The width to set.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    try:
-        CURRENT_SHAPE.width = Length(width)
-    except Exception as e:
-        raise ValueError(f"Failed to set width of shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            CURRENT_SHAPE.width = Length(width)
+        except Exception as e:
+            raise ValueError(f"Failed to set width of shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        JSON_CURRENT_SHAPE["width"] = width
 
 
 def set_height(
     height: int,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the height of a shape.
 
     Args:
         height: The height to set.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    try:
-        CURRENT_SHAPE.height = Length(height)
-    except Exception as e:
-        raise ValueError(f"Failed to set height of shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            CURRENT_SHAPE.height = Length(height)
+        except Exception as e:
+            raise ValueError(f"Failed to set height of shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        JSON_CURRENT_SHAPE["height"] = height
 
 
 def set_top(
     top: int,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the top of a shape.
 
     Args:
         top: The top to set.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    try:
-        CURRENT_SHAPE.top = Length(top)
-    except Exception as e:
-        raise ValueError(f"Failed to set top of shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            CURRENT_SHAPE.top = Length(top)
+        except Exception as e:
+            raise ValueError(f"Failed to set top of shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        JSON_CURRENT_SHAPE["top"] = top
 
 
 def set_left(
     left: int,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the left of a shape.
 
     Args:
         left: The left to set.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    try:
-        CURRENT_SHAPE.left = Length(left)
-    except Exception as e:
-        raise ValueError(f"Failed to set left of shape: {str(e)}")
+    if mode == "pptx":
+        try:
+            CURRENT_SHAPE.left = Length(left)
+        except Exception as e:
+            raise ValueError(f"Failed to set left of shape: {str(e)}")
+    else:
+        if JSON_CURRENT_SHAPE is None:
+            raise ValueError("No shape selected")
+        JSON_CURRENT_SHAPE["left"] = left
 
 
 def add_text_box(
@@ -357,6 +389,7 @@ def add_text_box(
     width: int,
     height: int,
     text: Optional[str] = None,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Add a text box to a slide.
 
@@ -366,17 +399,36 @@ def add_text_box(
         width: The width of the text box.
         height: The height of the text box.
     """
-    try:
-        text_box: BaseShape = CURRENT_SLIDE.shapes.add_textbox(
-            Length(left),
-            Length(top),
-            Length(width),
-            Length(height),
-        )
-        text_box.text = text
-        set_text_details(text_box)
-    except Exception as e:
-        raise ValueError(f"Failed to add text box to slide: {str(e)}")
+    global JSON_CURRENT_SHAPE
+    if mode == "pptx":
+        try:
+            text_box: BaseShape = CURRENT_SLIDE.shapes.add_textbox(
+                Length(left),
+                Length(top),
+                Length(width),
+                Length(height),
+            )
+            text_box.text = text
+            set_text_details(text_box)
+        except Exception as e:
+            raise ValueError(f"Failed to add text box to slide: {str(e)}")
+    else:
+        if JSON_CURRENT_SLIDE is None:
+            raise ValueError("No slide selected")
+        new_shape = {
+            "name": f"TextBox_{len(JSON_CURRENT_SLIDE['shapes'])}",
+            "shape_id": len(JSON_CURRENT_SLIDE["shapes"]) + 1,
+            "shape_type": "TEXT_BOX",
+            "measurement_unit": "emu",
+            "height": height,
+            "width": width,
+            "left": left,
+            "top": top,
+            "text": text or "",
+            "font_details": []
+        }
+        JSON_CURRENT_SLIDE["shapes"].append(new_shape)
+        JSON_CURRENT_SHAPE = new_shape
 
 
 def add_picture(
@@ -385,6 +437,7 @@ def add_picture(
     width: int,
     height: int,
     image_file: Optional[str] = None,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Add a picture to a slide.
 
@@ -395,19 +448,38 @@ def add_picture(
         height: The height of the picture.
         image_file: The path to the image file to add.
     """
-    global CURRENT_SLIDE, CURRENT_SHAPE
-    try:
-        img_path = os.path.abspath(image_file)
-        picture: Picture = CURRENT_SLIDE.shapes.add_picture(
-            img_path,
-            Length(left),
-            Length(top),
-            Length(width),
-            Length(height),
-        )
-        CURRENT_SHAPE = picture
-    except Exception as e:
-        raise ValueError(f"Failed to add picture to slide: {str(e)}")
+    global CURRENT_SLIDE, CURRENT_SHAPE, JSON_CURRENT_SHAPE
+    if mode == "pptx":
+        try:
+            img_path = os.path.abspath(image_file)
+            picture: Picture = CURRENT_SLIDE.shapes.add_picture(
+                img_path,
+                Length(left),
+                Length(top),
+                Length(width),
+                Length(height),
+            )
+            CURRENT_SHAPE = picture
+        except Exception as e:
+            raise ValueError(f"Failed to add picture to slide: {str(e)}")
+    else:
+        if JSON_CURRENT_SLIDE is None:
+            raise ValueError("No slide selected")
+        if image_file is None:
+            raise ValueError("Image file path is required")
+        new_shape = {
+            "name": f"Picture_{len(JSON_CURRENT_SLIDE['shapes'])}",
+            "shape_id": len(JSON_CURRENT_SLIDE["shapes"]) + 1,
+            "shape_type": "PICTURE",
+            "measurement_unit": "emu",
+            "height": height,
+            "width": width,
+            "left": left,
+            "top": top,
+            "image_path": os.path.abspath(image_file)
+        }
+        JSON_CURRENT_SLIDE["shapes"].append(new_shape)
+        JSON_CURRENT_SHAPE = new_shape
 
 
 def get_text_details(
