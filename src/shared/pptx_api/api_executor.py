@@ -27,13 +27,16 @@ JSON_DATA: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SLIDE: Optional[Dict[str, Any]] = None
 JSON_CURRENT_SHAPE: Optional[Dict[str, Any]] = None
 
+
 class FontDetails(TypedDict):
     """Type definition for font details in JSON format."""
+
     paragraph_index: int
     run_index: int
     text: str
     font_name: str
     font_size: float
+
 
 def api_executor(
     lines: List[str],
