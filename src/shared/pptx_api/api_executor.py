@@ -11,6 +11,9 @@ from pptx.shapes.picture import Picture
 from pptx.slide import Slide
 from pptx.util import Length, Pt
 
+import json
+from typing import TypedDict, Literal, Optional, Union, List, Dict, Any
+
 from .api_doc import api_list
 
 # Global variables
@@ -21,11 +24,47 @@ SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 TEXT_DETAILS: Dict[str, Any] = {}
 
+# Add JSON-specific global variables
+JSON_DATA: Optional[Dict[str, Any]] = None
+JSON_CURRENT_SLIDE: Optional[Dict[str, Any]] = None
+JSON_CURRENT_SHAPE: Optional[Dict[str, Any]] = None
+
+class FontDetails(TypedDict):
+    paragraph_index: int
+    run_index: int
+    text: str
+    font_name: str
+    font_size: float
+
+class Shape(TypedDict):
+    name: str
+    shape_id: int
+    shape_type: str
+    measurement_unit: str
+    height: int
+    width: int
+    left: int
+    top: int
+    text: str
+    font_details: List[FontDetails]
+    placeholder_type: Optional[str]
+
+class Slide(TypedDict):
+    slide_id: int
+    slide_name: str
+    shapes: List[Shape]
+
+class PresentationData(TypedDict):
+    slide_width: int
+    slide_height: int
+    measurement_unit: str
+    slide: Slide
 
 def api_executor(
     lines: List[str],
     pptx_path: Optional[str] = None,
     output_path: Optional[str] = None,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> List[str]:
     """Execute the API calls.
 
@@ -33,14 +72,15 @@ def api_executor(
         lines: The API calls to execute
         pptx_path: Optional path to an existing presentation to modify
         output_path: Optional path to save the modified presentation
+        mode: Mode to operate in ("pptx" or "json")
 
     Returns:
         The result of the API calls.
     """
-    global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
+    global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS, JSON_DATA
 
     if pptx_path is not None:
-        set_presentation(pptx_path)
+        set_presentation(pptx_path, mode)
 
     errors = []
     for line in lines:
@@ -60,7 +100,7 @@ def api_executor(
 
     if output_path is not None:
         try:
-            save_presentation(output_path)
+            save_presentation(output_path, mode)
         except ValueError as ve:
             errors.append(f"Error saving presentation: {str(ve)}")
         except Exception as e:
@@ -88,55 +128,83 @@ def api_in_list(
 
 def save_presentation(
     pptx_path: str,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Save the presentation.
 
     Args:
         pptx_path: The path to save the presentation.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    global PRESENTATION
-    try:
-        PRESENTATION.save(pptx_path)
-    except Exception as e:
-        raise ValueError(f"Failed to save presentation: {str(e)}")
+    global PRESENTATION, JSON_DATA
+    if mode == "pptx":
+        try:
+            PRESENTATION.save(pptx_path)
+        except Exception as e:
+            raise ValueError(f"Failed to save presentation: {str(e)}")
+    else:
+        try:
+            with open(pptx_path, 'w') as f:
+                json.dump(JSON_DATA, f, indent=4)
+        except Exception as e:
+            raise ValueError(f"Failed to save JSON: {str(e)}")
 
 
 def set_presentation(
     pptx_path: str,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the presentation to work with.
 
     Args:
         pptx_path: The path to the presentation.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
-    try:
-        PRESENTATION = presentation(pptx_path)
-        SLIDES = PRESENTATION.slides
-        CURRENT_SLIDE = None
-        SHAPES = None
-        CURRENT_SHAPE = None
-        TEXT_DETAILS = {}
-    except Exception as e:
-        raise ValueError(f"Failed to open presentation: {str(e)}")
+    global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS, JSON_DATA
+    if mode == "pptx":
+        try:
+            PRESENTATION = presentation(pptx_path)
+            SLIDES = PRESENTATION.slides
+            CURRENT_SLIDE = None
+            SHAPES = None
+            CURRENT_SHAPE = None
+            TEXT_DETAILS = {}
+        except Exception as e:
+            raise ValueError(f"Failed to open presentation: {str(e)}")
+    else:
+        try:
+            with open(pptx_path, 'r') as f:
+                JSON_DATA = json.load(f)
+        except Exception as e:
+            raise ValueError(f"Failed to open JSON: {str(e)}")
 
 
 def set_current_slide(
     slide_idx: int,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Set the current slide to work with.
 
     Args:
         slide_idx: The index of the slide to set as the current slide.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    global CURRENT_SLIDE, SHAPES, SLIDES
-    if SLIDES is None:
-        raise ValueError("Slides list is not initialized")
-    try:
-        CURRENT_SLIDE = SLIDES[slide_idx]
-        SHAPES = CURRENT_SLIDE.shapes
-    except Exception as e:
-        raise ValueError(f"Failed to set current slide: {str(e)}")
+    global CURRENT_SLIDE, SHAPES, SLIDES, JSON_CURRENT_SLIDE
+    if mode == "pptx":
+        if SLIDES is None:
+            raise ValueError("Slides list is not initialized")
+        try:
+            CURRENT_SLIDE = SLIDES[slide_idx]
+            SHAPES = CURRENT_SLIDE.shapes
+        except Exception as e:
+            raise ValueError(f"Failed to set current slide: {str(e)}")
+    else:
+        if JSON_DATA is None:
+            raise ValueError("JSON data is not initialized")
+        try:
+            JSON_CURRENT_SLIDE = JSON_DATA["slide"]
+        except Exception as e:
+            raise ValueError(f"Failed to set current JSON slide: {str(e)}")
 
 
 def create_slide(
@@ -188,30 +256,43 @@ def choose_slide(
 
 def choose_shape(
     shape_id: int,
+    mode: Literal["pptx", "json"] = "pptx",
 ) -> None:
     """Choose a shape to work with.
 
     Args:
         shape_id: The index of the shape to choose.
+        mode: Mode to operate in ("pptx" or "json")
     """
-    global CURRENT_SHAPE, SHAPES, CURRENT_SLIDE
-    try:
-        SHAPES = CURRENT_SLIDE.shapes
-        if SHAPES is None:
-            CURRENT_SHAPE = None
-        else:
-            current_shape = None
-            for shape in SHAPES:
-                if shape.shape_id == shape_id:
-                    current_shape = shape
-                    break
-            if current_shape is None:
-                raise ValueError(
-                    f"Failed to choose shape: Shape with id {shape_id} not found."
-                )
-            CURRENT_SHAPE = current_shape
-    except Exception as e:
-        raise ValueError(f"Failed to choose shape: {str(e)}")
+    global CURRENT_SHAPE, SHAPES, CURRENT_SLIDE, JSON_CURRENT_SHAPE
+    if mode == "pptx":
+        try:
+            SHAPES = CURRENT_SLIDE.shapes
+            if SHAPES is None:
+                CURRENT_SHAPE = None
+            else:
+                current_shape = None
+                for shape in SHAPES:
+                    if shape.shape_id == shape_id:
+                        current_shape = shape
+                        break
+                if current_shape is None:
+                    raise ValueError(
+                        f"Failed to choose shape: Shape with id {shape_id} not found."
+                    )
+                CURRENT_SHAPE = current_shape
+        except Exception as e:
+            raise ValueError(f"Failed to choose shape: {str(e)}")
+    else:
+        try:
+            if JSON_CURRENT_SLIDE is None:
+                raise ValueError("No current slide selected")
+            shape = next((s for s in JSON_CURRENT_SLIDE["shapes"] if s["shape_id"] == shape_id), None)
+            if shape is None:
+                raise ValueError(f"Shape with ID {shape_id} not found")
+            JSON_CURRENT_SHAPE = shape
+        except Exception as e:
+            raise ValueError(f"Failed to choose shape: {str(e)}")
 
 
 def set_width(
