@@ -959,3 +959,15 @@ def test_api_executor(sample_presentation: str) -> None:
     # Test case 4: Test without pptx_path (should use previously set presentation)
     errors = api_executor(valid_commands)
     assert not errors, f"Expected no errors but got: {errors}"
+
+
+def test_set_width_json(sample_json_data: dict) -> None:
+    """Test set_width function with JSON data."""
+    
+    from src.shared.pptx_api.api_executor import api_executor
+
+    commands = [
+        "choose_slide(256)",
+        "choose_shape(12)",
+        "set_width(4000)",
+    ]

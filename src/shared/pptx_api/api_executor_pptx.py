@@ -21,7 +21,7 @@ SHAPES: Optional[List[BaseShape]] = None
 TEXT_DETAILS: Dict[str, Any] = {}
 
 
-def api_executor(
+def api_executor_pptx(
     lines: List[str],
     pptx_path: Optional[str] = None,
     output_path: Optional[str] = None,
@@ -477,7 +477,7 @@ def main() -> None:
         SLIDES = PRESENTATION.slides
         create_slide()
         add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
-        errors = api_executor(["choose_slide(999)"])
+        errors = api_executor_pptx(["choose_slide(999)"])
         print(errors)
     except Exception as e:
         print(f"Error in main: {str(e)}")
