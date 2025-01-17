@@ -1,6 +1,7 @@
 import os
-from typing import Any, Dict, List, Literal, Optional, Union
 from pathlib import Path
+from typing import Any, Dict, List, Literal, Optional, Union
+
 from pptx import Presentation as presentation
 from pptx.dml.color import RGBColor
 from pptx.presentation import Presentation
@@ -37,10 +38,10 @@ def api_executor(
         The result of the API calls.
     """
     global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
-    
+
     if pptx_path is not None:
         set_presentation(pptx_path)
-        
+
     errors = []
     for line in lines:
         try:
@@ -56,7 +57,7 @@ def api_executor(
                 errors.append(f"API '{line}' not found.")
         except Exception as e:
             errors.append(f"Error parsing {line}: {str(e)}")
-    
+
     if output_path is not None:
         try:
             save_presentation(output_path)
@@ -64,7 +65,7 @@ def api_executor(
             errors.append(f"Error saving presentation: {str(ve)}")
         except Exception as e:
             errors.append(f"Error saving presentation: {str(e)}")
-            
+
     return errors
 
 

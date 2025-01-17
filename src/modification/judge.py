@@ -1,5 +1,8 @@
-from ..shared.pptx_api.api_executor import api_executor
 from typing import List, Optional
+
+from ..shared.pptx_api.api_executor import api_executor
+
+
 def modify_pptx(
     api_list: List[str],
     pptx_path: str,
