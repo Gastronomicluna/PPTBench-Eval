@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import pandas as pd
 
@@ -29,6 +29,7 @@ def format_answer_csv(
 
 def format_answer(
     answer: str,
+    subcategory: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Format the extracted functions for the detection tasks.
@@ -61,14 +62,14 @@ def extract_functions_from_json(
         List[str]: The list of functions.
     """
     functions = []
-    for value in json_data:
-        functions.append(value["function"])
+    for item in json_data:
+        functions.append(item.values())
     return functions
 
 
 def main() -> None:
-    format_answer_csv(Path("data/modification_results.csv"), overwrite=True)
-
+    # format_answer_csv(Path("data/modification_results.csv"), overwrite=True)
+    pass
 
 if __name__ == "__main__":
     main()
