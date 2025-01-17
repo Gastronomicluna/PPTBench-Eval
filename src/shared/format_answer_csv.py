@@ -6,7 +6,7 @@ import pandas as pd
 from .utils import csv_to_df, df_to_csv
 
 
-def format_answer_csv(
+def format_answer_csv_shared(
     format_answer_function: Callable,
     csv_path: Path,
     overwrite: bool = False,

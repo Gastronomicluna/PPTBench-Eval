@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, Union
 
 import pandas as pd
 
-from ..shared.format_answer_csv import format_answer_csv
+from ..shared.format_answer_csv import format_answer_csv_shared
 from ..shared.parse_answer import parse_json_answer
 
 
@@ -23,7 +23,7 @@ def format_answer_csv(
     Returns:
         pd.DataFrame: DataFrame with formatted answers.
     """
-    return format_answer_csv(format_answer, csv_path, overwrite)
+    return format_answer_csv_shared(format_answer, csv_path, overwrite)
 
 
 def format_answer(
