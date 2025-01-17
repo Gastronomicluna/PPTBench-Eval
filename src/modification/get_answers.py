@@ -1,8 +1,9 @@
+import json
 import logging
 import time
 import traceback
 from typing import Any, Dict, Optional
-import json
+
 import pandas as pd
 
 from ..shared.get_answer import get_answers
