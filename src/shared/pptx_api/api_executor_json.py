@@ -3,7 +3,7 @@ import logging
 import os
 from typing import Any, Dict, List, Literal, Optional
 
-from .api_doc import api_list
+from .utils import api_in_list
 
 # Global JSON variables
 JSON_DATA: Optional[Dict[str, Any]] = None
@@ -67,21 +67,6 @@ def api_executor_json(
     return JSON_DATA
 
 
-def api_in_list(
-    line: str,
-) -> bool:
-    """Parse an API from a line.
-
-    Args:
-        line: The line to parse the API from.
-
-    Returns:
-        The parsed API.
-    """
-    for api in api_list:
-        if api.name == line:
-            return True
-    return False
 
 
 def save_json(json_path: str) -> None:

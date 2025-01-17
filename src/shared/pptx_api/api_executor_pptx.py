@@ -10,8 +10,7 @@ from pptx.shapes.picture import Picture
 from pptx.slide import Slide
 from pptx.util import Length, Pt
 
-from .api_doc import api_list
-
+from .utils import api_in_list
 # Global variables
 CURRENT_SLIDE: Optional[Slide] = None
 CURRENT_SHAPE: Optional[Union[AutoShape, BaseShape]] = None
@@ -66,21 +65,7 @@ def api_executor_pptx(
             errors.append(f"Error saving presentation: {str(e)}")
 
 
-def api_in_list(
-    line: str,
-) -> bool:
-    """Parse an API from a line.
 
-    Args:
-        line: The line to parse the API from.
-
-    Returns:
-        The parsed API.
-    """
-    for api in api_list:
-        if api.name == line:
-            return True
-    return False
 
 
 def save_presentation(pptx_path: str) -> None:

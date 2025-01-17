@@ -2,6 +2,7 @@ from typing import List
 
 from pptx.presentation import Presentation
 from pptx.slide import Slide
+from .api_doc import api_list
 
 
 def get_slide_ids(
@@ -36,3 +37,19 @@ def get_shape_ids(
     for shape in slide.shapes:
         shape_ids.append(shape.shape_id)
     return shape_ids
+
+def api_in_list(
+    line: str,
+) -> bool:
+    """Parse an API from a line.
+
+    Args:
+        line: The line to parse the API from.
+
+    Returns:
+        The parsed API.
+    """
+    for api in api_list:
+        if api.name == line:
+            return True
+    return False
