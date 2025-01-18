@@ -47,7 +47,11 @@ def judge_answer_df(
     # Process answers
     answers_df["is_correct"] = answers_df.apply(
         lambda row: judge_answer(
-            row["subcategory"], row["ground_truth"], row["answer"]
+            task=row["task"],
+            api_calls=row["answer"],
+            file_hash=row["file_hash"],
+            ground_truth=row["ground_truth"],
+            shape_to_modify=row["shape_to_modify"],
         ),
         axis=1,
     )
