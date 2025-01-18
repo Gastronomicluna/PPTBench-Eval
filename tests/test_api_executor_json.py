@@ -1,5 +1,6 @@
-import pytest
 from typing import Any, Dict
+
+import pytest
 
 import src.shared.pptx_api.api_executor_json as api_json
 
@@ -685,7 +686,7 @@ def test_set_font(sample_json: Dict[str, Any]) -> None:
         api_json.set_font("Arial")
 
 
-def  set_font_color(
+def set_font_color(
     sample_json: Dict[str, Any],
 ) -> None:
     """Test setting font color in a shape.
