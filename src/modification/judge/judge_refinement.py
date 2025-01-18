@@ -24,7 +24,7 @@ def judge_answer_refinement(
         lambda row: judge_answer(
             api_calls=row["api_calls"],
             ground_truth=row["ground_truth"],
-            json_path=build_json_path(file_hash=row["hash"], json_dir=json_dir),
+            json_path=build_json_path(file_hash=row["file_hash"], json_dir=json_dir),
         ),
         axis=1,
     )
