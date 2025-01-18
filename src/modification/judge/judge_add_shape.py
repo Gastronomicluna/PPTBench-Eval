@@ -71,15 +71,15 @@ def compare_shape(
     # Compare text if it exists in either shape
     original_text = original_shape.get("text")
     modified_text = modified_shape.get("text")
-    
+
     # If text exists in one shape but not the other, return False
     if bool(original_text) != bool(modified_text):
         return False
-        
+
     # If both have text, compare them
     if original_text and modified_text and original_text != modified_text:
         return False
-    
+
     # Compare images
     original_image = original_shape.get("image_path")
     modified_image = modified_shape.get("image_path")
@@ -87,10 +87,11 @@ def compare_shape(
     # If image exists in one shape but not the other, return False
     if bool(original_image) != bool(modified_image):
         return False
-    
+
     # If both have images, compare them
     if original_image and modified_image and original_image != modified_image:
         return False
+
 
 def get_new_shape(
     original_slide_json: Dict[str, Any],
