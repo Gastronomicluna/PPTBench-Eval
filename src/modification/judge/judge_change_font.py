@@ -23,9 +23,10 @@ def judge_answer_change_font(
     Returns:
         bool: Whether the answer is correct.
     """
-    # Get the slide ID from the ground truth
+    # Get the slide ID and shape ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-
+    shape_id = shape_to_modify["shape_id"]
+    
     # Execute the API calls
     llm_modified_presentation = api_executor(
         lines=api_calls, 
@@ -52,9 +53,6 @@ def judge_answer_change_font(
 
     llm_modified_font_name = llm_modified_font.pop()
     
-    # Get the shape ID from the ground truth
-    shape_id = shape_to_modify["shape_id"]
-
     # Get the font names from the ground truth
     gold_font = get_font(
         shape_id=shape_id,
