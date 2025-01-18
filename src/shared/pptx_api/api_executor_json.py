@@ -130,7 +130,7 @@ def choose_slide(slide_id: int) -> Dict[str, Any]:
     global JSON_CURRENT_SLIDE
     if JSON_DATA is None:
         raise ValueError("No JSON data available")
-    
+
     JSON_CURRENT_SLIDE = next(
         (slide for slide in JSON_DATA["slides"] if slide["slide_id"] == slide_id),
         None,
@@ -155,7 +155,7 @@ def choose_shape(shape_id: int) -> Dict[str, Any]:
     global JSON_CURRENT_SHAPE
     if JSON_CURRENT_SLIDE is None:
         raise ValueError("No current slide selected")
-        
+
     JSON_CURRENT_SHAPE = next(
         (s for s in JSON_CURRENT_SLIDE["shapes"] if s["shape_id"] == shape_id),
         None,
