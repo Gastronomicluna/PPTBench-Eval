@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from .utils import api_in_list
 
@@ -31,7 +31,7 @@ def api_executor_json(
     global JSON_DATA
 
     if json is not None:
-        JSON_DATA = json
+        set_json(json)
     elif json_path is not None:
         set_json(json_path)
 
@@ -81,20 +81,23 @@ def save_json(json_path: str) -> None:
         raise ValueError(f"Failed to save JSON: {str(e)}")
 
 
-def set_json(json_path: str) -> None:
+def set_json(json_input: Union[str, Dict[str, Any]]) -> None:
     """Set the JSON data to work with.
 
     Args:
-        json_path: The path to the JSON data.
+        json_input: Either a path to the JSON file or a dictionary containing JSON data.
     """
     global JSON_DATA, JSON_CURRENT_SLIDE, JSON_CURRENT_SHAPE
     try:
-        with open(json_path, "r") as f:
-            JSON_DATA = json.load(f)
+        if isinstance(json_input, str):
+            with open(json_input, "r") as f:
+                JSON_DATA = json.load(f)
+        else:
+            JSON_DATA = json_input
         JSON_CURRENT_SLIDE = None
         JSON_CURRENT_SHAPE = None
     except Exception as e:
-        raise ValueError(f"Failed to open JSON: {str(e)}")
+        raise ValueError(f"Failed to set JSON: {str(e)}")
 
 
 def set_current_slide(slide_idx: int) -> None:
