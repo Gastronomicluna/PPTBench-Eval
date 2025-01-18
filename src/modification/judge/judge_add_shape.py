@@ -7,7 +7,7 @@ from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
 def judge_answer_add_shape(
     api_calls: List[str],
     ground_truth: Dict[str, Any],
-    json_data: Dict[str, Any],
+    presentation_json: Dict[str, Any],
 ) -> bool:
     """
     Judge the answer based on the API calls and ground truth.
@@ -15,7 +15,7 @@ def judge_answer_add_shape(
     Args:
         api_calls (List[str]): The API calls made by the model.
         ground_truth (Dict[str, Any]): The ground truth JSON data.
-        json_data (Dict[str, Any]): The JSON data, the original
+        presentation_json (Dict[str, Any]): The JSON data, the original
         json_path (str): The path to the JSON data.
 
     Returns:
@@ -23,7 +23,7 @@ def judge_answer_add_shape(
     """
     # Get slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-    modified_presentation = api_executor(lines=api_calls, json=json_data, mode="json")
+    modified_presentation = api_executor(lines=api_calls, json=presentation_json, mode="json")
 
     modified_slide = get_slide_from_presentation(
         slide_id=slide_id,
@@ -31,7 +31,10 @@ def judge_answer_add_shape(
     )
 
     # Get slides
-    original_slide = json_data.get("slide", {})
+    original_slide = get_slide_from_presentation(
+        slide_id=slide_id,
+        presentation=presentation_json,
+    )
     gold_slide = ground_truth.get("slide", {})
 
     gold_shape = get_new_shape(
