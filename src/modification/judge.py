@@ -32,8 +32,9 @@ def judge_answer_df(
         raise ValueError("The input DataFrame is empty.")
 
     if (
-        "subcategory" not in answers_df.columns
+        "task" not in answers_df.columns
         or "ground_truth" not in answers_df.columns
+        or "shape_to_modify" not in answers_df.columns
         or "answer" not in answers_df.columns
     ):
         raise ValueError(
