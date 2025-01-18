@@ -1,7 +1,6 @@
 from ...shared.pptx_api.api_executor import api_executor
 from typing import Any, Dict, List, Literal, Optional
-import traceback
-from ..utils import get_font
+from ..utils import get_font, get_shape
 import logging
 def judge_answer(
     api_calls: List[str],
