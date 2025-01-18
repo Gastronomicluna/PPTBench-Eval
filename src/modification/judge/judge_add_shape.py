@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
-from ...shared.pptx_api.api_executor import api_executor
 
+from ...shared.pptx_api.api_executor import api_executor
 from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
 
 
@@ -12,13 +12,13 @@ def judge_answer(
 ) -> bool:
     """
     Judge the answer based on the API calls and ground truth.
-    
+
     Args:
         api_calls (List[str]): The API calls made by the model.
         ground_truth (Dict[str, Any]): The ground truth JSON data.
         json_data (Dict[str, Any]): The JSON data, the original
         json_path (str): The path to the JSON data.
-        
+
     Returns:
         bool: Whether the answer is correct.
     """
@@ -29,29 +29,30 @@ def judge_answer(
         slide_id=slide_id,
         presentation=modified_presentation,
     )
-    
+
     # Get slides
     original_slide = json_data.get("slide", {})
     gold_slide = ground_truth.get("slide", {})
-    
+
     gold_shape = get_new_shape_from_slide(
         modified_slide_json=gold_slide,
         original_slide_json=original_slide,
     )
-    
+
     modified_shape = get_new_shape_from_presentation(
         modified_presentation=modified_presentation,
         original_slide_json=original_slide,
         ground_truth=ground_truth,
     )
-    
+
     # Check if the shape is out of bounds or has overlap
     if has_out_of_bounds(modified_shape):
         return False
     if has_overlap(modified_shape):
         return False
-    
+
     return compare_shape(gold_shape, modified_shape)
+
 
 def compare_shape(
     original_shape: Dict[str, Any],
@@ -69,6 +70,7 @@ def compare_shape(
     """
     # Compare the shapes
     pass
+
 
 def get_new_shape_from_presentation(
     modified_presentation: Dict[str, Any],
