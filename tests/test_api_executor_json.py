@@ -521,6 +521,7 @@ def test_add_text_box(sample_json: Dict[str, Any]) -> None:
     with pytest.raises(ValueError, match="No slide selected"):
         api_json.add_text_box(0, 0, 1000000, 1000000)
 
+
 def test_add_picture(sample_json: Dict[str, Any]) -> None:
     """Test adding a picture to a slide.
 
