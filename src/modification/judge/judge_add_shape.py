@@ -17,7 +17,6 @@ def judge_answer_add_shape(
         api_calls (List[str]): The API calls made by the model.
         ground_truth (Dict[str, Any]): The ground truth JSON data.
         presentation_json (Dict[str, Any]): The JSON data, the original
-        json_path (str): The path to the JSON data.
 
     Returns:
         bool: Whether the answer is correct.
@@ -25,45 +24,49 @@ def judge_answer_add_shape(
     # Get slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
     
-    # Execute the API calls
-    modified_presentation = api_executor(
-        lines=api_calls, 
-        json=presentation_json, 
-        mode="json"
-    )
-    if modified_presentation is None:
-        logging.error("Error executing API calls, result is None.")
-        return False
-    
-    modified_slide = get_slide_from_presentation(
-        slide_id=slide_id,
-        presentation=modified_presentation,
-    )
-
-    # Get slides
+    # Get original slides
     original_slide = get_slide_from_presentation(
         slide_id=slide_id,
         presentation=presentation_json,
     )
+    
+    # Execute the API calls
+    llm_modified_presentation = api_executor(
+        lines=api_calls, 
+        json=presentation_json, 
+        mode="json"
+    )
+    if llm_modified_presentation is None:
+        logging.error("Error executing API calls, result is None.")
+        return False
+    
+    llm_modified_slide = get_slide_from_presentation(
+        slide_id=slide_id,
+        presentation=llm_modified_presentation,
+    )
+
+    # Get the llm modified shape
+    llm_added_shape = get_new_shape(
+        modified_slide_json=llm_modified_slide,
+        original_slide_json=original_slide,
+    )
+        
+    # Check if the slide has out of bounds or has overlap
+    if has_out_of_bounds(llm_added_shape):
+        return False
+    if has_overlap(llm_added_shape):
+        return False
+    
+    # Get the gold slide
     gold_slide = ground_truth.get("slide", {})
 
+    # Get the gold added shape
     gold_shape = get_new_shape(
         modified_slide_json=gold_slide,
         original_slide_json=original_slide,
     )
 
-    modified_shape = get_new_shape(
-        modified_slide_json=modified_slide,
-        original_slide_json=original_slide,
-    )
-
-    # Check if the slide has out of bounds or has overlap
-    if has_out_of_bounds(modified_slide):
-        return False
-    if has_overlap(modified_slide):
-        return False
-
-    return compare_shape(gold_shape, modified_shape)
+    return compare_shape(gold_shape, llm_added_shape)
 
 
 def compare_shape(
