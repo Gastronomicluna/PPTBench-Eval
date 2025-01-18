@@ -199,6 +199,7 @@ def add_text_box(
     width: int,
     height: int,
     text: Optional[str] = None,
+    placeholder_type: Optional[str] = None,
 ) -> None:
     """Add a text box to a slide.
 
@@ -207,6 +208,8 @@ def add_text_box(
         top: The top of the text box.
         width: The width of the text box.
         height: The height of the text box.
+        text: Optional text to add to the text box.
+        placeholder_type: Optional placeholder type for the shape.
     """
     global JSON_CURRENT_SHAPE
     if JSON_CURRENT_SLIDE is None:
@@ -214,7 +217,7 @@ def add_text_box(
     new_shape = {
         "name": f"TextBox_{len(JSON_CURRENT_SLIDE['shapes'])}",
         "shape_id": len(JSON_CURRENT_SLIDE["shapes"]) + 1,
-        "shape_type": "TEXT_BOX",
+        "shape_type": "PLACEHOLDER" if placeholder_type else "TEXT_BOX",
         "measurement_unit": "emu",
         "height": height,
         "width": width,
@@ -223,6 +226,8 @@ def add_text_box(
         "text": text or "",
         "font_details": [],
     }
+    if placeholder_type:
+        new_shape["placeholder_type"] = placeholder_type
     JSON_CURRENT_SLIDE["shapes"].append(new_shape)
     JSON_CURRENT_SHAPE = new_shape
 
@@ -274,16 +279,25 @@ def insert_text(text: str) -> None:
     JSON_CURRENT_SHAPE["text"] += text
 
 
-def set_font_size(font_size: int) -> None:
+def set_font_size(font_size: float) -> None:
     """Set the font size of a shape.
 
     Args:
-        font_size: The font size to set.
+        font_size: The font size to set (can be floating point).
     """
     if JSON_CURRENT_SHAPE is None:
         raise ValueError("No shape selected")
-    for detail in JSON_CURRENT_SHAPE["font_details"]:
-        detail["font_size"] = font_size
+    # Create a new font detail if none exists
+    if not JSON_CURRENT_SHAPE["font_details"]:
+        JSON_CURRENT_SHAPE["font_details"].append({
+            "paragraph_index": 0,
+            "run_index": 0,
+            "text": JSON_CURRENT_SHAPE.get("text", ""),
+            "font_size": font_size
+        })
+    else:
+        for detail in JSON_CURRENT_SHAPE["font_details"]:
+            detail["font_size"] = font_size
 
 
 def set_font_style(font_style: Literal["bold", "italic"]) -> None:
