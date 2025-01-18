@@ -600,7 +600,17 @@ def test_set_font_size(sample_json: Dict[str, Any]) -> None:
     new_font_size = 20.0
     api_json.set_font_size(new_font_size)
 
-    # Verify the font size was set correctly
+    # Verify the font size was set correctly for all font details
+    for font_detail in api_json.JSON_CURRENT_SHAPE["font_details"]:
+        assert font_detail["font_size"] == new_font_size, (
+            f"Font size not updated correctly for paragraph {font_detail['paragraph_index']}, "
+            f"run {font_detail['run_index']}"
+        )
+
+    # Test shape with no font details
+    api_json.choose_shape(4)  # Choose shape with empty font_details
+    api_json.set_font_size(new_font_size)
+    assert len(api_json.JSON_CURRENT_SHAPE["font_details"]) == 1
     assert api_json.JSON_CURRENT_SHAPE["font_details"][0]["font_size"] == new_font_size
 
     # Test error case - no shape selected
