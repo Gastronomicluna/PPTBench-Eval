@@ -45,6 +45,7 @@ def judge_answer(
 def compare_shape(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
+    threshold: float = 0.01,
 ) -> bool:
     """
     Compare the ground truth shape with the result shape.
@@ -73,4 +74,10 @@ def compare_shape(
     equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
     equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
     
-    pass
+    top_diff = abs(ground_truth_coordinates["top"] - result_coordinates["top"])
+    equal_top = top_diff <= threshold * ground_truth_coordinates["height"]
+    
+    left_diff = abs(ground_truth_coordinates["left"] - result_coordinates["left"])
+    equal_left = left_diff <= threshold * ground_truth_coordinates["width"]
+    
+    return equal_height and equal_width and equal_top and equal_left
