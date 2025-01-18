@@ -35,6 +35,7 @@ def judge_answer_df(
     if (
         "task" not in answers_df.columns
         or "ground_truth" not in answers_df.columns
+        or "file_hash" not in answers_df.columns
         or "shape_to_modify" not in answers_df.columns
         or "answer" not in answers_df.columns
     ):
