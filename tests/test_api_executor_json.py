@@ -7,12 +7,14 @@ from PIL import Image
 from pptx import Presentation
 
 from src.shared.pptx_api.api_executor_json import (
+    set_json,
     choose_shape,
     choose_slide,
     set_height,
     set_left,
     set_top,
     set_width,
+    api_executor_json,
 )
 from src.shared.pptx_api.utils import get_shape_ids, get_slide_ids
 
@@ -338,3 +340,6 @@ def sample_json() -> str:
             },
         ],
     }
+
+def test_set_height(sample_json: str) -> None:
+    pass
