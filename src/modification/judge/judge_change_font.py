@@ -1,9 +1,11 @@
 import logging
 from typing import Any, Dict, List
+
 import pandas as pd
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import get_font, get_font_from_shape, get_shape_from_presentation
+
 
 def judge_answer_text_modification(
     df: pd.DataFrame,
@@ -11,11 +13,11 @@ def judge_answer_text_modification(
 ) -> pd.DataFrame:
     """
     Judge the answers in the DataFrame and save results back to the same file.
-    
+
     Args:
         df (pd.DataFrame): DataFrame with answers.
         json_path (str): Path to the JSON file.
-        
+
     Returns:
         pd.DataFrame: DataFrame with judged answers.
     """
@@ -29,8 +31,10 @@ def judge_answer_text_modification(
         ),
         axis=1,
     )
-    
+
     return df
+
+
 def judge_answer(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
