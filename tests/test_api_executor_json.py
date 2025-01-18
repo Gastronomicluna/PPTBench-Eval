@@ -371,6 +371,7 @@ def test_set_height(sample_json: Dict[str, Any]) -> None:
     with pytest.raises(ValueError, match="No shape selected"):
         api_json.set_height(1000000)
 
+
 def test_set_width(sample_json: Dict[str, Any]) -> None:
     """Test setting shape width.
 
