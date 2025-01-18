@@ -1,14 +1,15 @@
 from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_shape_from_presentation, get_shape_from_slide
+from ..utils import get_shape_from_presentation
+import logging
 
 
 def judge_answer_reposition(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
     ground_truth: Dict[str, Any],
-    json_data: Dict[str, Any],
+    presentation_json: Dict[str, Any],
 ) -> bool:
     """
     Judge the answer based on the API calls and ground truth.
@@ -22,27 +23,36 @@ def judge_answer_reposition(
     Returns:
         bool: Whether the answer is correct.
     """
-    # Get ground truth shape
-    slide = ground_truth.get("slide", {})
-    ground_truth_shape = get_shape_from_slide(
-        shape_id=shape_to_modify["shape_id"],
-        slide=slide,
-    )
-
-    # Get the slide ID from the ground truth
+    # Get the slide ID and shape ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-
+    shape_id = shape_to_modify["shape_id"]
+    
     # Execute the API calls
-    result_json = api_executor(lines=api_calls, json=json_data, mode="json")
-    # Get the shape from the ground truth
-    result_shape = get_shape_from_presentation(
+    llm_modified_presentation = api_executor(
+        lines=api_calls, 
+        json=presentation_json, 
+        mode="json"
+    )
+    if llm_modified_presentation is None:
+        logging.error("Error executing API calls, result is None.")
+        return False
+    
+    # Get the shape from the slide
+    llm_modified_shape = get_shape_from_presentation(
         slide_id=slide_id,
-        shape_id=shape_to_modify["shape_id"],
-        presentation=result_json,
+        shape_id=shape_id,
+        presentation=llm_modified_presentation,
+    )
+    
+    # Get the ground truth shape
+    ground_truth_shape = get_shape_from_presentation(
+        slide_id=slide_id,
+        shape_id=shape_id,
+        presentation=presentation_json,
     )
 
     # Compare the shapes
-    return compare_shape_position(ground_truth_shape, result_shape)
+    return compare_shape_position(ground_truth_shape, llm_modified_shape)
 
 
 def compare_shape_position(
