@@ -541,7 +541,7 @@ def test_add_picture(sample_json: Dict[str, Any]) -> None:
         top=2000000,
         width=3000000,
         height=1500000,
-        image_path="test_image.png",
+        image_file="test_image.png",
     )
 
     # Verify the picture was added correctly
