@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 import pandas as pd
 from thefuzz import fuzz
@@ -10,7 +10,7 @@ from ..shared.utils import csv_to_df, df_to_csv
 
 
 def judge_answer_df(
-    csv_path: Path | str,
+    csv_path: Union[Path, str],
     overwrite: bool = False,
 ) -> pd.DataFrame:
     """
