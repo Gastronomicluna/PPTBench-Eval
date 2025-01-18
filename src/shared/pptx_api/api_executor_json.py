@@ -353,6 +353,7 @@ def set_font_color(font_color: str = "000000") -> None:
     for detail in JSON_CURRENT_SHAPE.get("font_details", []):
         detail["color"] = font_color
 
+
 def assign_shape_id(
     slide: Dict[str, Any],
 ) -> int:
@@ -370,6 +371,7 @@ def assign_shape_id(
         return 1
     max_shape_id = max(shape.get("shape_id", 0) for shape in shapes)
     return max_shape_id + 1
+
 
 def reset_globals() -> None:
     """Reset global JSON variables to None."""
