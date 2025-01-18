@@ -41,3 +41,36 @@ def judge_answer(
     )
 
     pass
+
+def compare_shape(
+    ground_truth_shape: Dict[str, Any],
+    result_shape: Dict[str, Any],
+) -> bool:
+    """
+    Compare the ground truth shape with the result shape.
+
+    Args:
+        ground_truth_shape (Dict[str, Any]): The ground truth shape.
+        result_shape (Dict[str, Any]): The result shape.
+
+    Returns:
+        bool: Whether the shapes are the same.
+    """
+    ground_truth_coordinates = {
+        "height": ground_truth_shape["height"],
+        "width": ground_truth_shape["width"],
+        "top": ground_truth_shape["top"],
+        "left": ground_truth_shape["left"],
+    }
+    
+    result_coordinates = {
+        "height": result_shape["height"],
+        "width": result_shape["width"],
+        "top": result_shape["top"],
+        "left": result_shape["left"],
+    }
+    
+    equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
+    equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
+    
+    pass
