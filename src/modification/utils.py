@@ -141,3 +141,38 @@ def get_slide_from_presentation(
         return {}
 
     return target_slide
+
+def has_overlap(slide_json: Dict[str, Any]) -> bool:
+    """
+    Check if the slide contains overlapping elements.
+
+    Args:
+        slide_json (Dict[str, Any]): The JSON representation of the slide.
+
+    Returns:
+        bool: True if the slide contains overlapping elements, False otherwise.
+    """
+    shapes = slide_json["slide"]["shapes"]
+    n_shapes = len(shapes)
+
+    for i in range(n_shapes):
+        for j in range(i + 1, n_shapes):
+            shape1 = shapes[i]
+            shape2 = shapes[j]
+
+            # Calculate boundaries for each shape
+            shape1_right = shape1["left"] + shape1["width"]
+            shape1_bottom = shape1["top"] + shape1["height"]
+            shape2_right = shape2["left"] + shape2["width"]
+            shape2_bottom = shape2["top"] + shape2["height"]
+
+            # Check if shapes overlap
+            if not (
+                shape1_right <= shape2["left"]  # shape1 is left of shape2
+                or shape2_right <= shape1["left"]  # shape2 is left of shape1
+                or shape1_bottom <= shape2["top"]  # shape1 is above shape2
+                or shape2_bottom <= shape1["top"]
+            ):  # shape2 is above shape1
+                return True
+
+    return False
