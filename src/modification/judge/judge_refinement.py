@@ -1,41 +1,10 @@
-from pathlib import Path
 from typing import Any, Dict, List
 
-import pandas as pd
-
 from ...shared.pptx_api.api_executor import api_executor
-from ...shared.utils import build_json_path
 from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
 
 
 def judge_answer_refinement(
-    df: pd.DataFrame,
-    json_dir: Path = Path("data/json"),
-) -> pd.DataFrame:
-    """
-    Judge the answers in the DataFrame and save results back to the same file.
-
-    Args:
-        df (pd.DataFrame): DataFrame with answers.
-        json_path (str): Path to the JSON file.
-
-    Returns:
-        pd.DataFrame: DataFrame with judged answers.
-    """
-    # Process answers
-    df["is_correct"] = df.apply(
-        lambda row: judge_answer(
-            api_calls=row["api_calls"],
-            ground_truth=row["ground_truth"],
-            json_path=build_json_path(file_hash=row["file_hash"], json_dir=json_dir),
-        ),
-        axis=1,
-    )
-
-    return df
-
-
-def judge_answer(
     api_calls: List[str],
     ground_truth: Dict[str, Any],
     json_path: str,
