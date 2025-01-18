@@ -42,6 +42,7 @@ def judge_answer(
 
     pass
 
+
 def compare_shape(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
@@ -63,21 +64,21 @@ def compare_shape(
         "top": ground_truth_shape["top"],
         "left": ground_truth_shape["left"],
     }
-    
+
     result_coordinates = {
         "height": result_shape["height"],
         "width": result_shape["width"],
         "top": result_shape["top"],
         "left": result_shape["left"],
     }
-    
+
     equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
     equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
-    
+
     top_diff = abs(ground_truth_coordinates["top"] - result_coordinates["top"])
     equal_top = top_diff <= threshold * ground_truth_coordinates["height"]
-    
+
     left_diff = abs(ground_truth_coordinates["left"] - result_coordinates["left"])
     equal_left = left_diff <= threshold * ground_truth_coordinates["width"]
-    
+
     return equal_height and equal_width and equal_top and equal_left
