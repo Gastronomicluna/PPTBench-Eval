@@ -25,10 +25,6 @@ def judge_answer(
     # Get slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
     modified_presentation = api_executor(api_calls, json_path=json_path, mode="json")
-    modified_slide = get_slide_from_presentation(
-        slide_id=slide_id,
-        presentation=modified_presentation,
-    )
 
     # Get slides
     original_slide = json_data.get("slide", {})
