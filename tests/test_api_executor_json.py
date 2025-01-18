@@ -689,3 +689,36 @@ def test_set_font(sample_json: Dict[str, Any]) -> None:
     api_json.JSON_CURRENT_SHAPE = None
     with pytest.raises(ValueError, match="No shape selected"):
         api_json.set_font("Arial")
+
+
+def  set_font_color(
+    sample_json: Dict[str, Any],
+) -> None:
+    """Test setting font color in a shape.
+
+    Args:
+        sample_json: Sample JSON data fixture
+    """
+    # Reset globals before test
+    api_json.reset_globals()
+
+    # Initialize with sample data
+    api_json.set_json(sample_json)
+    api_json.choose_slide(262)
+    api_json.choose_shape(25)
+
+    # Test setting font color
+    new_color = "FF0000"
+    api_json.set_font_color(new_color)
+
+    # Verify font color was set correctly for all font details
+    for font_detail in api_json.JSON_CURRENT_SHAPE["font_details"]:
+        assert font_detail["font_color"] == new_color, (
+            f"Font color not updated correctly for paragraph {font_detail['paragraph_index']}, "
+            f"run {font_detail['run_index']}"
+        )
+
+    # Test error case - no shape selected
+    api_json.JSON_CURRENT_SHAPE = None
+    with pytest.raises(ValueError, match="No shape selected"):
+        api_json.set_font_color("FF0000")
