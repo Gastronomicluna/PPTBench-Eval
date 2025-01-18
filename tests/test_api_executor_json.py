@@ -1,12 +1,12 @@
 import os
 import tempfile
-from typing import Generator, Dict, Any
+from typing import Any, Dict, Generator
 
 import pytest
 from PIL import Image
 from pptx import Presentation
 
-import src.shared.pptx_api.api_executor_json  as api_json
+import src.shared.pptx_api.api_executor_json as api_json
 from src.shared.pptx_api.utils import get_shape_ids, get_slide_ids
 
 
@@ -332,39 +332,40 @@ def sample_json() -> Dict[str, Any]:
         ],
     }
 
+
 def test_set_height(sample_json: Dict[str, Any]) -> None:
     """Test setting shape height.
-    
+
     Args:
         sample_json: Sample JSON data fixture
-    """    
+    """
     # Reset globals before test
     api_json.reset_globals()
-    
+
     # Initialize with sample data and verify
     api_json.set_json(sample_json)
     assert api_json.JSON_DATA is not None, "JSON_DATA should be set"
     assert isinstance(api_json.JSON_DATA, dict), "JSON_DATA should be a dictionary"
     assert "slides" in api_json.JSON_DATA, "JSON_DATA should contain slides"
-    
+
     # Choose first slide and shape
     api_json.choose_slide(262)
     assert api_json.JSON_CURRENT_SLIDE is not None, "Slide 262 should be selected"
     assert api_json.JSON_CURRENT_SLIDE["slide_id"] == 262, "Wrong slide selected"
-    
+
     api_json.choose_shape(25)
     assert api_json.JSON_CURRENT_SHAPE is not None, "Shape 25 should be selected"
     assert api_json.JSON_CURRENT_SHAPE["shape_id"] == 25, "Wrong shape selected"
-    
+
     # Test setting new height
     new_height = 2000000
     api_json.set_height(new_height)
     assert api_json.JSON_CURRENT_SHAPE["height"] == new_height
-    
+
     # Test error cases
     with pytest.raises(ValueError, match="Shape with ID .* not found"):
         api_json.choose_shape(999)
-    
+
     # Test setting height with no shape selected
     api_json.JSON_CURRENT_SHAPE = None
     with pytest.raises(ValueError, match="No shape selected"):
