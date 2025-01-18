@@ -491,26 +491,22 @@ def test_set_left(sample_json: Dict[str, Any]) -> None:
 
 def test_add_text_box(sample_json: Dict[str, Any]) -> None:
     """Test adding a text box to a slide.
-    
+
     Args:
         sample_json: Sample JSON data fixture
     """
     # Reset globals before test
     api_json.reset_globals()
-    
+
     # Initialize with sample data
     api_json.set_json(sample_json)
     api_json.choose_slide(262)
-    
+
     # Test adding a regular text box
     api_json.add_text_box(
-        left=1000000,
-        top=2000000,
-        width=3000000,
-        height=1500000,
-        text="Test Text Box"
+        left=1000000, top=2000000, width=3000000, height=1500000, text="Test Text Box"
     )
-    
+
     # Verify the text box was added correctly
     new_shape = api_json.JSON_CURRENT_SLIDE["shapes"][-1]
     assert new_shape["shape_type"] == "TEXT_BOX"
@@ -519,7 +515,7 @@ def test_add_text_box(sample_json: Dict[str, Any]) -> None:
     assert new_shape["width"] == 3000000
     assert new_shape["height"] == 1500000
     assert new_shape["text"] == "Test Text Box"
-    
+
     # Test adding a placeholder text box
     api_json.add_text_box(
         left=2000000,
@@ -527,18 +523,16 @@ def test_add_text_box(sample_json: Dict[str, Any]) -> None:
         width=4000000,
         height=2000000,
         text="Placeholder Text",
-        placeholder_type="TITLE"
+        placeholder_type="TITLE",
     )
-    
+
     # Verify the placeholder text box was added correctly
     new_placeholder = api_json.JSON_CURRENT_SLIDE["shapes"][-1]
     assert new_placeholder["shape_type"] == "PLACEHOLDER"
     assert new_placeholder["placeholder_type"] == "TITLE"
     assert new_placeholder["text"] == "Placeholder Text"
-    
+
     # Test error case - no slide selected
     api_json.JSON_CURRENT_SLIDE = None
     with pytest.raises(ValueError, match="No slide selected"):
         api_json.add_text_box(0, 0, 1000000, 1000000)
-
-
