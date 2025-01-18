@@ -362,9 +362,13 @@ def test_set_height(sample_json: str) -> None:
     set_height(new_height)
     
     # Verify height was set correctly
+    assert JSON_CURRENT_SHAPE is not None
     assert JSON_CURRENT_SHAPE["height"] == new_height
     
     # Test with invalid state (no shape selected)
-    choose_shape(999)  # This will reset JSON_CURRENT_SHAPE by raising ValueError
+    with pytest.raises(ValueError, match="Shape with ID .* not found"):
+        choose_shape(999)  # This should raise ValueError
+        
+    # Test setting height with no shape selected
     with pytest.raises(ValueError, match="No shape selected"):
         set_height(1000000)
