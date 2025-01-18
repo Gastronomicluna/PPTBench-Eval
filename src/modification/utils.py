@@ -18,19 +18,12 @@ def get_font(
     """
     font_name = set()
     
-    # Get the shapes from the ground truth
-    shapes = ground_truth.get("slide", {}).get("shapes", [])
-    
-    # Find the target shape
-    target_shape = None
-    for shape in shapes:
-        if shape.get("shape_id") == shape_id:
-            target_shape = shape
-            break
-    
-    if target_shape is None:
-        logging.error(f"Shape with ID {shape_id} not found in ground truth.")
-        return font_name
+    # Get the shape from the ground truth
+    slide = ground_truth.get("slide", {})
+    target_shape = get_shape_from_slide(
+        shape_id=shape_id,
+        slide=slide,
+    )
         
     # Extract font names from font_details
     for font_detail in target_shape.get("font_details", []):
@@ -69,9 +62,31 @@ def get_shape_from_presentation(
     if target_slide is None:
         logging.error(f"Slide with ID {slide_id} not found in presentation.")
         return {}
-        
+    
+    # Find the target shape
+    target_shape = get_shape_from_slide(
+        shape_id=shape_id,
+        slide=target_slide,
+    )
+    
+    return target_shape
+
+def get_shape_from_slide(
+    shape_id: int,
+    slide: Dict[str, Any],
+) -> Dict[str, Any]:
+    """
+    Get the shape from the slide JSON data.
+
+    Args:
+        shape_id (int): The shape ID to get.
+        slide (Dict[str, Any]): The slide JSON data.
+
+    Returns:
+        Dict[str, Any]: The shape data.
+    """
     # Get the shapes from the slide
-    shapes = target_slide.get("shapes", [])
+    shapes = slide.get("shapes", [])
     
     # Find the target shape
     target_shape = None
@@ -85,4 +100,3 @@ def get_shape_from_presentation(
         return {}
     
     return target_shape
-
