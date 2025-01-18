@@ -118,3 +118,33 @@ def get_font_from_shape(
             font_name.add(font_detail["font_name"])
 
     return font_name
+
+def get_slide_from_presentation(
+    slide_id: int,
+    presentation: Dict[str, Any],
+) -> Dict[str, Any]:
+    """
+    Get the slide from the presentation JSON data.
+
+    Args:
+        slide_id (int): The slide ID of the slide.
+        presentation (Dict[str, Any]): The presentation JSON data.
+
+    Returns:
+        Dict[str, Any]: The slide data.
+    """
+    # Get the slides from the presentation
+    slides = presentation.get("slides", [])
+
+    # Find the target slide
+    target_slide = None
+    for slide in slides:
+        if slide.get("slide_id") == slide_id:
+            target_slide = slide
+            break
+
+    if target_slide is None:
+        logging.error(f"Slide with ID {slide_id} not found in presentation.")
+        return {}
+
+    return target_slide
