@@ -26,25 +26,29 @@ def judge_answer(
     slide_id = ground_truth.get("slide", {}).get("slide_id")
     modified_presentation = api_executor(api_calls, json_path=json_path, mode="json")
 
+    modified_slide = get_slide_from_presentation(
+        slide_id=slide_id,
+        presentation=modified_presentation,
+    )
+    
     # Get slides
     original_slide = json_data.get("slide", {})
     gold_slide = ground_truth.get("slide", {})
 
-    gold_shape = get_new_shape_from_slide(
+    gold_shape = get_new_shape(
         modified_slide_json=gold_slide,
         original_slide_json=original_slide,
     )
 
-    modified_shape = get_new_shape_from_presentation(
-        modified_presentation=modified_presentation,
+    modified_shape = get_new_shape(
+        modified_slide_json=modified_slide,
         original_slide_json=original_slide,
-        ground_truth=ground_truth,
     )
 
-    # Check if the shape is out of bounds or has overlap
-    if has_out_of_bounds(modified_shape):
+    # Check if the slide has out of bounds or has overlap
+    if has_out_of_bounds(modified_slide):
         return False
-    if has_overlap(modified_shape):
+    if has_overlap(modified_slide):
         return False
 
     return compare_shape(gold_shape, modified_shape)
@@ -67,42 +71,7 @@ def compare_shape(
     # Compare the shapes
     pass
 
-
-def get_new_shape_from_presentation(
-    modified_presentation: Dict[str, Any],
-    original_slide_json: Dict[str, Any],
-    ground_truth: Dict[str, Any],
-) -> Dict[str, Any]:
-    """
-    Get the new shape from the modified presentation JSON data.
-
-    Args:
-        modified_presentation (Dict[str, Any]): The modified presentation JSON data.
-        original_slide_json (Dict[str, Any]): The original slide JSON data.
-        ground_truth (Dict[str, Any]): The ground truth JSON data.
-
-    Returns:
-        Dict[str, Any]: The new shape data.
-    """
-    # Get the slide ID from the ground truth
-    slide_id = ground_truth.get("slide", {}).get("slide_id")
-
-    # Get the modified slide JSON data
-    modified_slide_json = get_slide_from_presentation(
-        slide_id=slide_id,
-        presentation=modified_presentation,
-    )
-
-    # Get the new shape from the modified slide
-    new_shape = get_new_shape_from_slide(
-        original_slide_json=original_slide_json,
-        modified_slide_json=modified_slide_json,
-    )
-
-    return new_shape
-
-
-def get_new_shape_from_slide(
+def get_new_shape(
     original_slide_json: Dict[str, Any],
     modified_slide_json: Dict[str, Any],
 ) -> Dict[str, Any]:
