@@ -534,4 +534,3 @@ def test_add_text_box(sample_json: Dict[str, Any]) -> None:
     api_json.JSON_CURRENT_SLIDE = None
     with pytest.raises(ValueError, match="No slide selected"):
         api_json.add_text_box(0, 0, 1000000, 1000000)
-
