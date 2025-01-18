@@ -9,7 +9,7 @@ from ...shared.utils import build_json_path
 from ..utils import get_font, get_font_from_shape, get_shape_from_presentation
 
 
-def judge_answer_text_modification(
+def judge_answer_change_font(
     df: pd.DataFrame,
     json_dir: Path = Path("data/json"),
 ) -> pd.DataFrame:
