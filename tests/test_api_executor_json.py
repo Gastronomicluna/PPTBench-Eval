@@ -1,13 +1,7 @@
-import os
-import tempfile
-from typing import Any, Dict, Generator
-
 import pytest
-from PIL import Image
-from pptx import Presentation
+from typing import Any, Dict
 
 import src.shared.pptx_api.api_executor_json as api_json
-from src.shared.pptx_api.utils import get_shape_ids, get_slide_ids
 
 
 @pytest.fixture
