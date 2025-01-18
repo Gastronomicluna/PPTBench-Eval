@@ -115,41 +115,54 @@ def set_current_slide(slide_idx: int) -> None:
         raise ValueError(f"Failed to set current JSON slide: {str(e)}")
 
 
-def choose_slide(slide_id: int) -> None:
+def choose_slide(slide_id: int) -> Dict[str, Any]:
     """Choose a slide to work with by ID.
 
     Args:
         slide_id: The ID of the slide to choose.
+
+    Returns:
+        Dict[str, Any]: The selected slide.
+
+    Raises:
+        ValueError: If slide not found or JSON_DATA is None.
     """
     global JSON_CURRENT_SLIDE
     if JSON_DATA is None:
         raise ValueError("No JSON data available")
-    for slide in JSON_DATA["slides"]:
-        if slide["slide_id"] == slide_id:
-            JSON_CURRENT_SLIDE = slide
-            return
-    raise ValueError(f"Slide with ID {slide_id} not found")
+    
+    JSON_CURRENT_SLIDE = next(
+        (slide for slide in JSON_DATA["slides"] if slide["slide_id"] == slide_id),
+        None,
+    )
+    if JSON_CURRENT_SLIDE is None:
+        raise ValueError(f"Slide with ID {slide_id} not found")
+    return JSON_CURRENT_SLIDE
 
 
-def choose_shape(shape_id: int) -> None:
+def choose_shape(shape_id: int) -> Dict[str, Any]:
     """Choose a shape to work with.
 
     Args:
         shape_id: The ID of the shape to choose.
+
+    Returns:
+        Dict[str, Any]: The selected shape.
+
+    Raises:
+        ValueError: If shape not found or no slide selected.
     """
     global JSON_CURRENT_SHAPE
-    try:
-        if JSON_CURRENT_SLIDE is None:
-            raise ValueError("No current slide selected")
-        shape = next(
-            (s for s in JSON_CURRENT_SLIDE["shapes"] if s["shape_id"] == shape_id),
-            None,
-        )
-        if shape is None:
-            raise ValueError(f"Shape with ID {shape_id} not found")
-        JSON_CURRENT_SHAPE = shape
-    except Exception as e:
-        raise ValueError(f"Failed to choose shape: {str(e)}")
+    if JSON_CURRENT_SLIDE is None:
+        raise ValueError("No current slide selected")
+        
+    JSON_CURRENT_SHAPE = next(
+        (s for s in JSON_CURRENT_SLIDE["shapes"] if s["shape_id"] == shape_id),
+        None,
+    )
+    if JSON_CURRENT_SHAPE is None:
+        raise ValueError(f"Shape with ID {shape_id} not found")
+    return JSON_CURRENT_SHAPE
 
 
 def set_width(width: int) -> None:
@@ -339,6 +352,14 @@ def set_font_color(font_color: str = "000000") -> None:
         raise ValueError("No shape selected")
     for detail in JSON_CURRENT_SHAPE.get("font_details", []):
         detail["color"] = font_color
+
+
+def reset_globals() -> None:
+    """Reset global JSON variables to None."""
+    global JSON_DATA, JSON_CURRENT_SLIDE, JSON_CURRENT_SHAPE
+    JSON_DATA = None
+    JSON_CURRENT_SLIDE = None
+    JSON_CURRENT_SHAPE = None
 
 
 def main() -> None:
