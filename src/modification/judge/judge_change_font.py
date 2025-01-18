@@ -9,7 +9,7 @@ def judge_answer_change_font(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
     ground_truth: Dict[str, Any],
-    json_data: Dict[str, Any],
+    presentation_json: Dict[str, Any],
 ) -> bool:
     """
     Judge the answer based on the API calls and ground truth.
@@ -26,6 +26,16 @@ def judge_answer_change_font(
     # Get the slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
 
+    # Execute the API calls
+    modified_presentation = api_executor(
+        lines=api_calls, 
+        json=presentation_json, 
+        mode="json"
+    )
+    if modified_presentation is None:
+        logging.error("Error executing API calls, result is None.")
+        return False
+    
     # Get the shape ID from the ground truth
     shape_id = shape_to_modify["shape_id"]
 
@@ -44,17 +54,13 @@ def judge_answer_change_font(
 
     font_name = font.pop()
 
-    # Execute the API calls
-    result_json = api_executor(lines=api_calls, json=json_data, mode="json")
-    if result_json is None:
-        logging.error("Error executing API calls, result is None.")
-        return False
+
 
     # Get the shape from the slide
     result_shape = get_shape_from_presentation(
         slide_id=slide_id,
         shape_id=shape_id,
-        presentation=result_json,
+        presentation=modified_presentation,
     )
     result_font = get_font_from_shape(result_shape)
     if result_font is None:

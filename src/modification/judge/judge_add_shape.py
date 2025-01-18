@@ -1,4 +1,5 @@
 from typing import Any, Dict, List
+import logging
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
@@ -23,8 +24,17 @@ def judge_answer_add_shape(
     """
     # Get slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-    modified_presentation = api_executor(lines=api_calls, json=presentation_json, mode="json")
-
+    
+    # Execute the API calls
+    modified_presentation = api_executor(
+        lines=api_calls, 
+        json=presentation_json, 
+        mode="json"
+    )
+    if modified_presentation is None:
+        logging.error("Error executing API calls, result is None.")
+        return False
+    
     modified_slide = get_slide_from_presentation(
         slide_id=slide_id,
         presentation=modified_presentation,
