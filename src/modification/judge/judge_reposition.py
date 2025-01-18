@@ -1,4 +1,3 @@
-import logging
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -15,11 +14,11 @@ def judge_answer_reposition(
 ) -> pd.DataFrame:
     """
     Judge the answers in the DataFrame and save results back to the same file.
-    
+
     Args:
         df (pd.DataFrame): DataFrame with answers.
         json_path (str): Path to the JSON file.
-        
+
     Returns:
         pd.DataFrame: DataFrame with judged answers.
     """
@@ -33,8 +32,9 @@ def judge_answer_reposition(
         ),
         axis=1,
     )
-    
+
     return df
+
 
 def judge_answer(
     api_calls: List[str],
@@ -60,10 +60,10 @@ def judge_answer(
         shape_id=shape_to_modify["shape_id"],
         slide=slide,
     )
-    
+
     # Get the slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-    
+
     # Execute the API calls
     result_json = api_executor(api_calls, json_path=json_path, mode="json")
 
@@ -73,7 +73,7 @@ def judge_answer(
         shape_id=shape_to_modify["shape_id"],
         presentation=result_json,
     )
-    
+
     # Compare the shapes
     return compare_shape(ground_truth_shape, result_shape)
 
