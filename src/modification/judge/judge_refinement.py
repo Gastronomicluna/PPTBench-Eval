@@ -23,11 +23,7 @@ def judge_answer_refinement(
     slide_id = ground_truth.get("slide", {}).get("slide_id")
 
     # Execute the API calls
-    result_json = api_executor(
-        lines=api_calls, 
-        json=json_data, 
-        mode="json"
-    )
+    result_json = api_executor(lines=api_calls, json=json_data, mode="json")
 
     # Get the slide
     slide = get_slide_from_presentation(

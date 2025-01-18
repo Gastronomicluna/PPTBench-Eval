@@ -45,11 +45,7 @@ def judge_answer_change_font(
     font_name = font.pop()
 
     # Execute the API calls
-    result_json = api_executor(
-        lines=api_calls, 
-        json=json_data, 
-        mode="json"
-    )
+    result_json = api_executor(lines=api_calls, json=json_data, mode="json")
     if result_json is None:
         logging.error("Error executing API calls, result is None.")
         return False

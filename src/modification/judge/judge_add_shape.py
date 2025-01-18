@@ -23,11 +23,7 @@ def judge_answer_add_shape(
     """
     # Get slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-    modified_presentation = api_executor(
-        lines=api_calls, 
-        json=json_data, 
-        mode="json"
-    )
+    modified_presentation = api_executor(lines=api_calls, json=json_data, mode="json")
 
     modified_slide = get_slide_from_presentation(
         slide_id=slide_id,

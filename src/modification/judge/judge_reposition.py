@@ -33,11 +33,7 @@ def judge_answer_reposition(
     slide_id = ground_truth.get("slide", {}).get("slide_id")
 
     # Execute the API calls
-    result_json = api_executor(
-        lines=api_calls, 
-        json=json_data, 
-        mode="json"
-    )
+    result_json = api_executor(lines=api_calls, json=json_data, mode="json")
     # Get the shape from the ground truth
     result_shape = get_shape_from_presentation(
         slide_id=slide_id,

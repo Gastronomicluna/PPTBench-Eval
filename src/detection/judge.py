@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, Optional, Union, Literal
+from typing import Dict, Literal, Optional, Union
 
 import pandas as pd
 from thefuzz import fuzz
