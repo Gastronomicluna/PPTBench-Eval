@@ -9,7 +9,7 @@ def judge_answer_change_font(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
     ground_truth: Dict[str, Any],
-    json_path: str,
+    json_data: Dict[str, Any],
 ) -> bool:
     """
     Judge the answer based on the API calls and ground truth.
@@ -46,9 +46,9 @@ def judge_answer_change_font(
 
     # Execute the API calls
     result_json = api_executor(
-        lines=api_calls,
-        json_path=json_path,
-        mode="json",
+        lines=api_calls, 
+        json=json_data, 
+        mode="json"
     )
     if result_json is None:
         logging.error("Error executing API calls, result is None.")
