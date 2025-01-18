@@ -16,8 +16,6 @@ def get_font(
     Returns:
         set: Set of font names used in the shape.
     """
-    font_name = set()
-    
     # Get the shape from the ground truth
     slide = ground_truth.get("slide", {})
     target_shape = get_shape_from_slide(
@@ -25,10 +23,7 @@ def get_font(
         slide=slide,
     )
         
-    # Extract font names from font_details
-    for font_detail in target_shape.get("font_details", []):
-        if "font_name" in font_detail:
-            font_name.add(font_detail["font_name"])
+    font_name = get_font_from_shape(target_shape)
             
     return font_name
 
@@ -100,3 +95,24 @@ def get_shape_from_slide(
         return {}
     
     return target_shape
+
+def get_font_from_shape(
+    shape: Dict[str, Any],
+) -> set:
+    """
+    Get the font names from a shape.
+
+    Args:
+        shape (Dict[str, Any]): The shape to get the font names for.
+
+    Returns:
+        set: Set of font names used in the shape.
+    """
+    font_name = set()
+    
+    # Extract font names from font_details
+    for font_detail in shape.get("font_details", []):
+        if "font_name" in font_detail:
+            font_name.add(font_detail["font_name"])
+            
+    return font_name
