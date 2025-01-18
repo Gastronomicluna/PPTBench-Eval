@@ -15,6 +15,9 @@ from src.shared.pptx_api.api_executor_json import (
     set_top,
     set_width,
     api_executor_json,
+    JSON_DATA,
+    JSON_CURRENT_SLIDE,
+    JSON_CURRENT_SHAPE,  # Add this import
 )
 from src.shared.pptx_api.utils import get_shape_ids, get_slide_ids
 
@@ -342,4 +345,26 @@ def sample_json() -> str:
     }
 
 def test_set_height(sample_json: str) -> None:
-    pass
+    """Test setting shape height.
+    
+    Args:
+        sample_json: Sample JSON data fixture
+    """
+    # Initialize with sample data
+    set_json(sample_json)
+    
+    # Choose first slide and shape
+    choose_slide(261)
+    choose_shape(23)
+    
+    # Test setting new height
+    new_height = 2000000
+    set_height(new_height)
+    
+    # Verify height was set correctly
+    assert JSON_CURRENT_SHAPE["height"] == new_height
+    
+    # Test with invalid state (no shape selected)
+    choose_shape(999)  # This will reset JSON_CURRENT_SHAPE by raising ValueError
+    with pytest.raises(ValueError, match="No shape selected"):
+        set_height(1000000)
