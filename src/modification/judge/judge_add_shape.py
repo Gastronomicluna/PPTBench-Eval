@@ -1,5 +1,5 @@
-from typing import Any, Dict, List
 import logging
+from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
@@ -23,23 +23,21 @@ def judge_answer_add_shape(
     """
     # Get slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-    
+
     # Get original slides
     original_slide = get_slide_from_presentation(
         slide_id=slide_id,
         presentation=presentation_json,
     )
-    
+
     # Execute the API calls
     llm_modified_presentation = api_executor(
-        lines=api_calls, 
-        json=presentation_json, 
-        mode="json"
+        lines=api_calls, json=presentation_json, mode="json"
     )
     if llm_modified_presentation is None:
         logging.error("Error executing API calls, result is None.")
         return False
-    
+
     llm_modified_slide = get_slide_from_presentation(
         slide_id=slide_id,
         presentation=llm_modified_presentation,
@@ -50,13 +48,13 @@ def judge_answer_add_shape(
         modified_slide_json=llm_modified_slide,
         original_slide_json=original_slide,
     )
-        
+
     # Check if the slide has out of bounds or has overlap
     if has_out_of_bounds(llm_added_shape):
         return False
     if has_overlap(llm_added_shape):
         return False
-    
+
     # Get the gold slide
     gold_slide = ground_truth.get("slide", {})
 

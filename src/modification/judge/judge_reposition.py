@@ -1,8 +1,8 @@
+import logging
 from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import get_shape_from_presentation
-import logging
 
 
 def judge_answer_reposition(
@@ -26,24 +26,22 @@ def judge_answer_reposition(
     # Get the slide ID and shape ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
     shape_id = shape_to_modify["shape_id"]
-    
+
     # Execute the API calls
     llm_modified_presentation = api_executor(
-        lines=api_calls, 
-        json=presentation_json, 
-        mode="json"
+        lines=api_calls, json=presentation_json, mode="json"
     )
     if llm_modified_presentation is None:
         logging.error("Error executing API calls, result is None.")
         return False
-    
+
     # Get the shape from the slide
     llm_modified_shape = get_shape_from_presentation(
         slide_id=slide_id,
         shape_id=shape_id,
         presentation=llm_modified_presentation,
     )
-    
+
     # Get the ground truth shape
     ground_truth_shape = get_shape_from_presentation(
         slide_id=slide_id,
