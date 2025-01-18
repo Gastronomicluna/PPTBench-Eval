@@ -63,7 +63,7 @@ def judge_answer(
     ],
     api_calls: List[str],
     ground_truth: Dict[str, Any],
-    json_data: Dict[str, Any] = None,
+    presentation_json: Dict[str, Any] = None,
     shape_to_modify: Optional[Dict[str, Any]] = None,
 ) -> bool:
     """
@@ -73,7 +73,7 @@ def judge_answer(
         task (str): The type of task.
         api_calls (List[str]): The API calls made by the model.
         ground_truth (Dict[str, Any]): The ground truth JSON data.
-        json_data (Dict[str, Any]): The JSON data, the original
+        presentation_json (Dict[str, Any]): The JSON data, the original
         json_path (str): The path to the JSON data.
 
     Returns:
@@ -83,34 +83,34 @@ def judge_answer(
         return judge_answer_add_shape(
             api_calls=api_calls,
             ground_truth=ground_truth,
-            json_data=json_data,
+            presentation_json=presentation_json,
         )
     elif task == "change_font":
         return judge_answer_change_font(
             api_calls=api_calls,
             shape_to_modify=shape_to_modify,
             ground_truth=ground_truth,
-            json_data=json_data,
+            presentation_json=presentation_json,
         )
     elif task == "reposition":
         return judge_answer_reposition(
             api_calls=api_calls,
             shape_to_modify=shape_to_modify,
             ground_truth=ground_truth,
-            json_data=json_data,
+            presentation_json=presentation_json,
         )
     elif task == "resize":
         return judge_answer_resize(
             api_calls=api_calls,
             shape_to_modify=shape_to_modify,
             ground_truth=ground_truth,
-            json_data=json_data,
+            presentation_json=presentation_json,
         )
     elif task == "overlap" or task == "out_of_bounds":
         return judge_answer_refinement(
             api_calls=api_calls,
             ground_truth=ground_truth,
-            json_data=json_data,
+            presentation_json=presentation_json,
         )
     else:
         raise ValueError(f"Unknown task type: {task}")
