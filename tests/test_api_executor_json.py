@@ -582,6 +582,7 @@ def test_insert_text(sample_json: Dict[str, Any]) -> None:
     with pytest.raises(ValueError, match="No shape selected"):
         api_json.insert_text("Should Fail")
 
+
 def test_set_font_size(sample_json: Dict[str, Any]) -> None:
     """Test setting font size in a shape.
 
