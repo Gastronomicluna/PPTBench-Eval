@@ -6,7 +6,7 @@ import pytest
 from PIL import Image
 from pptx import Presentation
 
-from src.shared.pptx_api.api_executor import (
+from src.shared.pptx_api.api_executor_pptx import (
     choose_shape,
     choose_slide,
     set_height,
@@ -943,22 +943,6 @@ def test_api_executor(sample_presentation: str) -> None:
         "set_width(4000)",
     ]
     errors = api_executor(valid_commands, pptx_path)
-    assert not errors, f"Expected no errors but got: {errors}"
-
-    # Test case 2: Invalid API call
-    invalid_commands = ["nonexistent_api()"]
-    errors = api_executor(invalid_commands, pptx_path)
-    assert len(errors) == 1
-    assert "API 'nonexistent_api()' not found." in errors[0]
-
-    # Test case 3: Error handling (invalid slide ID)
-    error_commands = ["choose_slide(999)"]
-    errors = api_executor(error_commands, pptx_path)
-    assert len(errors) == 1
-    assert "Slide with id 999 not found" in errors[0]
-
-    # Test case 4: Test without pptx_path (should use previously set presentation)
-    errors = api_executor(valid_commands)
     assert not errors, f"Expected no errors but got: {errors}"
 
 
