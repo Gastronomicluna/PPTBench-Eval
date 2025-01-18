@@ -1,6 +1,7 @@
+import logging
 import os
 from typing import Any, Dict, List, Literal, Optional, Union
-import logging
+
 from pptx import Presentation as presentation
 from pptx.dml.color import RGBColor
 from pptx.presentation import Presentation
@@ -66,6 +67,7 @@ def api_executor_pptx(
             errors.append(f"Error saving presentation: {str(e)}")
 
     logging.info(f"Errors: {errors}")
+
 
 def save_presentation(pptx_path: str) -> None:
     """Save the presentation.
