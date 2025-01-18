@@ -566,12 +566,17 @@ def test_insert_text(sample_json: Dict[str, Any]) -> None:
     api_json.choose_slide(262)
     api_json.choose_shape(25)
 
+    # Store original text
+    original_text = api_json.JSON_CURRENT_SHAPE["text"]
+
     # Test inserting text
-    api_json.insert_text("New Text")
+    new_text = "New Text"
+    api_json.insert_text(new_text)
 
-    # Verify the text was inserted correctly
-    assert api_json.JSON_CURRENT_SHAPE["text"] == "New Text"
+    # Verify the text was concatenated correctly
+    assert api_json.JSON_CURRENT_SHAPE["text"] == original_text + new_text
 
+        
     # Test error case - no shape selected
     api_json.JSON_CURRENT_SHAPE = None
     with pytest.raises(ValueError, match="No shape selected"):
