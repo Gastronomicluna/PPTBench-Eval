@@ -1,7 +1,60 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
+from ...shared.pptx_api.api_executor import api_executor
 
-from ..utils import get_slide_from_presentation
+from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
 
+
+def judge_answer(
+    api_calls: List[str],
+    ground_truth: Dict[str, Any],
+    json_data: Dict[str, Any],
+    json_path: str,
+) -> bool:
+    """
+    Judge the answer based on the API calls and ground truth.
+    
+    Args:
+        api_calls (List[str]): The API calls made by the model.
+        json_data (Dict[str, Any]): The JSON data.
+        json_path (str): The path to the JSON data.
+        
+    Returns:
+        bool: Whether the answer is correct.
+    """
+    # Get the slide ID from the ground truth
+    slide_id = ground_truth.get("slide", {}).get("slide_id")
+
+    # Execute the API calls
+    result_json = api_executor(api_calls, json_path=json_path, mode="json")
+
+    # Get the slide
+    slide = get_slide_from_presentation(
+        slide_id=slide_id,
+        presentation=result_json,
+    )
+
+    # Check for out of bounds or overlap
+    if has_out_of_bounds(slide) or has_overlap(slide):
+        return False
+
+    return True
+
+def compare_shape(
+    original_shape: Dict[str, Any],
+    modified_shape: Dict[str, Any],
+) -> bool:
+    """
+    Compare the original shape with the modified shape.
+
+    Args:
+        original_shape (Dict[str, Any]): The original shape data.
+        modified_shape (Dict[str, Any]): The modified shape data.
+
+    Returns:
+        bool: Whether the shapes are the same.
+    """
+    # Compare the shapes
+    pass
 
 def get_new_shape_from_presentation(
     modified_presentation: Dict[str, Any],
