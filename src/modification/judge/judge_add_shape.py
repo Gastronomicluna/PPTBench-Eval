@@ -30,7 +30,7 @@ def judge_answer(
         slide_id=slide_id,
         presentation=modified_presentation,
     )
-    
+
     # Get slides
     original_slide = json_data.get("slide", {})
     gold_slide = ground_truth.get("slide", {})
@@ -70,6 +70,7 @@ def compare_shape(
     """
     # Compare the shapes
     pass
+
 
 def get_new_shape(
     original_slide_json: Dict[str, Any],
