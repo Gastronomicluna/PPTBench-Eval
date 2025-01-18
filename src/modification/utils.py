@@ -44,19 +44,11 @@ def get_shape_from_presentation(
     Returns:
         Dict[str, Any]: The shape data.
     """
-    # Get the slides from the presentation
-    slides = presentation.get("slides", [])
-
     # Find the target slide
-    target_slide = None
-    for slide in slides:
-        if slide.get("slide_id") == slide_id:
-            target_slide = slide
-            break
-
-    if target_slide is None:
-        logging.error(f"Slide with ID {slide_id} not found in presentation.")
-        return {}
+    target_slide = get_slide_from_presentation(
+        slide_id=slide_id,
+        presentation=presentation,
+    )
 
     # Find the target shape
     target_shape = get_shape_from_slide(
