@@ -2,7 +2,7 @@ import logging
 from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_shape_from_presentation, get_shape_from_slide
+from ..utils import get_shape_from_presentation
 
 
 def judge_answer_resize(
