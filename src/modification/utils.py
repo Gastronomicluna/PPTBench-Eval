@@ -1,5 +1,5 @@
-from typing import Any, Dict
 import logging
+from typing import Any, Dict
 
 
 def get_font(
@@ -22,9 +22,9 @@ def get_font(
         shape_id=shape_id,
         slide=slide,
     )
-        
+
     font_name = get_font_from_shape(target_shape)
-            
+
     return font_name
 
 
@@ -46,25 +46,26 @@ def get_shape_from_presentation(
     """
     # Get the slides from the presentation
     slides = presentation.get("slides", [])
-    
+
     # Find the target slide
     target_slide = None
     for slide in slides:
         if slide.get("slide_id") == slide_id:
             target_slide = slide
             break
-    
+
     if target_slide is None:
         logging.error(f"Slide with ID {slide_id} not found in presentation.")
         return {}
-    
+
     # Find the target shape
     target_shape = get_shape_from_slide(
         shape_id=shape_id,
         slide=target_slide,
     )
-    
+
     return target_shape
+
 
 def get_shape_from_slide(
     shape_id: int,
@@ -82,19 +83,20 @@ def get_shape_from_slide(
     """
     # Get the shapes from the slide
     shapes = slide.get("shapes", [])
-    
+
     # Find the target shape
     target_shape = None
     for shape in shapes:
         if shape.get("shape_id") == shape_id:
             target_shape = shape
             break
-    
+
     if target_shape is None:
         logging.error(f"Shape with ID {shape_id} not found in slide.")
         return {}
-    
+
     return target_shape
+
 
 def get_font_from_shape(
     shape: Dict[str, Any],
@@ -109,10 +111,10 @@ def get_font_from_shape(
         set: Set of font names used in the shape.
     """
     font_name = set()
-    
+
     # Extract font names from font_details
     for font_detail in shape.get("font_details", []):
         if "font_name" in font_detail:
             font_name.add(font_detail["font_name"])
-            
+
     return font_name

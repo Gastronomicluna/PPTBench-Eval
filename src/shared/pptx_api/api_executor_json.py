@@ -289,12 +289,14 @@ def set_font_size(font_size: float) -> None:
         raise ValueError("No shape selected")
     # Create a new font detail if none exists
     if not JSON_CURRENT_SHAPE["font_details"]:
-        JSON_CURRENT_SHAPE["font_details"].append({
-            "paragraph_index": 0,
-            "run_index": 0,
-            "text": JSON_CURRENT_SHAPE.get("text", ""),
-            "font_size": font_size
-        })
+        JSON_CURRENT_SHAPE["font_details"].append(
+            {
+                "paragraph_index": 0,
+                "run_index": 0,
+                "text": JSON_CURRENT_SHAPE.get("text", ""),
+                "font_size": font_size,
+            }
+        )
     else:
         for detail in JSON_CURRENT_SHAPE["font_details"]:
             detail["font_size"] = font_size

@@ -1,7 +1,10 @@
-from ...shared.pptx_api.api_executor import api_executor
-from typing import Any, Dict, List
-from ..utils import get_font, get_shape_from_presentation, get_font_from_shape
 import logging
+from typing import Any, Dict, List
+
+from ...shared.pptx_api.api_executor import api_executor
+from ..utils import get_font, get_font_from_shape, get_shape_from_presentation
+
+
 def judge_answer(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
@@ -22,10 +25,10 @@ def judge_answer(
     """
     # Get the slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-    
+
     # Get the shape ID from the ground truth
     shape_id = shape_to_modify["shape_id"]
-        
+
     # Get the font names from the ground truth
     font = get_font(
         shape_id=shape_id,
@@ -38,9 +41,9 @@ def judge_answer(
     if len(font) > 1:
         logging.error("More than one font name found in the ground truth.")
         return False
-        
+
     font_name = font.pop()
-    
+
     # Execute the API calls
     result_json = api_executor(
         lines=api_calls,
@@ -50,7 +53,7 @@ def judge_answer(
     if result_json is None:
         logging.error("Error executing API calls, result is None.")
         return False
-    
+
     # Get the shape from the slide
     result_shape = get_shape_from_presentation(
         slide_id=slide_id,
@@ -64,7 +67,7 @@ def judge_answer(
     if len(result_font) > 1:
         logging.error("More than one font name found in the result JSON.")
         return False
-    
+
     result_font_name = result_font.pop()
 
     return font_name == result_font_name
