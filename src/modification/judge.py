@@ -1,9 +1,10 @@
+import json
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Union
-import json
+
 import pandas as pd
 
-from ..shared.utils import csv_to_df, df_to_csv, build_json_path
+from ..shared.utils import build_json_path, csv_to_df, df_to_csv
 from .judge.judge_add_shape import judge_answer_add_shape
 from .judge.judge_change_font import judge_answer_change_font
 from .judge.judge_refinement import judge_answer_refinement
@@ -83,9 +84,9 @@ def judge_answer(
         file_hash=file_hash,
         json_dir=Path("data/json"),
     )
-    
+
     presentation_json = json.load(open(json_path, "r"))
-    
+
     if task == "add_shape":
         return judge_answer_add_shape(
             api_calls=api_calls,
