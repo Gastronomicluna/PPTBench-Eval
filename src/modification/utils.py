@@ -40,7 +40,7 @@ def get_font(
     return font_name
 
 
-def get_shape(
+def get_shape_from_presentation(
     slide_id: int,
     shape_id: int,
     presentation: Dict[str, Any],
@@ -85,3 +85,4 @@ def get_shape(
         return {}
     
     return target_shape
+

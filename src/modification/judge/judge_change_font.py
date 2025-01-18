@@ -1,6 +1,6 @@
 from ...shared.pptx_api.api_executor import api_executor
 from typing import Any, Dict, List, Literal, Optional
-from ..utils import get_font, get_shape
+from ..utils import get_font, get_shape_from_presentation
 import logging
 def judge_answer(
     api_calls: List[str],
@@ -35,29 +35,13 @@ def judge_answer(
     
     # Get the shape ID from the ground truth
     shape_id = shape_to_modify["shape_id"]
-    
-    # Get the slide from the result
-    slide = None
-    for s in result_json.get("slides", []):
-        if s.get("slide_id") == slide_id:
-            slide = s
-            break
-    
-    if slide is None:
-        logging.error(f"Could not find slide with ID {slide_id} in result JSON.")
-        return False
+        
+    # Get the font names from the ground truth
         
     # Get the shape from the slide
-    result_shape = None
-    for s in slide.get("shapes", []):
-        if s.get("shape_id") == shape_id:
-            result_shape = s
-            break
-        
-    if result_shape is None:
-        logging.error(f"Could not find shape with ID {shape_id} in result JSON.")
-        return False
-    
-    # Get the ground truth font name
-    pass
+    result_shape = get_shape_from_presentation(
+        slide_id=slide_id,
+        shape_id=shape_id,
+        presentation=result_json,
+    )
 
