@@ -142,6 +142,7 @@ def get_slide_from_presentation(
 
     return target_slide
 
+
 def has_overlap(slide_json: Dict[str, Any]) -> bool:
     """
     Check if the slide contains overlapping elements.
@@ -176,6 +177,7 @@ def has_overlap(slide_json: Dict[str, Any]) -> bool:
                 return True
 
     return False
+
 
 def has_out_of_bounds(slide_json: Dict[str, Any]) -> bool:
     """
