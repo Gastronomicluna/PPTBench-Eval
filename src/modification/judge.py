@@ -1,10 +1,59 @@
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from .judge.judge_add_shape import judge_answer_add_shape
 from .judge.judge_change_font import judge_answer_change_font
 from .judge.judge_refinement import judge_answer_refinement
 from .judge.judge_reposition import judge_answer_reposition
 from .judge.judge_resize import judge_answer_resize
+from pathlib import Path
+
+import pandas as pd
+from ..shared.utils import csv_to_df, df_to_csv
+
+
+def judge_answer_df(
+    csv_path: Union[Path, str],
+    overwrite: bool = False,
+) -> pd.DataFrame:
+    """
+    Judge the answers in the CSV file and save results back to the same file.
+
+    Args:
+        csv_path (Union[Path, str]): Path to CSV file for input and output.
+        overwrite (bool): Whether to overwrite existing output file.
+
+    Returns:
+        pd.DataFrame: DataFrame with judged answers.
+    """
+    csv_path = Path(csv_path)
+    answers_df = csv_to_df(csv_path)
+
+    if answers_df is None:
+        raise ValueError("The input DataFrame is empty.")
+
+    if (
+        "subcategory" not in answers_df.columns
+        or "ground_truth" not in answers_df.columns
+        or "answer" not in answers_df.columns
+    ):
+        raise ValueError(
+            "The input DataFrame must contain 'subcategory', 'ground_truth', "
+            "and 'answer' columns."
+        )
+
+    # Process answers
+    answers_df["is_correct"] = answers_df.apply(
+        lambda row: judge_answer(
+            row["subcategory"], row["ground_truth"], row["answer"]
+        ),
+        axis=1,
+    )
+
+    # Save results
+    if overwrite:
+        df_to_csv(answers_df, csv_path)
+
+    return answers_df
 
 
 def judge_answer(
