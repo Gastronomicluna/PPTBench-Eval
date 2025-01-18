@@ -618,3 +618,43 @@ def test_set_font_size(sample_json: Dict[str, Any]) -> None:
     api_json.JSON_CURRENT_SHAPE = None
     with pytest.raises(ValueError, match="No shape selected"):
         api_json.set_font_size(24.0)
+
+
+def test_set_font_style(sample_json: Dict[str, Any]) -> None:
+    """Test setting font style in a shape.
+
+    Args:
+        sample_json: Sample JSON data fixture
+    """
+    # Reset globals before test
+    api_json.reset_globals()
+
+    # Initialize with sample data
+    api_json.set_json(sample_json)
+    api_json.choose_slide(262)
+    api_json.choose_shape(25)
+
+    # Test setting bold style
+    api_json.set_font_style("bold")
+
+    # Verify bold style was set correctly for all font details
+    for font_detail in api_json.JSON_CURRENT_SHAPE["font_details"]:
+        assert font_detail.get("bold") is True, (
+            f"Bold style not set correctly for paragraph {font_detail['paragraph_index']}, "
+            f"run {font_detail['run_index']}"
+        )
+
+    # Test setting italic style
+    api_json.set_font_style("italic")
+
+    # Verify italic style was set correctly for all font details
+    for font_detail in api_json.JSON_CURRENT_SHAPE["font_details"]:
+        assert font_detail.get("italic") is True, (
+            f"Italic style not set correctly for paragraph {font_detail['paragraph_index']}, "
+            f"run {font_detail['run_index']}"
+        )
+
+    # Test error case - no shape selected
+    api_json.JSON_CURRENT_SHAPE = None
+    with pytest.raises(ValueError, match="No shape selected"):
+        api_json.set_font_style("bold")
