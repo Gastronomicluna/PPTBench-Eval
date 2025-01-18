@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, Literal
 
 import pandas as pd
 from thefuzz import fuzz
@@ -55,7 +55,7 @@ def judge_answer_df(
 
 
 def judge_answer(
-    subcategory: str,
+    subcategory: Literal["content extraction", "layout detection", "style detection"],
     ground_truth: str,
     answer: Optional[str],
 ) -> bool:
