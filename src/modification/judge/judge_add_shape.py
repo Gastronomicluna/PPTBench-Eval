@@ -1,5 +1,7 @@
 from typing import Any, Dict
+
 from ..utils import get_slide_from_presentation
+
 
 def get_new_shape_from_presentation(
     modified_presentation: Dict[str, Any],
@@ -33,6 +35,8 @@ def get_new_shape_from_presentation(
     )
 
     return new_shape
+
+
 def get_new_shape(
     original_slide_json: Dict[str, Any],
     modified_slide_json: Dict[str, Any],
