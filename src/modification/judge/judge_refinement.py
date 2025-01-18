@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 import pandas as pd
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_slide_from_presentation
+from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
 
 
 def judge_answer(
@@ -34,4 +34,10 @@ def judge_answer(
         presentation=result_json,
     )
 
-    pass
+    # Check if the slide has overlapping shapes
+    has_overlap_result = has_overlap(slide)
+    
+    # Check if the slide has out of bounds shapes
+    has_out_of_bounds_result = has_out_of_bounds(slide)
+    
+    return not has_overlap_result and not has_out_of_bounds_result
