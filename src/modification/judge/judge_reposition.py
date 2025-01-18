@@ -6,7 +6,7 @@ import pandas as pd
 
 from ...shared.pptx_api.api_executor import api_executor
 from ...shared.utils import build_json_path
-from ..utils import get_font, get_font_from_shape, get_shape_from_presentation
+from ..utils import get_shape_from_presentation, get_shape_from_slide
 
 
 def judge_answer(
@@ -27,20 +27,28 @@ def judge_answer(
     Returns:
         bool: Whether the answer is correct.
     """
+    # Get ground truth shape
+    slide = ground_truth.get("slide", {})
+    ground_truth_shape = get_shape_from_slide(
+        shape_id=shape_to_modify["shape_id"],
+        slide=slide,
+    )
+    
     # Get the slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-
+    
     # Execute the API calls
     result_json = api_executor(api_calls, json_path=json_path, mode="json")
 
     # Get the shape from the ground truth
-    target_shape = get_shape_from_presentation(
+    result_shape = get_shape_from_presentation(
         slide_id=slide_id,
         shape_id=shape_to_modify["shape_id"],
         presentation=result_json,
     )
-
-    pass
+    
+    # Compare the shapes
+    return compare_shape(ground_truth_shape, result_shape)
 
 
 def compare_shape(
