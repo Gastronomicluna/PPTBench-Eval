@@ -409,3 +409,42 @@ def test_set_width(sample_json: Dict[str, Any]) -> None:
     api_json.JSON_CURRENT_SHAPE = None
     with pytest.raises(ValueError, match="No shape selected"):
         api_json.set_width(1000000)
+
+
+def test_set_top(sample_json: Dict[str, Any]) -> None:
+    """Test setting shape top.
+
+    Args:
+        sample_json: Sample JSON data fixture
+    """
+    # Reset globals before test
+    api_json.reset_globals()
+
+    # Initialize with sample data and verify
+    api_json.set_json(sample_json)
+    assert api_json.JSON_DATA is not None, "JSON_DATA should be set"
+    assert isinstance(api_json.JSON_DATA, dict), "JSON_DATA should be a dictionary"
+    assert "slides" in api_json.JSON_DATA, "JSON_DATA should contain slides"
+
+    # Choose first slide and shape
+    api_json.choose_slide(262)
+    assert api_json.JSON_CURRENT_SLIDE is not None, "Slide 262 should be selected"
+    assert api_json.JSON_CURRENT_SLIDE["slide_id"] == 262, "Wrong slide selected"
+
+    api_json.choose_shape(25)
+    assert api_json.JSON_CURRENT_SHAPE is not None, "Shape 25 should be selected"
+    assert api_json.JSON_CURRENT_SHAPE["shape_id"] == 25, "Wrong shape selected"
+
+    # Test setting new top
+    new_top = 4000000
+    api_json.set_top(new_top)
+    assert api_json.JSON_CURRENT_SHAPE["top"] == new_top
+
+    # Test error cases
+    with pytest.raises(ValueError, match="Shape with ID .* not found"):
+        api_json.choose_shape(999)
+
+    # Test setting top with no shape selected
+    api_json.JSON_CURRENT_SHAPE = None
+    with pytest.raises(ValueError, match="No shape selected"):
+        api_json.set_top(1000000)
