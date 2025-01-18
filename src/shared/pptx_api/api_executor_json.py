@@ -232,7 +232,7 @@ def add_text_box(
         raise ValueError("No slide selected")
     new_shape = {
         "name": f"TextBox_{len(JSON_CURRENT_SLIDE['shapes'])}",
-        "shape_id": len(JSON_CURRENT_SLIDE["shapes"]) + 1,
+        "shape_id": assign_shape_id(JSON_CURRENT_SLIDE),
         "shape_type": "PLACEHOLDER" if placeholder_type else "TEXT_BOX",
         "measurement_unit": "emu",
         "height": height,
@@ -271,7 +271,7 @@ def add_picture(
         raise ValueError("Image file path is required")
     new_shape = {
         "name": f"Picture_{len(JSON_CURRENT_SLIDE['shapes'])}",
-        "shape_id": len(JSON_CURRENT_SLIDE["shapes"]) + 1,
+        "shape_id": assign_shape_id(JSON_CURRENT_SLIDE),
         "shape_type": "PICTURE",
         "measurement_unit": "emu",
         "height": height,
