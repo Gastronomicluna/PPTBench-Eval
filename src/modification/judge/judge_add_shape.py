@@ -4,7 +4,7 @@ from ...shared.pptx_api.api_executor import api_executor
 from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
 
 
-def judge_answer(
+def judge_answer_add_shape(
     api_calls: List[str],
     ground_truth: Dict[str, Any],
     json_data: Dict[str, Any],
