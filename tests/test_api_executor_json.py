@@ -551,3 +551,28 @@ def test_add_picture(sample_json: Dict[str, Any]) -> None:
     assert new_shape["top"] == 2000000
     assert new_shape["width"] == 3000000
     assert new_shape["height"] == 1500000
+
+def test_insert_text(sample_json: Dict[str, Any]) -> None:
+    """Test inserting text into a shape.
+
+    Args:
+        sample_json: Sample JSON data fixture
+    """
+    # Reset globals before test
+    api_json.reset_globals()
+
+    # Initialize with sample data
+    api_json.set_json(sample_json)
+    api_json.choose_slide(262)
+    api_json.choose_shape(25)
+
+    # Test inserting text
+    api_json.insert_text("New Text")
+
+    # Verify the text was inserted correctly
+    assert api_json.JSON_CURRENT_SHAPE["text"] == "New Text"
+
+    # Test error case - no shape selected
+    api_json.JSON_CURRENT_SHAPE = None
+    with pytest.raises(ValueError, match="No shape selected"):
+        api_json.insert_text("Should Fail")
