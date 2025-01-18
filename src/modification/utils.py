@@ -111,6 +111,7 @@ def get_font_from_shape(
 
     return font_name
 
+
 def get_slide_from_presentation(
     slide_id: int,
     presentation: Dict[str, Any],
