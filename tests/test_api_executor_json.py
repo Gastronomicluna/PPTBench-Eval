@@ -581,3 +581,29 @@ def test_insert_text(sample_json: Dict[str, Any]) -> None:
     api_json.JSON_CURRENT_SHAPE = None
     with pytest.raises(ValueError, match="No shape selected"):
         api_json.insert_text("Should Fail")
+
+def test_set_font_size(sample_json: Dict[str, Any]) -> None:
+    """Test setting font size in a shape.
+
+    Args:
+        sample_json: Sample JSON data fixture
+    """
+    # Reset globals before test
+    api_json.reset_globals()
+
+    # Initialize with sample data
+    api_json.set_json(sample_json)
+    api_json.choose_slide(262)
+    api_json.choose_shape(25)
+
+    # Test setting font size
+    new_font_size = 20.0
+    api_json.set_font_size(new_font_size)
+
+    # Verify the font size was set correctly
+    assert api_json.JSON_CURRENT_SHAPE["font_details"][0]["font_size"] == new_font_size
+
+    # Test error case - no shape selected
+    api_json.JSON_CURRENT_SHAPE = None
+    with pytest.raises(ValueError, match="No shape selected"):
+        api_json.set_font_size(24.0)
