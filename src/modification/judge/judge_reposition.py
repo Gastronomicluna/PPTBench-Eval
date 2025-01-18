@@ -8,7 +8,7 @@ def judge_answer_reposition(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
     ground_truth: Dict[str, Any],
-    json_path: str,
+    json_data: Dict[str, Any],
 ) -> bool:
     """
     Judge the answer based on the API calls and ground truth.
@@ -33,8 +33,11 @@ def judge_answer_reposition(
     slide_id = ground_truth.get("slide", {}).get("slide_id")
 
     # Execute the API calls
-    result_json = api_executor(api_calls, json_path=json_path, mode="json")
-
+    result_json = api_executor(
+        lines=api_calls, 
+        json=json_data, 
+        mode="json"
+    )
     # Get the shape from the ground truth
     result_shape = get_shape_from_presentation(
         slide_id=slide_id,
