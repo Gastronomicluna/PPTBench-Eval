@@ -75,10 +75,10 @@ def judge_answer(
     )
 
     # Compare the shapes
-    return compare_shape(ground_truth_shape, result_shape)
+    return compare_shape_position(ground_truth_shape, result_shape)
 
 
-def compare_shape(
+def compare_shape_position(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
     threshold: float = 0.01,
