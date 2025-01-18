@@ -1,13 +1,13 @@
 import logging
-from typing import Any, Dict, List
 from pathlib import Path
+from typing import Any, Dict, List
 
 import pandas as pd
 
 from ...shared.pptx_api.api_executor import api_executor
+from ...shared.utils import build_json_path
 from ..utils import get_font, get_font_from_shape, get_shape_from_presentation
 
-from ...shared.utils import build_json_path
 
 def judge_answer_text_modification(
     df: pd.DataFrame,

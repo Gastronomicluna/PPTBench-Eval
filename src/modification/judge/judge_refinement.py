@@ -1,21 +1,24 @@
+from pathlib import Path
 from typing import Any, Dict, List
 
 import pandas as pd
-from pathlib import Path
+
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
 from ...shared.utils import build_json_path
+from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
+
+
 def judge_answer_refinement(
     df: pd.DataFrame,
     json_dir: Path = Path("data/json"),
 ) -> pd.DataFrame:
     """
     Judge the answers in the DataFrame and save results back to the same file.
-    
+
     Args:
         df (pd.DataFrame): DataFrame with answers.
         json_path (str): Path to the JSON file.
-        
+
     Returns:
         pd.DataFrame: DataFrame with judged answers.
     """
@@ -28,7 +31,7 @@ def judge_answer_refinement(
         ),
         axis=1,
     )
-    
+
     return df
 
 
@@ -61,8 +64,8 @@ def judge_answer(
 
     # Check if the slide has overlapping shapes
     has_overlap_result = has_overlap(slide)
-    
+
     # Check if the slide has out of bounds shapes
     has_out_of_bounds_result = has_out_of_bounds(slide)
-    
+
     return not has_overlap_result and not has_out_of_bounds_result

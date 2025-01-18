@@ -164,6 +164,7 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
 
     return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
 
+
 def build_json_path(
     file_hash: str,
     json_dir: Path = Path("data/json"),
