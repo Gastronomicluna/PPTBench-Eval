@@ -552,6 +552,7 @@ def test_add_picture(sample_json: Dict[str, Any]) -> None:
     assert new_shape["width"] == 3000000
     assert new_shape["height"] == 1500000
 
+
 def test_insert_text(sample_json: Dict[str, Any]) -> None:
     """Test inserting text into a shape.
 
@@ -576,7 +577,6 @@ def test_insert_text(sample_json: Dict[str, Any]) -> None:
     # Verify the text was concatenated correctly
     assert api_json.JSON_CURRENT_SHAPE["text"] == original_text + new_text
 
-        
     # Test error case - no shape selected
     api_json.JSON_CURRENT_SHAPE = None
     with pytest.raises(ValueError, match="No shape selected"):
