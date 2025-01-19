@@ -2,6 +2,7 @@ import csv
 import logging
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Union
+from thefuzz import fuzz
 
 import httpx
 import pandas as pd
@@ -180,3 +181,21 @@ def build_json_path(
         Path: Path to the JSON file.
     """
     return json_dir / f"{file_hash}.json"
+
+def fuzzy_match(
+    ground_truth: str,
+    answer: str,
+    threshold: float = 0.9,
+) -> bool:
+    """
+    Fuzzy matching function to compare the ground truth and the answer.
+
+    Args:
+        ground_truth (str): The ground truth answer.
+        answer (str): The answer from the model.
+        threshold (float): The threshold for the fuzzy matching
+    Returns:
+        bool: Whether the answer is correct.
+    """
+    ratio = fuzz.ratio(ground_truth, answer) / 100
+    return ratio >= threshold

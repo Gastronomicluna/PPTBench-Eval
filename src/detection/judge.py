@@ -3,10 +3,9 @@ from pathlib import Path
 from typing import Dict, Literal, Optional, Union
 
 import pandas as pd
-from thefuzz import fuzz
 
 from ..shared.parse_answer import parse_json_answer
-from ..shared.utils import csv_to_df, df_to_csv
+from ..shared.utils import csv_to_df, df_to_csv, fuzzy_match
 
 
 def judge_answer_df(
@@ -94,23 +93,7 @@ def judge_answer(
     return judge_function[subcategory](ground_truth, answer)
 
 
-def fuzzy_match(
-    ground_truth: str,
-    answer: str,
-    threshold: float = 0.9,
-) -> bool:
-    """
-    Fuzzy matching function to compare the ground truth and the answer.
 
-    Args:
-        ground_truth (str): The ground truth answer.
-        answer (str): The answer from the model.
-        threshold (float): The threshold for the fuzzy matching
-    Returns:
-        bool: Whether the answer is correct.
-    """
-    ratio = fuzz.ratio(ground_truth, answer) / 100
-    return ratio >= threshold
 
 
 def compare_coordinate(
