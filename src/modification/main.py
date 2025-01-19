@@ -8,7 +8,7 @@ import pandas as pd
 from ..shared.get_answer import get_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
-from ..shared.utils import get_project_root, process_model, download_kaggle_dataset
+from ..shared.utils import download_kaggle_dataset, get_project_root, process_model
 from .evaluation import evaluate_answers
 from .format_answers import format_answer_csv
 from .get_answers import get_answer_single_modification
@@ -43,7 +43,7 @@ def main(
 
     os.makedirs(results_dir, exist_ok=True)
 
-    logging.info("Loading dataset...")    
+    logging.info("Loading dataset...")
     df = load_save_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
@@ -55,7 +55,7 @@ def main(
         dataset_path="data",
         new_dir_name="json",
     )
-    
+
     # Test mode
     if test_mode:
         df = df[df["task"] == "refinement"]
@@ -103,7 +103,7 @@ def main(
                 logging.error(f"Error processing {model_name}: {str(e)}")
 
     logging.info("Formatting answers...")
-    
+
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name}.csv"
         if csv_path.exists():
@@ -114,7 +114,7 @@ def main(
             print(f"Formatted {len(results_df)} entries")
         else:
             logging.warning(f"Results file not found for {model_name}")
-    
+
     logging.info("Judging answers...")
 
     for _, model_name in models_to_run:
