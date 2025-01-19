@@ -59,7 +59,7 @@ def build_prompt_for_content_extraction(
     """
     divider = "#" * 80
     example_json_str = json.dumps(CONTENT_EXTRACTION_EXAMPLE, indent=2)
-    
+
     prompt = ""
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n\n"
