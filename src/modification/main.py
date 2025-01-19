@@ -108,3 +108,6 @@ def main(
             csv_path=results_dir / f"{model_name}.csv",
             overwrite=True,
         )
+        print(f"Judged {len(results_df)} entries")
+        
+    logging.info("Evaluating answers...")
