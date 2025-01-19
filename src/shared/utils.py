@@ -2,12 +2,12 @@ import csv
 import logging
 import os
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any, Callable, Dict, Optional, Union, List
 
 import httpx
 import pandas as pd
 from thefuzz import fuzz
-
+from .pptx_api.api_doc import API
 
 def get_image_bytes(image_data: dict | bytes) -> bytes:
     """Extract image bytes from dataset row.
@@ -233,3 +233,29 @@ def download_kaggle_dataset(
         os.system(
             f"mv {destination_dir}/{dataset_name} {destination_dir}/{new_dir_name}"
         )
+
+def api_to_string(
+    api_list: List[API],
+) -> str:
+    """
+    Convert a list of API objects to a string representation.
+
+    Args:
+        api_list (list): List of API objects.
+
+    Returns:
+        str: String representation of the API list.
+    """
+    api_strings = []
+    for api in api_list:
+        # Format each API with essential information only
+        api_str = (
+            f"{api.name}({api.parameters}) "
+            + f"Description: {api.description} "
+            + f"Notes: {api.notes}"
+        )
+
+        api_strings.append(api_str)
+
+    # Join all API strings with clear separation
+    return "\n".join(api_strings)
