@@ -154,3 +154,11 @@ def test_api_executor(sample_presentation: str) -> None:
     ]
     errors = api_executor(valid_commands, pptx_path)
     assert not errors, f"Expected no errors but got: {errors}"
+
+
+def test_create_presentation() -> None:
+    """Test create_presentation function."""
+    from src.shared.pptx_api.api_executor_pptx import create_presentation, save_presentation
+
+    create_presentation()
+    save_presentation("test_create_presentation.pptx")
