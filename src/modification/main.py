@@ -122,3 +122,10 @@ def main(
     combined_results = pd.concat(evaluation_results, ignore_index=True)
     combined_results.to_csv(results_dir / "combined_evaluation.csv", index=False)
     logging.info("Pipeline completed successfully.")
+    
+if __name__ == "__main__":
+    main(
+        max_workers=4,
+        ollama_mode=True,
+        test_mode=False,
+    )
