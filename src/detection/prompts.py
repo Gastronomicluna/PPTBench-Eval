@@ -1,4 +1,20 @@
 from typing import Any, Dict, Literal
+import json
+
+# JSON templates for examples
+CONTENT_EXTRACTION_EXAMPLE = {
+    "answer": "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021"
+}
+
+STYLE_FONT_EXAMPLE = {"answer": "Arial"}
+STYLE_SIZE_EXAMPLE = {"answer": 2.0}
+
+LAYOUT_TEMPLATE = {
+    "left": "<integer>",
+    "top": "<integer>",
+    "width": "<integer>",
+    "height": "<integer>"
+}
 
 
 def build_prompt(
@@ -42,6 +58,8 @@ def build_prompt_for_content_extraction(
         str: The prompt text.
     """
     divider = "#" * 80
+    example_json_str = json.dumps(CONTENT_EXTRACTION_EXAMPLE, indent=2)
+    
     prompt = "\n"
     prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
@@ -52,10 +70,10 @@ def build_prompt_for_content_extraction(
     prompt += "- Provide the response in JSON format with the key \"answer\" and the value being the extracted content.\n\n"
     prompt += "**Example:**\n"
     prompt += 'If the query is "title_extraction" and the ground truth is "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021",\n'
-    prompt += "Answer:\n{\n  \"answer\": \"Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021\"\n}\n"
+    prompt += f"Answer:\n{example_json_str}\n"
     prompt += f"{divider}\n"
     prompt += "Slide JSON:\n"
-    prompt += f"{str(slide_json)}\n\n"
+    prompt += json.dumps(slide_json, indent=2) + "\n\n"
     prompt += f"{divider}\n"
     prompt += "Answer (Please provide a JSON object with the key \"answer\" and the value being the extracted content, without any additional text):\n"
     return prompt
@@ -76,17 +94,20 @@ def build_prompt_for_style_detection(
         str: The prompt text.
     """
     divider = "#" * 80
+    font_example_str = json.dumps(STYLE_FONT_EXAMPLE, indent=2)
+    size_example_str = json.dumps(STYLE_SIZE_EXAMPLE, indent=2)
+    
     prompt = "\n"
     prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n\n"
     prompt += f"{query}. Provide only the requested information in JSON format without any additional text or explanations.\n\n"
     prompt += "Examples:\n"
     prompt += "Query: Identify the dominant font in the slide.\n"
-    prompt += "Answer:\n{\n  \"answer\": \"Arial\"\n}\n\n"
+    prompt += f"Answer:\n{font_example_str}\n\n"
     prompt += "Query: Identify the difference of the largest and the smallest font size excluding the notes section.\n"
-    prompt += "Answer:\n{\n  \"answer\": 2.0\n}\n\n"
+    prompt += f"Answer:\n{size_example_str}\n\n"
     prompt += f"{divider}\n"
-    prompt += f"Slide JSON: {str(slide_json)}\n\n"
+    prompt += f"Slide JSON: {json.dumps(slide_json, indent=2)}\n\n"
     prompt += f"{divider}\n"
     prompt += f"Query: {query}\n"
     prompt += "Answer (Please provide a JSON object with the key \"answer\" and the value being the answer to the query, without any additional text):\n"
@@ -109,19 +130,16 @@ def build_prompt_for_layout_detection(
         str: The prompt text.
     """
     divider = "#" * 80
+    layout_template_str = json.dumps(LAYOUT_TEMPLATE, indent=2)
+    
     prompt = "\n"
     prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}. Only return the requested information in the following JSON format:\n"
-    prompt += "{\n"
-    prompt += "  \"left\": <integer>,\n"
-    prompt += "  \"top\": <integer>,\n"
-    prompt += "  \"width\": <integer>,\n"
-    prompt += "  \"height\": <integer>\n"
-    prompt += "}\n"
+    prompt += f"{layout_template_str}\n"
     prompt += "Ensure that all values are integers and the JSON is properly formatted.\n\n"
     prompt += f"{divider}\n"
-    prompt += f"Slide: {str(slide_json)}\n\n"
+    prompt += f"Slide: {json.dumps(slide_json, indent=2)}\n\n"
     prompt += f"{divider}\n"
     prompt += f"Query: {query}\n"
     prompt += "Answer:\n"
