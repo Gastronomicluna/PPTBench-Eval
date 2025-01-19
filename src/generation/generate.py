@@ -1,5 +1,6 @@
 from ..shared.pptx_api.api_executor import api_executor
 
+
 def generate_pptx(
     api_calls: list[str],
     pptx_path: str,
