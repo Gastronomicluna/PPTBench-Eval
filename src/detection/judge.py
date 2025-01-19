@@ -93,9 +93,6 @@ def judge_answer(
     return judge_function[subcategory](ground_truth, answer)
 
 
-
-
-
 def compare_coordinate(
     ground_truth: Dict[str, int],
     answer: Dict[str, int],

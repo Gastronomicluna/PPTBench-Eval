@@ -2,10 +2,10 @@ import csv
 import logging
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Union
-from thefuzz import fuzz
 
 import httpx
 import pandas as pd
+from thefuzz import fuzz
 
 
 def get_image_bytes(image_data: dict | bytes) -> bytes:
@@ -181,6 +181,7 @@ def build_json_path(
         Path: Path to the JSON file.
     """
     return json_dir / f"{file_hash}.json"
+
 
 def fuzzy_match(
     ground_truth: str,
