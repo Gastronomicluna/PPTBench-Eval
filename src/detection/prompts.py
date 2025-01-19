@@ -1,5 +1,5 @@
-from typing import Any, Dict, Literal
 import json
+from typing import Any, Dict, Literal
 
 # JSON templates for examples
 CONTENT_EXTRACTION_EXAMPLE = {
@@ -13,7 +13,7 @@ LAYOUT_TEMPLATE = {
     "left": "<integer>",
     "top": "<integer>",
     "width": "<integer>",
-    "height": "<integer>"
+    "height": "<integer>",
 }
 
 
@@ -59,7 +59,7 @@ def build_prompt_for_content_extraction(
     """
     divider = "#" * 80
     example_json_str = json.dumps(CONTENT_EXTRACTION_EXAMPLE, indent=2)
-    
+
     prompt = "\n"
     prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
@@ -67,7 +67,7 @@ def build_prompt_for_content_extraction(
     prompt += "**Instructions:**\n"
     prompt += "- Extract **only** the requested information based on the query.\n"
     prompt += "- Do **not** include any additional text, explanations, or labels.\n"
-    prompt += "- Provide the response in JSON format with the key \"answer\" and the value being the extracted content.\n\n"
+    prompt += '- Provide the response in JSON format with the key "answer" and the value being the extracted content.\n\n'
     prompt += "**Example:**\n"
     prompt += 'If the query is "title_extraction" and the ground truth is "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021",\n'
     prompt += f"Answer:\n{example_json_str}\n"
@@ -75,7 +75,7 @@ def build_prompt_for_content_extraction(
     prompt += "Slide JSON:\n"
     prompt += json.dumps(slide_json, indent=2) + "\n\n"
     prompt += f"{divider}\n"
-    prompt += "Answer (Please provide a JSON object with the key \"answer\" and the value being the extracted content, without any additional text):\n"
+    prompt += 'Answer (Please provide a JSON object with the key "answer" and the value being the extracted content, without any additional text):\n'
     return prompt
 
 
@@ -96,7 +96,7 @@ def build_prompt_for_style_detection(
     divider = "#" * 80
     font_example_str = json.dumps(STYLE_FONT_EXAMPLE, indent=2)
     size_example_str = json.dumps(STYLE_SIZE_EXAMPLE, indent=2)
-    
+
     prompt = "\n"
     prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n\n"
@@ -110,7 +110,7 @@ def build_prompt_for_style_detection(
     prompt += f"Slide JSON: {json.dumps(slide_json, indent=2)}\n\n"
     prompt += f"{divider}\n"
     prompt += f"Query: {query}\n"
-    prompt += "Answer (Please provide a JSON object with the key \"answer\" and the value being the answer to the query, without any additional text):\n"
+    prompt += 'Answer (Please provide a JSON object with the key "answer" and the value being the answer to the query, without any additional text):\n'
     return prompt
 
 
@@ -131,13 +131,15 @@ def build_prompt_for_layout_detection(
     """
     divider = "#" * 80
     layout_template_str = json.dumps(LAYOUT_TEMPLATE, indent=2)
-    
+
     prompt = "\n"
     prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}. Only return the requested information in the following JSON format:\n"
     prompt += f"{layout_template_str}\n"
-    prompt += "Ensure that all values are integers and the JSON is properly formatted.\n\n"
+    prompt += (
+        "Ensure that all values are integers and the JSON is properly formatted.\n\n"
+    )
     prompt += f"{divider}\n"
     prompt += f"Slide: {json.dumps(slide_json, indent=2)}\n\n"
     prompt += f"{divider}\n"
