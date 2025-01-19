@@ -5,11 +5,11 @@ from typing import Any, Dict, List, Literal, Optional, Union
 import pandas as pd
 
 from ..shared.utils import build_json_path, csv_to_df, df_to_csv
-from .judge.judge_add_shape import judge_answer_add_shape
-from .judge.judge_change_font import judge_answer_change_font
-from .judge.judge_refinement import judge_answer_refinement
-from .judge.judge_reposition import judge_answer_reposition
-from .judge.judge_resize import judge_answer_resize
+from .judge_lib.judge_add_shape import judge_answer_add_shape
+from .judge_lib.judge_change_font import judge_answer_change_font
+from .judge_lib.judge_refinement import judge_answer_refinement
+from .judge_lib.judge_reposition import judge_answer_reposition
+from .judge_lib.judge_resize import judge_answer_resize
 
 
 def judge_answer_df(

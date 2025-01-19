@@ -100,3 +100,11 @@ def main(
             print(f"Formatted {len(results_df)} entries")
         else:
             logging.warning(f"Results file not found for {model_name}")
+            
+    logging.info("Judging answers...")
+    
+    for _, model_name in models_to_run:
+        results_df = judge_answer_df(
+            csv_path=results_dir / f"{model_name}.csv",
+            overwrite=True,
+        )
