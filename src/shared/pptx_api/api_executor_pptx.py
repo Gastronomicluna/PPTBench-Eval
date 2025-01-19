@@ -32,7 +32,7 @@ def api_executor_pptx(
     Args:
         lines: The API calls to execute
         pptx_path: Optional path to an existing presentation to modify.
-                  If None, creates a new presentation.
+                    If None, creates a new presentation.
         output_path: Optional path to save the modified presentation
 
     Returns:
