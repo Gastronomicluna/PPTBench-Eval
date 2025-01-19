@@ -135,12 +135,12 @@ def set_current_slide(slide_idx: int) -> None:
 
 
 def create_slide(
-    slide_layout: int = 1,
+    slide_layout: int = 6,
 ) -> None:
     """Create a new slide.
 
     Args:
-        slide_layout: The layout of the slide to create.
+        slide_layout: The layout of the slide to create. Layout 6 is the default blank layout.
     """
     global CURRENT_SLIDE, CURRENT_SHAPE, SLIDES, SHAPES, PRESENTATION
     if PRESENTATION is None:

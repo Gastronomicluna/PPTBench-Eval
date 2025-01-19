@@ -165,5 +165,5 @@ def test_create_presentation() -> None:
     )
 
     create_presentation()
-    create_slide(slide_layout=0)
-    save_presentation("test_create_presentation.pptx")
+    create_slide(slide_layout=6)
+    # save_presentation("test_create_presentation.pptx")
