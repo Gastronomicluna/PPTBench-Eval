@@ -2,8 +2,9 @@ import logging
 from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
 from ...shared.utils import fuzzy_match
+from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
+
 
 def judge_answer_add_shape(
     api_calls: List[str],
@@ -91,10 +92,14 @@ def compare_shape(
         return False
 
     # If both have text, compare them
-    if original_text and modified_text and fuzzy_match(
-        ground_truth=original_text,
-        answer=modified_text,
-        threshold=text_threshold,
+    if (
+        original_text
+        and modified_text
+        and fuzzy_match(
+            ground_truth=original_text,
+            answer=modified_text,
+            threshold=text_threshold,
+        )
     ):
         return False
 
