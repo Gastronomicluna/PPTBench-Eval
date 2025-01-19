@@ -1,8 +1,9 @@
 import csv
 import logging
+import os
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Union
-import os
+
 import httpx
 import pandas as pd
 from thefuzz import fuzz
@@ -217,15 +218,18 @@ def download_kaggle_dataset(
         new_dir_name (Optional[str]): Name of the new directory to create.
             Defaults to None.
     """
-    os.system(f"kaggle datasets download -d {dataset_name} -p {destination_dir} --unzip")
-    
+    os.system(
+        f"kaggle datasets download -d {dataset_name} -p {destination_dir} --unzip"
+    )
+
     # Delete metadata file
     metadata_files = ["dataset-metadata.json"]
     for metadata_file in metadata_files:
         metadata_path = Path(destination_dir) / dataset_name / metadata_file
         if metadata_path.exists():
             os.remove(metadata_path)
-    
+
     if new_dir_name:
-        os.system(f"mv {destination_dir}/{dataset_name} {destination_dir}/{new_dir_name}")
-        
+        os.system(
+            f"mv {destination_dir}/{dataset_name} {destination_dir}/{new_dir_name}"
+        )
