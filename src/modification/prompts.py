@@ -59,8 +59,6 @@ def build_prompt_element_modification(
     divider = "#" * 80
     example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
     
-    prompt = "\n"
-    prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
@@ -96,9 +94,7 @@ def build_prompt_refinement(
     """
     divider = "#" * 80
     example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
-    
-    prompt = "\n"
-    prompt += f"{divider}\n"
+
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
@@ -136,8 +132,6 @@ def build_prompt_text_modification(
     divider = "#" * 80
     example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
     
-    prompt = "\n"
-    prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
