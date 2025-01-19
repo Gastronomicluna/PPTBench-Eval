@@ -30,6 +30,7 @@ def build_prompt(
     divider = "#" * 80
     example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
 
+    prompt = ""
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
