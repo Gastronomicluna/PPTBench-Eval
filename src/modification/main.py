@@ -14,6 +14,7 @@ from .format_answers import format_answer_csv
 from .get_answers import get_answer_single_modification
 from .judge import judge_answer_df
 
+
 def main(
     max_workers: int = 4,
     ollama_mode: bool = True,
@@ -36,16 +37,16 @@ def main(
     project_root = get_project_root()
     dataset_name = "tyrionhuu/PPTBench-Modification"
     dataset_path = "data/PPTBench-Modification"
-    
+
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "modification_results"
-    
+
     os.makedirs(results_dir, exist_ok=True)
-    
-    # Test mode 
+
+    # Test mode
     if test_mode:
         df = df[df["task"] == "refinement"]
-        
+
     if ollama_mode:
         models_to_run = [
             (provider, model_name)
@@ -54,11 +55,11 @@ def main(
         ]
     else:
         models_to_run = API_LLM_MODELS
-        
+
     if not models_to_run:
         logging.info("No models to run. Exiting.")
         return
-    
+
     logging.info("Generating answers...")
 
     results: Dict[str, pd.DataFrame] = {}
@@ -80,16 +81,16 @@ def main(
             ): (model_name, provider)
             for provider, model_name in models_to_run
         }
-        
+
         for future in concurrent.futures.as_completed(future_to_model):
             _, model_name = future_to_model[future]
             try:
                 results[model_name] = future.result()
             except Exception as e:
                 logging.error(f"Error processing {model_name}: {str(e)}")
-                
+
     logging.info("Formatting answers...")
-    
+
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name}.csv"
         if csv_path.exists():
@@ -100,29 +101,30 @@ def main(
             print(f"Formatted {len(results_df)} entries")
         else:
             logging.warning(f"Results file not found for {model_name}")
-            
+
     logging.info("Judging answers...")
-    
+
     for _, model_name in models_to_run:
         results_df = judge_answer_df(
             csv_path=results_dir / f"{model_name}.csv",
             overwrite=True,
         )
         print(f"Judged {len(results_df)} entries")
-        
+
     logging.info("Evaluating answers...")
-    
+
     evaluation_results = []
     for _, model_name in models_to_run:
         judged_df = df.read_csv(results_dir / f"{model_name}.csv")
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
-        evaluation_results.append(eval_df)  
-        
+        evaluation_results.append(eval_df)
+
     combined_results = pd.concat(evaluation_results, ignore_index=True)
     combined_results.to_csv(results_dir / "combined_evaluation.csv", index=False)
     logging.info("Pipeline completed successfully.")
-    
+
+
 if __name__ == "__main__":
     main(
         max_workers=4,
