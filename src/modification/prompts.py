@@ -75,6 +75,7 @@ def build_prompt_element_modification(
     prompt += f"Query: {query}\n"
     prompt += f"Shape to Modify: {json.dumps(shape_to_modify, indent=2)}\n"
     prompt += "Answer:\n"
+    
     return prompt
 
 
