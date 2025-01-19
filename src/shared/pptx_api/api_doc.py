@@ -21,6 +21,14 @@ class API(object):
 
 api_list = [
     API(
+        name="create_slide",
+        parameters="",
+        description="Create a new slide.",
+        parameters_description="It does not take any parameters.",
+        notes="This function creates a new slide in the presentation.",
+        example="create_slide()",
+    ),
+    API(
         name="choose_shape",
         parameters="shape_id: int",
         description="Choose a shape to work with.",
