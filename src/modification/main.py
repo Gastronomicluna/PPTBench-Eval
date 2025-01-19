@@ -111,3 +111,14 @@ def main(
         print(f"Judged {len(results_df)} entries")
         
     logging.info("Evaluating answers...")
+    
+    evaluation_results = []
+    for _, model_name in models_to_run:
+        judged_df = df.read_csv(results_dir / f"{model_name}.csv")
+        eval_df = evaluate_answers(judged_df)
+        eval_df["model"] = model_name
+        evaluation_results.append(eval_df)  
+        
+    combined_results = pd.concat(evaluation_results, ignore_index=True)
+    combined_results.to_csv(results_dir / "combined_evaluation.csv", index=False)
+    logging.info("Pipeline completed successfully.")
