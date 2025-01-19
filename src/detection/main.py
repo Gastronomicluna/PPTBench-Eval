@@ -1,7 +1,7 @@
 import concurrent.futures
 import logging
 import os
-
+from typing import Dict
 import pandas as pd
 
 from ..shared.get_answer import get_answers
@@ -80,7 +80,7 @@ def main(
     logging.info("Generating answers...")
 
     # Process models in parallel with error handling
-    results: dict[str, pd.DataFrame] = {}
+    results: Dict[str, pd.DataFrame] = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_model = {
             executor.submit(
