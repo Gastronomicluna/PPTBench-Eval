@@ -31,7 +31,7 @@ def api_executor_pptx(
 
     Args:
         lines: The API calls to execute
-        pptx_path: Optional path to an existing presentation to modify. 
+        pptx_path: Optional path to an existing presentation to modify.
                   If None, creates a new presentation.
         output_path: Optional path to save the modified presentation
 
@@ -105,7 +105,7 @@ def set_presentation(pptx_path: Optional[str] = None) -> None:
     if pptx_path is None:
         create_presentation()
         return
-        
+
     global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
     try:
         PRESENTATION = presentation(pptx_path)
