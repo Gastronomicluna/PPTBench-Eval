@@ -60,7 +60,6 @@ def build_prompt_for_content_extraction(
     divider = "#" * 80
     example_json_str = json.dumps(CONTENT_EXTRACTION_EXAMPLE, indent=2)
 
-    prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n\n"
     prompt += "**Instructions:**\n"
@@ -96,7 +95,6 @@ def build_prompt_for_style_detection(
     font_example_str = json.dumps(STYLE_FONT_EXAMPLE, indent=2)
     size_example_str = json.dumps(STYLE_SIZE_EXAMPLE, indent=2)
 
-    prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n\n"
     prompt += f"{query}. Provide only the requested information in JSON format without any additional text or explanations.\n\n"
     prompt += "Examples:\n"
@@ -130,7 +128,6 @@ def build_prompt_for_layout_detection(
     divider = "#" * 80
     layout_template_str = json.dumps(LAYOUT_TEMPLATE, indent=2)
 
-    prompt += f"{divider}\n"
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}. Only return the requested information in the following JSON format:\n"
     prompt += f"{layout_template_str}\n"
