@@ -47,7 +47,7 @@ def api_executor_json(
                 except Exception as e:
                     errors.append(f"Error executing {line}: {str(e)}")
             else:
-                errors.append(f"API '{line}' not found.")
+                errors.append(f"API '{line}' not found in JSON API list")
         except Exception as e:
             errors.append(f"Error parsing {line}: {str(e)}")
 
