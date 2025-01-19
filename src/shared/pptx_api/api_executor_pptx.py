@@ -31,7 +31,8 @@ def api_executor_pptx(
 
     Args:
         lines: The API calls to execute
-        pptx_path: Optional path to an existing presentation to modify
+        pptx_path: Optional path to an existing presentation to modify. 
+                  If None, creates a new presentation.
         output_path: Optional path to save the modified presentation
 
     Returns:
@@ -39,8 +40,7 @@ def api_executor_pptx(
     """
     global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
 
-    if pptx_path is not None:
-        set_presentation(pptx_path)
+    set_presentation(pptx_path)
 
     errors = []
     for line in lines:
@@ -82,12 +82,30 @@ def save_presentation(pptx_path: str) -> None:
         raise ValueError(f"Failed to save presentation: {str(e)}")
 
 
-def set_presentation(pptx_path: str) -> None:
+def create_presentation() -> None:
+    """Create a new empty presentation."""
+    global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
+    try:
+        PRESENTATION = presentation()
+        SLIDES = PRESENTATION.slides
+        CURRENT_SLIDE = None
+        SHAPES = None
+        CURRENT_SHAPE = None
+        TEXT_DETAILS = {}
+    except Exception as e:
+        raise ValueError(f"Failed to create new presentation: {str(e)}")
+
+
+def set_presentation(pptx_path: Optional[str] = None) -> None:
     """Set the presentation to work with.
 
     Args:
-        pptx_path: The path to the presentation.
+        pptx_path: Optional path to the presentation. If None, creates a new presentation.
     """
+    if pptx_path is None:
+        create_presentation()
+        return
+        
     global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
     try:
         PRESENTATION = presentation(pptx_path)
