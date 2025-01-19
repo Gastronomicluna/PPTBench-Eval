@@ -43,6 +43,13 @@ def main(
 
     os.makedirs(results_dir, exist_ok=True)
 
+    df = load_save_dataset_df(
+        dataset_name=dataset_name,
+        dataset_path=dataset_path,
+        force_download=False,
+        source="huggingface",
+    )
+    
     # Test mode
     if test_mode:
         df = df[df["task"] == "refinement"]
