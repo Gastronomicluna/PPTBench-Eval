@@ -2,12 +2,14 @@ import csv
 import logging
 import os
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Union, List
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import httpx
 import pandas as pd
 from thefuzz import fuzz
+
 from .pptx_api.api_doc import API
+
 
 def get_image_bytes(image_data: dict | bytes) -> bytes:
     """Extract image bytes from dataset row.
@@ -233,6 +235,7 @@ def download_kaggle_dataset(
         os.system(
             f"mv {destination_dir}/{dataset_name} {destination_dir}/{new_dir_name}"
         )
+
 
 def api_to_string(
     api_list: List[API],

@@ -1,8 +1,9 @@
-from typing import Any, Dict, Literal, Optional
 import json
+from typing import Any, Dict, Literal, Optional
 
 from ..shared.pptx_api.api_doc import api_list
 from ..shared.utils import api_to_string
+
 # JSON templates for examples
 MODIFICATION_EXAMPLE = {
     "function1": "choose_slide(0)",
@@ -58,7 +59,7 @@ def build_prompt_element_modification(
     """
     divider = "#" * 80
     example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
-    
+
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
@@ -75,7 +76,7 @@ def build_prompt_element_modification(
     prompt += f"Query: {query}\n"
     prompt += f"Shape to Modify: {json.dumps(shape_to_modify, indent=2)}\n"
     prompt += "Answer:\n"
-    
+
     return prompt
 
 
@@ -132,7 +133,7 @@ def build_prompt_text_modification(
     """
     divider = "#" * 80
     example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
-    
+
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
@@ -150,9 +151,6 @@ def build_prompt_text_modification(
     prompt += f"Shape to Modify: {json.dumps(shape_to_modify, indent=2)}\n"
     prompt += "Answer:\n"
     return prompt
-
-
-
 
 
 def main() -> None:

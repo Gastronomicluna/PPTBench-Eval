@@ -1,5 +1,6 @@
-from typing import Any, Dict
 import json
+from typing import Any, Dict
+
 from ..shared.pptx_api.api_doc import api_list
 from ..shared.utils import api_to_string
 
@@ -10,6 +11,7 @@ GENERATION_EXAMPLE = {
     "function3": "set_width(1000000)",
     "function4": "insert_text('Hello, World!')",
 }
+
 
 def build_prompt(
     query: str,
@@ -27,7 +29,7 @@ def build_prompt(
     """
     divider = "#" * 80
     example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
-    
+
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
