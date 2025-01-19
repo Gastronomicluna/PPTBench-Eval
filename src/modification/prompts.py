@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Literal, Optional
 import json
 
 from ..shared.pptx_api.api_doc import API, api_list
-
+from ..shared.utils import api_to_string
 # JSON templates for examples
 MODIFICATION_EXAMPLE = {
     "function1": "choose_slide(0)",
@@ -151,31 +151,7 @@ def build_prompt_text_modification(
     return prompt
 
 
-def api_to_string(
-    api_list: List[API],
-) -> str:
-    """
-    Convert a list of API objects to a string representation.
 
-    Args:
-        api_list (list): List of API objects.
-
-    Returns:
-        str: String representation of the API list.
-    """
-    api_strings = []
-    for api in api_list:
-        # Format each API with essential information only
-        api_str = (
-            f"{api.name}({api.parameters}) "
-            + f"Description: {api.description} "
-            + f"Notes: {api.notes}"
-        )
-
-        api_strings.append(api_str)
-
-    # Join all API strings with clear separation
-    return "\n".join(api_strings)
 
 
 def main() -> None:
