@@ -2,7 +2,7 @@ import csv
 import logging
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Union
-
+import os
 import httpx
 import pandas as pd
 from thefuzz import fuzz
@@ -200,3 +200,32 @@ def fuzzy_match(
     """
     ratio = fuzz.ratio(ground_truth, answer) / 100
     return ratio >= threshold
+
+
+def download_kaggle_dataset(
+    dataset_name: str,
+    destination_dir: Union[str, Path] = "data",
+    new_dir_name: Optional[str] = None,
+) -> None:
+    """
+    Download a Kaggle dataset to the specified directory.
+
+    Args:
+        dataset_name (str): Name of the Kaggle dataset.
+        destination_dir (Union[str, Path]): Path to the destination directory.
+            Defaults to "data".
+        new_dir_name (Optional[str]): Name of the new directory to create.
+            Defaults to None.
+    """
+    os.system(f"kaggle datasets download -d {dataset_name} -p {destination_dir} --unzip")
+    
+    # Delete metadata file
+    metadata_files = ["dataset-metadata.json"]
+    for metadata_file in metadata_files:
+        metadata_path = Path(destination_dir) / dataset_name / metadata_file
+        if metadata_path.exists():
+            os.remove(metadata_path)
+    
+    if new_dir_name:
+        os.system(f"mv {destination_dir}/{dataset_name} {destination_dir}/{new_dir_name}")
+        
