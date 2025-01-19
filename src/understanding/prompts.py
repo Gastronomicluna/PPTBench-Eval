@@ -2,9 +2,8 @@ import json
 from typing import Any, Dict, Union
 
 # JSON templates for examples
-UNDERSTANDING_EXAMPLE = {
-    "answer": "A"
-}
+UNDERSTANDING_EXAMPLE = {"answer": "A"}
+
 
 def build_prompt(
     question: str,
