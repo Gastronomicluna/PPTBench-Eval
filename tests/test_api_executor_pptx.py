@@ -158,7 +158,11 @@ def test_api_executor(sample_presentation: str) -> None:
 
 def test_create_presentation() -> None:
     """Test create_presentation function."""
-    from src.shared.pptx_api.api_executor_pptx import create_presentation, save_presentation, create_slide
+    from src.shared.pptx_api.api_executor_pptx import (
+        create_presentation,
+        create_slide,
+        save_presentation,
+    )
 
     create_presentation()
     create_slide(slide_layout=0)
