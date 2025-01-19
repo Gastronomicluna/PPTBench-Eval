@@ -1,6 +1,10 @@
 import json
 from typing import Any, Dict, Union
 
+# JSON templates for examples
+UNDERSTANDING_EXAMPLE = {
+    "answer": "A"
+}
 
 def build_prompt(
     question: str,
@@ -19,6 +23,7 @@ def build_prompt(
         str: The prompt text.
     """
     divider = "#" * 80
+    example_json_str = json.dumps(UNDERSTANDING_EXAMPLE, indent=2)
 
     # Handle options being either a string or dict
     if isinstance(options, str):
@@ -31,24 +36,23 @@ def build_prompt(
         [f"{key}. {value}" for key, value in options_dict.items()]
     )
 
-    # Construct the prompt with emphasis on returning only the option letter
-    prompt = f"""
-{divider}
-Task: You are provided with a slide from a presentation and a multiple-choice question related to it. Analyze the slide content and select the most appropriate option that answers the question.
-
-{divider}
-Slide Content:
-{slide_json}
-
-{divider}
-Question:
-{question}
-Options:
-{options_formatted}
-
-{divider}
-Answer (Please provide a JSON object with the key "answer" and the value being the letter of the correct option, without any additional text):
-"""
+    prompt = ""
+    prompt += "Task: You are provided with a slide from a presentation and a multiple-choice question related to it. "
+    prompt += "Analyze the slide content and select the most appropriate option that answers the question.\n\n"
+    prompt += "Instructions:\n"
+    prompt += "- Choose the most appropriate answer from the given options.\n"
+    prompt += "- Return only the letter of your choice in JSON format.\n"
+    prompt += "- Do not include any explanations or additional text.\n\n"
+    prompt += "Example:\n"
+    prompt += f"{example_json_str}\n\n"
+    prompt += f"{divider}\n"
+    prompt += "Slide Content:\n"
+    prompt += f"{json.dumps(slide_json, indent=2)}\n\n"
+    prompt += f"{divider}\n"
+    prompt += f"Question:\n{question}\n\n"
+    prompt += f"Options:\n{options_formatted}\n\n"
+    prompt += f"{divider}\n"
+    prompt += 'Answer (Please provide a JSON object with the key "answer" and the value being the letter of the correct option, without any additional text):\n'
 
     return prompt
 
