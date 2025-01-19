@@ -42,29 +42,25 @@ def build_prompt_for_content_extraction(
         str: The prompt text.
     """
     divider = "#" * 80
-    prompt = f"""
-{divider}
-Task: You are given a slide from a presentation in the form of an image and JSON data.
-{query}
-
-**Instructions:**
-- Extract **only** the requested information based on the query.
-- Do **not** include any additional text, explanations, or labels.
-- Provide the response in JSON format with the key "answer" and the value being the extracted content.
-
-**Example:**
-If the query is "title_extraction" and the ground truth is "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021",
-Answer:
-{{
-    "answer": "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021"
-}}
-{divider}
-Slide JSON:
-{slide_json}
-
-{divider}
-Answer (Please provide a JSON object with the key "answer" and the value being the extracted content, without any additional text):
-"""
+    prompt = "\n"
+    prompt += divider + "\n"
+    prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
+    prompt += query + "\n\n"
+    prompt += "**Instructions:**\n"
+    prompt += "- Extract **only** the requested information based on the query.\n"
+    prompt += "- Do **not** include any additional text, explanations, or labels.\n"
+    prompt += "- Provide the response in JSON format with the key \"answer\" and the value being the extracted content.\n\n"
+    prompt += "**Example:**\n"
+    prompt += 'If the query is "title_extraction" and the ground truth is "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021",\n'
+    prompt += "Answer:\n"
+    prompt += "{\n"
+    prompt += '    "answer": "Emergency Clean Water Grant Fund Prop 84, Chapter 2 Public Resources Code Section 75021"\n'
+    prompt += "}\n"
+    prompt += divider + "\n"
+    prompt += "Slide JSON:\n"
+    prompt += str(slide_json) + "\n\n"
+    prompt += divider + "\n"
+    prompt += "Answer (Please provide a JSON object with the key \"answer\" and the value being the extracted content, without any additional text):\n"
     return prompt
 
 
@@ -83,32 +79,26 @@ def build_prompt_for_style_detection(
         str: The prompt text.
     """
     divider = "#" * 80
-    prompt = f"""
-{divider}
-Task: You are given a slide from a presentation in the form of an image and JSON data.
-
-{query}. Provide only the requested information in JSON format without any additional text or explanations.
-
-Examples:
-Query: Identify the dominant font in the slide.
-Answer:
-{{
-    "answer": "Arial"
-}}
-
-Query: Identify the difference of the largest and the smallest font size excluding the notes section.
-Answer:
-{{
-    "answer": 2.0
-}}
-
-{divider}
-Slide JSON: {slide_json}
-
-{divider}
-Query: {query}
-Answer (Please provide a JSON object with the key "answer" and the value being the answer to the query, without any additional text):
-"""
+    prompt = "\n"
+    prompt += divider + "\n"
+    prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n\n"
+    prompt += query + ". Provide only the requested information in JSON format without any additional text or explanations.\n\n"
+    prompt += "Examples:\n"
+    prompt += "Query: Identify the dominant font in the slide.\n"
+    prompt += "Answer:\n"
+    prompt += "{\n"
+    prompt += '    "answer": "Arial"\n'
+    prompt += "}\n\n"
+    prompt += "Query: Identify the difference of the largest and the smallest font size excluding the notes section.\n"
+    prompt += "Answer:\n"
+    prompt += "{\n"
+    prompt += '    "answer": 2.0\n'
+    prompt += "}\n\n"
+    prompt += divider + "\n"
+    prompt += "Slide JSON: " + str(slide_json) + "\n\n"
+    prompt += divider + "\n"
+    prompt += "Query: " + query + "\n"
+    prompt += "Answer (Please provide a JSON object with the key \"answer\" and the value being the answer to the query, without any additional text):\n"
     return prompt
 
 
@@ -128,25 +118,22 @@ def build_prompt_for_layout_detection(
         str: The prompt text.
     """
     divider = "#" * 80
-    prompt = f"""
-{divider}
-Task: You are given a slide from a presentation in the form of an image and JSON data.
-{query}. Only return the requested information in the following JSON format:
-{{
-    "left": <integer>,
-    "top": <integer>,
-    "width": <integer>,
-    "height": <integer>
-}}
-Ensure that all values are integers and the JSON is properly formatted.
-
-{divider}
-Slide: {slide_json}
-
-{divider}
-Query: {query}
-Answer:
-"""
+    prompt = "\n"
+    prompt += divider + "\n"
+    prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
+    prompt += query + ". Only return the requested information in the following JSON format:\n"
+    prompt += "{\n"
+    prompt += '    "left": <integer>,\n'
+    prompt += '    "top": <integer>,\n'
+    prompt += '    "width": <integer>,\n'
+    prompt += '    "height": <integer>\n'
+    prompt += "}\n"
+    prompt += "Ensure that all values are integers and the JSON is properly formatted.\n\n"
+    prompt += divider + "\n"
+    prompt += "Slide: " + str(slide_json) + "\n\n"
+    prompt += divider + "\n"
+    prompt += "Query: " + query + "\n"
+    prompt += "Answer:\n"
     return prompt
 
 
