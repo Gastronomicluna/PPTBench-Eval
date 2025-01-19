@@ -1,7 +1,7 @@
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, Literal, Optional
 import json
 
-from ..shared.pptx_api.api_doc import API, api_list
+from ..shared.pptx_api.api_doc import api_list
 from ..shared.utils import api_to_string
 # JSON templates for examples
 MODIFICATION_EXAMPLE = {
