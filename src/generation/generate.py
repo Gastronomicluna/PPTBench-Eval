@@ -18,6 +18,7 @@ def generate_pptx(
         mode="pptx",
     )
 
+
 def build_pptx_path(
     base_dir: str,
     task: str,
