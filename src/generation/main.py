@@ -128,7 +128,7 @@ def main(
             print(f"Generated PPTX files for {model_name}")
         else:
             logging.warning(f"Results file not found for {model_name}")
-                
+
     logging.info("Judging answers...")
     pass
     logging.info("Evaluating answers...")
