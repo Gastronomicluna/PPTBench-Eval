@@ -26,6 +26,7 @@ pillow = "^11.1.0"
 matplotlib = "^3.10.0"
 python-pptx = "^1.0.2"
 pdf2image = "^1.17.0"
+kaggle = "^1.6.17"
 
 
 [[tool.poetry.source]]
