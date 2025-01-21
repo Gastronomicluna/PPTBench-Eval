@@ -2,7 +2,11 @@ import json
 from typing import Any, Dict, List, Literal
 
 from ..shared.pptx_api.api_doc import api_list
-from ..shared.utils import api_to_string, get_notes_from_json_data, get_texts_from_json_data
+from ..shared.utils import (
+    api_to_string,
+    get_notes_from_json_data,
+    get_texts_from_json_data,
+)
 
 # JSON templates for examples
 GENERATION_EXAMPLE = {
