@@ -4,8 +4,8 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 
-from ..shared.format_answer_csv import format_answer_csv_shared
-from ..shared.parse_answer import parse_json_answer
+from .format_answer_csv import format_answer_csv_shared
+from .parse_answer import parse_json_answer
 
 
 def format_answer_csv(
