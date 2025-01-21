@@ -48,6 +48,10 @@ def build_prompt(
         return build_prompt_for_multimedia_to_slide(
             query=query, content_images=content_images, texts=texts
         )
+    if task == "screenshot_to_slide":
+        return build_prompt_for_screenshot_to_slide(
+            query=query, content_images=content_images
+        )
     pass
 
 
