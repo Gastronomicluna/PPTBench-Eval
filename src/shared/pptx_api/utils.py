@@ -6,6 +6,22 @@ from pptx.slide import Slide
 from .api_doc import api_list
 
 
+def pptx_to_png(
+    pptx_path: str,
+    output_dir: str,
+    dpi: int = 300,
+    remove_pdf: bool = True,
+) -> None:
+    """
+    Convert a PowerPoint file to PNG images.
+
+    Args:
+        pptx_path (str): The path to the PowerPoint file.
+        output_dir (str): The directory to save the PNG images.
+        dpi (int, optional): The DPI of the PNG images. Defaults to 300.
+        remove_pdf (bool, optional): Whether to remove the PDF file after conversion. Defaults to True.
+    """
+    
 def get_slide_ids(
     presentation: Presentation,
 ) -> List[int]:
