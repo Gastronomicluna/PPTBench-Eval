@@ -1,8 +1,8 @@
 import json
-from typing import Any, Dict, Literal
+from typing import Any, Dict, Literal, List
 
 from ..shared.pptx_api.api_doc import api_list
-from ..shared.utils import api_to_string
+from ..shared.utils import api_to_string, get_notes_from_json_data
 
 # JSON templates for examples
 GENERATION_EXAMPLE = {
@@ -46,6 +46,47 @@ def build_prompt(
     prompt += "Slide JSON:\n"
     prompt += f"{json.dumps(slide_json, indent=2)}\n\n"
     prompt += f"{divider}\n"
+    prompt += f"Query: {query}\n"
+    prompt += "Answer:\n"
+
+    return prompt
+
+
+def build_prompt_for_note_to_slide(
+    query: str,
+    slide_json: Dict[str, Any],
+    content_images: List[str] = [],
+) -> str:
+    """
+    Build the prompt for the given query for the note_to_slide task.
+
+    Args:
+        query (str): The query to build the prompt for.
+        slide_json (Dict[str, Any]): The JSON data for the slide.
+
+    Returns:
+        str: The prompt for the query.
+    """
+    divider = "#" * 80
+    example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
+    notes = get_notes_from_json_data(slide_json)
+    prompt = ""
+    prompt += f"{query}\n"
+    prompt += "To achieve this task, you can use the following functions:\n"
+    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += "Instructions:\n"
+    prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
+    prompt += "- Abide by JSON formatting rules.\n\n"
+    prompt += "Examples:\n"
+    prompt += f"{example_json_str}\n\n"
+    prompt += f"{divider}\n"
+    prompt += "Notes:\n"
+    prompt += f"{notes}\n\n"
+    prompt += f"{divider}\n"
+    if content_images != []:
+        prompt += "The images given are materials you can use, and their paths are "
+        prompt += f"{content_images}"
+        prompt += "\n"
     prompt += f"Query: {query}\n"
     prompt += "Answer:\n"
 
