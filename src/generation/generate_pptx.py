@@ -1,6 +1,9 @@
+import pandas as pd
+
 from ..shared.pptx_api.api_executor import api_executor
 from ..shared.utils import pptx_to_pdf
-import pandas as pd
+
+
 def generate_pptx_files(
     df: pd.DataFrame,
     base_dir: str,

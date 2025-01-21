@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import logging
 import os
 import subprocess
@@ -11,7 +12,8 @@ from pdf2image import convert_from_path
 from thefuzz import fuzz
 
 from .pptx_api.api_doc import API
-import hashlib
+
+
 def generate_hash(
     *args: Any,
 ) -> str:
@@ -27,6 +29,7 @@ def generate_hash(
     # Convert all arguments to strings and join with a separator
     text = "_".join(str(arg) for arg in args)
     return hashlib.md5(text.encode()).hexdigest()
+
 
 def get_texts_from_json_data(
     json_data: Dict[str, Any],
