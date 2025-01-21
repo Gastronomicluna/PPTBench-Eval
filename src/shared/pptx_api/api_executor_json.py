@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from typing import Any, Dict, List, Literal, Optional, Union
+from pathlib import Path
 
 from .utils import api_in_list
 
@@ -13,8 +14,8 @@ JSON_CURRENT_SHAPE: Optional[Dict[str, Any]] = None
 
 def api_executor_json(
     lines: List[str],
-    json_path: Optional[str] = None,
-    output_path: Optional[str] = None,
+    json_path: Optional[Union[str, Path]] = None,
+    output_path: Optional[Union[str, Path]] = None,
     json: Optional[Dict[str, Any]] = None,
 ) -> Optional[Dict[str, Any]]:
     """Execute the API calls for JSON mode.
@@ -33,7 +34,7 @@ def api_executor_json(
     if json is not None:
         set_json(json)
     elif json_path is not None:
-        set_json(json_path)
+        set_json(str(json_path))
 
     errors = []
     for line in lines:
@@ -53,7 +54,7 @@ def api_executor_json(
 
     if output_path is not None:
         try:
-            save_json(output_path)
+            save_json(str(output_path))
         except ValueError as ve:
             errors.append(f"Error saving JSON: {str(ve)}")
         except Exception as e:

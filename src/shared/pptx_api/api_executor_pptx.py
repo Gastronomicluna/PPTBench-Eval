@@ -1,6 +1,7 @@
 import logging
 import os
 from typing import Any, Dict, List, Literal, Optional, Union
+from pathlib import Path
 
 from pptx import Presentation as presentation
 from pptx.dml.color import RGBColor
@@ -24,8 +25,8 @@ TEXT_DETAILS: Dict[str, Any] = {}
 
 def api_executor_pptx(
     lines: List[str],
-    pptx_path: Optional[str] = None,
-    output_path: Optional[str] = None,
+    pptx_path: Optional[Union[str, Path]] = None,
+    output_path: Optional[Union[str, Path]] = None,
 ) -> Optional[Dict[str, Any]]:
     """Execute the API calls.
 
@@ -40,7 +41,10 @@ def api_executor_pptx(
     """
     global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
 
-    set_presentation(pptx_path)
+    # Convert paths to strings
+    pptx_path_str = str(pptx_path) if pptx_path is not None else None
+
+    set_presentation(pptx_path_str)
 
     errors = []
     for line in lines:
@@ -60,7 +64,7 @@ def api_executor_pptx(
 
     if output_path is not None:
         try:
-            save_presentation(output_path)
+            save_presentation(str(output_path))
         except ValueError as ve:
             errors.append(f"Error saving presentation: {str(ve)}")
         except Exception as e:
