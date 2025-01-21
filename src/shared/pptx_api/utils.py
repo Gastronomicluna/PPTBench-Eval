@@ -37,6 +37,16 @@ def pptx_to_png(
     subprocess.run(["unoconv", "-f", "pdf", pptx_path], check=True)
     print(f"Created PDF: {pdf_path}")
 
+    # 2. Convert PDF -> Images (one per PDF page) using pdf2image
+    # -----------------------------------------------------------
+    print(f"Converting PDF pages to images at {dpi} DPI...")
+    pages = convert_from_path(pdf_path, dpi=dpi)
+
+    for i, page in enumerate(pages):
+        # Save each page as a PNG (you could choose 'JPEG' if preferred)
+        output_filename = os.path.join(output_dir, f"slide_{i+1}.png")
+        page.save(output_filename, "PNG")
+        print(f"Saved image: {output_filename}")
 def get_slide_ids(
     presentation: Presentation,
 ) -> List[int]:
