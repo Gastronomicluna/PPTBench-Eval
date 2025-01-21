@@ -32,7 +32,7 @@ def format_answer_csv(
             return df
 
     df["answer"] = df.apply(
-        lambda row: format_answer(row["answer"]),
+        lambda row: format_answer(row["llm_answer"]),
         axis=1,
     )
 
