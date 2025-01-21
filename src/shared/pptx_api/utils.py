@@ -1,5 +1,7 @@
 from typing import List
-
+import os
+import subprocess
+from pdf2image import convert_from_path
 from pptx.presentation import Presentation
 from pptx.slide import Slide
 
@@ -21,7 +23,10 @@ def pptx_to_png(
         dpi (int, optional): The DPI of the PNG images. Defaults to 300.
         remove_pdf (bool, optional): Whether to remove the PDF file after conversion. Defaults to True.
     """
-    
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+
+
 def get_slide_ids(
     presentation: Presentation,
 ) -> List[int]:
