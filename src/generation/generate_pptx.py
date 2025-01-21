@@ -3,12 +3,53 @@ import os
 from typing import Optional
 
 import pandas as pd
+from ..shared.utils import csv_to_df, df_to_csv
 
 from ..shared.pptx_api.api_executor import api_executor
 from ..shared.utils import generate_hash, pptx_to_png
-
+from pathlib import Path
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def generate_pptx_files_csv(
+    csv_path: Path,
+    base_dir: str,
+    overwrite: bool = False,
+) -> pd.DataFrame:
+    """
+    Generate PowerPoint files from a CSV file containing API calls.
+
+    Args:
+        csv_path (Path): Path to the CSV file containing API calls.
+        overwrite (bool, optional): Whether to overwrite existing files. Defaults to False.
+
+    Returns:
+        pd.DataFrame: DataFrame with generated PowerPoint and PNG files information.
+    """
+    try:
+        if not csv_path.exists():
+            raise FileNotFoundError(f"CSV file not found: {csv_path}")
+
+        df = csv_to_df(csv_path=csv_path)
+
+        if not overwrite:
+            # Filter out rows that already have generated files
+            df = df[df["pptx_path"].isna() | df["png_path"].isna()]
+            if df.empty:
+                logger.info("No new files to generate")
+                return df
+        
+        result_df = generate_pptx_files_with_png_files(df=df, base_dir=base_dir)
+
+        if df_to_csv(df=result_df, csv_path=csv_path):
+            return result_df
+        else:
+            logger.error("Failed to save the updated CSV file")
+            return pd.DataFrame()
+    except Exception as e:
+        logger.error(f"Error processing CSV file: {str(e)}")
+        return pd.DataFrame()
 
 
 def generate_pptx_files_with_png_files(
