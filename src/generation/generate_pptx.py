@@ -1,5 +1,37 @@
 from ..shared.pptx_api.api_executor import api_executor
 from ..shared.utils import pptx_to_pdf
+import pandas as pd
+def generate_pptx_files(
+    df: pd.DataFrame,
+    base_dir: str,
+) -> pd.DataFrame:
+    """
+    Generate the PowerPoint files based on the DataFrame.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the API calls.
+        base_dir (str): The base directory for the PowerPoint files.
+
+    Returns:
+        pd.DataFrame: The DataFrame with the generated PowerPoint files.
+    """
+    for index, row in df.iterrows():
+        api_calls = row["api_calls"]
+        task = row["task"]
+        hash_str = row["hash"]
+        pptx_path = build_pptx_path(
+            base_dir=base_dir,
+            task=task,
+            hash_str=hash_str,
+        )
+        generate_pptx(
+            api_calls=api_calls,
+            pptx_path=pptx_path,
+        )
+        pdf_path = pptx_to_pdf(pptx_path)
+        df.at[index, "pptx_path"] = pptx_path
+        df.at[index, "pdf_path"] = pdf_path
+    return df
 
 
 def generate_pptx(
