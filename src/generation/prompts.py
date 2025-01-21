@@ -77,7 +77,8 @@ def build_prompt_for_screenshot_to_slide(
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
     if content_images != []:
-        prompt += "The images given are materials you can use, and their paths are "
+        prompt += "The first image is the screenshot you need to convert to a slide.\n"
+        prompt += "The remaining images are materials you can use, and their paths are "
         prompt += f"{content_images}"
         prompt += "\n"
     prompt += f"Query: {query}\n"
