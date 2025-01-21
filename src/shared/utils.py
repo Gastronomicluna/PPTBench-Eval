@@ -318,3 +318,20 @@ def api_to_string(
 
     # Join all API strings with clear separation
     return "\n".join(api_strings)
+
+
+def get_notes_from_json_data(
+    json_data: Dict[str, Any]
+) -> str:
+    """Extract notes from a slide's JSON data.
+
+    Args:
+        json_data (Dict[str, Any]): A dictionary containing slide data,
+            expected to have a 'slide' key containing slide information.
+
+    Returns:
+        str: The notes text from the slide data. Empty string if no notes found.
+    """
+    slide = json_data.get("slide", {})
+    notes = slide.get("notes", {})
+    note = notes["text"]
