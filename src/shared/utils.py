@@ -264,7 +264,7 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
 
 def build_json_path(
     file_hash: str,
-    json_dir: Path = Path("data/json"),
+    json_dir: Path = Path("dataset/json"),
 ) -> Path:
     """
     Build the JSON path for the given file hash.

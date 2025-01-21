@@ -134,9 +134,7 @@ def main():
     from ..shared.utils import download_kaggle_dataset
 
     download_kaggle_dataset(
-        dataset_name="tyrionhuu/PPTBench-JSON",
-        destination_dir="dataset",
-        new_dir_name="json",
+        dataset_name="tyrionhuu/PPTBench-JSON", destination_dir="dataset/json"
     )
     # csv_path = Path("data/modification_results.csv")
     # format_answer_csv(csv_path, overwrite=True)
