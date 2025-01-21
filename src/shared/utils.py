@@ -313,29 +313,36 @@ def download_kaggle_dataset(
             Defaults to "data".
         new_dir_name (Optional[str]): Name of the new directory to create.
             Defaults to None.
+        delete_metadata (bool): Whether to delete metadata files. 
+            Defaults to True.
     """
     destination_dir = Path(destination_dir).resolve()
     os.makedirs(destination_dir, exist_ok=True)
     
+    # Download and unzip dataset
     os.system(
         f"kaggle datasets download -d {dataset_name} -p {destination_dir} --unzip"
     )
 
-    # Delete metadata file
+    # Delete metadata file if requested
     if delete_metadata:
         metadata_files = ["dataset-metadata.json"]
         for metadata_file in metadata_files:
-            metadata_path = destination_dir / dataset_name / metadata_file
+            metadata_path = destination_dir / metadata_file
             if metadata_path.exists():
                 os.remove(metadata_path)
-                
-    new_dir_path = destination_dir / dataset_name
-    os.makedirs(new_dir_path, exist_ok=True)
-    
+
+    # Rename directory if new_dir_name is provided
     if new_dir_name:
-        os.system(
-            f"mv {destination_dir}/{dataset_name} {destination_dir}/{new_dir_name}"
-        )
+        source_dir = destination_dir / dataset_name.split('/')[-1]
+        target_dir = destination_dir / new_dir_name
+        
+        if target_dir.exists():
+            import shutil
+            shutil.rmtree(target_dir)
+            
+        if source_dir.exists():
+            os.rename(source_dir, target_dir)
 
 
 def api_to_string(
