@@ -2,10 +2,10 @@ import csv
 import hashlib
 import logging
 import os
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
-import shutil
 
 import httpx
 import pandas as pd
@@ -348,7 +348,7 @@ def download_kaggle_dataset(
 
     if target_dir.exists():
         shutil.rmtree(target_dir)
-    
+
     temp_dataset_dir = temp_download_dir / dataset_default_name
     if temp_dataset_dir.exists():
         shutil.move(str(temp_dataset_dir), str(target_dir))
