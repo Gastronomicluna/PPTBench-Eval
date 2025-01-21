@@ -1,7 +1,7 @@
 import logging
 import os
-from typing import Any, Dict, List, Literal, Optional, Union
 from pathlib import Path
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from pptx import Presentation as presentation
 from pptx.dml.color import RGBColor
