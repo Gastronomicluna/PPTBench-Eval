@@ -52,8 +52,46 @@ def build_prompt(
         return build_prompt_for_screenshot_to_slide(
             query=query, content_images=content_images
         )
-    pass
+    if task == "text_to_slide":
+        texts = get_texts_from_json_data(slide_json)
+        return build_prompt_for_text_to_slide(query=query, texts=texts)
+    raise ValueError(f"Invalid task: {task}")
 
+
+def build_prompt_for_text_to_slide(
+    query: str,
+    texts: List[str],
+) -> str:
+    """
+    Build the prompt for the given query for the text_to_slide task.
+
+    Args:
+        query (str): The query to build the prompt for.
+        texts (List[str]): The list of texts.
+
+    Returns:
+        str: The prompt for the query.
+    """
+    divider = "#" * 80
+    example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
+    prompt = ""
+    prompt += f"{query}\n"
+    prompt += "To achieve this task, you can use the following functions:\n"
+    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += "Instructions:\n"
+    prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
+    prompt += "- Abide by JSON formatting rules.\n\n"
+    prompt += "Examples:\n"
+    prompt += f"{example_json_str}\n\n"
+    prompt += f"{divider}\n"
+    prompt += "Texts:\n"
+    for text in texts:
+        prompt += f"{text}\n"
+    prompt += "\n"
+    prompt += f"Query: {query}\n"
+    prompt += "Answer:\n"
+
+    return prompt
 
 def build_prompt_for_screenshot_to_slide(
     query: str,
