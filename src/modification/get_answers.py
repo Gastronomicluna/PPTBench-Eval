@@ -79,6 +79,7 @@ def get_answer_single_modification(
                 "hash": hash_value,
                 "subcategory": subcategory,
                 "task": task,
+                "shape_to_modify": shape_to_modify,
                 "ground_truth": ground_truth,
                 "llm_answer": llm_answer,
             }
@@ -95,6 +96,7 @@ def get_answer_single_modification(
                 "hash": hash_value,
                 "subcategory": subcategory,
                 "task": task,
+                "shape_to_modify": shape_to_modify,
                 "ground_truth": ground_truth,
                 "llm_answer": f"Timeout occurred after {max_attempts} attempts",
             }
@@ -105,6 +107,7 @@ def get_answer_single_modification(
                 "hash": hash_value,
                 "subcategory": subcategory,
                 "task": task,
+                "shape_to_modify": shape_to_modify,
                 "ground_truth": ground_truth,
                 "llm_answer": str(e),
             }
