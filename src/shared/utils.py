@@ -12,16 +12,17 @@ from thefuzz import fuzz
 
 from .pptx_api.api_doc import API
 
+
 def get_texts_from_json_data(
     json_data: Dict[str, Any],
 ) -> List[str]:
     """
     Extract text from a slide's JSON data.
-    
+
     Args:
         json_data (Dict[str, Any]): A dictionary containing slide data,
             expected to have a 'slide' key containing slide information.
-            
+
     Returns:
         List[str]: The text content from the slide data.
     """
@@ -29,6 +30,7 @@ def get_texts_from_json_data(
     shapes = slide.get("shapes", [])
     texts = [shape.get("text", "") for shape in shapes]
     return texts
+
 
 def pptx_to_png(
     pptx_path: str,
