@@ -36,3 +36,20 @@ def build_pptx_path(
         str: The path to the PowerPoint file.
     """
     return f"{base_dir}/{task}/{hash_str}.pptx"
+
+
+def take_screenshot(
+    pptx_path: str,
+    output_path: str,
+) -> None:
+    """
+    Take a screenshot of the PowerPoint file.
+
+    Args:
+        pptx_path (str): The path to the PowerPoint file.
+        output_path (str): The path to save the screenshot.
+    """
+    api_executor(
+        lines=[f"take_screenshot('{pptx_path}', '{output_path}')"],
+        mode="pptx",
+    )
