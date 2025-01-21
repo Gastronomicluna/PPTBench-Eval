@@ -4,6 +4,7 @@ from typing import Any, Dict, List
 import pandas as pd
 
 from .parse_answer import parse_json_answer
+from .utils import csv_to_df, df_to_csv
 
 
 def format_answer_csv(
@@ -22,7 +23,7 @@ def format_answer_csv(
     Returns:
         pd.DataFrame: DataFrame with formatted answers.
     """
-    df = pd.read_csv(csv_path)
+    df = csv_to_df(csv_path)
     if df.empty:
         raise ValueError("The CSV file is empty.")
 
@@ -36,8 +37,10 @@ def format_answer_csv(
         axis=1,
     )
 
-    df.to_csv(csv_path, index=False)
-    return df
+    if df_to_csv(df, csv_path):
+        return df
+    else:
+        raise ValueError("Failed to save the formatted answers.")
 
 
 def format_answer(
@@ -95,7 +98,7 @@ def main() -> None:
     answers = df["llm_answer"]
     for answer in answers:
         try:
-            parsed_answer = parse_json_answer(answer)
+            parsed_answer = format_answer(answer)
             print(parsed_answer)
         except Exception as e:
             print(f"Error parsing answer: {str(e)}")
