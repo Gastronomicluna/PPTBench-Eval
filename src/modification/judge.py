@@ -87,7 +87,7 @@ def judge_answer(
     """
     json_path = build_json_path(
         file_hash=file_hash,
-        json_dir=Path("data/json"),
+        json_dir=Path("dataset/json"),  # Changed from data/json to dataset/json
     )
 
     presentation_json = json.load(open(json_path, "r"))

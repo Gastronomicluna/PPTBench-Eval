@@ -5,6 +5,7 @@ import os
 import subprocess
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
+import shutil
 
 import httpx
 import pandas as pd
@@ -264,7 +265,7 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
 
 def build_json_path(
     file_hash: str,
-    json_dir: Path = Path("dataset/json"),
+    json_dir: Path = Path("dataset/json"),  # Changed from data/json to dataset/json
 ) -> Path:
     """
     Build the JSON path for the given file hash.
@@ -322,41 +323,44 @@ def download_kaggle_dataset(
     destination_dir = Path(destination_dir).resolve()
     os.makedirs(destination_dir, exist_ok=True)
 
-    target_dir = destination_dir / dataset_name.split("/")[-1]
-    # Check if directory already exists
-    if new_dir_name is not None:
-        target_dir = destination_dir / new_dir_name
-        print(f"Downloading dataset to {target_dir}")
-        
+    # Determine the target directory
+    dataset_default_name = dataset_name.split("/")[-1]
+    target_dir = destination_dir / (new_dir_name or dataset_default_name)
+
     if target_dir.exists() and not force_download:
         print(f"Directory {target_dir} already exists, skipping download")
         return
 
-    # Download and unzip dataset
+    # Create temporary download directory
+    temp_download_dir = destination_dir / "temp_download"
+    os.makedirs(temp_download_dir, exist_ok=True)
+
+    # Download to temporary directory
     os.system(
-        f"kaggle datasets download -d {dataset_name} -p {destination_dir} --unzip"
+        f"kaggle datasets download -d {dataset_name} -p {temp_download_dir} --unzip"
     )
 
     # Delete metadata file if requested
     if delete_metadata:
-        metadata_files = ["dataset-metadata.json"]
-        for metadata_file in metadata_files:
-            metadata_path = destination_dir / metadata_file
-            if metadata_path.exists():
-                os.remove(metadata_path)
+        metadata_file = temp_download_dir / "dataset-metadata.json"
+        if metadata_file.exists():
+            os.remove(metadata_file)
 
-    # Rename directory if new_dir_name is provided
-    if new_dir_name:
-        source_dir = destination_dir / dataset_name.split("/")[-1]
-        target_dir = destination_dir / new_dir_name
+    if target_dir.exists():
+        shutil.rmtree(target_dir)
+    
+    temp_dataset_dir = temp_download_dir / dataset_default_name
+    if temp_dataset_dir.exists():
+        shutil.move(str(temp_dataset_dir), str(target_dir))
+    else:
+        # If dataset was extracted directly into temp_download_dir
+        os.makedirs(target_dir, exist_ok=True)
+        for item in temp_download_dir.iterdir():
+            if item.name != "dataset-metadata.json":
+                shutil.move(str(item), str(target_dir / item.name))
 
-        if target_dir.exists():
-            import shutil
-
-            shutil.rmtree(target_dir)
-
-        if source_dir.exists():
-            os.rename(source_dir, target_dir)
+    # Clean up temporary directory
+    shutil.rmtree(temp_download_dir)
 
 
 def api_to_string(
