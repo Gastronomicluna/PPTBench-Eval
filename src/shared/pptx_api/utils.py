@@ -53,6 +53,9 @@ def pptx_to_png(
     if remove_pdf and os.path.exists(pdf_path):
         os.remove(pdf_path)
         print(f"Removed intermediate PDF: {pdf_path}")
+        
+    print("Conversion complete!")
+
 def get_slide_ids(
     presentation: Presentation,
 ) -> List[int]:
