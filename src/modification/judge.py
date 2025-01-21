@@ -141,7 +141,7 @@ def main():
     )
 
     csv_path = Path("data/modification_results.csv")
-    # format_answer_csv(csv_path, overwrite=True)
+    format_answer_csv(csv_path, overwrite=True)
     # judge_answer_df(csv_path, overwrite=True)
 
 
