@@ -325,7 +325,7 @@ def download_kaggle_dataset(
     # Check if directory already exists
     target_name = new_dir_name or dataset_name.split("/")[-1]
     target_dir = destination_dir / target_name
-    
+
     if target_dir.exists() and not force_download:
         print(f"Directory {target_dir} already exists, skipping download")
         return
@@ -335,7 +335,7 @@ def download_kaggle_dataset(
         f"kaggle datasets download -d {dataset_name} -p {destination_dir} --unzip"
     )
 
-    # Delete metadata file if requested 
+    # Delete metadata file if requested
     if delete_metadata:
         metadata_files = ["dataset-metadata.json"]
         for metadata_file in metadata_files:
@@ -350,8 +350,9 @@ def download_kaggle_dataset(
 
         if target_dir.exists():
             import shutil
+
             shutil.rmtree(target_dir)
-            
+
         if source_dir.exists():
             os.rename(source_dir, target_dir)
 
