@@ -50,6 +50,40 @@ def build_prompt(
         )
     pass
 
+def build_prompt_for_screenshot_to_slide(
+    query: str,
+    content_images: List[str] = [],
+) -> str:
+    """
+    Build the prompt for the given query for the screenshot_to_slide task.
+    
+    Args:
+        query (str): The query to build the prompt for.
+        content_images (List[str], optional): The list of content images. Defaults to [].
+        
+    Returns:
+        str: The prompt for the query.
+    """
+    divider = "#" * 80
+    example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
+    prompt = ""
+    prompt += f"{query}\n"
+    prompt += "To achieve this task, you can use the following functions:\n"
+    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += "Instructions:\n"
+    prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
+    prompt += "- Abide by JSON formatting rules.\n\n"
+    prompt += "Examples:\n"
+    prompt += f"{example_json_str}\n\n"
+    prompt += f"{divider}\n"
+    if content_images != []:
+        prompt += "The images given are materials you can use, and their paths are "
+        prompt += f"{content_images}"
+        prompt += "\n"
+    prompt += f"Query: {query}\n"
+    prompt += "Answer:\n"
+
+    return prompt
 
 def build_prompt_for_multimedia_to_slide(
     query: str,
