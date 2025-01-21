@@ -26,6 +26,11 @@ def pptx_to_png(
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
 
+    # Create presentation-specific directory
+    pptx_name = os.path.splitext(os.path.basename(pptx_path))[0]
+    ppt_output_dir = os.path.join(output_dir, pptx_name)
+    os.makedirs(ppt_output_dir, exist_ok=True)
+
     # 1. Convert PPTX -> PDF using unoconv
     # -------------------------------------------------
     # By default, unoconv will create a PDF with the same base filename
@@ -44,7 +49,7 @@ def pptx_to_png(
 
     for i, page in enumerate(pages):
         # Save each page as a PNG (you could choose 'JPEG' if preferred)
-        output_filename = os.path.join(output_dir, f"slide_{i+1}.png")
+        output_filename = os.path.join(ppt_output_dir, f"slide_{i+1}.png")
         page.save(output_filename, "PNG")
         print(f"Saved image: {output_filename}")
         
