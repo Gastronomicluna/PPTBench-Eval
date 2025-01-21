@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Literal
 
 from ..shared.pptx_api.api_doc import api_list
 from ..shared.utils import api_to_string
@@ -15,6 +15,7 @@ GENERATION_EXAMPLE = {
 
 def build_prompt(
     query: str,
+    task: Literal["note_to_slide", "multimedia_to_slide", "screenshot_to_slide", "text_to_slide"],
     slide_json: Dict[str, Any],
 ) -> str:
     """
@@ -27,6 +28,7 @@ def build_prompt(
     Returns:
         str: The prompt for the query.
     """
+    pass
     divider = "#" * 80
     example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
 
