@@ -130,8 +130,9 @@ def judge_answer(
 
 
 def main():
-    from ..shared.format_answers_api import format_answer_api
-    csv_path = "data/modification_results.csv"
+    from ..shared.format_answers_api import format_answer_csv
+    csv_path = Path("data/modification_results.csv")
+    format_answer_csv(csv_path, overwrite=True)
     judge_answer_df(csv_path, overwrite=True)
 
 
