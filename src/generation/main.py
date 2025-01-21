@@ -10,8 +10,8 @@ from ..shared.get_answer import get_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import download_kaggle_dataset, get_project_root, process_model
-
 from .get_answers import get_answer_single_generation
+
 
 def main(
     max_workers: int = 4,
@@ -35,10 +35,10 @@ def main(
     project_root = get_project_root()
     dataset_name = "tyrionhuu/PPTBench-Generation"
     dataset_path = "data/PPTBench-Generation"
-    
+
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "generation_results"
-    
+
     os.makedirs(results_dir, exist_ok=True)
 
     logging.info("Loading dataset...")
@@ -55,7 +55,7 @@ def main(
     #     dataset_path="data",
     #     new_dir_name="images",
     # )
-    
+
     # Test mode
     if test_mode:
         df = df[df["task"] == "text_to_slide"]
@@ -68,13 +68,13 @@ def main(
         ]
     else:
         models_to_run = API_LLM_MODELS
-        
+
     if not models_to_run:
         logging.info("No models to run. Exiting.")
         return
 
     logging.info("Generating answers...")
-    
+
     results: Dict[str, pd.DataFrame] = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_model = {
@@ -94,7 +94,7 @@ def main(
             ): (model_name, provider)
             for provider, model_name in models_to_run
         }
-        
+
         for future in concurrent.futures.as_completed(future_to_model):
             _, model_name = future_to_model[future]
             try:
@@ -103,7 +103,7 @@ def main(
                 logging.error(f"Error processing {model_name}: {str(e)}")
 
     logging.info("Formatting answers...")
-    
+
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name}.csv"
         if csv_path.exists():
@@ -114,12 +114,13 @@ def main(
             print(f"Formatted {len(results_df)} entries")
         else:
             logging.warning(f"Results file not found for {model_name}")
-            
+
     logging.info("Judging answers...")
     pass
     logging.info("Evaluating answers...")
     pass
     logging.info("Pipeline completed successfully.")
+
 
 if __name__ == "__main__":
     main(
