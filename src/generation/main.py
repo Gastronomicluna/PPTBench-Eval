@@ -10,8 +10,9 @@ from ..shared.get_answer import get_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import download_kaggle_dataset, get_project_root, process_model
-from .get_answers import get_answer_single_generation
 from .generate_pptx import generate_pptx_files_with_png_files
+from .get_answers import get_answer_single_generation
+
 
 def main(
     max_workers: int = 4,
@@ -114,10 +115,9 @@ def main(
             print(f"Formatted {len(results_df)} entries")
         else:
             logging.warning(f"Results file not found for {model_name}")
-    
+
     logging.info("Generating PPTX files...")
-    
-    
+
     logging.info("Judging answers...")
     pass
     logging.info("Evaluating answers...")
