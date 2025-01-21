@@ -10,7 +10,7 @@ from ..shared.get_answer import get_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import download_kaggle_dataset, get_project_root, process_model
-from .generate_pptx import generate_pptx_files_with_png_files
+from .generate_pptx import generate_pptx_files_csv
 from .get_answers import get_answer_single_generation
 
 
@@ -36,10 +36,10 @@ def main(
     project_root = get_project_root()
     dataset_name = "tyrionhuu/PPTBench-Generation"
     dataset_path = "data/PPTBench-Generation"
-
+    dataset_base_dir = "datasets"
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "generation_results"
-
+    base_dir = project_root / dataset_base_dir / "pptx"
     os.makedirs(results_dir, exist_ok=True)
 
     logging.info("Loading dataset...")
@@ -117,7 +117,18 @@ def main(
             logging.warning(f"Results file not found for {model_name}")
 
     logging.info("Generating PPTX files...")
-
+    for _, model_name in models_to_run:
+        csv_path = results_dir / f"{model_name}.csv"
+        if csv_path.exists():
+            generate_pptx_files_csv(
+                csv_path=csv_path,
+                base_dir=base_dir,
+                overwrite=True,
+            )
+            print(f"Generated PPTX files for {model_name}")
+        else:
+            logging.warning(f"Results file not found for {model_name}")
+                
     logging.info("Judging answers...")
     pass
     logging.info("Evaluating answers...")
