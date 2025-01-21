@@ -10,6 +10,7 @@ from ..shared.utils import generate_hash, pptx_to_png
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def generate_pptx_files_with_png_files(
     df: pd.DataFrame,
     base_dir: str,
@@ -30,29 +31,30 @@ def generate_pptx_files_with_png_files(
             task = row["task"]
             hash = row["hash"]
             hash_str = generate_hash(api_calls, task, hash)
-            
+
             pptx_path = build_pptx_path(base_dir=base_dir, hash_str=hash_str)
             png_path = build_png_path(base_dir=base_dir, hash_str=hash_str)
-            
+
             os.makedirs(os.path.dirname(pptx_path), exist_ok=True)
             os.makedirs(os.path.dirname(png_path), exist_ok=True)
-            
+
             if not generate_pptx(api_calls=api_calls, pptx_path=pptx_path):
                 logger.error(f"Failed to generate PPTX for index {index}")
                 continue
-                
+
             if not pptx_to_png(pptx_path=pptx_path, png_path=png_path):
                 logger.error(f"Failed to convert PPTX to PNG for index {index}")
                 continue
-                
+
             df.at[index, "pptx_path"] = pptx_path
             df.at[index, "png_path"] = png_path
-            
+
         except Exception as e:
             logger.error(f"Error processing index {index}: {str(e)}")
             continue
-            
+
     return df
+
 
 def generate_pptx(
     api_calls: list[str],
@@ -79,6 +81,7 @@ def generate_pptx(
         logger.error(f"Error generating PPTX {pptx_path}: {str(e)}")
         return False
 
+
 def build_png_path(
     base_dir: str,
     file_name: str,
@@ -100,6 +103,7 @@ def build_png_path(
     except Exception as e:
         logger.error(f"Error building PNG path: {str(e)}")
         return None
+
 
 def build_pptx_path(
     base_dir: str,
