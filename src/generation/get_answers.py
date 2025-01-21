@@ -9,6 +9,7 @@ from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
 from .prompts import build_prompt
 
+
 def get_answer_single_generation(
     row: pd.Series,
     model_name: str,

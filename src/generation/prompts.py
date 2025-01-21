@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Literal, List
+from typing import Any, Dict, List, Literal
 
 from ..shared.pptx_api.api_doc import api_list
 from ..shared.utils import api_to_string, get_notes_from_json_data
@@ -15,7 +15,9 @@ GENERATION_EXAMPLE = {
 
 def build_prompt(
     query: str,
-    task: Literal["note_to_slide", "multimedia_to_slide", "screenshot_to_slide", "text_to_slide"],
+    task: Literal[
+        "note_to_slide", "multimedia_to_slide", "screenshot_to_slide", "text_to_slide"
+    ],
     slide_json: Dict[str, Any],
     content_images: List[str] = [],
 ) -> str:
@@ -25,17 +27,20 @@ def build_prompt(
     Args:
         query (str): The query to build the prompt for.
         slide_json (Dict[str, Any]): The JSON data for the slide.
-        task (Literal["note_to_slide", "multimedia_to_slide", "screenshot_to_slide", "text_to_slide"]): 
+        task (Literal["note_to_slide", "multimedia_to_slide", "screenshot_to_slide", "text_to_slide"]):
             The task to build the prompt for.
         content_images (List[str], optional): The list of content images. Defaults to
-        
+
     Returns:
         str: The prompt for the query.
     """
     if task == "note_to_slide":
         notes = get_notes_from_json_data(slide_json)
-        return build_prompt_for_note_to_slide(query=query, notes=notes, content_images=content_images)
+        return build_prompt_for_note_to_slide(
+            query=query, notes=notes, content_images=content_images
+        )
     pass
+
 
 def build_prompt_for_multimedia_to_slide(
     query: str,
@@ -44,16 +49,18 @@ def build_prompt_for_multimedia_to_slide(
 ) -> str:
     """
     Build the prompt for the given query for the multimedia_to_slide task.
-    
+
     Args:
         query (str): The query to build the prompt for.
         slide_json (Dict[str, Any]): The JSON data for the slide.
         content_images (List[str], optional): The list of content images. Defaults to [].
-        
+
     Returns:
         str: The prompt for the query.
     """
     pass
+
+
 def build_prompt_for_note_to_slide(
     query: str,
     notes: str,
@@ -66,7 +73,7 @@ def build_prompt_for_note_to_slide(
         query (str): The query to build the prompt for.
         slide_json (Dict[str, Any]): The JSON data for the slide.
         content_images (List[str], optional): The list of content images. Defaults to [].
-        
+
     Returns:
         str: The prompt for the query.
     """
