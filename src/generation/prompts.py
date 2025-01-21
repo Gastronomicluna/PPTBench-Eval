@@ -39,12 +39,16 @@ def build_prompt(
         return build_prompt_for_note_to_slide(
             query=query, notes=notes, content_images=content_images
         )
+    if task == "multimedia_to_slide":
+        texts = []
+        return build_prompt_for_multimedia_to_slide(
+            query=query, content_images=content_images, texts=texts
+        )
     pass
 
 
 def build_prompt_for_multimedia_to_slide(
     query: str,
-    slide_json: Dict[str, Any],
     content_images: List[str] = [],
     texts: List[str] = [],
 ) -> str:
