@@ -314,6 +314,9 @@ def download_kaggle_dataset(
         new_dir_name (Optional[str]): Name of the new directory to create.
             Defaults to None.
     """
+    destination_dir = Path(destination_dir).resolve()
+    os.makedirs(destination_dir, exist_ok=True)
+    
     os.system(
         f"kaggle datasets download -d {dataset_name} -p {destination_dir} --unzip"
     )
@@ -322,7 +325,7 @@ def download_kaggle_dataset(
     if delete_metadata:
         metadata_files = ["dataset-metadata.json"]
         for metadata_file in metadata_files:
-            metadata_path = Path(destination_dir) / dataset_name / metadata_file
+            metadata_path = destination_dir / dataset_name / metadata_file
             if metadata_path.exists():
                 os.remove(metadata_path)
 
