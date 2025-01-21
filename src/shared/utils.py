@@ -302,6 +302,7 @@ def download_kaggle_dataset(
     dataset_name: str,
     destination_dir: Union[str, Path] = "data",
     new_dir_name: Optional[str] = None,
+    delete_metadata: bool = True,
 ) -> None:
     """
     Download a Kaggle dataset to the specified directory.
@@ -318,11 +319,12 @@ def download_kaggle_dataset(
     )
 
     # Delete metadata file
-    metadata_files = ["dataset-metadata.json"]
-    for metadata_file in metadata_files:
-        metadata_path = Path(destination_dir) / dataset_name / metadata_file
-        if metadata_path.exists():
-            os.remove(metadata_path)
+    if delete_metadata:
+        metadata_files = ["dataset-metadata.json"]
+        for metadata_file in metadata_files:
+            metadata_path = Path(destination_dir) / dataset_name / metadata_file
+            if metadata_path.exists():
+                os.remove(metadata_path)
 
     if new_dir_name:
         os.system(
