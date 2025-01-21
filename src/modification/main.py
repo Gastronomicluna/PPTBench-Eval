@@ -43,13 +43,15 @@ def main(
 
     os.makedirs(results_dir, exist_ok=True)
 
-    logging.info("Loading dataset...")
+    logging.info("Loading dataset from Hugging Face...")
     df = load_save_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
         force_download=False,
         source="huggingface",
     )
+    
+    logging.info("Downloading JSON dataset from Kaggle...")
     download_kaggle_dataset(
         dataset_name="PPTBench-JSON",
         dataset_path="data",
