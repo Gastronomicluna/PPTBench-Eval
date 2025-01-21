@@ -328,7 +328,10 @@ def download_kaggle_dataset(
             metadata_path = destination_dir / dataset_name / metadata_file
             if metadata_path.exists():
                 os.remove(metadata_path)
-
+                
+    new_dir_path = destination_dir / dataset_name
+    os.makedirs(new_dir_path, exist_ok=True)
+    
     if new_dir_name:
         os.system(
             f"mv {destination_dir}/{dataset_name} {destination_dir}/{new_dir_name}"
