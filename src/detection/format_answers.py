@@ -4,7 +4,7 @@ from typing import Any, Dict, Literal, Optional, Union
 
 import pandas as pd
 
-from ..shared.format_answer_csv import format_answer_csv_shared
+from ..shared.format_answers_csv import format_answer_csv_shared
 from ..shared.parse_answer import parse_json_answer
 
 
