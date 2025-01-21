@@ -1,5 +1,5 @@
 from ..shared.pptx_api.api_executor import api_executor
-
+from ..shared.utils import pptx_to_pdf
 
 def generate_pptx(
     api_calls: list[str],
