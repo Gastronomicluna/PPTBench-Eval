@@ -93,6 +93,7 @@ def build_prompt_for_text_to_slide(
 
     return prompt
 
+
 def build_prompt_for_screenshot_to_slide(
     query: str,
     content_images: List[str] = [],
