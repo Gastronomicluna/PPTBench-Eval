@@ -48,19 +48,18 @@ def get_answer_single_generation(
             description = row["description"]
             content_images = row["content_images"]
             image_data = row["image"]
-            shape_to_modify = row["shape_to_modify"]
             json_data = row["json_content"]
             ground_truth = row["ground_truth"]
-            
+
             image_bytes = get_image_bytes(image_data) if not pure_text else None
-            
+
             prompt = build_prompt(
                 query=description,
                 task=task,
                 slide_json=json_data,
                 content_images=content_images,
             )
-            
+
             kwargs = {
                 "model_name": model_name,
                 "provider": provider,
@@ -105,7 +104,8 @@ def get_answer_single_generation(
                 "ground_truth": ground_truth,
                 "llm_answer": str(e),
             }
-            
+
+
 def main(
     test: bool = False,
 ) -> None:
@@ -114,22 +114,22 @@ def main(
     from src.shared.load_save_dataset import load_save_dataset_df
 
     from ..shared.get_answer import get_answers
-    
+
     dataset_name = "tyrionhuu/PPTBench-Generation"
     dataset_path = "data/PPTBench-Generation"
     csv_path = "data/" + "generation_results.csv"
-    
+
     df = load_save_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
         force_download=False,
         source="huggingface",
     )
-    
+
     sample_size = 5
     if test:
         df = df.head(sample_size)
-    
+
     results = get_answers(
         get_answer_single=get_answer_single_generation,
         df=df,
@@ -144,6 +144,7 @@ def main(
         pure_text=False,
     )
     print(results)
+
 
 if __name__ == "__main__":
     main(test=True)
