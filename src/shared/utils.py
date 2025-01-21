@@ -322,10 +322,12 @@ def download_kaggle_dataset(
     destination_dir = Path(destination_dir).resolve()
     os.makedirs(destination_dir, exist_ok=True)
 
+    target_dir = destination_dir / dataset_name.split("/")[-1]
     # Check if directory already exists
-    target_name = new_dir_name or dataset_name.split("/")[-1]
-    target_dir = destination_dir / target_name
-
+    if new_dir_name is not None:
+        target_dir = destination_dir / new_dir_name
+        print(f"Downloading dataset to {target_dir}")
+        
     if target_dir.exists() and not force_download:
         print(f"Directory {target_dir} already exists, skipping download")
         return
