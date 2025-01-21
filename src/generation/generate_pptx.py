@@ -1,8 +1,7 @@
 import pandas as pd
 
 from ..shared.pptx_api.api_executor import api_executor
-from ..shared.utils import pptx_to_png, generate_hash
-
+from ..shared.utils import generate_hash, pptx_to_png
 
 
 def generate_pptx_files_with_png_files(
@@ -63,22 +62,23 @@ def generate_pptx(
     )
 
 
-
 def build_png_path(
     base_dir: str,
     file_name: str,
 ) -> str:
     """
     Build the path to the PNG file based on the hash.
-    
+
     Args:
         base_dir (str): The base directory for the PNG file.
         file_name (str): The hash string.
-        
+
     Returns:
         str: The path to the PNG file.
     """
     return f"{base_dir}/png/{file_name}.png"
+
+
 def build_pptx_path(
     base_dir: str,
     file_name: str,
