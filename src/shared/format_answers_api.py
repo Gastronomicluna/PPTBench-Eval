@@ -4,7 +4,6 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-from .format_answers_csv import format_answer_csv_shared
 from .parse_answer import parse_json_answer
 
 
@@ -24,7 +23,22 @@ def format_answer_csv(
     Returns:
         pd.DataFrame: DataFrame with formatted answers.
     """
-    return format_answer_csv_shared(format_answer, csv_path, overwrite)
+    df = pd.read_csv(csv_path)
+    if df.empty:
+        raise ValueError("The CSV file is empty.")
+
+    if "answer" in df.columns and not overwrite:
+        # Check if answer column has any non-null values
+        if not df["answer"].isna().all():
+            return df
+
+    df["answer"] = df.apply(
+        lambda row: format_answer(row["answer"]),
+        axis=1,
+    )
+
+    df.to_csv(csv_path, index=False)
+    return df
 
 
 def format_answer(
