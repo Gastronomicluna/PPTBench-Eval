@@ -1,16 +1,17 @@
 import csv
 import logging
 import os
+import subprocess
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
-import os
-import subprocess
+
 import httpx
 import pandas as pd
-from thefuzz import fuzz
 from pdf2image import convert_from_path
+from thefuzz import fuzz
 
 from .pptx_api.api_doc import API
+
 
 def pptx_to_png(
     pptx_path: str,
@@ -64,6 +65,8 @@ def pptx_to_png(
         print(f"Removed intermediate PDF: {pdf_path}")
 
     print("Conversion complete!")
+
+
 def get_image_bytes(image_data: dict | bytes) -> bytes:
     """Extract image bytes from dataset row.
 

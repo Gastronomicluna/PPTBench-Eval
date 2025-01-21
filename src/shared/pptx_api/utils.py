@@ -1,13 +1,9 @@
-
 from typing import List
 
 from pptx.presentation import Presentation
 from pptx.slide import Slide
 
 from .api_doc import api_list
-
-
-
 
 
 def get_slide_ids(
