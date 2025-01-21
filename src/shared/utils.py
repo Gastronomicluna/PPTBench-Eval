@@ -11,7 +11,22 @@ from pdf2image import convert_from_path
 from thefuzz import fuzz
 
 from .pptx_api.api_doc import API
+import hashlib
+def generate_hash(
+    *args: Any,
+) -> str:
+    """Generate a hash from variable number of arguments.
 
+    Args:
+        *args (Any): Variable number of arguments to be hashed.
+            All arguments will be converted to strings and concatenated.
+
+    Returns:
+        str: MD5 hash of the concatenated string arguments.
+    """
+    # Convert all arguments to strings and join with a separator
+    text = "_".join(str(arg) for arg in args)
+    return hashlib.md5(text.encode()).hexdigest()
 
 def get_texts_from_json_data(
     json_data: Dict[str, Any],
