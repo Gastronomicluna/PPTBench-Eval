@@ -29,7 +29,6 @@ def format_answer_csv(
 
 def format_answer(
     answer: str,
-    subcategory: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Format the extracted functions for the detection tasks.
