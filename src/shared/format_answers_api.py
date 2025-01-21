@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -43,7 +42,7 @@ def format_answer_csv(
 
 def format_answer(
     answer: str,
-) -> Dict[str, Any]:
+) -> List[str]:
     """
     Format the extracted functions for the detection tasks.
 
@@ -51,16 +50,14 @@ def format_answer(
         answer (str): The extracted functions.
 
     Returns:
-        Dict[str, Any]: The formatted answer.
+        List[str]: The formatted list of functions.
     """
     try:
         json_answer = parse_json_answer(answer)
-        # print(json_answer)
         functions = extract_functions_from_json(json_answer)
-        result_json = {"functions": functions}
+        return functions
     except Exception:
-        return {}
-    return json.dumps(result_json)
+        return []
 
 
 def extract_functions_from_json(
