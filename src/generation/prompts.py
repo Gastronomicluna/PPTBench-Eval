@@ -50,17 +50,18 @@ def build_prompt(
         )
     pass
 
+
 def build_prompt_for_screenshot_to_slide(
     query: str,
     content_images: List[str] = [],
 ) -> str:
     """
     Build the prompt for the given query for the screenshot_to_slide task.
-    
+
     Args:
         query (str): The query to build the prompt for.
         content_images (List[str], optional): The list of content images. Defaults to [].
-        
+
     Returns:
         str: The prompt for the query.
     """
@@ -85,6 +86,7 @@ def build_prompt_for_screenshot_to_slide(
     prompt += "Answer:\n"
 
     return prompt
+
 
 def build_prompt_for_multimedia_to_slide(
     query: str,
