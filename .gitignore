@@ -19,7 +19,7 @@ __pycache__/
 
 # Generated files
 data/
-
+dataset/
 
 # Cache
 .mypy_cache/
