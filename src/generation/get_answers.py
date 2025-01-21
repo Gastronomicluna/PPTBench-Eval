@@ -38,4 +38,112 @@ def get_answer_single_generation(
     Returns:
         Dict[str, Any]: Dictionary containing hash, ground_truth, and llm_answer.
     """
-    pass
+    attempts = 0
+    max_attempts = retry if retry is not None else 0
+
+    while attempts <= max_attempts:
+        try:
+            hash_value = row["hash"]
+            task = row["task"]
+            description = row["description"]
+            content_images = row["content_images"]
+            image_data = row["image"]
+            shape_to_modify = row["shape_to_modify"]
+            json_data = row["json_content"]
+            ground_truth = row["ground_truth"]
+            
+            image_bytes = get_image_bytes(image_data) if not pure_text else None
+            
+            prompt = build_prompt(
+                query=description,
+                task=task,
+                slide_json=json_data,
+                content_images=content_images,
+            )
+            
+            kwargs = {
+                "model_name": model_name,
+                "provider": provider,
+                "prompt": prompt,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+                "json": json,
+            }
+            if timeout is not None:
+                kwargs["timeout"] = timeout
+            if not pure_text:
+                kwargs["images"] = image_bytes
+
+            llm_answer = call_vision_model(**kwargs)
+            return {
+                "hash": hash_value,
+                "task": task,
+                "ground_truth": ground_truth,
+                "llm_answer": llm_answer,
+            }
+        except TimeoutError as e:
+            attempts += 1
+            if attempts <= max_attempts:
+                logging.warning(
+                    f"Timeout occurred, attempt {attempts} of {max_attempts}"
+                )
+                time.sleep(1)  # Add a small delay between retries
+                continue
+            logging.error(f"All retry attempts failed: {str(e)}")
+            return {
+                "hash": hash_value,
+                "task": task,
+                "ground_truth": ground_truth,
+                "llm_answer": f"Timeout occurred after {max_attempts} attempts",
+            }
+        except Exception as e:
+            logging.error(f"Error occurred: {str(e)}")
+            logging.error(traceback.format_exc())
+            return {
+                "hash": hash_value,
+                "task": task,
+                "ground_truth": ground_truth,
+                "llm_answer": str(e),
+            }
+            
+def main(
+    test: bool = False,
+) -> None:
+    from pathlib import Path
+
+    from src.shared.load_save_dataset import load_save_dataset_df
+
+    from ..shared.get_answer import get_answers
+    
+    dataset_name = "tyrionhuu/PPTBench-Generation"
+    dataset_path = "data/PPTBench-Generation"
+    csv_path = "data/" + "generation_results.csv"
+    
+    df = load_save_dataset_df(
+        dataset_name=dataset_name,
+        dataset_path=dataset_path,
+        force_download=False,
+        source="huggingface",
+    )
+    
+    sample_size = 5
+    if test:
+        df = df.head(sample_size)
+    
+    results = get_answers(
+        get_answer_single=get_answer_single_generation,
+        df=df,
+        model_name="gpt-4o",
+        provider="api",
+        temperature=0.0,
+        max_tokens=3200,
+        json=True,
+        timeout=60,
+        csv_path=Path(csv_path),
+        overwrite=True,
+        pure_text=False,
+    )
+    print(results)
+
+if __name__ == "__main__":
+    main(test=True)
