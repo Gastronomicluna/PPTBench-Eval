@@ -114,7 +114,9 @@ def main(
             print(f"Formatted {len(results_df)} entries")
         else:
             logging.warning(f"Results file not found for {model_name}")
-
+    
+    logging.info("Generating PPTX files...")
+    pass
     logging.info("Judging answers...")
     pass
     logging.info("Evaluating answers...")
