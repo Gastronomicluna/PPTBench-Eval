@@ -36,5 +36,3 @@ def build_pptx_path(
         str: The path to the PowerPoint file.
     """
     return f"{base_dir}/{task}/{hash_str}.pptx"
-
-

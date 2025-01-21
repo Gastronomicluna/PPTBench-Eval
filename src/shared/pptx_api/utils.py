@@ -1,6 +1,7 @@
-from typing import List
 import os
 import subprocess
+from typing import List
+
 from pdf2image import convert_from_path
 from pptx.presentation import Presentation
 from pptx.slide import Slide
@@ -52,14 +53,15 @@ def pptx_to_png(
         output_filename = os.path.join(ppt_output_dir, f"slide_{i+1}.png")
         page.save(output_filename, "PNG")
         print(f"Saved image: {output_filename}")
-        
+
     # 3. Optionally remove the intermediate PDF
     # -----------------------------------------
     if remove_pdf and os.path.exists(pdf_path):
         os.remove(pdf_path)
         print(f"Removed intermediate PDF: {pdf_path}")
-        
+
     print("Conversion complete!")
+
 
 def get_slide_ids(
     presentation: Presentation,
