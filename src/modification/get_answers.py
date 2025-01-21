@@ -5,7 +5,6 @@ from typing import Any, Dict, Optional
 
 import pandas as pd
 
-from ..shared.get_answer import get_answers
 from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
 from .prompts import build_prompt
@@ -117,6 +116,7 @@ def main(
     from pathlib import Path
 
     from src.shared.load_save_dataset import load_save_dataset_df
+    from ..shared.get_answer import get_answers
 
     dataset_name = "tyrionhuu/PPTBench-Modification"
     dataset_path = "data/PPTBench-Modification"
