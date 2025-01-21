@@ -26,6 +26,16 @@ def pptx_to_png(
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
 
+    # 1. Convert PPTX -> PDF using unoconv
+    # -------------------------------------------------
+    # By default, unoconv will create a PDF with the same base filename
+    # but with a .pdf extension in the same folder as the input PPTX.
+    base_name, _ = os.path.splitext(pptx_path)
+    pdf_path = f"{base_name}.pdf"
+
+    print(f"Converting {pptx_path} to PDF...")
+    subprocess.run(["unoconv", "-f", "pdf", pptx_path], check=True)
+    print(f"Created PDF: {pdf_path}")
 
 def get_slide_ids(
     presentation: Presentation,
