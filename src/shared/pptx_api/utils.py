@@ -47,6 +47,12 @@ def pptx_to_png(
         output_filename = os.path.join(output_dir, f"slide_{i+1}.png")
         page.save(output_filename, "PNG")
         print(f"Saved image: {output_filename}")
+        
+    # 3. Optionally remove the intermediate PDF
+    # -----------------------------------------
+    if remove_pdf and os.path.exists(pdf_path):
+        os.remove(pdf_path)
+        print(f"Removed intermediate PDF: {pdf_path}")
 def get_slide_ids(
     presentation: Presentation,
 ) -> List[int]:
