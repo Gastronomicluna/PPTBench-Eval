@@ -33,13 +33,30 @@ def build_prompt(
         str: The prompt for the query.
     """
     if task == "note_to_slide":
-        return build_prompt_for_note_to_slide(query=query, slide_json=slide_json, content_images=content_images)
+        notes = get_notes_from_json_data(slide_json)
+        return build_prompt_for_note_to_slide(query=query, notes=notes, content_images=content_images)
+    pass
 
-
-
-def build_prompt_for_note_to_slide(
+def build_prompt_for_multimedia_to_slide(
     query: str,
     slide_json: Dict[str, Any],
+    content_images: List[str] = [],
+) -> str:
+    """
+    Build the prompt for the given query for the multimedia_to_slide task.
+    
+    Args:
+        query (str): The query to build the prompt for.
+        slide_json (Dict[str, Any]): The JSON data for the slide.
+        content_images (List[str], optional): The list of content images. Defaults to [].
+        
+    Returns:
+        str: The prompt for the query.
+    """
+    pass
+def build_prompt_for_note_to_slide(
+    query: str,
+    notes: str,
     content_images: List[str] = [],
 ) -> str:
     """
@@ -55,7 +72,6 @@ def build_prompt_for_note_to_slide(
     """
     divider = "#" * 80
     example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
-    notes = get_notes_from_json_data(slide_json)
     prompt = ""
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
