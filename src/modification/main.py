@@ -54,7 +54,7 @@ def main(
     logging.info("Downloading JSON dataset from Kaggle...")
     download_kaggle_dataset(
         dataset_name="PPTBench-JSON",
-        destination_dir="data",
+        destination_dir="dataset",
         new_dir_name="json",
     )
 
