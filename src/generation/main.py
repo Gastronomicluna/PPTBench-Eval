@@ -12,7 +12,6 @@ from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import (  # download_kaggle_dataset,
     get_project_root,
-    handle_rate_limit,
     process_model,
 )
 from .generate_pptx import generate_pptx_files_csv

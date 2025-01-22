@@ -9,7 +9,7 @@ import pandas as pd
 
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
-from ..shared.utils import get_project_root, handle_rate_limit, process_model
+from ..shared.utils import get_project_root, process_model
 from .evaluation import evaluate_answers
 from .format_answers import format_answer_csv
 from .get_answers import get_answers_detection
