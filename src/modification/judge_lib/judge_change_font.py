@@ -67,3 +67,11 @@ def judge_answer_change_font(
     gold_font_name = gold_font.pop()
 
     return gold_font_name == llm_modified_font_name
+
+# def main() -> None:
+#     api_calls = ['choose_slide(258)', 'choose_shape(47)', ""set_font('Arial')""]
+#     for api_call in api_calls:
+#         print(f"API call: {api_call}")
+        
+# if __name__ == "__main__":
+#     main()
