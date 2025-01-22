@@ -40,8 +40,7 @@ def judge_answer_df(
         or "answer" not in answers_df.columns
     ):
         raise ValueError(
-            "The input DataFrame must contain 'subcategory', 'ground_truth', "
-            "and 'answer' columns."
+            "The input DataFrame must contain columns: task, ground_truth, file_hash, shape_to_modify, and answer."
         )
 
     # Process answers
