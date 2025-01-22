@@ -111,7 +111,7 @@ def main(
                 json=True,
                 timeout=60,
                 csv_path=results_dir / f"{model_name}.csv",
-                overwrite=True,
+                overwrite=False,
                 max_retries=3,
                 initial_delay=2.0,
             ): (model_name, provider)
