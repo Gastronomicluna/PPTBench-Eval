@@ -13,6 +13,27 @@ from .judge_lib.judge_resize import judge_answer_resize
 from ..shared.parse_answer import parse_json_answer
 
 
+def parse_api_calls(answer: str) -> List[str]:
+    """
+    Parse api calls from answer string.
+
+    Args:
+        answer (str): Raw answer string containing API calls.
+
+    Returns:
+        List[str]: List of API call strings.
+    """
+    try:
+        # Try parsing as JSON first
+        calls = json.loads(answer)
+        if isinstance(calls, list):
+            return calls
+    except json.JSONDecodeError:
+        pass
+    
+    # If not JSON, split by newline and clean
+    return [call.strip() for call in answer.split('\n') if call.strip()]
+
 def judge_answer_df(
     csv_path: Union[Path, str],
     overwrite: bool = False,
@@ -43,18 +64,25 @@ def judge_answer_df(
         raise ValueError(
             "The input DataFrame must contain columns: task, ground_truth, file_hash, shape_to_modify, and answer."
         )
-    print(answers_df["ground_truth"].iloc[0])
+    # print(answers_df["ground_truth"].iloc[0])
     # Process answers
-    answers_df["is_correct"] = answers_df.apply(
-        lambda row: judge_answer(
-            task=row["task"],
-            api_calls=row["answer"],
-            file_hash=row["file_hash"],
-            ground_truth=json.loads(row["ground_truth"]),
-            shape_to_modify=json.loads(row["shape_to_modify"]),
-        ),
-        axis=1,
-    )
+    def process_row(row: pd.Series) -> bool:
+        try:
+            api_calls = parse_api_calls(row["answer"])
+            print(f"API calls: {api_calls}")
+            return judge_answer(
+                task=row["task"],
+                api_calls=api_calls,
+                file_hash=row["file_hash"],
+                ground_truth=json.loads(row["ground_truth"]),
+                shape_to_modify=json.loads(row["shape_to_modify"]),
+            )
+        except Exception as e:
+            print(f"Error processing row: {e}")
+            print(f"Row data: {row}")
+            return False
+
+    answers_df["is_correct"] = answers_df.apply(process_row, axis=1)
 
     # Save results
     if overwrite:
@@ -89,7 +117,8 @@ def judge_answer(
         file_hash=file_hash,
         json_dir=Path("dataset/json"),  # Changed from data/json to dataset/json
     )
-    print(api_calls)
+    # assert api_calls is List[str]
+    assert isinstance(api_calls, list)
     presentation_json = json.load(open(json_path, "r"))
     if task == "add_shape":
         return judge_answer_add_shape(
