@@ -1,18 +1,21 @@
 import concurrent.futures
 import logging
 import os
+import time
 from datetime import datetime
-from typing import Dict
-
+from typing import Dict, Any, Optional
+import openai
 import pandas as pd
 
 from ..shared.format_answers_api import format_answer_csv
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
-from ..shared.utils import download_kaggle_dataset, get_project_root, process_model
+from ..shared.utils import download_kaggle_dataset, get_project_root, process_model, handle_rate_limit
 from .evaluation import evaluate_answers
 from .get_answers import get_answers_modification
 from .judge import judge_answer_df
+
+
 
 
 def main(
@@ -95,6 +98,7 @@ def main(
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_model = {
             executor.submit(
+                handle_rate_limit,
                 process_model,
                 function=get_answers_modification,
                 df=df,
@@ -106,6 +110,8 @@ def main(
                 timeout=60,
                 csv_path=results_dir / f"{model_name}.csv",
                 overwrite=True,
+                max_retries=3,
+                initial_delay=2.0,
             ): (model_name, provider)
             for provider, model_name in models_to_run
         }
@@ -113,7 +119,11 @@ def main(
         for future in concurrent.futures.as_completed(future_to_model):
             _, model_name = future_to_model[future]
             try:
-                results[model_name] = future.result()
+                result = future.result()
+                if result is not None:
+                    results[model_name] = result
+                else:
+                    logging.error(f"Failed to process {model_name} after retries")
             except Exception as e:
                 logging.error(f"Error processing {model_name}: {str(e)}")
 
