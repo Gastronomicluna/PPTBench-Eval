@@ -10,10 +10,7 @@ import pandas as pd
 from ..shared.format_answers_api import format_answer_csv
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
-from ..shared.utils import (  # download_kaggle_dataset,
-    get_project_root,
-    process_model,
-)
+from ..shared.utils import get_project_root, process_model  # download_kaggle_dataset,
 from .generate_pptx import generate_pptx_files_csv
 from .get_answers import get_answers_generation
 
@@ -108,21 +105,23 @@ def main(
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {}
         for provider, model_name in models_to_run:
-            futures[executor.submit(
-                process_model,
-                function=get_answers_generation,
-                df=df,
-                model_name=model_name,
-                provider=provider,
-                temperature=0.0,
-                max_tokens=2048,
-                json=True,
-                timeout=60,
-                csv_path=results_dir / f"{model_name}.csv",
-                overwrite=True,
-            )] = (provider, model_name)
+            futures[
+                executor.submit(
+                    process_model,
+                    function=get_answers_generation,
+                    df=df,
+                    model_name=model_name,
+                    provider=provider,
+                    temperature=0.0,
+                    max_tokens=2048,
+                    json=True,
+                    timeout=60,
+                    csv_path=results_dir / f"{model_name}.csv",
+                    overwrite=True,
+                )
+            ] = (provider, model_name)
             time.sleep(job_delay)  # Add delay between job submissions
-            
+
         for future in concurrent.futures.as_completed(futures):
             _, model_name = futures[future]
             try:

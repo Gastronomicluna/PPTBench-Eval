@@ -110,21 +110,23 @@ def main(
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {}
         for provider, model_name in models_to_run:
-            futures[executor.submit(
-                process_model,
-                function=get_answers_detection,
-                df=df,
-                model_name=model_name,
-                provider=provider,
-                temperature=0.0,
-                max_tokens=2048,
-                json=True,
-                timeout=60,
-                csv_path=results_dir / f"{model_name}.csv",
-                overwrite=False,
-            )] = (provider, model_name)
+            futures[
+                executor.submit(
+                    process_model,
+                    function=get_answers_detection,
+                    df=df,
+                    model_name=model_name,
+                    provider=provider,
+                    temperature=0.0,
+                    max_tokens=2048,
+                    json=True,
+                    timeout=60,
+                    csv_path=results_dir / f"{model_name}.csv",
+                    overwrite=False,
+                )
+            ] = (provider, model_name)
             time.sleep(job_delay)  # Add delay between job submissions
-            
+
         for future in concurrent.futures.as_completed(futures):
             _, model_name = futures[future]
             try:
