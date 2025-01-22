@@ -13,7 +13,7 @@ from .prompts import build_prompt
 
 
 def get_answers_understanding(
-    row: pd.Series,
+    df: pd.DataFrame,
     model_name: str,
     provider: str,
     temperature: float,
@@ -27,7 +27,7 @@ def get_answers_understanding(
     Get the answer to a single description and return the result.
 
     Args:
-        row (pd.Series): The row containing the description and image data.
+        df (pd.DataFrame): DataFrame containing the descriptions and image data.
         model_name (str): Name of the model to use.
         provider (str): Provider of the model.
         temperature (float): Sampling temperature.
@@ -42,7 +42,7 @@ def get_answers_understanding(
     """
     return get_answers(
         get_answer_single=get_answer_single_understanding,
-        df=row,
+        df=df,
         model_name=model_name,
         provider=provider,
         temperature=temperature,
