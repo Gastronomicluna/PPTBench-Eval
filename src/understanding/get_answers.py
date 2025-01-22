@@ -11,6 +11,7 @@ from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
 from .prompts import build_prompt
 
+
 def get_answers_understanding(
     row: pd.Series,
     model_name: str,
@@ -24,7 +25,7 @@ def get_answers_understanding(
 ) -> pd.DataFrame:
     """
     Get the answer to a single description and return the result.
-    
+
     Args:
         row (pd.Series): The row containing the description and image data.
         model_name (str): Name of the model to use.
@@ -35,7 +36,7 @@ def get_answers_understanding(
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
         pure_text (bool): If True, only use text data without images.
-        
+
     Returns:
         pd.DataFrame: DataFrame containing hash, ground_truth, and llm_answer.
     """
