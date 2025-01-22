@@ -142,7 +142,7 @@ def main(
                 csv_path=csv_path,
                 overwrite=True,
             )
-            print(f"Formatted {len(results_df)} entries")
+            print(f"Formatted {len(results_df)} entries for {model_name}")
         else:
             logging.warning(f"Results file not found for {model_name}")
 
