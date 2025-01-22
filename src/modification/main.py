@@ -1,11 +1,9 @@
 import concurrent.futures
 import logging
 import os
-import time
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Dict
 
-import openai
 import pandas as pd
 
 from ..shared.format_answers_api import format_answer_csv
