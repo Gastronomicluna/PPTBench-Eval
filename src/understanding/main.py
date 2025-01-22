@@ -8,7 +8,7 @@ import pandas as pd
 
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
-from ..shared.utils import get_project_root, process_model
+from ..shared.utils import get_project_root, process_model, handle_rate_limit
 from .get_answers import get_answers_understanding
 
 
@@ -82,6 +82,7 @@ def main(
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_model = {
             executor.submit(
+                handle_rate_limit,
                 process_model,
                 function=get_answers_understanding,
                 df=df,
@@ -93,6 +94,8 @@ def main(
                 timeout=60,
                 csv_path=results_dir / f"{model_name}.csv",
                 overwrite=True,
+                max_retries=3,
+                initial_delay=2.0,
             ): (provider, model_name)
             for provider, model_name in models_to_run
         }
