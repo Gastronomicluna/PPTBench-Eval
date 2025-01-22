@@ -153,7 +153,7 @@ def has_overlap(slide_json: Dict[str, Any]) -> bool:
     Returns:
         bool: True if the slide contains overlapping elements, False otherwise.
     """
-    shapes = slide_json["slide"]["shapes"]
+    shapes = slide_json["shapes"]
     n_shapes = len(shapes)
 
     for i in range(n_shapes):

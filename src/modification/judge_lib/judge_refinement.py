@@ -36,7 +36,7 @@ def judge_answer_refinement(
         slide_id=slide_id,
         presentation=llm_modified_presentation,
     )
-
+    print(llm_modified_slide)
     # Check if the slide has overlapping shapes
     has_overlap_result = has_overlap(llm_modified_slide)
 
