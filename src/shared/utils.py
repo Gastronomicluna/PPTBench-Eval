@@ -11,9 +11,40 @@ import httpx
 import pandas as pd
 from pdf2image import convert_from_path
 from thefuzz import fuzz
-
+import time
+import openai
 from .pptx_api.api_doc import API
+def handle_rate_limit(
+    func: Any,
+    *args: Any,
+    max_retries: int = 3,
+    initial_delay: float = 1.0,
+    **kwargs: Any,
+) -> Optional[Any]:
+    """Handle rate limit errors with exponential backoff.
 
+    Args:
+        func: Function to execute
+        max_retries: Maximum number of retry attempts
+        initial_delay: Initial delay in seconds
+        *args: Positional arguments for the function
+        **kwargs: Keyword arguments for the function
+
+    Returns:
+        Result from the function or None if all retries fail
+    """
+    delay = initial_delay
+    for attempt in range(max_retries):
+        try:
+            return func(*args, **kwargs)
+        except openai.RateLimitError as e:
+            if attempt == max_retries - 1:
+                logging.error(f"Rate limit exceeded after {max_retries} attempts: {e}")
+                return None
+            wait_time = delay * (2 ** attempt)
+            logging.warning(f"Rate limit hit, waiting {wait_time}s before retry...")
+            time.sleep(wait_time)
+    return None
 
 def generate_hash(
     *args: Any,
