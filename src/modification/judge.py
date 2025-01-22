@@ -13,7 +13,6 @@ from .judge_lib.judge_reposition import judge_answer_reposition
 from .judge_lib.judge_resize import judge_answer_resize
 
 
-
 def judge_answer_df(
     csv_path: Union[Path, str],
     overwrite: bool = False,

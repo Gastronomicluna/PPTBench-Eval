@@ -43,6 +43,7 @@ def parse_api_calls(answer: str) -> List[str]:
     # If all else fails, split by newline and clean
     return [call.strip() for call in answer.split("\n") if call.strip()]
 
+
 def parse_json_answer(
     answer: str,
 ) -> Dict[str, Any]:
