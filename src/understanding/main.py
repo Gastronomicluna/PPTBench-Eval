@@ -12,6 +12,7 @@ from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import get_project_root, handle_rate_limit, process_model
 from .get_answers import get_answers_understanding
 from .judge import judge_answer_df
+from .evaluation import evaluate_answers
 
 
 def main(
@@ -134,6 +135,19 @@ def main(
 
     logging.info("Evaluating answers...")
 
+        # Evaluate answers and combine results
+    evaluation_results = []
+    for _, model_name in models_to_run:
+        judged_df = pd.read_csv(results_dir / f"{model_name}.csv")
+        eval_df = evaluate_answers(judged_df)
+        eval_df["model"] = model_name
+        evaluation_results.append(eval_df)
+
+    # Combine all results and save
+    combined_results = pd.concat(evaluation_results, ignore_index=True)
+    combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
+    
+    logging.info("Evaluation complete. Results saved to evaluation_results.csv")
     logging.info("Pipeline completed successfully.")
 
 
