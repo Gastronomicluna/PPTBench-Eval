@@ -42,6 +42,9 @@ def get_answers_detection(
     Returns:
         pd.DataFrame: DataFrame containing hash, ground_truth, and llm_answer.
     """
+    if df.empty:
+        logging.warning("Empty DataFrame provided, returning empty DataFrame")
+        return pd.DataFrame()
     return get_answers(
         get_answer_single=get_answer_single_detection,
         df=df,
