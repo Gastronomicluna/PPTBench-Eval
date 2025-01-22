@@ -108,7 +108,6 @@ def main(
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_model = {
             executor.submit(
-                handle_rate_limit,
                 process_model,
                 function=get_answers_modification,
                 df=df,
