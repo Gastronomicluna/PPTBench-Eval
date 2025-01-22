@@ -62,9 +62,9 @@ def api_executor_json(
             errors.append(error)
 
     if errors:
-        logging.info("Errors occurred during API execution:")
+        logging.warning("Errors occurred during API execution:")
         for error in errors:
-            logging.info(error)
+            logging.warning(error)
 
     return JSON_DATA
 
