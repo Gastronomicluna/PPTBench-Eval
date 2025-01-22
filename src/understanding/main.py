@@ -21,30 +21,22 @@ def main(
     test_mode: bool = False,
     target_task: str = "table understanding",
 ) -> None:
-    """Main entry point for the understanding pipeline.
-
-    Args:
-        max_workers: Maximum number of concurrent workers for parallel processing.
-            Defaults to 4.
-        ollama_mode: Whether to only run OLLAMA models. Defaults to True.
-        test_mode: Whether to run in test mode. Defaults to False.
-        target_task: Which understanding task to run. Defaults to "table understanding".
-
-    Returns:
-        None
-    """
     project_root = get_project_root()
-
-    # Set up logging
+    
+    # Set up logging first thing
     log_dir = project_root / "log"
     os.makedirs(log_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_file = log_dir / f"understanding_{timestamp}.log"
-
+    
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
-        handlers=[logging.FileHandler(log_file), logging.StreamHandler()],
+        handlers=[
+            logging.FileHandler(log_file, mode='w', encoding='utf-8'),
+            logging.StreamHandler()
+        ],
+        force=True
     )
 
     dataset_name = "tyrionhuu/PPTBench-Understanding"

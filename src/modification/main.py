@@ -41,7 +41,7 @@ def main(
     """
     project_root = get_project_root()
 
-    # Set up logging
+    # Set up logging first thing
     log_dir = project_root / "log"
     os.makedirs(log_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -50,7 +50,11 @@ def main(
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
-        handlers=[logging.FileHandler(log_file), logging.StreamHandler()],
+        handlers=[
+            logging.FileHandler(log_file, mode='w', encoding='utf-8'),
+            logging.StreamHandler()
+        ],
+        force=True
     )
 
     dataset_name = "tyrionhuu/PPTBench-Modification"
