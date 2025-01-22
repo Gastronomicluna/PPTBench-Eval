@@ -1,7 +1,7 @@
 import json
 import logging
 from typing import Any, Dict
-
+import traceback
 
 def parse_json_answer(
     answer: str,
@@ -24,6 +24,7 @@ def parse_json_answer(
             parsed_answer = json.loads(decoded_str)
         except (json.JSONDecodeError, UnicodeError) as e:
             logging.error(f"Error parsing JSON answer: {str(e)}")
+            print(traceback.format_exc())
             parsed_answer = {}
 
     return parsed_answer
