@@ -1,8 +1,47 @@
 import json
 import logging
 import traceback
-from typing import Any, Dict
+from typing import Any, Dict, List
 
+
+def parse_api_calls(answer: str) -> List[str]:
+    """
+    Parse api calls from answer string.
+
+    Args:
+        answer (str): Raw answer string containing API calls.
+
+    Returns:
+        List[str]: List of API call strings.
+    """
+    try:
+        # Try parsing as JSON first
+        calls = json.loads(answer)
+        if isinstance(calls, list):
+            # Handle the case where we have a list of strings
+            if all(isinstance(x, str) for x in calls):
+                return calls
+            # Handle the case where we have a string representation of a list
+            if len(calls) == 1 and isinstance(calls[0], str):
+                try:
+                    inner_calls = eval(
+                        calls[0]
+                    )  # Safe here since we know it's a list literal
+                    if isinstance(inner_calls, list):
+                        return inner_calls
+                except:
+                    pass
+    except json.JSONDecodeError:
+        # If not JSON, try evaluating as a Python literal
+        try:
+            calls = eval(answer)  # Safe here since we expect a list literal
+            if isinstance(calls, list):
+                return calls
+        except:
+            pass
+
+    # If all else fails, split by newline and clean
+    return [call.strip() for call in answer.split("\n") if call.strip()]
 
 def parse_json_answer(
     answer: str,
