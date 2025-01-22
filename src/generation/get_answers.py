@@ -2,6 +2,7 @@ import logging
 import time
 import traceback
 from typing import Any, Dict, Optional
+from pathlib import Path
 
 import pandas as pd
 
@@ -20,6 +21,8 @@ def get_answers_generation(
     json: bool,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
+    csv_path: Optional[Path] = None,
+    overwrite: bool = False,
     pure_text: bool = False,
 ) -> pd.DataFrame:
     """
@@ -49,6 +52,8 @@ def get_answers_generation(
         json=json,
         timeout=timeout,
         retry=retry,
+        csv_path=csv_path,
+        overwrite=overwrite,
         pure_text=pure_text,
     )
 
