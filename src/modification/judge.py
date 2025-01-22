@@ -10,6 +10,7 @@ from .judge_lib.judge_change_font import judge_answer_change_font
 from .judge_lib.judge_refinement import judge_answer_refinement
 from .judge_lib.judge_reposition import judge_answer_reposition
 from .judge_lib.judge_resize import judge_answer_resize
+from ..shared.parse_answer import parse_json_answer
 
 
 def judge_answer_df(
@@ -90,7 +91,7 @@ def judge_answer(
     )
 
     presentation_json = json.load(open(json_path, "r"))
-
+    ground_truth = parse_json_answer(ground_truth)
     if task == "add_shape":
         return judge_answer_add_shape(
             api_calls=api_calls,
