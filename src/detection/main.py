@@ -2,6 +2,7 @@ import concurrent.futures
 import logging
 import os
 from typing import Dict
+from datetime import datetime
 
 import pandas as pd
 
@@ -36,6 +37,22 @@ def main(
         None
     """
     project_root = get_project_root()
+    
+    # Set up logging
+    log_dir = project_root / "log"
+    os.makedirs(log_dir, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = log_dir / f"detection_{timestamp}.log"
+    
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ]
+    )
+
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
 
