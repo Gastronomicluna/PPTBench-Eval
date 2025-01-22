@@ -4,6 +4,7 @@ import traceback
 from typing import Any, Dict, Optional
 
 import pandas as pd
+from pathlib import Path
 
 from ..shared.get_answers import get_answers
 from ..shared.llm import call_vision_model
@@ -20,8 +21,9 @@ def get_answers_detection(
     json: bool,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
-    pure_text: bool = False,
-) -> pd.DataFrame:
+    csv_path: Optional[Path] = None,
+    overwrite: bool = False,
+    pure_text: bool = False,) -> pd.DataFrame:
     """
     Get the answer to a single description and return the result.
 
@@ -49,6 +51,8 @@ def get_answers_detection(
         json=json,
         timeout=timeout,
         retry=retry,
+        csv_path=csv_path,
+        overwrite=overwrite,
         pure_text=pure_text,
     )
 
