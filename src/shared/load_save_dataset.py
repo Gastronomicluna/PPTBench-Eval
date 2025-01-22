@@ -1,8 +1,9 @@
 import logging
 from typing import Literal, Optional, Tuple
-from huggingface_hub import HfApi
+
 import pandas as pd
 from datasets import Dataset, load_dataset, load_from_disk
+from huggingface_hub import HfApi
 from modelscope import MsDataset
 from modelscope.utils.constant import DownloadMode
 
@@ -26,7 +27,7 @@ def _check_dataset_version(dataset_name: str, dataset_path: str) -> bool:
         # Get latest commit hash from Hub
         remote_info = api.dataset_info(dataset_name)
         remote_sha = remote_info.sha
-        
+
         # Get local version info (stored in dataset_info.json)
         try:
             dataset = load_from_disk(dataset_path)
@@ -36,7 +37,7 @@ def _check_dataset_version(dataset_name: str, dataset_path: str) -> bool:
             return True
         except:
             return False
-            
+
     except Exception as e:
         logger.warning(f"Failed to check dataset version: {str(e)}")
         return True  # On error, assume local version is OK
