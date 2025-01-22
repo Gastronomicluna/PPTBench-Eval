@@ -1,6 +1,7 @@
 import concurrent.futures
 import logging
 import os
+import time
 from datetime import datetime
 from typing import Dict
 
@@ -20,6 +21,7 @@ def main(
     ollama_mode: bool = True,
     test_mode: bool = False,
     non_magic_mode: bool = False,
+    job_delay: float = 1.0,
 ) -> None:
     """Main entry point for the detection pipeline.
 
@@ -32,6 +34,7 @@ def main(
         ollama_mode: Whether to only run OLLAMA models. Defaults to True.
         test_mode: Whether to run in test mode. Defaults to False.
         non_magic_mode: Whether to run in non-magic mode. Defaults to False.
+        job_delay: Delay between job submissions in seconds. Defaults to 1.0.
 
     Returns:
         None
@@ -105,8 +108,9 @@ def main(
     # Process models in parallel with error handling
     results: Dict[str, pd.DataFrame] = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_model = {
-            executor.submit(
+        futures = {}
+        for provider, model_name in models_to_run:
+            futures[executor.submit(
                 process_model,
                 function=get_answers_detection,
                 df=df,
@@ -118,12 +122,11 @@ def main(
                 timeout=60,
                 csv_path=results_dir / f"{model_name}.csv",
                 overwrite=False,
-            ): (provider, model_name)
-            for provider, model_name in models_to_run
-        }
-
-        for future in concurrent.futures.as_completed(future_to_model):
-            _, model_name = future_to_model[future]
+            )] = (provider, model_name)
+            time.sleep(job_delay)  # Add delay between job submissions
+            
+        for future in concurrent.futures.as_completed(futures):
+            _, model_name = futures[future]
             try:
                 results[model_name] = future.result()
             except Exception as e:
@@ -174,4 +177,5 @@ if __name__ == "__main__":
         max_workers=4,
         ollama_mode=True,
         test_mode=False,
+        job_delay=1.0,
     )

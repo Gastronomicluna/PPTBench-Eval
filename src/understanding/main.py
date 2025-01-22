@@ -1,6 +1,7 @@
 import concurrent.futures
 import logging
 import os
+import time
 from datetime import datetime
 from typing import Dict
 
@@ -20,6 +21,7 @@ def main(
     ollama_mode: bool = True,
     test_mode: bool = False,
     target_task: str = "table understanding",
+    job_delay: float = 1.0,
 ) -> None:
     project_root = get_project_root()
 
@@ -80,8 +82,9 @@ def main(
     results: Dict[str, pd.DataFrame] = {}
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_model = {
-            executor.submit(
+        futures = {}
+        for provider, model_name in models_to_run:
+            futures[executor.submit(
                 process_model,
                 function=get_answers_understanding,
                 df=df,
@@ -93,12 +96,11 @@ def main(
                 timeout=60,
                 csv_path=results_dir / f"{model_name}.csv",
                 overwrite=True,
-            ): (provider, model_name)
-            for provider, model_name in models_to_run
-        }
+            )] = (provider, model_name)
+            time.sleep(job_delay)  # Add delay between job submissions
 
-        for future in concurrent.futures.as_completed(future_to_model):
-            _, model_name = future_to_model[future]
+        for future in concurrent.futures.as_completed(futures):
+            _, model_name = futures[future]
             try:
                 results[model_name] = future.result()
             except Exception as e:
@@ -151,4 +153,5 @@ if __name__ == "__main__":
         ollama_mode=True,
         test_mode=False,
         target_task="table understanding",
+        job_delay=1.0,
     )
