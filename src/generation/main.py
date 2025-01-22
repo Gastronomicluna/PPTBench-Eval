@@ -48,7 +48,7 @@ def main(
     # Configure file handler for all logs
     file_handler = logging.FileHandler(log_file, mode="w", encoding="utf-8")
     file_handler.setLevel(logging.INFO)
-    
+
     # Configure stream handler for errors only
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.ERROR)
