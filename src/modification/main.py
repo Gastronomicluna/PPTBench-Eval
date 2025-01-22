@@ -119,8 +119,6 @@ def main(
                 timeout=60,
                 csv_path=results_dir / f"{model_name}.csv",
                 overwrite=False,
-                max_retries=3,
-                initial_delay=2.0,
             ): (model_name, provider)
             for provider, model_name in models_to_run
         }
