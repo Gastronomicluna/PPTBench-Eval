@@ -4,13 +4,12 @@ import os
 
 import pandas as pd
 
-from ..shared.get_answer import get_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import get_project_root, process_model
 from .evaluation import evaluate_answers
 from .format_answers import format_answer_csv
-from .get_answers import get_answer_single_understanding
+from .get_answers import get_answers_understanding
 from .judge import judge_answer_df
 
 
@@ -84,8 +83,7 @@ def main(
         future_to_model = {
             executor.submit(
                 process_model,
-                function=get_answers,
-                get_answer_single=get_answer_single_understanding,
+                function=get_answers_understanding,
                 df=df,
                 model_name=model_name,
                 provider=provider,
