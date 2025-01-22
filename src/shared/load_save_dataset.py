@@ -1,6 +1,6 @@
 import logging
-from typing import Literal, Optional
-
+from typing import Literal, Optional, Tuple
+from huggingface_hub import HfApi
 import pandas as pd
 from datasets import Dataset, load_dataset, load_from_disk
 from modelscope import MsDataset
@@ -8,6 +8,38 @@ from modelscope.utils.constant import DownloadMode
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def _check_dataset_version(dataset_name: str, dataset_path: str) -> bool:
+    """
+    Check if the locally saved dataset is the newest version.
+
+    Args:
+        dataset_name (str): The name of the dataset on Hugging Face Hub.
+        dataset_path (str): Local path where dataset is saved.
+
+    Returns:
+        bool: True if local version is latest, False if update needed.
+    """
+    try:
+        api = HfApi()
+        # Get latest commit hash from Hub
+        remote_info = api.dataset_info(dataset_name)
+        remote_sha = remote_info.sha
+        
+        # Get local version info (stored in dataset_info.json)
+        try:
+            dataset = load_from_disk(dataset_path)
+            local_info = dataset.info.download_checksums
+            if not local_info or remote_sha not in str(local_info):
+                return False
+            return True
+        except:
+            return False
+            
+    except Exception as e:
+        logger.warning(f"Failed to check dataset version: {str(e)}")
+        return True  # On error, assume local version is OK
 
 
 def load_save_huggingface_dataset(
@@ -25,34 +57,44 @@ def load_save_huggingface_dataset(
     Returns:
         Optional[Dataset]: The loaded dataset if successful, None otherwise.
     """
-    if force_download or dataset_path is None:
+    if dataset_path is None:
         try:
-            logger.info(
-                f"{'Force downloading' if force_download else 'Loading'} dataset {dataset_name}"
-            )
+            logger.info(f"Loading dataset {dataset_name} without saving")
             dataset = load_dataset(dataset_name)
-            if dataset_path:
-                dataset.save_to_disk(dataset_path)
-                logger.info(f"Successfully saved dataset to {dataset_path}")
         except Exception as e:
             logger.error(f"Error downloading dataset {dataset_name}: {str(e)}")
             raise
     else:
         try:
-            logger.info(f"Loading dataset from {dataset_path}")
-            dataset = load_from_disk(dataset_path)
-            logger.info(f"Successfully loaded dataset from {dataset_path}")
-        except FileNotFoundError:
-            try:
-                logger.info(f"Dataset not found. Downloading {dataset_name}")
+            if force_download:
+                logger.info(f"Force downloading dataset {dataset_name}")
                 dataset = load_dataset(dataset_name)
                 dataset.save_to_disk(dataset_path)
-                logger.info(
-                    f"Successfully downloaded and saved dataset to {dataset_path}"
-                )
-            except Exception as e:
-                logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
-                raise
+                logger.info(f"Successfully saved dataset to {dataset_path}")
+            else:
+                try:
+                    # First check if local version exists and is up to date
+                    is_latest = _check_dataset_version(dataset_name, dataset_path)
+                    if is_latest:
+                        logger.info(f"Loading latest version from {dataset_path}")
+                        dataset = load_from_disk(dataset_path)
+                    else:
+                        logger.info(
+                            f"Local dataset outdated or missing. Downloading {dataset_name}"
+                        )
+                        dataset = load_dataset(dataset_name)
+                        dataset.save_to_disk(dataset_path)
+                        logger.info(f"Successfully saved dataset to {dataset_path}")
+                except FileNotFoundError:
+                    logger.info(f"Dataset not found. Downloading {dataset_name}")
+                    dataset = load_dataset(dataset_name)
+                    dataset.save_to_disk(dataset_path)
+                    logger.info(
+                        f"Successfully downloaded and saved dataset to {dataset_path}"
+                    )
+        except Exception as e:
+            logger.error(f"Error handling dataset {dataset_name}: {str(e)}")
+            raise
 
     if dataset is not None:
         try:
