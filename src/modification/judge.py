@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Literal, Optional, Union
 
 import pandas as pd
 
+from ..shared.parse_answer import parse_api_calls
 from ..shared.utils import build_json_path, csv_to_df, df_to_csv
 from .judge_lib.judge_add_shape import judge_answer_add_shape
 from .judge_lib.judge_change_font import judge_answer_change_font
@@ -11,45 +12,6 @@ from .judge_lib.judge_refinement import judge_answer_refinement
 from .judge_lib.judge_reposition import judge_answer_reposition
 from .judge_lib.judge_resize import judge_answer_resize
 
-
-def parse_api_calls(answer: str) -> List[str]:
-    """
-    Parse api calls from answer string.
-
-    Args:
-        answer (str): Raw answer string containing API calls.
-
-    Returns:
-        List[str]: List of API call strings.
-    """
-    try:
-        # Try parsing as JSON first
-        calls = json.loads(answer)
-        if isinstance(calls, list):
-            # Handle the case where we have a list of strings
-            if all(isinstance(x, str) for x in calls):
-                return calls
-            # Handle the case where we have a string representation of a list
-            if len(calls) == 1 and isinstance(calls[0], str):
-                try:
-                    inner_calls = eval(
-                        calls[0]
-                    )  # Safe here since we know it's a list literal
-                    if isinstance(inner_calls, list):
-                        return inner_calls
-                except:
-                    pass
-    except json.JSONDecodeError:
-        # If not JSON, try evaluating as a Python literal
-        try:
-            calls = eval(answer)  # Safe here since we expect a list literal
-            if isinstance(calls, list):
-                return calls
-        except:
-            pass
-
-    # If all else fails, split by newline and clean
-    return [call.strip() for call in answer.split("\n") if call.strip()]
 
 
 def judge_answer_df(
