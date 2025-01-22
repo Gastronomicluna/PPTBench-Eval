@@ -5,12 +5,13 @@ from datetime import datetime
 from typing import Dict
 
 import pandas as pd
+from ..shared.format_answers_csv import format_answer_csv_shared
 
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import get_project_root, handle_rate_limit, process_model
 from .get_answers import get_answers_understanding
-
+from .judge import judge_answer_df
 
 def main(
     max_workers: int = 4,
@@ -107,6 +108,31 @@ def main(
             except Exception as e:
                 logging.error(f"Model {model_name} failed: {str(e)}")
 
+    logging.info("Formatting answers...")
+
+    for _, model_name in models_to_run:
+        csv_path = results_dir / f"{model_name}.csv"
+        if csv_path.exists():
+            results_df = format_answer_csv_shared(
+                csv_path=csv_path,
+                overwrite=True,
+            )
+            print(f"Formatted {len(results_df)} entries")
+        else:
+            logging.warning(f"Results file not found for {model_name}")
+
+    logging.info("Judging answers...")
+    
+    # Judge answers and save to CSV
+    for _, model_name in models_to_run:
+        results_df = judge_answer_df(
+            csv_path=results_dir / f"{model_name}.csv",
+            overwrite=True,
+        )
+        print(f"Judged {len(results_df)} entries")
+
+    logging.info("Evaluating answers...")
+    
     logging.info("Pipeline completed successfully.")
 
 
