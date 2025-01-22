@@ -63,7 +63,7 @@ def main(
     base_dir = project_root / dataset_base_dir / "pptx"
     os.makedirs(results_dir, exist_ok=True)
 
-    logging.info("Loading dataset...")
+    print("Loading dataset...")
     df = load_save_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
@@ -71,7 +71,7 @@ def main(
         source="huggingface",
     )
 
-    logging.info("Downloading Extracted Images from Kaggle...")
+    print("Downloading Extracted Images from Kaggle...")
     # download_kaggle_dataset(
     #     dataset_name="PPTBench-Images",
     #     dataset_path="data",
@@ -92,10 +92,10 @@ def main(
         models_to_run = API_LLM_MODELS
 
     if not models_to_run:
-        logging.info("No models to run. Exiting.")
+        print("No models to run. Exiting.")
         return
 
-    logging.info("Generating answers...")
+    print("Generating answers...")
 
     results: Dict[str, pd.DataFrame] = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -126,7 +126,7 @@ def main(
             except Exception as e:
                 logging.error(f"Error processing {model_name}: {str(e)}")
 
-    logging.info("Formatting answers...")
+    print("Formatting answers...")
 
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name}.csv"
@@ -139,7 +139,7 @@ def main(
         else:
             logging.warning(f"Results file not found for {model_name}")
 
-    logging.info("Generating PPTX files...")
+    print("Generating PPTX files...")
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name}.csv"
         if csv_path.exists():
@@ -152,11 +152,11 @@ def main(
         else:
             logging.warning(f"Results file not found for {model_name}")
 
-    logging.info("Judging answers...")
+    print("Judging answers...")
     pass
-    logging.info("Evaluating answers...")
+    print("Evaluating answers...")
     pass
-    logging.info("Pipeline completed successfully.")
+    print("Pipeline completed successfully.")
 
 
 if __name__ == "__main__":

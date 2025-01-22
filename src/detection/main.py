@@ -92,10 +92,10 @@ def main(
         models_to_run = API_LLM_MODELS
 
     if not models_to_run:
-        logging.error("No models configured to run")
+        print("No models configured to run")
         return
 
-    logging.info("Generating answers...")
+    print("Generating answers...")
 
     # Process models in parallel with error handling
     results: Dict[str, pd.DataFrame] = {}
@@ -127,7 +127,7 @@ def main(
             except Exception as e:
                 logging.error(f"Model {model_name} failed: {str(e)}")
 
-    logging.info("Formatting answers...")
+    print("Formatting answers...")
 
     # Format answers with file existence check
     for _, model_name in models_to_run:
@@ -141,7 +141,7 @@ def main(
         else:
             logging.warning(f"Results file not found for {model_name}")
 
-    logging.info("Judging answers...")
+    print("Judging answers...")
 
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
@@ -151,7 +151,7 @@ def main(
         )
         print(f"Judged {len(results_df)} entries")
 
-    logging.info("Evaluating answers...")
+    print("Evaluating answers...")
 
     # Evaluate answers and combine results
     evaluation_results = []
@@ -164,7 +164,7 @@ def main(
     # Combine all results and save
     combined_results = pd.concat(evaluation_results, ignore_index=True)
     combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
-    logging.info("Evaluation complete. Results saved to evaluation_results.csv")
+    print("Evaluation complete. Results saved to evaluation_results.csv")
 
 
 if __name__ == "__main__":

@@ -44,7 +44,7 @@ def main(
     results_dir = project_root / "data" / "understanding_results"
     os.makedirs(results_dir, exist_ok=True)
 
-    logging.info("Loading dataset...")
+    print("Loading dataset...")
     df = load_save_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
@@ -68,10 +68,10 @@ def main(
         models_to_run = API_LLM_MODELS
 
     if not models_to_run:
-        logging.error("No models configured to run")
+        print("No models configured to run")
         return
 
-    logging.info("Generating answers...")
+    print("Generating answers...")
     results: Dict[str, pd.DataFrame] = {}
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -102,7 +102,7 @@ def main(
             except Exception as e:
                 logging.error(f"Model {model_name} failed: {str(e)}")
 
-    logging.info("Formatting answers...")
+    print("Formatting answers...")
 
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name}.csv"
@@ -115,7 +115,7 @@ def main(
         else:
             logging.warning(f"Results file not found for {model_name}")
 
-    logging.info("Judging answers...")
+    print("Judging answers...")
 
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
@@ -125,7 +125,7 @@ def main(
         )
         print(f"Judged {len(results_df)} entries")
 
-    logging.info("Evaluating answers...")
+    print("Evaluating answers...")
 
     # Evaluate answers and combine results
     evaluation_results = []
@@ -139,8 +139,8 @@ def main(
     combined_results = pd.concat(evaluation_results, ignore_index=True)
     combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
 
-    logging.info("Evaluation complete. Results saved to evaluation_results.csv")
-    logging.info("Pipeline completed successfully.")
+    print("Evaluation complete. Results saved to evaluation_results.csv")
+    print("Pipeline completed successfully.")
 
 
 if __name__ == "__main__":
