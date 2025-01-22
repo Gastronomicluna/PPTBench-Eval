@@ -1,10 +1,10 @@
 import logging
 import time
 import traceback
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 import pandas as pd
-from pathlib import Path
 
 from ..shared.get_answers import get_answers
 from ..shared.llm import call_vision_model
@@ -23,7 +23,8 @@ def get_answers_detection(
     retry: Optional[int] = None,
     csv_path: Optional[Path] = None,
     overwrite: bool = False,
-    pure_text: bool = False,) -> pd.DataFrame:
+    pure_text: bool = False,
+) -> pd.DataFrame:
     """
     Get the answer to a single description and return the result.
 
