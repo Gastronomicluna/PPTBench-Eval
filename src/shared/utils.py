@@ -4,16 +4,19 @@ import logging
 import os
 import shutil
 import subprocess
+import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import httpx
+import openai
 import pandas as pd
 from pdf2image import convert_from_path
 from thefuzz import fuzz
-import time
-import openai
+
 from .pptx_api.api_doc import API
+
+
 def handle_rate_limit(
     func: Any,
     *args: Any,
@@ -41,10 +44,11 @@ def handle_rate_limit(
             if attempt == max_retries - 1:
                 logging.error(f"Rate limit exceeded after {max_retries} attempts: {e}")
                 return None
-            wait_time = delay * (2 ** attempt)
+            wait_time = delay * (2**attempt)
             logging.warning(f"Rate limit hit, waiting {wait_time}s before retry...")
             time.sleep(wait_time)
     return None
+
 
 def generate_hash(
     *args: Any,
