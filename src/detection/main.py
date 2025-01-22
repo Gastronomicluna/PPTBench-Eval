@@ -48,10 +48,10 @@ def main(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
         handlers=[
-            logging.FileHandler(log_file, mode='w', encoding='utf-8'),
-            logging.StreamHandler()
+            logging.FileHandler(log_file, mode="w", encoding="utf-8"),
+            logging.StreamHandler(),
         ],
-        force=True
+        force=True,
     )
 
     dataset_name = "tyrionhuu/PPTBench-Detection"

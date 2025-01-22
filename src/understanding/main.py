@@ -22,21 +22,21 @@ def main(
     target_task: str = "table understanding",
 ) -> None:
     project_root = get_project_root()
-    
+
     # Set up logging first thing
     log_dir = project_root / "log"
     os.makedirs(log_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_file = log_dir / f"understanding_{timestamp}.log"
-    
+
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
         handlers=[
-            logging.FileHandler(log_file, mode='w', encoding='utf-8'),
-            logging.StreamHandler()
+            logging.FileHandler(log_file, mode="w", encoding="utf-8"),
+            logging.StreamHandler(),
         ],
-        force=True
+        force=True,
     )
 
     dataset_name = "tyrionhuu/PPTBench-Understanding"
