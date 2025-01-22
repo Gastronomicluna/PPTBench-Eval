@@ -27,11 +27,27 @@ def parse_api_calls(answer: str) -> List[str]:
         # Try parsing as JSON first
         calls = json.loads(answer)
         if isinstance(calls, list):
-            return calls
+            # Handle the case where we have a list of strings
+            if all(isinstance(x, str) for x in calls):
+                return calls
+            # Handle the case where we have a string representation of a list
+            if len(calls) == 1 and isinstance(calls[0], str):
+                try:
+                    inner_calls = eval(calls[0])  # Safe here since we know it's a list literal
+                    if isinstance(inner_calls, list):
+                        return inner_calls
+                except:
+                    pass
     except json.JSONDecodeError:
-        pass
+        # If not JSON, try evaluating as a Python literal
+        try:
+            calls = eval(answer)  # Safe here since we expect a list literal
+            if isinstance(calls, list):
+                return calls
+        except:
+            pass
     
-    # If not JSON, split by newline and clean
+    # If all else fails, split by newline and clean
     return [call.strip() for call in answer.split('\n') if call.strip()]
 
 def judge_answer_df(
@@ -69,7 +85,7 @@ def judge_answer_df(
     def process_row(row: pd.Series) -> bool:
         try:
             api_calls = parse_api_calls(row["answer"])
-            print(f"API calls: {api_calls}")
+            # print(f"API calls: {api_calls}")
             return judge_answer(
                 task=row["task"],
                 api_calls=api_calls,
