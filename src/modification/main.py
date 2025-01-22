@@ -155,7 +155,7 @@ def main(
 
     evaluation_results = []
     for _, model_name in models_to_run:
-        judged_df = df.read_csv(results_dir / f"{model_name}.csv")
+        judged_df = pd.read_csv(results_dir / f"{model_name}.csv")
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
         evaluation_results.append(eval_df)
