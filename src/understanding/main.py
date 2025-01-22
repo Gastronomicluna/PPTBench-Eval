@@ -21,7 +21,7 @@ def main(
     ollama_mode: bool = True,
     test_mode: bool = False,
     target_task: str = "table understanding",
-    job_delay: float = 1.0,
+    job_delay: float = 0.5,
 ) -> None:
     project_root = get_project_root()
 
@@ -153,5 +153,5 @@ if __name__ == "__main__":
         ollama_mode=True,
         test_mode=False,
         target_task="table understanding",
-        job_delay=1.0,
+        job_delay=0.5,
     )

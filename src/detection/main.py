@@ -21,7 +21,7 @@ def main(
     ollama_mode: bool = True,
     test_mode: bool = False,
     non_magic_mode: bool = False,
-    job_delay: float = 1.0,
+    job_delay: float = 0.5,
 ) -> None:
     """Main entry point for the detection pipeline.
 
@@ -177,5 +177,5 @@ if __name__ == "__main__":
         max_workers=4,
         ollama_mode=True,
         test_mode=False,
-        job_delay=1.0,
+        job_delay=0.5,
     )
