@@ -44,17 +44,19 @@ def api_executor_pptx(
     # Convert paths to strings
     pptx_path_str = str(pptx_path) if pptx_path is not None else None
 
-    set_presentation(pptx_path_str)
-
     errors = []
+    error = set_presentation(pptx_path_str)
+    if error:
+        errors.append(error)
+
     for line in lines:
         try:
             api_name = line.split("(")[0]
             if api_in_list(api_name):
                 try:
-                    exec(line)
-                except ValueError as ve:
-                    errors.append(str(ve))
+                    result = eval(line)
+                    if isinstance(result, str):  # If function returned an error
+                        errors.append(result)
                 except Exception as e:
                     errors.append(f"Error executing {line}: {str(e)}")
             else:
@@ -63,31 +65,37 @@ def api_executor_pptx(
             errors.append(f"Error parsing {line}: {str(e)}")
 
     if output_path is not None:
-        try:
-            save_presentation(str(output_path))
-        except ValueError as ve:
-            errors.append(f"Error saving presentation: {str(ve)}")
-        except Exception as e:
-            errors.append(f"Error saving presentation: {str(e)}")
+        error = save_presentation(str(output_path))
+        if error:
+            errors.append(error)
 
     logging.info(f"Errors: {errors}")
+    return {"errors": errors} if errors else None
 
 
-def save_presentation(pptx_path: str) -> None:
+def save_presentation(pptx_path: str) -> Optional[str]:
     """Save the presentation.
 
     Args:
         pptx_path: The path to save the presentation.
+
+    Returns:
+        Optional error message if saving fails.
     """
     global PRESENTATION
     try:
         PRESENTATION.save(pptx_path)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to save presentation: {str(e)}")
+        return f"Failed to save presentation: {str(e)}"
 
 
-def create_presentation() -> None:
-    """Create a new empty presentation."""
+def create_presentation() -> Optional[str]:
+    """Create a new empty presentation.
+    
+    Returns:
+        Optional error message if creation fails.
+    """
     global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
     try:
         PRESENTATION = presentation()
@@ -96,19 +104,22 @@ def create_presentation() -> None:
         SHAPES = None
         CURRENT_SHAPE = None
         TEXT_DETAILS = {}
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to create new presentation: {str(e)}")
+        return f"Failed to create new presentation: {str(e)}"
 
 
-def set_presentation(pptx_path: Optional[str] = None) -> None:
+def set_presentation(pptx_path: Optional[str] = None) -> Optional[str]:
     """Set the presentation to work with.
 
     Args:
         pptx_path: Optional path to the presentation. If None, creates a new presentation.
+        
+    Returns:
+        Optional error message if operation fails.
     """
     if pptx_path is None:
-        create_presentation()
-        return
+        return create_presentation()
 
     global PRESENTATION, SLIDES, CURRENT_SLIDE, SHAPES, CURRENT_SHAPE, TEXT_DETAILS
     try:
@@ -118,11 +129,12 @@ def set_presentation(pptx_path: Optional[str] = None) -> None:
         SHAPES = None
         CURRENT_SHAPE = None
         TEXT_DETAILS = {}
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to open presentation: {str(e)}")
+        return f"Failed to open presentation: {str(e)}"
 
 
-def set_current_slide(slide_idx: int) -> None:
+def set_current_slide(slide_idx: int) -> Optional[str]:
     """Set the current slide to work with.
 
     Args:
@@ -130,17 +142,18 @@ def set_current_slide(slide_idx: int) -> None:
     """
     global CURRENT_SLIDE, SHAPES, SLIDES
     if SLIDES is None:
-        raise ValueError("Slides list is not initialized")
+        return "Slides list is not initialized"
     try:
         CURRENT_SLIDE = SLIDES[slide_idx]
         SHAPES = CURRENT_SLIDE.shapes
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set current slide: {str(e)}")
+        return f"Failed to set current slide: {str(e)}"
 
 
 def create_slide(
     slide_layout: int = 6,
-) -> None:
+) -> Optional[str]:
     """Create a new slide.
 
     Args:
@@ -148,20 +161,21 @@ def create_slide(
     """
     global CURRENT_SLIDE, CURRENT_SHAPE, SLIDES, SHAPES, PRESENTATION
     if PRESENTATION is None:
-        raise ValueError("Presentation must be initialized before creating slides")
+        return "Presentation must be initialized before creating slides"
     if SLIDES is None:
         SLIDES = PRESENTATION.slides
     try:
         slide = SLIDES.add_slide(PRESENTATION.slide_layouts[slide_layout])
         CURRENT_SLIDE = slide
         CURRENT_SHAPE = None
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to create slide: {str(e)}")
+        return f"Failed to create slide: {str(e)}"
 
 
 def choose_slide(
     slide_id: int,
-) -> None:
+) -> Optional[str]:
     """Choose a slide to work with.
 
     Args:
@@ -169,19 +183,20 @@ def choose_slide(
     """
     global CURRENT_SLIDE, SLIDES
     if SLIDES is None:
-        raise ValueError("No slides list available. Set current presentation first.")
+        return "No slides list available. Set current presentation first."
     try:
         current_slide = next((s for s in SLIDES if s.slide_id == slide_id), None)
         if current_slide is None:
-            raise ValueError(f"Slide with ID {slide_id} not found")
+            return f"Slide with ID {slide_id} not found"
         CURRENT_SLIDE = current_slide
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to choose slide: {str(e)}")
+        return f"Failed to choose slide: {str(e)}"
 
 
 def choose_shape(
     shape_id: int,
-) -> None:
+) -> Optional[str]:
     """Choose a shape to work with.
 
     Args:
@@ -199,17 +214,16 @@ def choose_shape(
                     current_shape = shape
                     break
             if current_shape is None:
-                raise ValueError(
-                    f"Failed to choose shape: Shape with id {shape_id} not found."
-                )
+                return f"Failed to choose shape: Shape with id {shape_id} not found."
             CURRENT_SHAPE = current_shape
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to choose shape: {str(e)}")
+        return f"Failed to choose shape: {str(e)}"
 
 
 def set_width(
     width: int,
-) -> None:
+) -> Optional[str]:
     """Set the width of a shape.
 
     Args:
@@ -217,13 +231,14 @@ def set_width(
     """
     try:
         CURRENT_SHAPE.width = Length(width)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set width of shape: {str(e)}")
+        return f"Failed to set width of shape: {str(e)}"
 
 
 def set_height(
     height: int,
-) -> None:
+) -> Optional[str]:
     """Set the height of a shape.
 
     Args:
@@ -231,13 +246,14 @@ def set_height(
     """
     try:
         CURRENT_SHAPE.height = Length(height)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set height of shape: {str(e)}")
+        return f"Failed to set height of shape: {str(e)}"
 
 
 def set_top(
     top: int,
-) -> None:
+) -> Optional[str]:
     """Set the top of a shape.
 
     Args:
@@ -245,13 +261,14 @@ def set_top(
     """
     try:
         CURRENT_SHAPE.top = Length(top)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set top of shape: {str(e)}")
+        return f"Failed to set top of shape: {str(e)}"
 
 
 def set_left(
     left: int,
-) -> None:
+) -> Optional[str]:
     """Set the left of a shape.
 
     Args:
@@ -259,8 +276,9 @@ def set_left(
     """
     try:
         CURRENT_SHAPE.left = Length(left)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set left of shape: {str(e)}")
+        return f"Failed to set left of shape: {str(e)}"
 
 
 def add_text_box(
@@ -269,7 +287,7 @@ def add_text_box(
     width: int,
     height: int,
     text: Optional[str] = None,
-) -> None:
+) -> Optional[str]:
     """Add a text box to a slide.
 
     Args:
@@ -288,8 +306,9 @@ def add_text_box(
         )
         text_box.text = text
         set_text_details(text_box)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to add text box to slide: {str(e)}")
+        return f"Failed to add text box to slide: {str(e)}"
 
 
 def add_picture(
@@ -298,7 +317,7 @@ def add_picture(
     width: int,
     height: int,
     image_file: Optional[str] = None,
-) -> None:
+) -> Optional[str]:
     """Add a picture to a slide.
 
     Args:
@@ -319,8 +338,9 @@ def add_picture(
             Length(height),
         )
         CURRENT_SHAPE = picture
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to add picture to slide: {str(e)}")
+        return f"Failed to add picture to slide: {str(e)}"
 
 
 def get_text_details(
@@ -368,7 +388,7 @@ def get_text_details(
 
 def set_text_details(
     shape: BaseShape,
-) -> None:
+) -> Optional[str]:
     """Set the text details of a shape.
 
     Args:
@@ -387,13 +407,14 @@ def set_text_details(
                 run.font.name = TEXT_DETAILS["font_name"]
         paragraph.line_spacing = TEXT_DETAILS["line_spacing"]
         paragraph.alignment = TEXT_DETAILS["alignment"]
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set text details of shape: {str(e)}")
+        return f"Failed to set text details of shape: {str(e)}"
 
 
 def insert_text(
     text: str,
-) -> None:
+) -> Optional[str]:
     """Insert text into a shape.
 
     Args:
@@ -405,15 +426,16 @@ def insert_text(
         elif hasattr(CURRENT_SHAPE, "text_frame"):
             CURRENT_SHAPE.text_frame.text += text
         else:
-            raise ValueError("Shape does not have a text attribute")
+            return "Shape does not have a text attribute"
         set_text_details(CURRENT_SHAPE)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to insert text into shape: {str(e)}")
+        return f"Failed to insert text into shape: {str(e)}"
 
 
 def set_font_size(
     font_size: int,
-) -> None:
+) -> Optional[str]:
     """Set the font size of a shape.
 
     Args:
@@ -423,13 +445,14 @@ def set_font_size(
         for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
             for run in paragraph.runs:
                 run.font.size = Pt(font_size)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set font size of shape: {str(e)}")
+        return f"Failed to set font size of shape: {str(e)}"
 
 
 def set_font_style(
     font_style: Literal["bold", "italic"],
-) -> None:
+) -> Optional[str]:
     """Set the font style of a shape.
 
     Args:
@@ -441,13 +464,14 @@ def set_font_style(
                 run.font.bold = font_style == "bold"
                 run.font.italic = font_style == "italic"
                 run.font.underline = font_style == "underline"
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set font style of shape: {str(e)}")
+        return f"Failed to set font style of shape: {str(e)}"
 
 
 def set_font(
     font_name: str,
-) -> None:
+) -> Optional[str]:
     """Set the font of a shape.
 
     Args:
@@ -457,13 +481,14 @@ def set_font(
         for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
             for run in paragraph.runs:
                 run.font.name = font_name
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set font of shape: {str(e)}")
+        return f"Failed to set font of shape: {str(e)}"
 
 
 def set_font_color(
     font_color: str = "000000",
-) -> None:
+) -> Optional[str]:
     """Set the font color of a shape.
 
     Args:
@@ -473,8 +498,9 @@ def set_font_color(
         for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
             for run in paragraph.runs:
                 run.font.color.rgb = RGBColor.from_string(font_color)
+        return None
     except Exception as e:
-        raise ValueError(f"Failed to set font color of shape: {str(e)}")
+        return f"Failed to set font color of shape: {str(e)}"
 
 
 def main() -> None:
