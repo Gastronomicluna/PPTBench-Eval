@@ -179,7 +179,11 @@ def has_overlap(slide_json: Dict[str, Any]) -> bool:
     return False
 
 
-def has_out_of_bounds(slide_json: Dict[str, Any]) -> bool:
+def has_out_of_bounds(
+    slide_json: Dict[str, Any],
+    slide_height: int,
+    slide_width: int,
+) -> bool:
     """
     Check if the slide contains elements that are out of bounds.
 
@@ -189,8 +193,6 @@ def has_out_of_bounds(slide_json: Dict[str, Any]) -> bool:
     Returns:
         bool: True if the slide contains elements that are out of bounds, False otherwise.
     """
-    slide_width = slide_json["slide_width"]
-    slide_height = slide_json["slide_height"]
     shapes = slide_json["slide"]["shapes"]
 
     for shape in shapes:

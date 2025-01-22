@@ -22,7 +22,8 @@ def judge_answer_refinement(
     """
     # Get slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-
+    slide_height = ground_truth["slide_height"]
+    slide_width = ground_truth["slide_width"]
     # Execute the API calls
     llm_modified_presentation = api_executor(
         lines=api_calls, json=presentation_json, mode="json"
@@ -41,6 +42,10 @@ def judge_answer_refinement(
     has_overlap_result = has_overlap(llm_modified_slide)
 
     # Check if the slide has out of bounds shapes
-    has_out_of_bounds_result = has_out_of_bounds(llm_modified_slide)
+    has_out_of_bounds_result = has_out_of_bounds(
+        slide_json=llm_modified_slide,
+        slide_height=slide_height,
+        slide_width=slide_width,
+    )
 
     return not has_overlap_result and not has_out_of_bounds_result
