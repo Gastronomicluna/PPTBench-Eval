@@ -92,7 +92,7 @@ def save_presentation(pptx_path: str) -> Optional[str]:
 
 def create_presentation() -> Optional[str]:
     """Create a new empty presentation.
-    
+
     Returns:
         Optional error message if creation fails.
     """
@@ -114,7 +114,7 @@ def set_presentation(pptx_path: Optional[str] = None) -> Optional[str]:
 
     Args:
         pptx_path: Optional path to the presentation. If None, creates a new presentation.
-        
+
     Returns:
         Optional error message if operation fails.
     """
