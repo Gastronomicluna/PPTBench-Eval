@@ -4,11 +4,12 @@ import traceback
 from typing import Any, Dict, Optional
 
 import pandas as pd
-from ..shared.get_answer import get_answers
 
+from ..shared.get_answer import get_answers
 from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
 from .prompts import build_prompt
+
 
 def get_answers_generation(
     row: pd.Series,
@@ -50,6 +51,7 @@ def get_answers_generation(
         retry=retry,
         pure_text=pure_text,
     )
+
 
 def get_answer_single_generation(
     row: pd.Series,
