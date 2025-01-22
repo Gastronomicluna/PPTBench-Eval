@@ -10,7 +10,6 @@ from .judge_lib.judge_change_font import judge_answer_change_font
 from .judge_lib.judge_refinement import judge_answer_refinement
 from .judge_lib.judge_reposition import judge_answer_reposition
 from .judge_lib.judge_resize import judge_answer_resize
-from ..shared.parse_answer import parse_json_answer
 
 
 def parse_api_calls(answer: str) -> List[str]:
@@ -33,7 +32,9 @@ def parse_api_calls(answer: str) -> List[str]:
             # Handle the case where we have a string representation of a list
             if len(calls) == 1 and isinstance(calls[0], str):
                 try:
-                    inner_calls = eval(calls[0])  # Safe here since we know it's a list literal
+                    inner_calls = eval(
+                        calls[0]
+                    )  # Safe here since we know it's a list literal
                     if isinstance(inner_calls, list):
                         return inner_calls
                 except:
@@ -46,9 +47,10 @@ def parse_api_calls(answer: str) -> List[str]:
                 return calls
         except:
             pass
-    
+
     # If all else fails, split by newline and clean
-    return [call.strip() for call in answer.split('\n') if call.strip()]
+    return [call.strip() for call in answer.split("\n") if call.strip()]
+
 
 def judge_answer_df(
     csv_path: Union[Path, str],
@@ -80,6 +82,7 @@ def judge_answer_df(
         raise ValueError(
             "The input DataFrame must contain columns: task, ground_truth, file_hash, shape_to_modify, and answer."
         )
+
     # print(answers_df["ground_truth"].iloc[0])
     # Process answers
     def process_row(row: pd.Series) -> bool:

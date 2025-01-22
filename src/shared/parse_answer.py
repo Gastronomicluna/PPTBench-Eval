@@ -1,7 +1,8 @@
 import json
 import logging
-from typing import Any, Dict
 import traceback
+from typing import Any, Dict
+
 
 def parse_json_answer(
     answer: str,
