@@ -193,7 +193,7 @@ def has_out_of_bounds(
     Returns:
         bool: True if the slide contains elements that are out of bounds, False otherwise.
     """
-    shapes = slide_json["slide"]["shapes"]
+    shapes = slide_json["shapes"]
 
     for shape in shapes:
         # Check if shape extends beyond slide boundaries
