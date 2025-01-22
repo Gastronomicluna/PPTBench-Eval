@@ -62,11 +62,11 @@ def api_executor_json(
             errors.append(error)
 
     if errors:
-        logging.error("Errors occurred during API execution:")
+        logging.info("Errors occurred during API execution:")
         for error in errors:
-            logging.error(error)
+            logging.info(error)
 
-    return {"errors": errors, "data": JSON_DATA} if errors else {"data": JSON_DATA}
+    return JSON_DATA
 
 
 def save_json(json_path: str) -> Optional[str]:

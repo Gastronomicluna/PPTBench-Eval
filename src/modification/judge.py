@@ -58,8 +58,8 @@ def judge_answer_df(
                 shape_to_modify=json.loads(row["shape_to_modify"]),
             )
         except Exception as e:
-            print(f"Error processing row: {e}")
-            print(f"Row data: {row}")
+            # print(f"Error processing row: {e}")
+            # print(f"Row data: {row}")
             return False
 
     answers_df["is_correct"] = answers_df.apply(process_row, axis=1)
