@@ -73,7 +73,7 @@ def main(
 
     # Test mode
     if test_mode:
-        df = df[df["task"] == "refinement"]
+        df = df[df["subcategory"] == "refinement"]
         df = df.sample(10, random_state=42)
     print(f"Dataset shape: {df.shape}")
     if ollama_mode:
