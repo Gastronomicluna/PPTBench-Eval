@@ -44,6 +44,7 @@ def get_answer_single_modification(
     while attempts <= max_attempts:
         try:
             hash_value = row["hash"]
+            file_hash = row["file_hash"]
             subcategory = row["subcategory"]
             task = row["task"]
             description = row["description"]
@@ -77,6 +78,7 @@ def get_answer_single_modification(
             llm_answer = call_vision_model(**kwargs)
             return {
                 "hash": hash_value,
+                "file_hash": file_hash,
                 "subcategory": subcategory,
                 "task": task,
                 "shape_to_modify": shape_to_modify,
@@ -94,6 +96,7 @@ def get_answer_single_modification(
             logging.error(f"All retry attempts failed: {str(e)}")
             return {
                 "hash": hash_value,
+                "file_hash": file_hash,
                 "subcategory": subcategory,
                 "task": task,
                 "shape_to_modify": shape_to_modify,
@@ -105,6 +108,7 @@ def get_answer_single_modification(
             logging.error(traceback.format_exc())
             return {
                 "hash": hash_value,
+                "file_hash": file_hash,
                 "subcategory": subcategory,
                 "task": task,
                 "shape_to_modify": shape_to_modify,
