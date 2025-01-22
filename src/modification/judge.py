@@ -43,14 +43,15 @@ def judge_answer_df(
         raise ValueError(
             "The input DataFrame must contain columns: task, ground_truth, file_hash, shape_to_modify, and answer."
         )
+    print(answers_df["ground_truth"].iloc[0])
     # Process answers
     answers_df["is_correct"] = answers_df.apply(
         lambda row: judge_answer(
             task=row["task"],
-            api_calls=parse_json_answer(row["answer"]),
+            api_calls=row["answer"],
             file_hash=row["file_hash"],
-            ground_truth=parse_json_answer(row["ground_truth"]),
-            shape_to_modify=parse_json_answer(row["shape_to_modify"]),
+            ground_truth=json.loads(row["ground_truth"]),
+            shape_to_modify=json.loads(row["shape_to_modify"]),
         ),
         axis=1,
     )
@@ -88,7 +89,7 @@ def judge_answer(
         file_hash=file_hash,
         json_dir=Path("dataset/json"),  # Changed from data/json to dataset/json
     )
-
+    print(api_calls)
     presentation_json = json.load(open(json_path, "r"))
     if task == "add_shape":
         return judge_answer_add_shape(
@@ -140,7 +141,7 @@ def main():
 
     csv_path = Path("data/modification_results.csv")
     df = format_answer_csv(csv_path, overwrite=True)
-    print(df.info())
+    # print(df.info())
     judge_answer_df(csv_path, overwrite=True)
 
 
