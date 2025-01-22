@@ -29,16 +29,16 @@ def parse_api_calls(answer: str) -> List[str]:
                     )  # Safe here since we know it's a list literal
                     if isinstance(inner_calls, list):
                         return inner_calls
-                except:
-                    pass
+                except Exception as e:
+                    logging.error(f"Error parsing inner list: {str(e)}")
     except json.JSONDecodeError:
         # If not JSON, try evaluating as a Python literal
         try:
             calls = eval(answer)  # Safe here since we expect a list literal
             if isinstance(calls, list):
                 return calls
-        except:
-            pass
+        except Exception as e:
+            logging.error(f"Error parsing API calls: {str(e)}")
 
     # If all else fails, split by newline and clean
     return [call.strip() for call in answer.split("\n") if call.strip()]
