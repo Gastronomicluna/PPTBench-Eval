@@ -6,12 +6,11 @@ from typing import Dict
 import pandas as pd
 
 from ..shared.format_answers_api import format_answer_csv
-from ..shared.get_answer import get_answers
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import download_kaggle_dataset, get_project_root, process_model
 from .evaluation import evaluate_answers
-from .get_answers import get_answer_single_modification
+from .get_answers import get_answers_modification
 from .judge import judge_answer_df
 
 
@@ -83,8 +82,7 @@ def main(
         future_to_model = {
             executor.submit(
                 process_model,
-                function=get_answers,
-                get_answer_single=get_answer_single_modification,
+                function=get_answers_modification,
                 df=df,
                 model_name=model_name,
                 provider=provider,

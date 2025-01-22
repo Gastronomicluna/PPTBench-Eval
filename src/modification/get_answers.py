@@ -11,7 +11,7 @@ from ..shared.utils import get_image_bytes
 from .prompts import build_prompt
 
 
-def get_answer_modification(
+def get_answers_modification(
     row: pd.Series,
     model_name: str,
     provider: str,
@@ -40,7 +40,7 @@ def get_answer_modification(
         pd.DataFrame: DataFrame containing hash, ground_truth, and llm_answer.
     """
     return get_answers(
-        get_answer_single=get_answer_single_modification,
+        get_answer_single=get_answers_single_modification,
         df=row,
         model_name=model_name,
         provider=provider,
@@ -53,7 +53,7 @@ def get_answer_modification(
     )
 
 
-def get_answer_single_modification(
+def get_answers_single_modification(
     row: pd.Series,
     model_name: str,
     provider: str,
@@ -187,7 +187,7 @@ def main(
     df = df.sample(sample_size, random_state=42)
 
     results = get_answers(
-        get_answer_single=get_answer_single_modification,
+        get_answer_single=get_answers_single_modification,
         df=df,
         model_name="gpt-4o",
         provider="api",
