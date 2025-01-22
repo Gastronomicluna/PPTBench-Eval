@@ -61,6 +61,7 @@ def main(
     # Test mode
     if test_mode:
         df = df[df["task"] == "refinement"]
+        df = df.head(10)
 
     if ollama_mode:
         models_to_run = [
@@ -144,5 +145,5 @@ if __name__ == "__main__":
     main(
         max_workers=4,
         ollama_mode=True,
-        test_mode=False,
+        test_mode=True,
     )
