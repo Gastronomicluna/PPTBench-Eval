@@ -140,7 +140,8 @@ def main():
     )
 
     csv_path = Path("data/modification_results.csv")
-    format_answer_csv(csv_path, overwrite=True)
+    df = format_answer_csv(csv_path, overwrite=True)
+    print(df.info())
     judge_answer_df(csv_path, overwrite=True)
 
 
