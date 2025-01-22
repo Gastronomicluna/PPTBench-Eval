@@ -10,6 +10,7 @@ from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
 from .prompts import build_prompt
 
+
 def get_answers_detection(
     row: pd.Series,
     model_name: str,
@@ -50,6 +51,7 @@ def get_answers_detection(
         retry=retry,
         pure_text=pure_text,
     )
+
 
 def get_answer_single_detection(
     row: pd.Series,
