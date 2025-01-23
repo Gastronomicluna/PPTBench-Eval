@@ -58,8 +58,8 @@ def judge_answer_add_shape(
 
     # Get the gold slide
     gold_slide = ground_truth.get("slide", {})
-    # if gold_slide is None:
-    #     raise ValueError("Gold slide is None.")
+    # if len(gold_slide["shapes"]) == len(original_slide["shapes"]):
+    #     raise ValueError("The number of shapes in the gold slide is not greater than the original slide.")
     # Get the gold added shape
     gold_shape = get_new_shape(
         add_shape_slide_json=gold_slide,
