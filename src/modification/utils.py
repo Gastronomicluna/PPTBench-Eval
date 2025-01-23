@@ -1,6 +1,7 @@
 import logging
-from typing import Any, Dict
 from copy import deepcopy
+from typing import Any, Dict
+
 
 def produce_presentation_json(
     presentation: Dict[str, Any],
@@ -30,6 +31,7 @@ def produce_presentation_json(
             break
 
     return new_presentation
+
 
 def get_font(
     shape_id: int,
