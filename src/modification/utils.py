@@ -1,6 +1,35 @@
 import logging
 from typing import Any, Dict
+from copy import deepcopy
 
+def produce_presentation_json(
+    presentation: Dict[str, Any],
+    slide_id: int,
+    slide_json: Dict[str, Any],
+) -> Dict[str, Any]:
+    """
+    Produce a new presentation JSON data with the modified slide.
+
+    Args:
+        presentation (Dict[str, Any]): The original presentation JSON data.
+        slide_id (int): The slide ID of the modified slide.
+        slide_json (Dict[str, Any]): The modified slide JSON data.
+
+    Returns:
+        Dict[str, Any]: The new presentation JSON data.
+    """
+    # Deep copy the original presentation
+    new_presentation = deepcopy(presentation)
+
+    # Find the target slide
+    slides = new_presentation.get("slides", [])
+    for slide in slides:
+        if slide.get("slide_id") == slide_id:
+            slide_index = slides.index(slide)
+            slides[slide_index] = slide_json
+            break
+
+    return new_presentation
 
 def get_font(
     shape_id: int,
