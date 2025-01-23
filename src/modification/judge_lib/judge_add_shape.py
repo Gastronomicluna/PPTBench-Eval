@@ -58,13 +58,14 @@ def judge_answer_add_shape(
 
     # Get the gold slide
     gold_slide = ground_truth.get("slide", {})
-
+    # if gold_slide is None:
+    #     raise ValueError("Gold slide is None.")
     # Get the gold added shape
     gold_shape = get_new_shape(
         modified_slide_json=gold_slide,
         original_slide_json=original_slide,
     )
-    assert gold_shape is not None, "Gold shape is None."
+    # assert gold_shape is not None, "Gold shape is None."
     # Get the llm modified shape
     llm_added_shape = get_new_shape(
         modified_slide_json=llm_modified_slide,
