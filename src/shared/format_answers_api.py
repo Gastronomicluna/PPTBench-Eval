@@ -3,9 +3,8 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-from ..shared.format_answers_csv import format_answer_csv_shared
 from .parse_answer import parse_json_answer
-from .utils import csv_to_df
+from .utils import csv_to_df, df_to_csv
 
 
 def format_answer_csv(
@@ -24,11 +23,39 @@ def format_answer_csv(
     Returns:
         pd.DataFrame: DataFrame with formatted answers.
     """
-    return format_answer_csv_shared(
-        format_answer_function=format_answer,
-        csv_path=csv_path,
-        overwrite=overwrite,
-    )
+    try:
+        df = csv_to_df(csv_path)
+        if df is None:
+            raise ValueError("The CSV file is empty.")
+
+        # Initialize error column if it doesn't exist
+        if "error" not in df.columns:
+            df["error"] = None
+
+        if "answer" in df.columns and not overwrite:
+            if not df["answer"].isna().all():
+                return df
+
+        def apply_format_safely(row):
+            # Skip if there's already an error
+            if pd.notna(row["error"]):
+                return pd.NA
+
+            try:
+                return format_answer(row["llm_answer"])
+            except Exception as e:
+                df.at[row.name, "error"] = str(e)
+                return pd.NA
+
+        df["answer"] = df.apply(apply_format_safely, axis=1)
+
+        if not df_to_csv(df, csv_path):
+            raise ValueError("Failed to save the formatted answers.")
+
+        return df
+
+    except Exception as e:
+        raise Exception(f"Error processing CSV file: {e}")
 
 
 def format_answer(
