@@ -53,6 +53,9 @@ def judge_answer_df(
     def process_row(row: pd.Series) -> bool:
         try:
             # assert isinstance(row["answer"], list)
+            answer = row["answer"]
+            if answer is pd.NA:
+                return False
             api_calls = parse_api_calls(row["answer"])
             # assert isinstance(api_calls, list)
             # print(f"API calls: {api_calls}")
