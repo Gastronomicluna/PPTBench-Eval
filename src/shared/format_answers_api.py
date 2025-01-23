@@ -87,7 +87,7 @@ def extract_functions_from_json(
 
 def main() -> None:
     csv_path = Path("data/modification_results/claude-3-5-sonnet-20241022.csv")
-    df = csv_to_df(csv_path)
+    df = csv_to_df(csv_path=csv_path, list_columns=["answer"])
     row = df[df["hash"] == "2bea6a2949d62d49f4773bc977326625"].iloc[0]
     print(row)
     answer_str = row["llm_answer"]
