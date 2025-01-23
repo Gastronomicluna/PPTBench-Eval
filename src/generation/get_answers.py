@@ -130,6 +130,7 @@ def get_answer_single_generation(
                 "task": task,
                 "ground_truth": ground_truth,
                 "llm_answer": llm_answer,
+                "error": None,
             }
         except TimeoutError as e:
             attempts += 1
@@ -144,7 +145,8 @@ def get_answer_single_generation(
                 "hash": hash_value,
                 "task": task,
                 "ground_truth": ground_truth,
-                "llm_answer": f"Timeout occurred after {max_attempts} attempts",
+                "llm_answer": None,
+                "error": str(e),
             }
         except Exception as e:
             logging.error(f"Error occurred: {str(e)}")
@@ -153,7 +155,8 @@ def get_answer_single_generation(
                 "hash": hash_value,
                 "task": task,
                 "ground_truth": ground_truth,
-                "llm_answer": str(e),
+                "llm_answer": None,
+                "error": str(e),
             }
 
 
