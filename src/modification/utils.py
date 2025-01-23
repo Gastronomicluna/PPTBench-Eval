@@ -3,7 +3,7 @@ from copy import deepcopy
 from typing import Any, Dict
 
 
-def produce_presentation_json(
+def produce_modified_presentation_json(
     presentation: Dict[str, Any],
     slide_id: int,
     slide_json: Dict[str, Any],
