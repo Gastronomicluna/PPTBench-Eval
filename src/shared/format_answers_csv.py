@@ -1,10 +1,7 @@
 from pathlib import Path
 from typing import Callable
-
 import pandas as pd
-
 from .utils import csv_to_df, df_to_csv
-
 
 def format_answer_csv_shared(
     format_answer_function: Callable,
@@ -22,22 +19,34 @@ def format_answer_csv_shared(
 
     Returns:
         pd.DataFrame: DataFrame with formatted answers.
+
+    Raises:
+        ValueError: If the CSV file is empty or cannot be processed.
+        Exception: For other unexpected errors during processing.
     """
-    df = csv_to_df(csv_path)
-    if df is None:
-        raise ValueError("The CSV file is empty.")
+    try:
+        df = csv_to_df(csv_path)
+        if df is None:
+            raise ValueError("The CSV file is empty.")
 
-    if "answer" in df.columns and not overwrite:
-        # Check if answer column has any non-null values
-        if not df["answer"].isna().all():
-            return df
+        if "answer" in df.columns and not overwrite:
+            if not df["answer"].isna().all():
+                return df
 
-    df["answer"] = df.apply(
-        lambda row: format_answer_function(row["llm_answer"], row["subcategory"]),
-        axis=1,
-    )
+        try:
+            df["answer"] = df.apply(
+                lambda row: format_answer_function(row["llm_answer"], row["subcategory"]),
+                axis=1,
+            )
+        except KeyError as e:
+            raise ValueError(f"Required column missing: {e}")
+        except Exception as e:
+            raise ValueError(f"Error formatting answers: {e}")
 
-    if df_to_csv(df, csv_path):
+        if not df_to_csv(df, csv_path):
+            raise ValueError("Failed to save the formatted answers.")
+
         return df
-    else:
-        raise ValueError("Failed to save the formatted answers.")
+
+    except Exception as e:
+        raise Exception(f"Error processing CSV file: {e}")
