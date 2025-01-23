@@ -52,7 +52,7 @@ def judge_answer_df(
     # Process answers
     def process_row(row: pd.Series) -> bool:
         try:
-            assert isinstance(row["answer"], str)
+            # assert isinstance(row["answer"], list)
             api_calls = parse_api_calls(row["answer"])
             # assert isinstance(api_calls, list)
             print(f"API calls: {api_calls}")

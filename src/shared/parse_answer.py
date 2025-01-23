@@ -16,7 +16,7 @@ def parse_api_calls(answer: str) -> List[str]:
     """
     try:
         # Try parsing as JSON first
-        calls = json.loads(answer)
+        calls = answer
         if isinstance(calls, list):
             # Handle the case where we have a list of strings
             if all(isinstance(x, str) for x in calls):
