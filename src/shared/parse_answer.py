@@ -30,7 +30,7 @@ def parse_api_calls(answer: str) -> List[str]:
                     if isinstance(inner_calls, list):
                         return inner_calls
                 except Exception as e:
-                    logging.error(f"Error parsing inner list: {str(e)}")
+                    raise ValueError(f"Error parsing inner API calls: {str(e)}")
     except json.JSONDecodeError:
         # If not JSON, try evaluating as a Python literal
         try:
@@ -38,7 +38,7 @@ def parse_api_calls(answer: str) -> List[str]:
             if isinstance(calls, list):
                 return calls
         except Exception as e:
-            logging.error(f"Error parsing API calls: {str(e)}")
+            raise ValueError(f"Error parsing API calls: {str(e)}")
 
     # If all else fails, split by newline and clean
     return [call.strip() for call in answer.split("\n") if call.strip()]
@@ -64,9 +64,7 @@ def parse_json_answer(
             decoded_str = answer.encode().decode("unicode_escape")
             parsed_answer = json.loads(decoded_str)
         except (json.JSONDecodeError, UnicodeError) as e:
-            logging.error(f"Error parsing JSON answer: {str(e)}")
-            print(traceback.format_exc())
-            parsed_answer = {}
+            raise ValueError(f"Error parsing JSON answer: {str(e)}")
 
     return parsed_answer
 
