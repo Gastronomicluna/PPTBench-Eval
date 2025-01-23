@@ -62,13 +62,13 @@ def judge_answer_add_shape(
     #     raise ValueError("Gold slide is None.")
     # Get the gold added shape
     gold_shape = get_new_shape(
-        modified_slide_json=gold_slide,
+        add_shape_slide_json=gold_slide,
         original_slide_json=original_slide,
     )
     # assert gold_shape is not None, "Gold shape is None."
     # Get the llm modified shape
     llm_added_shape = get_new_shape(
-        modified_slide_json=llm_modified_slide,
+        add_shape_slide_json=llm_modified_slide,
         original_slide_json=original_slide,
     )
 
@@ -125,14 +125,14 @@ def compare_shape(
 
 def get_new_shape(
     original_slide_json: Dict[str, Any],
-    modified_slide_json: Dict[str, Any],
+    add_shape_slide_json: Dict[str, Any],
 ) -> Dict[str, Any]:
     """
     Get the new shape from the modified slide JSON data.
 
     Args:
         original_slide_json (Dict[str, Any]): The original slide JSON data.
-        modified_slide_json (Dict[str, Any]): The modified slide JSON data.
+        add_shape_slide_json (Dict[str, Any]): The modified slide JSON data.
 
     Returns:
         Dict[str, Any]: The new shape data.
@@ -141,7 +141,7 @@ def get_new_shape(
     original_shapes = original_slide_json.get("shapes", [])
 
     # Get the shapes from the modified slide
-    modified_shapes = modified_slide_json.get("shapes", [])
+    modified_shapes = add_shape_slide_json.get("shapes", [])
 
     # Find the new shape
     new_shape = None
