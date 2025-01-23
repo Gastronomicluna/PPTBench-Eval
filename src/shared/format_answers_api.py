@@ -30,7 +30,7 @@ def format_answer_csv(
 
         # Initialize error column with string dtype if it doesn't exist
         if "error" not in df.columns:
-            df["error"] = pd.Series(dtype='string')
+            df["error"] = pd.Series(dtype="string")
 
         if "answer" in df.columns and not overwrite:
             if not df["answer"].isna().all():
