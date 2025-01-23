@@ -37,10 +37,12 @@ def parse_api_calls(answer: str) -> List[str]:
                 return calls
         except Exception as e:
             raise ValueError(f"Error parsing API calls: {str(e)}")
-
-    # If all else fails, split by newline and clean
-    return [call.strip() for call in answer.split("\n") if call.strip()]
-
+    try:
+        result = [call.strip() for call in answer.split("\n") if call.strip()]
+        return result
+    except Exception as e:
+        print(answer)
+        raise ValueError(f"Error parsing API calls: {str(e)}")
 
 def parse_json_answer(
     answer: str,
