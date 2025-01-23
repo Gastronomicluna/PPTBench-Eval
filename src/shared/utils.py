@@ -4,9 +4,9 @@ import logging
 import os
 import shutil
 import subprocess
+from ast import literal_eval
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
-from ast import literal_eval
 
 import httpx
 import pandas as pd
@@ -121,7 +121,7 @@ def get_image_bytes(image_data: dict | bytes) -> bytes:
 
 
 def csv_to_df(
-    csv_path: Path, 
+    csv_path: Path,
     encoding: str = "utf-8",
     list_columns: Optional[List[str]] = None,
 ) -> Optional[pd.DataFrame]:
@@ -148,11 +148,13 @@ def csv_to_df(
             lineterminator="\n",
             on_bad_lines="warn",
         )
-        
-        if list_columns:    
+
+        if list_columns:
             for column in list_columns:
-                df[column] = df[column].apply(lambda x: literal_eval(x) if pd.notna(x) else x)
-                
+                df[column] = df[column].apply(
+                    lambda x: literal_eval(x) if pd.notna(x) else x
+                )
+
         return df
     except Exception as e:
         logging.error(f"Error reading CSV {csv_path}: {str(e)}")
