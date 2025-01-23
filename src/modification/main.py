@@ -85,7 +85,7 @@ def main(
 
     # Test mode
     if test_mode:
-        df = df[df["subcategory"] == "refinement"]
+        df = df[df["task"] == "add_shape"]
         df = df.sample(10, random_state=42)
 
     print(f"Dataset shape: {df.shape}")
@@ -121,7 +121,7 @@ def main(
                     json=True,
                     timeout=60,
                     csv_path=results_dir / f"{model_name}.csv",
-                    overwrite=False,
+                    overwrite=True,
                 )
             ] = (model_name, provider)
             time.sleep(job_delay)  # Add delay between job submissions
