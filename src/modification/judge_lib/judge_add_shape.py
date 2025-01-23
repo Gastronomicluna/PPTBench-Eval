@@ -64,7 +64,7 @@ def judge_answer_add_shape(
         modified_slide_json=gold_slide,
         original_slide_json=original_slide,
     )
-
+    assert gold_shape is not None, "Gold shape is None."
     # Get the llm modified shape
     llm_added_shape = get_new_shape(
         modified_slide_json=llm_modified_slide,
