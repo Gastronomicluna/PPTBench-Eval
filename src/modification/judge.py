@@ -85,7 +85,7 @@ def judge_answer(
     task: Literal[
         "add_shape", "change_font", "reposition", "resize", "overlap", "out_of_bounds"
     ],
-    api_calls: List[str],
+    api_calls: Optional[List[str]],
     file_hash: str,
     ground_truth: Dict[str, Any],
     shape_to_modify: Optional[Dict[str, Any]] = None,
@@ -107,8 +107,8 @@ def judge_answer(
         file_hash=file_hash,
         json_dir=Path("dataset/json"),  # Changed from data/json to dataset/json
     )
-    # assert api_calls is List[str]
-    assert isinstance(api_calls, list)
+    if api_calls is None:
+        return False
     presentation_json = json.load(open(json_path, "r"))
     if task == "add_shape":
         return judge_answer_add_shape(
