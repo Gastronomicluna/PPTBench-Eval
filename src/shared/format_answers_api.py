@@ -3,9 +3,10 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-from .parse_answer import parse_json_answer
-from .utils import csv_to_df, df_to_csv
 from ..shared.format_answers_csv import format_answer_csv_shared
+from .parse_answer import parse_json_answer
+from .utils import csv_to_df
+
 
 def format_answer_csv(
     csv_path: Path,
