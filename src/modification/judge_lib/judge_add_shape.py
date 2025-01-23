@@ -142,8 +142,8 @@ def get_new_shape(
 
     # Get the shapes from the modified slide
     add_shape_slide_shapes = add_shape_slide_json.get("shapes", [])
-    if len(add_shape_slide_shapes) <= len(original_shapes):
-        raise ValueError("The number of shapes in the modified slide is not greater than the original slide.")
+    # if len(add_shape_slide_shapes) <= len(original_shapes):
+    #     raise ValueError("The number of shapes in the modified slide is not greater than the original slide.")
     # Find the new shape
     new_shape = None
     for shape in add_shape_slide_shapes:
