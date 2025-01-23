@@ -35,7 +35,7 @@ def _check_dataset_version(dataset_name: str, dataset_path: str) -> bool:
             if not local_info or remote_sha not in str(local_info):
                 return False
             return True
-        except:
+        except Exception:
             return False
 
     except Exception as e:
