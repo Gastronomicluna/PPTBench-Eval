@@ -96,5 +96,6 @@ def main() -> None:
     print(functions)
     assert functions == format_answer(answer_str)
 
+
 if __name__ == "__main__":
     main()
