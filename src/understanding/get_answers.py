@@ -131,6 +131,7 @@ def get_answer_single_understanding(
                 "task": task,
                 "ground_truth": ground_truth,
                 "llm_answer": llm_answer,
+                "error": None,
             }
         except TimeoutError as e:
             attempts += 1
@@ -145,7 +146,8 @@ def get_answer_single_understanding(
                 "hash": row["hash"],
                 "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
-                "llm_answer": f"Timeout error after {max_attempts} attempts: {str(e)}",
+                "llm_answer": None,
+                "error": str(e),
             }
         except Exception as e:
             logging.error(f"Error in get_answer_single: {str(e)}")
@@ -154,7 +156,8 @@ def get_answer_single_understanding(
                 "hash": row["hash"],
                 "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
-                "llm_answer": str(e),
+                "llm_answer": None,
+                "error": str(e),
             }
 
 
