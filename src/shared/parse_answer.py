@@ -1,8 +1,8 @@
 import json
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 
-def parse_api_calls(answer: str) -> List[str]:
+def parse_api_calls(answer: str) -> Optional[List[str]]:
     """
     Parse api calls from answer string.
 
@@ -10,7 +10,7 @@ def parse_api_calls(answer: str) -> List[str]:
         answer (str): Raw answer string containing API calls.
 
     Returns:
-        List[str]: List of API call strings.
+        Optional[List[str]]: List of
     """
     try:
         # Try parsing as JSON first
@@ -37,11 +37,11 @@ def parse_api_calls(answer: str) -> List[str]:
                 return calls
         except Exception as e:
             raise ValueError(f"Error parsing API calls: {str(e)}")
+        
     try:
         result = [call.strip() for call in answer.split("\n") if call.strip()]
         return result
     except Exception as e:
-        print(answer)
         raise ValueError(f"Error parsing API calls: {str(e)}")
 
 def parse_json_answer(
