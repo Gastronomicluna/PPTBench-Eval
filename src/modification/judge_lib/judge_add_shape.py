@@ -22,6 +22,8 @@ def judge_answer_add_shape(
     Returns:
         bool: Whether the answer is correct.
     """
+    slide_height = presentation_json.get("slide_height")
+    slide_width = presentation_json.get("slide_width")
     # Get slide ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
 
@@ -44,16 +46,14 @@ def judge_answer_add_shape(
         presentation=llm_modified_presentation,
     )
 
-    # Get the llm modified shape
-    llm_added_shape = get_new_shape(
-        modified_slide_json=llm_modified_slide,
-        original_slide_json=original_slide,
-    )
-
     # Check if the slide has out of bounds or has overlap
-    if has_out_of_bounds(llm_added_shape):
+    if has_out_of_bounds(
+        slide_json=llm_modified_slide,
+        slide_height=slide_height,
+        slide_width=slide_width,
+    ):
         return False
-    if has_overlap(llm_added_shape):
+    if has_overlap(slide_json=llm_modified_slide):
         return False
 
     # Get the gold slide
@@ -62,6 +62,12 @@ def judge_answer_add_shape(
     # Get the gold added shape
     gold_shape = get_new_shape(
         modified_slide_json=gold_slide,
+        original_slide_json=original_slide,
+    )
+
+    # Get the llm modified shape
+    llm_added_shape = get_new_shape(
+        modified_slide_json=llm_modified_slide,
         original_slide_json=original_slide,
     )
 
