@@ -54,7 +54,7 @@ def judge_answer_df(
         try:
             # assert isinstance(row["answer"], list)
             answer = row["answer"]
-            if answer is pd.NA:
+            if answer is pd.NA or None:
                 return False
             api_calls = parse_api_calls(row["answer"])
             # assert isinstance(api_calls, list)
