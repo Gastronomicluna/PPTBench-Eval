@@ -74,8 +74,8 @@ def format_answer(
         json_answer = parse_json_answer(answer)
         functions = extract_functions_from_json(json_answer)
         return functions
-    except Exception:
-        return []
+    except Exception as e:
+        raise Exception(f"Error formatting answer: {e}")
 
 
 def extract_functions_from_json(
