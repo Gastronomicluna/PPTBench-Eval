@@ -157,8 +157,7 @@ def build_prompt_text_modification(
 
 
 def main() -> None:
-    api_str = api_to_string(api_list)
-    print(api_str)
+    print(build_prompt_refinement("Refine the slide.", {"slide": "data"}))
 
 
 if __name__ == "__main__":
