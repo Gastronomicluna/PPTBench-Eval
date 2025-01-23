@@ -28,7 +28,10 @@ def judge_answer_df(
         pd.DataFrame: DataFrame with judged answers.
     """
     csv_path = Path(csv_path)
-    answers_df = csv_to_df(csv_path)
+    answers_df = csv_to_df(
+        csv_path=csv_path,
+        list_columns=["answer"],
+    )
 
     if answers_df is None:
         raise ValueError("The input DataFrame is empty.")
