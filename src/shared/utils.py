@@ -190,10 +190,10 @@ def df_to_csv(
             escapechar="\\",
             encoding=encoding,
             lineterminator="\n",
+            na_rep="NULL",
         )
         return True
     except Exception as e:
-        logging.error(f"Error writing CSV {csv_path}: {str(e)}")
         return False
 
 
