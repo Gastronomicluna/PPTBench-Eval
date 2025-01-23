@@ -193,7 +193,7 @@ def df_to_csv(
             na_rep="NULL",
         )
         return True
-    except Exception as e:
+    except Exception:
         return False
 
 
