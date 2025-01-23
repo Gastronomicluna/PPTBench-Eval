@@ -46,7 +46,7 @@ def parse_api_calls(answer: str) -> Optional[List[str]]:
 
 def parse_json_answer(
     answer: str,
-) -> Dict[str, Any]:
+) -> Optional[Dict[str, Any]]:
     """
     Parse the answer from the model into a dictionary.
 
