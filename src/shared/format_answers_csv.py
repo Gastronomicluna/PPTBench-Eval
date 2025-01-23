@@ -1,7 +1,10 @@
 from pathlib import Path
 from typing import Callable
+
 import pandas as pd
+
 from .utils import csv_to_df, df_to_csv
+
 
 def format_answer_csv_shared(
     format_answer_function: Callable,
@@ -41,7 +44,7 @@ def format_answer_csv_shared(
             # Skip if there's already an error
             if pd.notna(row["error"]):
                 return pd.NA
-            
+
             try:
                 return format_answer_function(row["llm_answer"], row["subcategory"])
             except Exception as e:
