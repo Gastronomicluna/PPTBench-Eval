@@ -6,6 +6,7 @@ import shutil
 import subprocess
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
+from ast import literal_eval
 
 import httpx
 import pandas as pd
@@ -119,7 +120,11 @@ def get_image_bytes(image_data: dict | bytes) -> bytes:
     return image_data
 
 
-def csv_to_df(csv_path: Path, encoding: str = "utf-8") -> Optional[pd.DataFrame]:
+def csv_to_df(
+    csv_path: Path, 
+    encoding: str = "utf-8",
+    list_columns: Optional[List[str]] = None,
+) -> Optional[pd.DataFrame]:
     """
     Convert CSV file to pandas DataFrame with proper error handling.
 
@@ -143,6 +148,11 @@ def csv_to_df(csv_path: Path, encoding: str = "utf-8") -> Optional[pd.DataFrame]
             lineterminator="\n",
             on_bad_lines="warn",
         )
+        
+        if list_columns:    
+            for column in list_columns:
+                df[column] = df[column].apply(lambda x: literal_eval(x) if pd.notna(x) else x)
+                
         return df
     except Exception as e:
         logging.error(f"Error reading CSV {csv_path}: {str(e)}")
