@@ -55,7 +55,7 @@ def judge_answer_df(
             # assert isinstance(row["answer"], list)
             api_calls = parse_api_calls(row["answer"])
             # assert isinstance(api_calls, list)
-            print(f"API calls: {api_calls}")
+            # print(f"API calls: {api_calls}")
             return judge_answer(
                 task=row["task"],
                 api_calls=api_calls,
