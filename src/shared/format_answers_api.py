@@ -28,34 +28,28 @@ def format_answer_csv(
         if df is None:
             raise ValueError("The CSV file is empty.")
 
-        # Initialize columns with correct dtypes
+        # Initialize error column with string dtype if it doesn't exist
         if "error" not in df.columns:
-            df["error"] = pd.Series(dtype="string")
-        
-        if "answer" not in df.columns:
-            df["answer"] = pd.Series(dtype="object")
-        elif not overwrite:
+            df["error"] = pd.Series(dtype='string')
+
+        if "answer" in df.columns and not overwrite:
             if not df["answer"].isna().all():
                 return df
 
         def apply_format_safely(row):
             # Skip if there's already an error
             if pd.notna(row["error"]):
-                return None
+                return pd.NA
 
             try:
-                if pd.isna(row["llm_answer"]):
-                    return None
-                result = format_answer(str(row["llm_answer"]))
-                return result if result else None
+                return format_answer(row["llm_answer"])
             except Exception as e:
+                # Explicitly convert index and error message to appropriate types
                 idx = pd.Index([row.name], dtype=df.index.dtype)
                 df.loc[idx, "error"] = str(e)
-                return None
+                return pd.NA
 
-        # Apply formatting and ensure results are stored as objects
-        results = df.apply(apply_format_safely, axis=1)
-        df["answer"] = results.astype("object")
+        df["answer"] = df.apply(apply_format_safely, axis=1)
 
         if not df_to_csv(df, csv_path):
             raise ValueError("Failed to save the formatted answers.")
