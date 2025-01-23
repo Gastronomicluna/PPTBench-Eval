@@ -1,4 +1,5 @@
 import json
+import traceback
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Union
 
@@ -11,7 +12,7 @@ from .judge_lib.judge_change_font import judge_answer_change_font
 from .judge_lib.judge_refinement import judge_answer_refinement
 from .judge_lib.judge_reposition import judge_answer_reposition
 from .judge_lib.judge_resize import judge_answer_resize
-import traceback
+
 
 def judge_answer_df(
     csv_path: Union[Path, str],
@@ -65,6 +66,7 @@ def judge_answer_df(
             print(f"Error processing row: {e}")
             print(traceback.format_exc())
             return False
+
     # print(answers_df)
     answers_df["is_correct"] = answers_df.apply(process_row, axis=1)
 
