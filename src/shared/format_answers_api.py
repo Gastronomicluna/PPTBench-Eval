@@ -97,6 +97,8 @@ def extract_functions_from_json(
         for key in sorted(json_data.keys()):
             if key.startswith("function"):
                 functions.append(json_data[key])
+    else:
+        raise ValueError("Invalid JSON data format.")
     return functions
 
 
