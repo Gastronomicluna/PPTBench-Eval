@@ -25,7 +25,7 @@ def format_answer_csv(
         pd.DataFrame: DataFrame with formatted answers.
     """
     return format_answer_csv_shared(
-        format_answer=format_answer,
+        format_answer_function=format_answer,
         csv_path=csv_path,
         overwrite=overwrite,
     )
