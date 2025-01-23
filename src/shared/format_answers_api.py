@@ -5,7 +5,7 @@ import pandas as pd
 
 from .parse_answer import parse_json_answer
 from .utils import csv_to_df, df_to_csv
-
+from ..shared.format_answers_csv import format_answer_csv_shared
 
 def format_answer_csv(
     csv_path: Path,
@@ -23,24 +23,11 @@ def format_answer_csv(
     Returns:
         pd.DataFrame: DataFrame with formatted answers.
     """
-    df = csv_to_df(csv_path)
-    if df.empty:
-        raise ValueError("The CSV file is empty.")
-
-    if "answer" in df.columns and not overwrite:
-        # Check if answer column has any non-null values
-        if not df["answer"].isna().all():
-            return df
-
-    df["answer"] = df.apply(
-        lambda row: format_answer(row["llm_answer"]),
-        axis=1,
+    return format_answer_csv_shared(
+        format_answer=format_answer,
+        csv_path=csv_path,
+        overwrite=overwrite,
     )
-
-    if df_to_csv(df, csv_path):
-        return df
-    else:
-        raise ValueError("Failed to save the formatted answers.")
 
 
 def format_answer(
