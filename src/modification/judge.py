@@ -11,7 +11,7 @@ from .judge_lib.judge_change_font import judge_answer_change_font
 from .judge_lib.judge_refinement import judge_answer_refinement
 from .judge_lib.judge_reposition import judge_answer_reposition
 from .judge_lib.judge_resize import judge_answer_resize
-
+import traceback
 
 def judge_answer_df(
     csv_path: Union[Path, str],
@@ -53,7 +53,7 @@ def judge_answer_df(
         try:
             api_calls = parse_api_calls(row["answer"])
             # assert isinstance(api_calls, list)
-            # print(f"API calls: {api_calls}")
+            print(f"API calls: {api_calls}")
             return judge_answer(
                 task=row["task"],
                 api_calls=api_calls,
@@ -62,10 +62,10 @@ def judge_answer_df(
                 shape_to_modify=json.loads(row["shape_to_modify"]),
             )
         except Exception as e:
-            # print(f"Error processing row: {e}")
-            # print(f"Row data: {row}")
+            print(f"Error processing row: {e}")
+            print(traceback.format_exc())
             return False
-
+    # print(answers_df)
     answers_df["is_correct"] = answers_df.apply(process_row, axis=1)
 
     # Save results

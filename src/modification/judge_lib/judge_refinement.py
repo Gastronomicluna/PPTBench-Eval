@@ -24,8 +24,8 @@ def judge_answer_refinement(
     slide_id = ground_truth.get("slide", {}).get("slide_id")
     slide_height = ground_truth["slide_height"]
     slide_width = ground_truth["slide_width"]
-    for api_call in api_calls:
-        print(api_call)
+    # for api_call in api_calls:
+    #     print(api_call)
     # Execute the API calls
     llm_modified_presentation = api_executor(
         lines=api_calls, json=presentation_json, mode="json"
