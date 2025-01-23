@@ -87,9 +87,9 @@ def main(
     if test_mode:
         df = df[df["subcategory"] == "refinement"]
         df = df.sample(10, random_state=42)
-        
+
     print(f"Dataset shape: {df.shape}")
-    
+
     if ollama_mode:
         models_to_run = [
             (provider, model_name)
