@@ -2,13 +2,19 @@ from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
 from ...shared.utils import fuzzy_match
-from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap, produce_modified_presentation_json
+from ..utils import (
+    get_slide_from_presentation,
+    has_out_of_bounds,
+    has_overlap,
+    produce_modified_presentation_json,
+)
+
 
 def judge_answer_add_shape(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
-    json_data: Dict[str, Any], # JSON data, minus one shape
-    presentation_json: Dict[str, Any], # Original Presentation JSON data
+    json_data: Dict[str, Any],  # JSON data, minus one shape
+    presentation_json: Dict[str, Any],  # Original Presentation JSON data
 ) -> bool:
     """
     Judge the answer based on the API calls and ground truth.
@@ -28,30 +34,29 @@ def judge_answer_add_shape(
     # Get slide ID
     slide_id = shape_to_modify.get("slide_id")
 
-    
     # Get the minus one shape slide JSON data
     minus_one_shape_slide_json = json_data.get("slide", {})
-    
+
     # Produce the modified presentation JSON data
     minus_one_shape_presentation_json = produce_modified_presentation_json(
         presentation=presentation_json,
         slide_id=slide_id,
         slide_json=minus_one_shape_slide_json,
     )
-    
+
     # Execute the API calls
     modified_presentation_json = api_executor(
-        lines=api_calls, 
+        lines=api_calls,
         json=minus_one_shape_presentation_json,
         mode="json",
     )
-    
+
     # Get the modified slide
     modified_slide = get_slide_from_presentation(
         slide_id=slide_id,
         presentation=modified_presentation_json,
     )
-    
+
     # Check if the slide has out of bounds or has overlap
     if has_out_of_bounds(
         slide_json=modified_slide,
@@ -59,10 +64,10 @@ def judge_answer_add_shape(
         slide_width=slide_width,
     ):
         return False
-    
+
     if has_overlap(slide_json=modified_slide):
         return False
-    
+
     def get_new_shape(
         slide_with_n_shape: Dict[str, Any],
         slide_with_n_plus_one_shape: Dict[str, Any],
@@ -98,7 +103,7 @@ def judge_answer_add_shape(
         slide_with_n_shape=minus_one_shape_slide_json,
         slide_with_n_plus_one_shape=modified_slide,
     )
-    
+
     def compare_shape(
         gold_shape: Dict[str, Any],
         shape_to_test: Dict[str, Any],
@@ -145,7 +150,7 @@ def judge_answer_add_shape(
         # If both have images, compare them
         if original_image and modified_image and original_image != modified_image:
             return False
-    
+
     return compare_shape(
         gold_shape=shape_to_modify,
         shape_to_test=added_shape,
