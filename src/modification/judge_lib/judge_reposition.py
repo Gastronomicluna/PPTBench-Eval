@@ -56,7 +56,7 @@ def judge_answer_reposition(
     return compare_shape_position(ground_truth_shape, modified_shape)
 
 
-def calculate_diff(
+def calculate_position_diff(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
 ) -> float:
@@ -84,9 +84,6 @@ def calculate_diff(
         "left": result_shape["left"],
     }
 
-    equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
-    equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
-
     top_diff = abs(ground_truth_coordinates["top"] - result_coordinates["top"])
 
     left_diff = abs(ground_truth_coordinates["left"] - result_coordinates["left"])
@@ -112,7 +109,7 @@ def compare_shape_position(
     Returns:
         bool: Whether the shapes are the same.
     """
-    percentage_diff = calculate_diff(ground_truth_shape, result_shape)
+    percentage_diff = calculate_position_diff(ground_truth_shape, result_shape)
 
     ground_truth_coordinates = {
         "height": ground_truth_shape["height"],
