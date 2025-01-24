@@ -1,4 +1,3 @@
-import logging
 from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
@@ -37,7 +36,7 @@ def judge_answer_reposition(
         slide_id=slide_id,
         slide_json=slide_json,
     )
-    
+
     modified_presentation_json = api_executor(
         lines=api_calls,
         json=produced_presentation_json,
@@ -45,15 +44,15 @@ def judge_answer_reposition(
     )
 
     shape_id = shape_to_modify["shape_id"]
-    
+
     modified_shape = get_shape_from_presentation(
         slide_id=slide_id,
         shape_id=shape_id,
         presentation=modified_presentation_json,
     )
-    
+
     ground_truth_shape = shape_to_modify
-    
+
     return compare_shape_position(ground_truth_shape, modified_shape)
 
 
