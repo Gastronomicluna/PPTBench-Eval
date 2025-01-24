@@ -1,7 +1,7 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import calculate_position_diff, get_shape_from_presentation
+from ..utils import calculate_position_diff, get_shape_from_presentation, calculate_size_diff
 
 
 def judge_answer_reposition(
@@ -53,14 +53,17 @@ def judge_answer_reposition(
 
     ground_truth_shape = shape_to_modify
 
-    return compare_shape_position(ground_truth_shape, modified_shape)
+    # Compare the shapes
+    flag, _ = compare_shape_position(ground_truth_shape, modified_shape)
+    
+    return flag
 
 
 def compare_shape_position(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
     threshold: float = 0.001,
-) -> bool:
+) -> Tuple[bool, float]:
     """
     Compare the ground truth shape with the result shape.
 
@@ -71,23 +74,11 @@ def compare_shape_position(
     Returns:
         bool: Whether the shapes are the same.
     """
-    percentage_diff = calculate_position_diff(ground_truth_shape, result_shape)
+    position_percentage_diff = calculate_position_diff(ground_truth_shape, result_shape)
 
-    ground_truth_coordinates = {
-        "height": ground_truth_shape["height"],
-        "width": ground_truth_shape["width"],
-        "top": ground_truth_shape["top"],
-        "left": ground_truth_shape["left"],
-    }
+    size_percentage_diff = calculate_size_diff(ground_truth_shape, result_shape)
 
-    result_coordinates = {
-        "height": result_shape["height"],
-        "width": result_shape["width"],
-        "top": result_shape["top"],
-        "left": result_shape["left"],
-    }
-
-    equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
-    equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
-
-    return percentage_diff <= threshold and equal_height and equal_width
+    return (
+        position_percentage_diff < threshold and size_percentage_diff == 0,
+        position_percentage_diff + size_percentage_diff,
+    )
