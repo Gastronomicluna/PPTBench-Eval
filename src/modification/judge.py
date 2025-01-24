@@ -57,7 +57,10 @@ def judge_answer_df(
             answer = row["answer"]
             if answer is pd.NA or None:
                 return False
-            api_calls = parse_api_calls(row["answer"])
+            if not isinstance(answer, List):
+                api_calls = parse_api_calls(row["answer"])
+            else:
+                api_calls = answer
             # assert isinstance(api_calls, list)
             # print(f"API calls: {api_calls}")
             return judge_answer(
