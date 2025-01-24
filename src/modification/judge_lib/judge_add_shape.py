@@ -3,8 +3,7 @@ from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
 from ...shared.utils import fuzzy_match
-from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap
-
+from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap, produce_modified_presentation_json
 
 def judge_answer_add_shape(
     api_calls: List[str],
