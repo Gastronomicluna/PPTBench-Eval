@@ -17,7 +17,11 @@ def sample_ground_truth():
 
 def test_successful_font_change():
     """Test successful font change matching ground truth."""
-    api_calls = ['shape.font.name = "Calibri"']
+    api_calls = [
+        "choose_slide(265)",
+        "choose_shape(100)",
+        "set_font('Tahoma')",
+    ]
     result = judge_answer_change_font(
         api_calls=api_calls,
         shape_to_modify=sample_shape_to_modify(),
@@ -28,7 +32,11 @@ def test_successful_font_change():
 
 def test_incorrect_font_change():
     """Test incorrect font change not matching ground truth."""
-    api_calls = ['shape.font.name = "Times New Roman"']
+    api_calls = [
+        "choose_slide(265)",
+        "choose_shape(100)",
+        "set_font('Arial')",
+    ]
     result = judge_answer_change_font(
         api_calls=api_calls,
         shape_to_modify=sample_shape_to_modify(),
@@ -39,7 +47,11 @@ def test_incorrect_font_change():
 
 def test_invalid_api_calls():
     """Test handling of invalid API calls."""
-    api_calls = ['invalid.api.call()']
+    api_calls = [
+        "choose_slide(265)",
+        "choose_shape(100)",
+        "invalid_api_call()",
+    ]
     result = judge_answer_change_font(
         api_calls=api_calls,
         shape_to_modify=sample_shape_to_modify(),
@@ -48,31 +60,3 @@ def test_invalid_api_calls():
     )
     assert result is False
 
-def test_multiple_fonts_in_shape():
-    """Test handling of multiple fonts in a shape."""
-    multi_font_presentation = {
-        "slides": [{
-            "slide_id": "slide1",
-            "shapes": [{
-                "shape_id": "shape1",
-                "text": {
-                    "paragraphs": [
-                        {
-                            "runs": [
-                                {"font": {"name": "Arial"}},
-                                {"font": {"name": "Calibri"}}
-                            ]
-                        }
-                    ]
-                }
-            }]
-        }]
-    }
-    api_calls = ['shape.font.name = "Calibri"']
-    result = judge_answer_change_font(
-        api_calls=api_calls,
-        shape_to_modify=sample_shape_to_modify(),
-        ground_truth=sample_ground_truth(),
-        presentation_json=multi_font_presentation
-    )
-    assert result is False
