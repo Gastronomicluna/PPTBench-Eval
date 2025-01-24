@@ -8,7 +8,7 @@ from ..utils import get_shape_from_presentation
 def judge_answer_reposition(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
-    ground_truth: Dict[str, Any],
+    json_data: Dict[str, Any],
     presentation_json: Dict[str, Any],
 ) -> bool:
     """
@@ -23,34 +23,38 @@ def judge_answer_reposition(
     Returns:
         bool: Whether the answer is correct.
     """
-    # Get the slide ID and shape ID from the ground truth
-    slide_id = ground_truth.get("slide", {}).get("slide_id")
-    shape_id = shape_to_modify["shape_id"]
+    # Get slide ID
+    slide_json = json_data.get("slide", {})
+    if slide_json is None:
+        raise ValueError("The slide JSON data is not found in the JSON data.")
 
-    # Execute the API calls
-    llm_modified_presentation = api_executor(
-        lines=api_calls, json=presentation_json, mode="json"
-    )
-    if llm_modified_presentation is None:
-        logging.error("Error executing API calls, result is None.")
-        return False
+    slide_id = slide_json.get("slide_id")
+    if slide_id is None:
+        raise ValueError("The slide ID is not found in the shape to modify.")
 
-    # Get the shape from the slide
-    llm_modified_shape = get_shape_from_presentation(
-        slide_id=slide_id,
-        shape_id=shape_id,
-        presentation=llm_modified_presentation,
-    )
-
-    # Get the ground truth shape
-    ground_truth_shape = get_shape_from_presentation(
-        slide_id=slide_id,
-        shape_id=shape_id,
+    produced_presentation_json = produced_presentation_json(
         presentation=presentation_json,
+        slide_id=slide_id,
+        slide_json=slide_json,
+    )
+    
+    modified_presentation_json = api_executor(
+        lines=api_calls,
+        json=produced_presentation_json,
+        mode="json",
     )
 
-    # Compare the shapes
-    return compare_shape_position(ground_truth_shape, llm_modified_shape)
+    shape_id = shape_to_modify["shape_id"]
+    
+    modified_shape = get_shape_from_presentation(
+        slide_id=slide_id,
+        shape_id=shape_id,
+        presentation=modified_presentation_json,
+    )
+    
+    ground_truth_shape = shape_to_modify
+    
+    return compare_shape_position(ground_truth_shape, modified_shape)
 
 
 def compare_shape_position(
