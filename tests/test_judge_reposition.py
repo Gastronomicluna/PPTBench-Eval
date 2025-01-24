@@ -4,7 +4,6 @@ import pytest
 
 from src.modification.judge_lib.judge_reposition import (
     compare_shape_position,
-    judge_answer_reposition,
 )
 
 
