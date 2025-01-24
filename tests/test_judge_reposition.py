@@ -52,6 +52,6 @@ def test_shape_reposition_score_not_matching(shape_to_modify):
     """Test score calculation with not matching shapes."""
     ground_truth_shape = shape_to_modify.copy()
     result_shape = shape_to_modify.copy()
-    result_shape["left"] += 10000
+    result_shape["left"] += 10000000
 
-    assert not compare_shape_position(ground_truth_shape, result_shape)
+    assert not compare_shape_position(ground_truth_shape, result_shape)[0]

@@ -86,6 +86,6 @@ def compare_shape_position(
     size_percentage_diff = calculate_size_diff(ground_truth_shape, result_shape)
 
     return (
-        position_percentage_diff < threshold and size_percentage_diff == 0,
+        position_percentage_diff <= threshold and size_percentage_diff == 0,
         position_percentage_diff + size_percentage_diff,
     )
