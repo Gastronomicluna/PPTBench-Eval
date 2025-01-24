@@ -1,5 +1,7 @@
-import pytest
 import json
+
+import pytest
+
 from src.modification.judge_lib.judge_add_shape import (
     get_new_shape,
     judge_answer_add_shape,
@@ -11,7 +13,8 @@ def base_presentation_json():
     json_file = "data/test.json"
     with open(json_file, "r") as f:
         return json.load(f)
-    
+
+
 @pytest.fixture
 def json_data_minus_one():
     return {
