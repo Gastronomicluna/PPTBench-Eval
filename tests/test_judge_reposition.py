@@ -47,6 +47,7 @@ def test_shape_reposition_score_exact_match(shape_to_modify):
 
     assert compare_shape_position(ground_truth_shape, result_shape)
 
+
 def test_shape_reposition_score_not_matching(shape_to_modify):
     """Test score calculation with not matching shapes."""
     ground_truth_shape = shape_to_modify.copy()
