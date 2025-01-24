@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Union
@@ -310,7 +309,7 @@ def add_picture(
         "width": width,
         "left": left,
         "top": top,
-        "image_path": os.path.abspath(image_file),
+        "image_path": image_file,
     }
     JSON_CURRENT_SLIDE["shapes"].append(new_shape)
     JSON_CURRENT_SHAPE = new_shape
