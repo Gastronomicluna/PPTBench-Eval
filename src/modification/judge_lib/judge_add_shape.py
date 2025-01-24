@@ -179,3 +179,5 @@ def compare_shape(
     # If both have images, compare them
     if original_image and modified_image and original_image != modified_image:
         return False
+
+    return True
