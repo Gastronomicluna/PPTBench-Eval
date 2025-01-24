@@ -164,7 +164,7 @@ def compare_shape(
         answer=modified_text,
         threshold=text_threshold,
     )
-    
+
     if not text_match:
         return False
 
