@@ -33,9 +33,13 @@ def judge_answer_add_shape(
     slide_width = presentation_json.get("slide_width")
 
     # Get slide ID
-    slide_id = shape_to_modify.get("slide_id")
+    slide_json = json_data.get("slide", {})
+    if slide_json is None:
+        raise ValueError("The slide JSON data is not found in the JSON data.")
+    slide_id = slide_json.get("slide_id")
     if slide_id is None:
         raise ValueError("The slide ID is not found in the shape to modify.")
+    
     # Get the minus one shape slide JSON data
     minus_one_shape_slide_json = json_data.get("slide", {})
 
