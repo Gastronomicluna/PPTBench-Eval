@@ -10,7 +10,7 @@ from src.modification.judge_lib.judge_add_shape import (
 
 @pytest.fixture
 def base_presentation_json():
-    json_file = "data/test.json"
+    json_file = "tests/data/test.json"
     with open(json_file, "r") as f:
         return json.load(f)
 
