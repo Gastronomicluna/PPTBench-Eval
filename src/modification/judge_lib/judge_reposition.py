@@ -1,7 +1,11 @@
 from typing import Any, Dict, List, Tuple, Union
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import calculate_position_diff, get_shape_from_presentation, calculate_size_diff
+from ..utils import (
+    calculate_position_diff,
+    calculate_size_diff,
+    get_shape_from_presentation,
+)
 
 
 def judge_answer_reposition(
@@ -56,7 +60,7 @@ def judge_answer_reposition(
 
     # Compare the shapes
     flag, score = compare_shape_position(ground_truth_shape, modified_shape)
-    
+
     if debug:
         return flag, score
     return flag
