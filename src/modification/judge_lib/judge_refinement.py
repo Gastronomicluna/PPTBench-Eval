@@ -12,7 +12,6 @@ from ..utils import (
 def judge_answer_refinement(
     api_calls: List[str],
     json_data: Dict[str, Any],
-    ground_truth: Dict[str, Any],
     presentation_json: Dict[str, Any],
 ) -> bool:
     """
@@ -25,15 +24,18 @@ def judge_answer_refinement(
     Returns:
         bool: Whether the answer is correct.
     """
-    # Get slide ID from the ground truth
-    slide_id = ground_truth.get("slide", {}).get("slide_id")
-    slide_height = ground_truth["slide_height"]
-    slide_width = ground_truth["slide_width"]
-
+    slide_height = json_data["slide_height"]
+    slide_width = json_data["slide_width"]
+    
     # Get the slide JSON data
     slide_json = json_data.get("slide", {})
     if slide_json is None:
         raise ValueError("The slide JSON data is not found in the JSON data.")
+    
+    # Get slide ID from the ground truth
+    slide_id = slide_json["slide_id"]
+    if slide_id is None:
+        raise ValueError("The slide ID is not found in the shape to modify.")
 
     # Execute the API calls
     produced_presentation_json = produce_modified_presentation_json(
