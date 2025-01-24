@@ -93,9 +93,10 @@ def calculate_diff(
 
     percentage_diff = top_diff / ground_truth_coordinates["height"]
     percentage_diff += left_diff / ground_truth_coordinates["width"]
-    
+
     return percentage_diff
-    
+
+
 def compare_shape_position(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
@@ -112,7 +113,7 @@ def compare_shape_position(
         bool: Whether the shapes are the same.
     """
     percentage_diff = calculate_diff(ground_truth_shape, result_shape)
-    
+
     ground_truth_coordinates = {
         "height": ground_truth_shape["height"],
         "width": ground_truth_shape["width"],
@@ -129,5 +130,5 @@ def compare_shape_position(
 
     equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
     equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
-    
+
     return percentage_diff <= threshold and equal_height and equal_width
