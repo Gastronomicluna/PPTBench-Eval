@@ -36,11 +36,11 @@ def judge_answer_add_shape(
     slide_json = json_data.get("slide", {})
     if slide_json is None:
         raise ValueError("The slide JSON data is not found in the JSON data.")
-    
+
     slide_id = slide_json.get("slide_id")
     if slide_id is None:
         raise ValueError("The slide ID is not found in the shape to modify.")
-    
+
     # Get the minus one shape slide JSON data
     minus_one_shape_slide_json = json_data.get("slide", {})
 
@@ -75,16 +75,12 @@ def judge_answer_add_shape(
     if has_overlap(slide_json=modified_slide):
         return False
 
-
-
     # Get the added shape
     added_shape = get_new_shape(
         slide_with_n_shape=minus_one_shape_slide_json,
         slide_with_n_plus_one_shape=modified_slide,
     )
 
-
-        
     # print(added_shape)
     return compare_shape(
         gold_shape=shape_to_modify,
@@ -121,6 +117,7 @@ def get_new_shape(
             break
 
     return new_shape
+
 
 def compare_shape(
     gold_shape: Dict[str, Any],
