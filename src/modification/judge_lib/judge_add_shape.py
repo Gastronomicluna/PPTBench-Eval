@@ -74,7 +74,9 @@ def judge_answer_add_shape(
 
     if has_overlap(slide_json=modified_slide):
         return False
-
+    
+    # print("Minus one shape slide: ", minus_one_shape_slide_json)
+    # print("Modified slide: ", modified_slide)
     # Get the added shape
     added_shape = get_new_shape(
         slide_with_n_shape=minus_one_shape_slide_json,
@@ -122,8 +124,8 @@ def get_new_shape(
             new_shape = shape
             break
     
-    if new_shape is None:
-        raise ValueError("New shape not found! ")
+    # if new_shape is None:
+    #     raise ValueError("New shape not found! ")
     
     return new_shape
 
