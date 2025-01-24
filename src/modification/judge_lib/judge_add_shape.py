@@ -34,7 +34,8 @@ def judge_answer_add_shape(
 
     # Get slide ID
     slide_id = shape_to_modify.get("slide_id")
-
+    if slide_id is None:
+        raise ValueError("The slide ID is not found in the shape to modify.")
     # Get the minus one shape slide JSON data
     minus_one_shape_slide_json = json_data.get("slide", {})
 
@@ -57,7 +58,7 @@ def judge_answer_add_shape(
         slide_id=slide_id,
         presentation=modified_presentation_json,
     )
-    # print(modified_slide)
+    print(modified_slide)
     # Check if the slide has out of bounds or has overlap
     if has_out_of_bounds(
         slide_json=modified_slide,

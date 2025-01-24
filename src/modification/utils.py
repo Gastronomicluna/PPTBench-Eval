@@ -29,7 +29,9 @@ def produce_modified_presentation_json(
             slide_index = slides.index(slide)
             slides[slide_index] = slide_json
             break
-
+    if presentation == new_presentation:
+        logging.error(f"Slide with ID {slide_id} not found in presentation.")
+        return {}
     return new_presentation
 
 
