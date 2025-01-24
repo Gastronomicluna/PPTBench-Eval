@@ -21,8 +21,9 @@ def judge_answer_add_shape(
 
     Args:
         api_calls (List[str]): The API calls made by the model.
-        ground_truth (Dict[str, Any]): The ground truth JSON data.
-        presentation_json (Dict[str, Any]): The JSON data, the original
+        shape_to_modify (Dict[str, Any]): The shape to modify.
+        json_data (Dict[str, Any]): The JSON data with n - 1 shapes.
+        presentation_json (Dict[str, Any]): The original presentation JSON data.
 
     Returns:
         bool: Whether the answer is correct.
