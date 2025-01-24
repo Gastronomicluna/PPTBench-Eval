@@ -62,7 +62,7 @@ def judge_answer_add_shape(
         slide_id=slide_id,
         presentation=modified_presentation_json,
     )
-    print(modified_slide)
+    # print(modified_slide)
     # Check if the slide has out of bounds or has overlap
     if has_out_of_bounds(
         slide_json=modified_slide,
