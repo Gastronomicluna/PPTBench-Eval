@@ -83,52 +83,7 @@ def judge_answer_add_shape(
         slide_with_n_plus_one_shape=modified_slide,
     )
 
-    def compare_shape(
-        gold_shape: Dict[str, Any],
-        shape_to_test: Dict[str, Any],
-        text_threshold: float = 0.95,
-    ) -> bool:
-        """
-        Compare the original shape with the modified shape.
 
-        Args:
-            gold_shape (Dict[str, Any]): The original shape data.
-            shape_to_test (Dict[str, Any]): The modified shape data.
-
-        Returns:
-            bool: Whether the shapes are the same.
-        """
-        # Compare text if it exists in either shape
-        original_text = gold_shape.get("text")
-        modified_text = shape_to_test.get("text")
-
-        # If text exists in one shape but not the other, return False
-        if bool(original_text) != bool(modified_text):
-            return False
-
-        # If both have text, compare them
-        if (
-            original_text
-            and modified_text
-            and fuzzy_match(
-                ground_truth=original_text,
-                answer=modified_text,
-                threshold=text_threshold,
-            )
-        ):
-            return False
-
-        # Compare images
-        original_image = gold_shape.get("image_path")
-        modified_image = shape_to_test.get("image_path")
-
-        # If image exists in one shape but not the other, return False
-        if bool(original_image) != bool(modified_image):
-            return False
-
-        # If both have images, compare them
-        if original_image and modified_image and original_image != modified_image:
-            return False
         
     # print(added_shape)
     return compare_shape(
@@ -166,3 +121,50 @@ def get_new_shape(
             break
 
     return new_shape
+
+def compare_shape(
+    gold_shape: Dict[str, Any],
+    shape_to_test: Dict[str, Any],
+    text_threshold: float = 0.95,
+) -> bool:
+    """
+    Compare the original shape with the modified shape.
+
+    Args:
+        gold_shape (Dict[str, Any]): The original shape data.
+        shape_to_test (Dict[str, Any]): The modified shape data.
+
+    Returns:
+        bool: Whether the shapes are the same.
+    """
+    # Compare text if it exists in either shape
+    original_text = gold_shape.get("text")
+    modified_text = shape_to_test.get("text")
+
+    # If text exists in one shape but not the other, return False
+    if bool(original_text) != bool(modified_text):
+        return False
+
+    # If both have text, compare them
+    if (
+        original_text
+        and modified_text
+        and fuzzy_match(
+            ground_truth=original_text,
+            answer=modified_text,
+            threshold=text_threshold,
+        )
+    ):
+        return False
+
+    # Compare images
+    original_image = gold_shape.get("image_path")
+    modified_image = shape_to_test.get("image_path")
+
+    # If image exists in one shape but not the other, return False
+    if bool(original_image) != bool(modified_image):
+        return False
+
+    # If both have images, compare them
+    if original_image and modified_image and original_image != modified_image:
+        return False
