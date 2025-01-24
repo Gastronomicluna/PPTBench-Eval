@@ -419,3 +419,45 @@ def test_incorrect_shape_properties(
     )
 
     assert result is False
+
+
+def test_get_new_shape_success(slide_with_n_shape, slide_with_n_plus_one_shape):
+    """Test successful identification of new shape."""
+    new_shape = get_new_shape(
+        slide_with_n_shape=slide_with_n_shape,
+        slide_with_n_plus_one_shape=slide_with_n_plus_one_shape,
+    )
+    
+    expected_shape = {
+        "name": "PlaceHolder 1",
+        "shape_id": 88,
+        "shape_type": "PLACEHOLDER",
+        "measurement_unit": "emu",
+        "height": 1371600,
+        "width": 8229600,
+        "left": 457200,
+        "top": 457200,
+        "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution",
+        "font_details": [
+            {
+                "paragraph_index": 0,
+                "run_index": 0,
+                "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution",
+                "font_name": "Arial",
+                "font_size": 20.0,
+            }
+        ],
+        "placeholder_type": "TITLE",
+    }
+    
+    assert new_shape == expected_shape
+
+
+def test_get_new_shape_no_change(slide_with_n_shape):
+    """Test when no new shape is added."""
+    new_shape = get_new_shape(
+        slide_with_n_shape=slide_with_n_shape,
+        slide_with_n_plus_one_shape=slide_with_n_shape,
+    )
+    
+    assert new_shape is None
