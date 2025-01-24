@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Union
 
@@ -102,7 +103,7 @@ def set_json(json_input: Union[str, Dict[str, Any]]) -> Optional[str]:
             with open(json_input, "r") as f:
                 JSON_DATA = json.load(f)
         else:
-            JSON_DATA = json_input
+            JSON_DATA = deepcopy(json_input)
         JSON_CURRENT_SLIDE = None
         JSON_CURRENT_SHAPE = None
         return None
