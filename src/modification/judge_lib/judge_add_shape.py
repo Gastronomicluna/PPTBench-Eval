@@ -36,6 +36,7 @@ def judge_answer_add_shape(
     slide_json = json_data.get("slide", {})
     if slide_json is None:
         raise ValueError("The slide JSON data is not found in the JSON data.")
+    
     slide_id = slide_json.get("slide_id")
     if slide_id is None:
         raise ValueError("The slide ID is not found in the shape to modify.")
@@ -156,7 +157,7 @@ def judge_answer_add_shape(
         # If both have images, compare them
         if original_image and modified_image and original_image != modified_image:
             return False
-
+    print(shape_to_modify)
     return compare_shape(
         gold_shape=shape_to_modify,
         shape_to_test=added_shape,
