@@ -1,6 +1,8 @@
 import logging
 from copy import deepcopy
 from typing import Any, Dict
+
+
 def calculate_position_diff(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],

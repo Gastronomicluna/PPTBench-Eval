@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_shape_from_presentation, calculate_position_diff
+from ..utils import calculate_position_diff, get_shape_from_presentation
 
 
 def judge_answer_reposition(
@@ -54,8 +54,6 @@ def judge_answer_reposition(
     ground_truth_shape = shape_to_modify
 
     return compare_shape_position(ground_truth_shape, modified_shape)
-
-
 
 
 def compare_shape_position(
