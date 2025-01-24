@@ -18647,8 +18647,8 @@ def json_data_minus_one():
 def test_successful_shape_addition(base_presentation_json, json_data_minus_one):
     """Test case for successful shape addition."""
     api_calls = [
-        "add_shape('rectangle', 'slide1', 900, 900, 200, 200)",
-        "set_shape_text(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
+        "choose_slide(264)",
+        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
     ]
     
     shape_to_modify = {"name": "PlaceHolder 1", "shape_id": 88, "shape_type": "PLACEHOLDER", "measurement_unit": "emu", "height": 1371600, "width": 8229600, "left": 457200, "top": 457200, "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution", "font_details": [{"paragraph_index": 0, "run_index": 0, "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution", "font_name": "Arial", "font_size": 20.0}], "placeholder_type": "TITLE"}
@@ -18666,8 +18666,8 @@ def test_successful_shape_addition(base_presentation_json, json_data_minus_one):
 def test_out_of_bounds_shape(base_presentation_json, json_data_minus_one):
     """Test case for shape added out of bounds."""
     api_calls = [
-        "add_shape('rectangle', 'slide1', 900, 900, 200, 200)",
-        "set_shape_text(457200, 457200, 8229600, 1371600)",
+        "choose_slide(264)",
+        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
     ]
     
     shape_to_modify = {"name": "PlaceHolder 1", "shape_id": 88, "shape_type": "PLACEHOLDER", "measurement_unit": "emu", "height": 1371600, "width": 8229600, "left": 457200, "top": 457200, "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution", "font_details": [{"paragraph_index": 0, "run_index": 0, "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution", "font_name": "Arial", "font_size": 20.0}], "placeholder_type": "TITLE"}
@@ -18685,18 +18685,11 @@ def test_out_of_bounds_shape(base_presentation_json, json_data_minus_one):
 def test_overlapping_shape(base_presentation_json, json_data_minus_one):
     """Test case for overlapping shapes."""
     api_calls = [
-        "add_shape('rectangle', 'slide1', 150, 150, 200, 200)",
-        "set_shape_text(1, 'Overlapping Shape')",
+        "choose_slide(264)",
+        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
     ]
     
-    shape_to_modify = {
-        "slide_id": "slide1",
-        "left": 150,
-        "top": 150,
-        "width": 200,
-        "height": 200,
-        "text": "Overlapping Shape",
-    }
+    shape_to_modify = {"name": "PlaceHolder 1", "shape_id": 88, "shape_type": "PLACEHOLDER", "measurement_unit": "emu", "height": 1371600, "width": 8229600, "left": 457200, "top": 457200, "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution", "font_details": [{"paragraph_index": 0, "run_index": 0, "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution", "font_name": "Arial", "font_size": 20.0}], "placeholder_type": "TITLE"}
     
     result = judge_answer_add_shape(
         api_calls=api_calls,
@@ -18711,18 +18704,11 @@ def test_overlapping_shape(base_presentation_json, json_data_minus_one):
 def test_incorrect_shape_properties(base_presentation_json, json_data_minus_one):
     """Test case for shape with incorrect properties."""
     api_calls = [
-        "add_shape('rectangle', 'slide1', 400, 400, 200, 200)",
-        "set_shape_text(1, 'Wrong Text')",
+        "choose_slide(264)",
+        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
     ]
     
-    shape_to_modify = {
-        "slide_id": "slide1",
-        "left": 400,
-        "top": 400,
-        "width": 200,
-        "height": 200,
-        "text": "Correct Text",
-    }
+    shape_to_modify = {"name": "PlaceHolder 1", "shape_id": 88, "shape_type": "PLACEHOLDER", "measurement_unit": "emu", "height": 1371600, "width": 8229600, "left": 457200, "top": 457200, "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution", "font_details": [{"paragraph_index": 0, "run_index": 0, "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution", "font_name": "Arial", "font_size": 20.0}], "placeholder_type": "TITLE"}
     
     result = judge_answer_add_shape(
         api_calls=api_calls,
