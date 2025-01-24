@@ -307,6 +307,9 @@ def fuzzy_match(
     Returns:
         bool: Whether the answer is correct.
     """
+    if ground_truth == answer:
+        return True
+    
     ratio = fuzz.ratio(ground_truth, answer) / 100
     return ratio >= threshold
 

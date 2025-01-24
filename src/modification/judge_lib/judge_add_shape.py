@@ -159,15 +159,13 @@ def compare_shape(
         return False
 
     # If both have text, compare them
-    if (
-        original_text
-        and modified_text
-        and fuzzy_match(
-            ground_truth=original_text,
-            answer=modified_text,
-            threshold=text_threshold,
-        )
-    ):
+    text_match = fuzzy_match(
+        ground_truth=original_text,
+        answer=modified_text,
+        threshold=text_threshold,
+    )
+    
+    if not text_match:
         return False
 
     # Compare images
