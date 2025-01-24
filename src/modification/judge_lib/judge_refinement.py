@@ -1,7 +1,12 @@
 from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_slide_from_presentation, has_out_of_bounds, has_overlap, produce_modified_presentation_json
+from ..utils import (
+    get_slide_from_presentation,
+    has_out_of_bounds,
+    has_overlap,
+    produce_modified_presentation_json,
+)
 
 
 def judge_answer_refinement(
@@ -24,44 +29,39 @@ def judge_answer_refinement(
     slide_id = ground_truth.get("slide", {}).get("slide_id")
     slide_height = ground_truth["slide_height"]
     slide_width = ground_truth["slide_width"]
-    
+
     # Get the slide JSON data
     slide_json = json_data.get("slide", {})
     if slide_json is None:
         raise ValueError("The slide JSON data is not found in the JSON data.")
-    
+
     # Execute the API calls
     produced_presentation_json = produce_modified_presentation_json(
         presentation=presentation_json,
         slide_id=slide_id,
         slide_json=slide_json,
     )
-    
+
     llm_modified_presentation = api_executor(
         lines=api_calls, json=produced_presentation_json, mode="json"
     )
     if llm_modified_presentation is None:
         raise ValueError("Error executing API calls, result is None.")
-    
+
     # Get the llm modified slide
     llm_modified_slide = get_slide_from_presentation(
         slide_id=slide_id,
         presentation=llm_modified_presentation,
     )
-    
+
     # Check if the slide has overlapping shapes
     has_overlap_result = has_overlap(llm_modified_slide)
-    
+
     # Check if the slide has out of bounds shapes
     has_out_of_bounds_result = has_out_of_bounds(
         slide_json=llm_modified_slide,
         slide_height=slide_height,
         slide_width=slide_width,
     )
-    
+
     return not has_overlap_result and not has_out_of_bounds_result
-    
-    
-    
-    
-    
