@@ -43,7 +43,9 @@ def judge_answer_add_shape(
 
     # Get the minus one shape slide JSON data
     minus_one_shape_slide_json = json_data.get("slide", {})
-    print("Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"]))
+    print(
+        "Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"])
+    )
     # Produce the modified presentation JSON data
     minus_one_shape_presentation_json = produce_modified_presentation_json(
         presentation=presentation_json,
@@ -64,7 +66,9 @@ def judge_answer_add_shape(
         presentation=modified_presentation_json,
     )
     print("Modified slide shape count: ", len(modified_slide["shapes"]))
-    print("Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"]))
+    print(
+        "Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"])
+    )
     # Check if the slide has out of bounds or has overlap
     if has_out_of_bounds(
         slide_json=modified_slide,
@@ -75,7 +79,7 @@ def judge_answer_add_shape(
 
     if has_overlap(slide_json=modified_slide):
         return False
-    
+
     # print("Minus one shape slide: ", minus_one_shape_slide_json)
     # print("Modified slide: ", modified_slide)
     # Get the added shape
@@ -110,7 +114,7 @@ def get_new_shape(
 
     if slide_with_n_shape is None:
         raise ValueError("The original slide JSON data is not found.")
-    
+
     # Get the shapes from the original slide
     original_shapes = slide_with_n_shape.get("shapes", [])
 
@@ -124,10 +128,10 @@ def get_new_shape(
         if shape not in original_shapes:
             new_shape = shape
             break
-    
+
     # if new_shape is None:
     #     raise ValueError("New shape not found! ")
-    
+
     return new_shape
 
 
