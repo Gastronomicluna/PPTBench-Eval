@@ -2,6 +2,37 @@ import logging
 from copy import deepcopy
 from typing import Any, Dict
 
+def calculate_size_diff(
+    ground_truth_shape: Dict[str, Any],
+    result_shape: Dict[str, Any],
+) -> float:
+    """
+    Compare the ground truth shape with the result shape.
+
+    Args:
+        ground_truth_shape (Dict[str, Any]): The ground truth shape.
+        result_shape (Dict[str, Any]): The result shape.
+
+    Returns:
+        float: The difference between the ground truth shape and the result shape.
+    """
+    ground_truth_coordinates = {
+        "height": ground_truth_shape["height"],
+        "width": ground_truth_shape["width"],
+    }
+
+    result_coordinates = {
+        "height": result_shape["height"],
+        "width": result_shape["width"],
+    }
+
+    height_diff = abs(ground_truth_coordinates["height"] - result_coordinates["height"])
+    width_diff = abs(ground_truth_coordinates["width"] - result_coordinates["width"])
+
+    percentage_diff = height_diff / ground_truth_coordinates["height"]
+    percentage_diff += width_diff / ground_truth_coordinates["width"]
+
+    return percentage_diff
 
 def calculate_position_diff(
     ground_truth_shape: Dict[str, Any],
