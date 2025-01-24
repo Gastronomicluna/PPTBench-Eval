@@ -83,20 +83,25 @@ def shape_reposition_score(
         "left": result_shape["left"],
     }
 
-    # Calculate relative differences
+    # Calculate relative differences with increased sensitivity
     top_diff = abs(gt_coords["top"] - res_coords["top"]) / gt_coords["height"]
     left_diff = abs(gt_coords["left"] - res_coords["left"]) / gt_coords["width"]
 
-    # If dimensions don't match exactly, penalize the score
-    dim_penalty = 1.0
-    if (
-        gt_coords["height"] != res_coords["height"]
-        or gt_coords["width"] != res_coords["width"]
-    ):
-        dim_penalty = 0.7
+    # Add absolute position threshold (in EMU units)
+    absolute_threshold = 5000  # About 5 points in PowerPoint
+    if (abs(gt_coords["top"] - res_coords["top"]) > absolute_threshold or
+        abs(gt_coords["left"] - res_coords["left"]) > absolute_threshold):
+        return 0.0
 
-    # Calculate position score (exponential decay based on difference)
-    position_score = dim_penalty * (1.0 - (top_diff + left_diff) / 2)
+    # Stronger dimension penalty
+    dim_penalty = 1.0
+    if (gt_coords["height"] != res_coords["height"] or
+        gt_coords["width"] != res_coords["width"]):
+        dim_penalty = 0.5  # Increased penalty from 0.7 to 0.5
+
+    # Calculate position score with quadratic penalty
+    position_diff = (top_diff ** 2 + left_diff ** 2) ** 0.5
+    position_score = dim_penalty * (1.0 - position_diff)
 
     # Clamp score between 0 and 1
     return max(0.0, min(1.0, position_score))
