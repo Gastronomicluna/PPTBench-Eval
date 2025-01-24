@@ -156,6 +156,7 @@ def compare_shape(
 
     # If text exists in one shape but not the other, return False
     if bool(original_text) != bool(modified_text):
+        # print("Text exists in one shape but not the other")
         return False
 
     # If both have text, compare them
@@ -166,6 +167,7 @@ def compare_shape(
     )
 
     if not text_match:
+        # print("Text does not match")
         return False
 
     # Compare images
@@ -174,10 +176,13 @@ def compare_shape(
 
     # If image exists in one shape but not the other, return False
     if bool(original_image) != bool(modified_image):
+        # print("Image exists in one shape but not the other")
         return False
 
     # If both have images, compare them
     if original_image and modified_image and original_image != modified_image:
+        print("Original image: ", original_image)
+        print("Modified image: ", modified_image)
         return False
 
     return True
