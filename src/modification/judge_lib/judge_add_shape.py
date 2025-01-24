@@ -1,4 +1,5 @@
 from typing import Any, Dict, List
+from copy import deepcopy
 
 from ...shared.pptx_api.api_executor import api_executor
 from ...shared.utils import fuzzy_match
@@ -41,12 +42,12 @@ def judge_answer_add_shape(
     if slide_id is None:
         raise ValueError("The slide ID is not found in the shape to modify.")
 
-    # Get the minus one shape slide JSON data
-    minus_one_shape_slide_json = json_data.get("slide", {})
-
+    # Create a deep copy of the minus one shape slide JSON data
+    minus_one_shape_slide_json = deepcopy(json_data.get("slide", {}))
+    print("Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"]))
     # Produce the modified presentation JSON data
     minus_one_shape_presentation_json = produce_modified_presentation_json(
-        presentation=presentation_json,
+        presentation=deepcopy(presentation_json),  # Also deep copy the presentation JSON
         slide_id=slide_id,
         slide_json=minus_one_shape_slide_json,
     )
@@ -63,7 +64,8 @@ def judge_answer_add_shape(
         slide_id=slide_id,
         presentation=modified_presentation_json,
     )
-    # print(modified_slide)
+    print("Modified slide shape count: ", len(modified_slide["shapes"]))
+    print("Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"]))
     # Check if the slide has out of bounds or has overlap
     if has_out_of_bounds(
         slide_json=modified_slide,
