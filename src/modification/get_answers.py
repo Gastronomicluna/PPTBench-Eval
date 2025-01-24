@@ -153,7 +153,7 @@ def get_answer_single_modification(
                 "subcategory": subcategory,
                 "task": task,
                 "shape_to_modify": shape_to_modify,
-                "json_data": json_data, 
+                "json_data": json_data,
                 "ground_truth": ground_truth,
                 "llm_answer": None,
                 "error": str(e),
