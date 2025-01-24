@@ -18781,7 +18781,7 @@ def test_out_of_bounds_shape(base_presentation_json, json_data_minus_one):
     """Test case for shape added out of bounds."""
     api_calls = [
         "choose_slide(264)",
-        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
+        "add_text_box(457200000, 457200000, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
     ]
 
     shape_to_modify = {
@@ -18820,7 +18820,7 @@ def test_overlapping_shape(base_presentation_json, json_data_minus_one):
     """Test case for overlapping shapes."""
     api_calls = [
         "choose_slide(264)",
-        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
+        "add_text_box(0, 0, 9144000, 9144000, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
     ]
 
     shape_to_modify = {
@@ -18859,7 +18859,7 @@ def test_incorrect_shape_properties(base_presentation_json, json_data_minus_one)
     """Test case for shape with incorrect properties."""
     api_calls = [
         "choose_slide(264)",
-        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
+        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected')",
     ]
 
     shape_to_modify = {
