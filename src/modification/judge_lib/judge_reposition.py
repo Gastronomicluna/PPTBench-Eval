@@ -89,18 +89,22 @@ def shape_reposition_score(
 
     # Add absolute position threshold (in EMU units)
     absolute_threshold = 5000  # About 5 points in PowerPoint
-    if (abs(gt_coords["top"] - res_coords["top"]) > absolute_threshold or
-        abs(gt_coords["left"] - res_coords["left"]) > absolute_threshold):
+    if (
+        abs(gt_coords["top"] - res_coords["top"]) > absolute_threshold
+        or abs(gt_coords["left"] - res_coords["left"]) > absolute_threshold
+    ):
         return 0.0
 
     # Stronger dimension penalty
     dim_penalty = 1.0
-    if (gt_coords["height"] != res_coords["height"] or
-        gt_coords["width"] != res_coords["width"]):
+    if (
+        gt_coords["height"] != res_coords["height"]
+        or gt_coords["width"] != res_coords["width"]
+    ):
         dim_penalty = 0.5  # Increased penalty from 0.7 to 0.5
 
     # Calculate position score with quadratic penalty
-    position_diff = (top_diff ** 2 + left_diff ** 2) ** 0.5
+    position_diff = (top_diff**2 + left_diff**2) ** 0.5
     position_score = dim_penalty * (1.0 - position_diff)
 
     # Clamp score between 0 and 1
