@@ -1,29 +1,11 @@
 import pytest
 from src.modification.judge_lib.judge_change_font import judge_answer_change_font
-
+import json
 @pytest.fixture
 def sample_presentation_json():
-    return {
-        "slides": [
-            {
-                "slide_id": "slide1",
-                "shapes": [
-                    {
-                        "shape_id": "shape1",
-                        "text": {
-                            "paragraphs": [
-                                {
-                                    "runs": [
-                                        {"font": {"name": "Arial"}}
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
-        ]
-    }
+    json_file = "tests/data/test.json"
+    with open(json_file, "r") as f:
+        return json.load(f)
 
 @pytest.fixture
 def sample_shape_to_modify():
