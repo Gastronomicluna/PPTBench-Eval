@@ -42,6 +42,7 @@ def judge_answer_df(
         or "ground_truth" not in answers_df.columns
         or "file_hash" not in answers_df.columns
         or "shape_to_modify" not in answers_df.columns
+        or "json_data" not in answers_df.columns
         or "answer" not in answers_df.columns
     ):
         raise ValueError(
@@ -65,6 +66,7 @@ def judge_answer_df(
                 file_hash=row["file_hash"],
                 ground_truth=json.loads(row["ground_truth"]),
                 shape_to_modify=json.loads(row["shape_to_modify"]),
+                json_data=json.loads(row["json_data"]),
             )
         except Exception as e:
             print(f"Error processing row: {e}")
@@ -87,6 +89,7 @@ def judge_answer(
     ],
     api_calls: Optional[List[str]],
     file_hash: str,
+    json_data: Dict[str, Any],
     ground_truth: Dict[str, Any],
     shape_to_modify: Optional[Dict[str, Any]] = None,
 ) -> bool:
@@ -113,7 +116,8 @@ def judge_answer(
     if task == "add_shape":
         return judge_answer_add_shape(
             api_calls=api_calls,
-            ground_truth=ground_truth,
+            shape_to_modify=shape_to_modify,
+            json_data=json_data,
             presentation_json=presentation_json,
         )
     elif task == "change_font":
