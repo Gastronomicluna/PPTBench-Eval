@@ -102,6 +102,12 @@ def get_new_shape(
     Returns:
         Dict[str, Any]: The new shape data.
     """
+    if slide_with_n_plus_one_shape is None:
+        raise ValueError("The modified slide JSON data is not found.")
+
+    if slide_with_n_shape is None:
+        raise ValueError("The original slide JSON data is not found.")
+    
     # Get the shapes from the original slide
     original_shapes = slide_with_n_shape.get("shapes", [])
 
@@ -115,7 +121,10 @@ def get_new_shape(
         if shape not in original_shapes:
             new_shape = shape
             break
-
+    
+    if new_shape is None:
+        raise ValueError("New shape not found! ")
+    
     return new_shape
 
 
