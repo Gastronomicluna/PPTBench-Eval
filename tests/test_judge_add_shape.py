@@ -260,10 +260,7 @@ def json_data():
 
 def test_successful_shape_addition(base_presentation_json, shape_to_modify, json_data):
     """Test case for successful shape addition."""
-    api_calls = [
-        "choose_slide(302)",
-        "add_picture(6324480, 1828800, 2492640, 3753000, 'dataset/extracted_images/HU34OGSYJRWDNIPBOH5QHHZ4KNJSRSLG/46/image_46_3.jpg')",
-    ]
+    api_calls = ['choose_slide(302)', "add_picture(6324480, 1828800, 2492640, 3753000, 'dataset/extracted_images/HU34OGSYJRWDNIPBOH5QHHZ4KNJSRSLG/46/image_46_3.jpg')"]
 
     result = judge_answer_add_shape(
         api_calls=api_calls,
