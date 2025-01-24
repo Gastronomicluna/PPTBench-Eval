@@ -75,35 +75,7 @@ def judge_answer_add_shape(
     if has_overlap(slide_json=modified_slide):
         return False
 
-    def get_new_shape(
-        slide_with_n_shape: Dict[str, Any],
-        slide_with_n_plus_one_shape: Dict[str, Any],
-    ) -> Dict[str, Any]:
-        """
-        Get the new shape from the modified slide JSON data.
 
-        Args:
-            slide_with_n_shape (Dict[str, Any]): The slide JSON data with n shapes.
-            slide_with_n_plus_one_shape (Dict[str, Any]): The slide JSON data with n + 1 shapes.
-
-        Returns:
-            Dict[str, Any]: The new shape data.
-        """
-        # Get the shapes from the original slide
-        original_shapes = slide_with_n_shape.get("shapes", [])
-
-        # Get the shapes from the modified slide
-        add_shape_slide_shapes = slide_with_n_plus_one_shape.get("shapes", [])
-        # if len(add_shape_slide_shapes) <= len(original_shapes):
-        #     raise ValueError("The number of shapes in the modified slide is not greater than the original slide.")
-        # Find the new shape
-        new_shape = None
-        for shape in add_shape_slide_shapes:
-            if shape not in original_shapes:
-                new_shape = shape
-                break
-
-        return new_shape
 
     # Get the added shape
     added_shape = get_new_shape(
@@ -157,8 +129,40 @@ def judge_answer_add_shape(
         # If both have images, compare them
         if original_image and modified_image and original_image != modified_image:
             return False
-    print(shape_to_modify)
+        
+    # print(added_shape)
     return compare_shape(
         gold_shape=shape_to_modify,
         shape_to_test=added_shape,
     )
+
+
+def get_new_shape(
+    slide_with_n_shape: Dict[str, Any],
+    slide_with_n_plus_one_shape: Dict[str, Any],
+) -> Dict[str, Any]:
+    """
+    Get the new shape from the modified slide JSON data.
+
+    Args:
+        slide_with_n_shape (Dict[str, Any]): The slide JSON data with n shapes.
+        slide_with_n_plus_one_shape (Dict[str, Any]): The slide JSON data with n + 1 shapes.
+
+    Returns:
+        Dict[str, Any]: The new shape data.
+    """
+    # Get the shapes from the original slide
+    original_shapes = slide_with_n_shape.get("shapes", [])
+
+    # Get the shapes from the modified slide
+    add_shape_slide_shapes = slide_with_n_plus_one_shape.get("shapes", [])
+    # if len(add_shape_slide_shapes) <= len(original_shapes):
+    #     raise ValueError("The number of shapes in the modified slide is not greater than the original slide.")
+    # Find the new shape
+    new_shape = None
+    for shape in add_shape_slide_shapes:
+        if shape not in original_shapes:
+            new_shape = shape
+            break
+
+    return new_shape
