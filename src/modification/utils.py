@@ -2,6 +2,7 @@ import logging
 from copy import deepcopy
 from typing import Any, Dict
 
+
 def calculate_size_diff(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
@@ -33,6 +34,7 @@ def calculate_size_diff(
     percentage_diff += width_diff / ground_truth_coordinates["width"]
 
     return percentage_diff
+
 
 def calculate_position_diff(
     ground_truth_shape: Dict[str, Any],
