@@ -50,9 +50,10 @@ def test_shape_reposition_score_exact_match(shape_to_modify):
 def test_shape_reposition_score_near_match(shape_to_modify):
     """Test score calculation with slightly different positions."""
     modified_shape = shape_to_modify.copy()
-    modified_shape["top"] = 154000  # Small difference in EMU
+    modified_shape["top"] = 155000  # Small difference in EMU
     modified_shape["left"] = 687000  # Small difference in EMU
     score = shape_reposition_score(shape_to_modify, modified_shape)
+    print(score)
     assert score > 0.95
     assert score < 1.0
 
