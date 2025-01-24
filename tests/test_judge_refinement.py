@@ -262,7 +262,6 @@ def test_judge_answer_refinement_success(
     result = judge_answer_refinement(
         api_calls=api_calls,
         json_data=json_data,
-        ground_truth=ground_truth,
         presentation_json=base_presentation_json,
     )
 
