@@ -177,7 +177,11 @@ def sample_ground_truth():
     }
 
 
-def test_successful_font_change():
+def test_successful_font_change(
+    sample_shape_to_modify,
+    sample_ground_truth,
+    sample_presentation_json
+):
     """Test successful font change matching ground truth."""
     api_calls = [
         "choose_slide(265)",
@@ -186,14 +190,18 @@ def test_successful_font_change():
     ]
     result = judge_answer_change_font(
         api_calls=api_calls,
-        shape_to_modify=sample_shape_to_modify(),
-        ground_truth=sample_ground_truth(),
-        presentation_json=sample_presentation_json(),
+        shape_to_modify=sample_shape_to_modify,
+        ground_truth=sample_ground_truth,
+        presentation_json=sample_presentation_json,
     )
     assert result is True
 
 
-def test_incorrect_font_change():
+def test_incorrect_font_change(
+    sample_shape_to_modify,
+    sample_ground_truth,
+    sample_presentation_json
+):
     """Test incorrect font change not matching ground truth."""
     api_calls = [
         "choose_slide(265)",
@@ -202,14 +210,18 @@ def test_incorrect_font_change():
     ]
     result = judge_answer_change_font(
         api_calls=api_calls,
-        shape_to_modify=sample_shape_to_modify(),
-        ground_truth=sample_ground_truth(),
-        presentation_json=sample_presentation_json(),
+        shape_to_modify=sample_shape_to_modify,
+        ground_truth=sample_ground_truth,
+        presentation_json=sample_presentation_json,
     )
     assert result is False
 
 
-def test_invalid_api_calls():
+def test_invalid_api_calls(
+    sample_shape_to_modify,
+    sample_ground_truth,
+    sample_presentation_json
+):
     """Test handling of invalid API calls."""
     api_calls = [
         "choose_slide(265)",
@@ -218,8 +230,8 @@ def test_invalid_api_calls():
     ]
     result = judge_answer_change_font(
         api_calls=api_calls,
-        shape_to_modify=sample_shape_to_modify(),
-        ground_truth=sample_ground_truth(),
-        presentation_json=sample_presentation_json(),
+        shape_to_modify=sample_shape_to_modify,
+        ground_truth=sample_ground_truth,
+        presentation_json=sample_presentation_json,
     )
     assert result is False
