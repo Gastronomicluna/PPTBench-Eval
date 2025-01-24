@@ -43,9 +43,9 @@ def judge_answer_add_shape(
 
     # Get the minus one shape slide JSON data
     minus_one_shape_slide_json = json_data.get("slide", {})
-    print(
-        "Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"])
-    )
+    # print(
+    #     "Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"])
+    # )
     # Produce the modified presentation JSON data
     minus_one_shape_presentation_json = produce_modified_presentation_json(
         presentation=presentation_json,
@@ -65,10 +65,10 @@ def judge_answer_add_shape(
         slide_id=slide_id,
         presentation=modified_presentation_json,
     )
-    print("Modified slide shape count: ", len(modified_slide["shapes"]))
-    print(
-        "Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"])
-    )
+    # print("Modified slide shape count: ", len(modified_slide["shapes"]))
+    # print(
+    #     "Minus one shape slide shape count: ", len(minus_one_shape_slide_json["shapes"])
+    # )
     # Check if the slide has out of bounds or has overlap
     if has_out_of_bounds(
         slide_json=modified_slide,
