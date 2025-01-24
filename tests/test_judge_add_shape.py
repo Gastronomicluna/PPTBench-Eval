@@ -1,6 +1,6 @@
 import pytest
 
-from src.modification.judge_lib.judge_add_shape import judge_answer_add_shape
+from src.modification.judge_lib.judge_add_shape import judge_answer_add_shape, get_new_shape
 
 
 @pytest.fixture
