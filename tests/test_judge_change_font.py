@@ -178,9 +178,7 @@ def sample_ground_truth():
 
 
 def test_successful_font_change(
-    sample_shape_to_modify,
-    sample_ground_truth,
-    sample_presentation_json
+    sample_shape_to_modify, sample_ground_truth, sample_presentation_json
 ):
     """Test successful font change matching ground truth."""
     api_calls = [
@@ -198,9 +196,7 @@ def test_successful_font_change(
 
 
 def test_incorrect_font_change(
-    sample_shape_to_modify,
-    sample_ground_truth,
-    sample_presentation_json
+    sample_shape_to_modify, sample_ground_truth, sample_presentation_json
 ):
     """Test incorrect font change not matching ground truth."""
     api_calls = [
@@ -218,9 +214,7 @@ def test_incorrect_font_change(
 
 
 def test_invalid_api_calls(
-    sample_shape_to_modify,
-    sample_ground_truth,
-    sample_presentation_json
+    sample_shape_to_modify, sample_ground_truth, sample_presentation_json
 ):
     """Test handling of invalid API calls."""
     api_calls = [
