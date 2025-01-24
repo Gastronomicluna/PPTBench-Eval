@@ -427,7 +427,7 @@ def test_get_new_shape_success(slide_with_n_shape, slide_with_n_plus_one_shape):
         slide_with_n_shape=slide_with_n_shape,
         slide_with_n_plus_one_shape=slide_with_n_plus_one_shape,
     )
-    
+
     expected_shape = {
         "name": "PlaceHolder 1",
         "shape_id": 88,
@@ -449,7 +449,7 @@ def test_get_new_shape_success(slide_with_n_shape, slide_with_n_plus_one_shape):
         ],
         "placeholder_type": "TITLE",
     }
-    
+
     assert new_shape == expected_shape
 
 
@@ -459,5 +459,5 @@ def test_get_new_shape_no_change(slide_with_n_shape):
         slide_with_n_shape=slide_with_n_shape,
         slide_with_n_plus_one_shape=slide_with_n_shape,
     )
-    
+
     assert new_shape is None
