@@ -2,9 +2,7 @@ import json
 
 import pytest
 
-from src.modification.judge_lib.judge_add_shape import (
-    judge_answer_add_shape,
-)
+from src.modification.judge_lib.judge_add_shape import judge_answer_add_shape
 
 
 @pytest.fixture
@@ -260,9 +258,7 @@ def json_data():
     }
 
 
-def test_successful_shape_addition(
-    base_presentation_json, shape_to_modify, json_data
-):
+def test_successful_shape_addition(base_presentation_json, shape_to_modify, json_data):
     """Test case for successful shape addition."""
     api_calls = [
         "choose_slide(302)",
