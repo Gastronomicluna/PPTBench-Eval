@@ -2,9 +2,7 @@ import json
 
 import pytest
 
-from src.modification.judge_lib.judge_reposition import (
-    compare_shape_position,
-)
+from src.modification.judge_lib.judge_reposition import compare_shape_position
 
 
 @pytest.fixture
