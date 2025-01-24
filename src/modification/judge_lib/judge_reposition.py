@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import calculate_position_diff, get_shape_from_presentation, calculate_size_diff
@@ -9,7 +9,8 @@ def judge_answer_reposition(
     shape_to_modify: Dict[str, Any],
     json_data: Dict[str, Any],
     presentation_json: Dict[str, Any],
-) -> bool:
+    debug: bool = False,
+) -> Union[bool, Tuple[bool, float]]:
     """
     Judge the answer based on the API calls and ground truth.
 
@@ -54,8 +55,10 @@ def judge_answer_reposition(
     ground_truth_shape = shape_to_modify
 
     # Compare the shapes
-    flag, _ = compare_shape_position(ground_truth_shape, modified_shape)
+    flag, score = compare_shape_position(ground_truth_shape, modified_shape)
     
+    if debug:
+        return flag, score
     return flag
 
 
