@@ -5,7 +5,6 @@ import pytest
 from src.modification.judge_lib.judge_reposition import (
     compare_shape_position,
     judge_answer_reposition,
-    shape_reposition_score,
 )
 
 
@@ -43,35 +42,15 @@ def shape_to_modify():
 
 def test_shape_reposition_score_exact_match(shape_to_modify):
     """Test score calculation with exactly matching shapes."""
-    score = shape_reposition_score(shape_to_modify, shape_to_modify.copy())
-    assert score == 1.0
+    ground_truth_shape = shape_to_modify.copy()
+    result_shape = shape_to_modify.copy()
 
+    assert compare_shape_position(ground_truth_shape, result_shape)
 
-def test_shape_reposition_score_near_match(shape_to_modify):
-    """Test score calculation with slightly different positions."""
-    modified_shape = shape_to_modify.copy()
-    modified_shape["top"] = 153780  # Small difference in EMU
-    modified_shape["left"] = 693800  # Small difference in EMU
-    score = shape_reposition_score(shape_to_modify, modified_shape)
-    print(score)
-    assert score > 0.95
-    assert score < 1.0
+def test_shape_reposition_score_not_matching(shape_to_modify):
+    """Test score calculation with not matching shapes."""
+    ground_truth_shape = shape_to_modify.copy()
+    result_shape = shape_to_modify.copy()
+    result_shape["left"] += 10000
 
-
-# def test_judge_answer_reposition(base_presentation_json):
-#     """Test the main judge function with sample API calls."""
-#     api_calls = ["shape = slide.shapes[0]", "shape.top = 152280", "shape.left = 685800"]
-#     shape_to_modify = {
-#         "shape_id": 17,
-#         "slide_id": 1,
-#         "top": 152280,
-#         "left": 685800,
-#         "height": 533520,
-#         "width": 7772400,
-#     }
-#     json_data = {"slide": {"slide_id": 1}}
-
-#     result = judge_answer_reposition(
-#         api_calls, shape_to_modify, json_data, base_presentation_json
-#     )
-#     assert isinstance(result, bool)
+    assert not compare_shape_position(ground_truth_shape, result_shape)

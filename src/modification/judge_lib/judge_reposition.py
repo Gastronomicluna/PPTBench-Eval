@@ -56,64 +56,50 @@ def judge_answer_reposition(
     return compare_shape_position(ground_truth_shape, modified_shape)
 
 
-def shape_reposition_score(
-    ground_truth_shape: Dict[str, Any], 
+def calculate_diff(
+    ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
-    limit: float = 0.1,
 ) -> float:
     """
-    Calculate a similarity score between two shapes based on their position.
+    Compare the ground truth shape with the result shape.
 
     Args:
         ground_truth_shape (Dict[str, Any]): The ground truth shape.
         result_shape (Dict[str, Any]): The result shape.
 
     Returns:
-        float: Score from 0 to 1, where 1 means exact match.
+        float: The difference between the ground truth shape and the result shape.
     """
-    gt_coords = {
+    ground_truth_coordinates = {
         "height": ground_truth_shape["height"],
         "width": ground_truth_shape["width"],
         "top": ground_truth_shape["top"],
         "left": ground_truth_shape["left"],
     }
 
-    res_coords = {
+    result_coordinates = {
         "height": result_shape["height"],
         "width": result_shape["width"],
         "top": result_shape["top"],
         "left": result_shape["left"],
     }
 
-    # Calculate relative thresholds (10% of dimensions)
-    height_threshold = gt_coords["height"] * limit
-    width_threshold = gt_coords["width"] * limit
+    equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
+    equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
 
-    # Check if position differences exceed the relative thresholds
-    if (abs(gt_coords["top"] - res_coords["top"]) > height_threshold or
-        abs(gt_coords["left"] - res_coords["left"]) > width_threshold):
-        return 0.0
+    top_diff = abs(ground_truth_coordinates["top"] - result_coordinates["top"])
 
-    # Calculate relative differences with increased sensitivity
-    top_diff = abs(gt_coords["top"] - res_coords["top"]) / gt_coords["height"]
-    left_diff = abs(gt_coords["left"] - res_coords["left"]) / gt_coords["width"]
+    left_diff = abs(ground_truth_coordinates["left"] - result_coordinates["left"])
 
-    # Rest of the scoring logic
-    dim_penalty = 1.0
-    if (gt_coords["height"] != res_coords["height"] or
-        gt_coords["width"] != res_coords["width"]):
-        dim_penalty = 0.5
-
-    position_diff = (top_diff ** 2 + left_diff ** 2) ** 0.5
-    position_score = dim_penalty * (1.0 - position_diff)
-
-    return max(0.0, min(1.0, position_score))
-
-
+    percentage_diff = top_diff / ground_truth_coordinates["height"]
+    percentage_diff += left_diff / ground_truth_coordinates["width"]
+    
+    return percentage_diff
+    
 def compare_shape_position(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
-    threshold: float = 0.95,
+    threshold: float = 0.001,
 ) -> bool:
     """
     Compare the ground truth shape with the result shape.
@@ -121,10 +107,27 @@ def compare_shape_position(
     Args:
         ground_truth_shape (Dict[str, Any]): The ground truth shape.
         result_shape (Dict[str, Any]): The result shape.
-        threshold (float): Minimum score threshold for positions to be considered equal.
 
     Returns:
-        bool: Whether the shapes are similar enough based on threshold.
+        bool: Whether the shapes are the same.
     """
-    score = shape_reposition_score(ground_truth_shape, result_shape)
-    return score >= threshold
+    percentage_diff = calculate_diff(ground_truth_shape, result_shape)
+    
+    ground_truth_coordinates = {
+        "height": ground_truth_shape["height"],
+        "width": ground_truth_shape["width"],
+        "top": ground_truth_shape["top"],
+        "left": ground_truth_shape["left"],
+    }
+
+    result_coordinates = {
+        "height": result_shape["height"],
+        "width": result_shape["width"],
+        "top": result_shape["top"],
+        "left": result_shape["left"],
+    }
+
+    equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
+    equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
+    
+    return percentage_diff <= threshold and equal_height and equal_width
