@@ -28,4 +28,21 @@ def test_overlap(json_data, ground_truth):
     assert has_overlap(slide_json) == True
     ground_truth_slide = ground_truth["slide"]
     assert has_overlap(ground_truth_slide) == False
+
+def test_judge_answer_refinement_success(json_data, base_presentation_json, ground_truth):
+    """Test successful refinement with valid shape position."""
+    api_calls = [
+        "choose_slide(257)",
+        "choose_shape(22)",
+        "set_top(1752480)",
+        "set_left(609480)",
+    ]
     
+    result = judge_answer_refinement(
+        api_calls=api_calls,
+        json_data=json_data,
+        ground_truth=ground_truth,
+        presentation_json=base_presentation_json,
+    )
+    
+    assert result is True
