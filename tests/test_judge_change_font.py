@@ -3,7 +3,7 @@ from src.modification.judge_lib.judge_change_font import judge_answer_change_fon
 import json
 @pytest.fixture
 def sample_presentation_json():
-    json_file = "tests/data/test.json"
+    json_file = "tests/data/test_judge_change_font.json"
     with open(json_file, "r") as f:
         return json.load(f)
 
