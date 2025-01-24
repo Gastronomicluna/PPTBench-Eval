@@ -144,6 +144,7 @@ def judge_answer(
     elif task == "overlap" or task == "out_of_bounds":
         return judge_answer_refinement(
             api_calls=api_calls,
+            json_data=json_data,
             ground_truth=ground_truth,
             presentation_json=presentation_json,
         )
