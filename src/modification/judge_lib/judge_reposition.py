@@ -56,42 +56,64 @@ def judge_answer_reposition(
     return compare_shape_position(ground_truth_shape, modified_shape)
 
 
-def compare_shape_position(
-    ground_truth_shape: Dict[str, Any],
-    result_shape: Dict[str, Any],
-    threshold: float = 0.01,
-) -> bool:
+def shape_reposition_score(
+    ground_truth_shape: Dict[str, Any], 
+    result_shape: Dict[str, Any]
+) -> float:
     """
-    Compare the ground truth shape with the result shape.
-
+    Calculate a similarity score between two shapes based on their position.
+    
     Args:
         ground_truth_shape (Dict[str, Any]): The ground truth shape.
         result_shape (Dict[str, Any]): The result shape.
-
+        
     Returns:
-        bool: Whether the shapes are the same.
+        float: Score from 0 to 1, where 1 means exact match.
     """
-    ground_truth_coordinates = {
+    gt_coords = {
         "height": ground_truth_shape["height"],
         "width": ground_truth_shape["width"],
         "top": ground_truth_shape["top"],
         "left": ground_truth_shape["left"],
     }
-
-    result_coordinates = {
+    
+    res_coords = {
         "height": result_shape["height"],
         "width": result_shape["width"],
         "top": result_shape["top"],
         "left": result_shape["left"],
     }
+    
+    # Calculate relative differences
+    top_diff = abs(gt_coords["top"] - res_coords["top"]) / gt_coords["height"]
+    left_diff = abs(gt_coords["left"] - res_coords["left"]) / gt_coords["width"]
+    
+    # If dimensions don't match exactly, penalize the score
+    dim_penalty = 1.0
+    if gt_coords["height"] != res_coords["height"] or gt_coords["width"] != res_coords["width"]:
+        dim_penalty = 0.7
+    
+    # Calculate position score (exponential decay based on difference)
+    position_score = dim_penalty * (1.0 - (top_diff + left_diff) / 2)
+    
+    # Clamp score between 0 and 1
+    return max(0.0, min(1.0, position_score))
 
-    equal_height = ground_truth_coordinates["height"] == result_coordinates["height"]
-    equal_width = ground_truth_coordinates["width"] == result_coordinates["width"]
-
-    top_diff = abs(ground_truth_coordinates["top"] - result_coordinates["top"])
-    equal_top = top_diff <= threshold * ground_truth_coordinates["height"]
-
-    left_diff = abs(ground_truth_coordinates["left"] - result_coordinates["left"])
-    equal_left = left_diff <= threshold * ground_truth_coordinates["width"]
-
-    return equal_height and equal_width and equal_top and equal_left
+def compare_shape_position(
+    ground_truth_shape: Dict[str, Any],
+    result_shape: Dict[str, Any],
+    threshold: float = 095
+) -> bool:
+    """
+    Compare the ground truth shape with the result shape.
+    
+    Args:
+        ground_truth_shape (Dict[str, Any]): The ground truth shape.
+        result_shape (Dict[str, Any]): The result shape.
+        threshold (float): Minimum score threshold for positions to be considered equal.
+        
+    Returns:
+        bool: Whether the shapes are similar enough based on threshold.
+    """
+    score = shape_reposition_score(ground_truth_shape, result_shape)
+    return score >= threshold
