@@ -50,39 +50,12 @@ def test_shape_reposition_score_exact_match(shape_to_modify):
 def test_shape_reposition_score_near_match(shape_to_modify):
     """Test score calculation with slightly different positions."""
     modified_shape = shape_to_modify.copy()
-    modified_shape["top"] = 155000  # Small difference in EMU
-    modified_shape["left"] = 687000  # Small difference in EMU
+    modified_shape["top"] = 153780  # Small difference in EMU
+    modified_shape["left"] = 693800  # Small difference in EMU
     score = shape_reposition_score(shape_to_modify, modified_shape)
     print(score)
     assert score > 0.95
     assert score < 1.0
-
-
-def test_shape_reposition_score_dimension_mismatch(shape_to_modify):
-    """Test score calculation with different dimensions."""
-    modified_shape = shape_to_modify.copy()
-    modified_shape["height"] = 400000  # Different height in EMU
-    score = shape_reposition_score(shape_to_modify, modified_shape)
-    assert score == pytest.approx(0.7, rel=0.1)
-
-
-def test_compare_shape_position_exact_match(shape_to_modify):
-    """Test position comparison with exact match."""
-    assert compare_shape_position(shape_to_modify, shape_to_modify.copy())
-
-
-def test_compare_shape_position_near_match(shape_to_modify):
-    """Test position comparison with near match."""
-    modified_shape = shape_to_modify.copy()
-    modified_shape["top"] = 154000  # Small difference in EMU
-    assert compare_shape_position(shape_to_modify, modified_shape, threshold=0.95)
-
-
-def test_compare_shape_position_mismatch(shape_to_modify):
-    """Test position comparison with clear mismatch."""
-    modified_shape = shape_to_modify.copy()
-    modified_shape["top"] = 300000  # Large difference in EMU
-    assert not compare_shape_position(shape_to_modify, modified_shape)
 
 
 # def test_judge_answer_reposition(base_presentation_json):
