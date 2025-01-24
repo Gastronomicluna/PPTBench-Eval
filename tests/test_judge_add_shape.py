@@ -18737,15 +18737,9 @@ def json_data_minus_one():
         },
     }
 
-
-def test_successful_shape_addition(base_presentation_json, json_data_minus_one):
-    """Test case for successful shape addition."""
-    api_calls = [
-        "choose_slide(264)",
-        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
-    ]
-
-    shape_to_modify = {
+@pytest.fixture
+def shape_to_modify():
+    return {
         "name": "PlaceHolder 1",
         "shape_id": 88,
         "shape_type": "PLACEHOLDER",
@@ -18766,6 +18760,13 @@ def test_successful_shape_addition(base_presentation_json, json_data_minus_one):
         ],
         "placeholder_type": "TITLE",
     }
+
+def test_successful_shape_addition(base_presentation_json, json_data_minus_one, shape_to_modify):
+    """Test case for successful shape addition."""
+    api_calls = [
+        "choose_slide(264)",
+        "add_text_box(457200, 457200, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
+    ]
 
     result = judge_answer_add_shape(
         api_calls=api_calls,
@@ -18777,35 +18778,13 @@ def test_successful_shape_addition(base_presentation_json, json_data_minus_one):
     assert result is True
 
 
-def test_out_of_bounds_shape(base_presentation_json, json_data_minus_one):
+def test_out_of_bounds_shape(base_presentation_json, json_data_minus_one, shape_to_modify):
     """Test case for shape added out of bounds."""
     api_calls = [
         "choose_slide(264)",
         "add_text_box(457200000, 457200000, 8229600, 1371600, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
     ]
 
-    shape_to_modify = {
-        "name": "PlaceHolder 1",
-        "shape_id": 88,
-        "shape_type": "PLACEHOLDER",
-        "measurement_unit": "emu",
-        "height": 1371600,
-        "width": 8229600,
-        "left": 457200,
-        "top": 457200,
-        "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution",
-        "font_details": [
-            {
-                "paragraph_index": 0,
-                "run_index": 0,
-                "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution",
-                "font_name": "Arial",
-                "font_size": 20.0,
-            }
-        ],
-        "placeholder_type": "TITLE",
-    }
-
     result = judge_answer_add_shape(
         api_calls=api_calls,
         shape_to_modify=shape_to_modify,
@@ -18816,35 +18795,13 @@ def test_out_of_bounds_shape(base_presentation_json, json_data_minus_one):
     assert result is False
 
 
-def test_overlapping_shape(base_presentation_json, json_data_minus_one):
+def test_overlapping_shape(base_presentation_json, json_data_minus_one, shape_to_modify):
     """Test case for overlapping shapes."""
     api_calls = [
         "choose_slide(264)",
         "add_text_box(0, 0, 9144000, 9144000, 'Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution')",
     ]
 
-    shape_to_modify = {
-        "name": "PlaceHolder 1",
-        "shape_id": 88,
-        "shape_type": "PLACEHOLDER",
-        "measurement_unit": "emu",
-        "height": 1371600,
-        "width": 8229600,
-        "left": 457200,
-        "top": 457200,
-        "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution",
-        "font_details": [
-            {
-                "paragraph_index": 0,
-                "run_index": 0,
-                "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution",
-                "font_name": "Arial",
-                "font_size": 20.0,
-            }
-        ],
-        "placeholder_type": "TITLE",
-    }
-
     result = judge_answer_add_shape(
         api_calls=api_calls,
         shape_to_modify=shape_to_modify,
@@ -18855,34 +18812,12 @@ def test_overlapping_shape(base_presentation_json, json_data_minus_one):
     assert result is False
 
 
-def test_incorrect_shape_properties(base_presentation_json, json_data_minus_one):
+def test_incorrect_shape_properties(base_presentation_json, json_data_minus_one, shape_to_modify):
     """Test case for shape with incorrect properties."""
     api_calls = [
         "choose_slide(264)",
         "add_text_box(457200, 457200, 8229600, 1371600, 'Projected')",
     ]
-
-    shape_to_modify = {
-        "name": "PlaceHolder 1",
-        "shape_id": 88,
-        "shape_type": "PLACEHOLDER",
-        "measurement_unit": "emu",
-        "height": 1371600,
-        "width": 8229600,
-        "left": 457200,
-        "top": 457200,
-        "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution",
-        "font_details": [
-            {
-                "paragraph_index": 0,
-                "run_index": 0,
-                "text": "Projected Impacts of ABI Data on Satellite-Based Precipitation Estimation Part I: Enhanced Temporal Resolution",
-                "font_name": "Arial",
-                "font_size": 20.0,
-            }
-        ],
-        "placeholder_type": "TITLE",
-    }
 
     result = judge_answer_add_shape(
         api_calls=api_calls,
