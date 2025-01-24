@@ -1,7 +1,11 @@
 from typing import Any, Dict, List
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_shape_from_presentation
+from ..utils import (
+    calculate_position_diff,
+    calculate_size_diff,
+    get_shape_from_presentation,
+)
 
 
 def judge_answer_resize(
@@ -60,7 +64,7 @@ def judge_answer_resize(
 def compare_shape_size(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
-    threshold: float = 0.01,
+    threshold: float = 0.001,
 ) -> bool:
     """
     Compare the ground truth shape with the result shape.
@@ -73,5 +77,19 @@ def compare_shape_size(
         bool: Whether the shapes are the same.
     """
 
+    # Get the position of the shapes
+    ground_truth_position = ground_truth_shape["position"]
+    result_position = result_shape["position"]
 
-pass
+    # Get the size of the shapes
+    ground_truth_size = ground_truth_shape["size"]
+    result_size = result_shape["size"]
+
+    # Calculate the difference in position
+    position_diff = calculate_position_diff(ground_truth_position, result_position)
+
+    # Calculate the difference in size
+    size_diff = calculate_size_diff(ground_truth_size, result_size)
+
+    # Check if the difference is within the threshold
+    return position_diff <= threshold and size_diff <= threshold
