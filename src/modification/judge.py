@@ -131,21 +131,20 @@ def judge_answer(
         return judge_answer_reposition(
             api_calls=api_calls,
             shape_to_modify=shape_to_modify,
-            ground_truth=ground_truth,
+            json_data=json_data,
             presentation_json=presentation_json,
         )
     elif task == "resize":
         return judge_answer_resize(
             api_calls=api_calls,
             shape_to_modify=shape_to_modify,
-            ground_truth=ground_truth,
+            json_data=json_data,
             presentation_json=presentation_json,
         )
     elif task == "overlap" or task == "out_of_bounds":
         return judge_answer_refinement(
             api_calls=api_calls,
             json_data=json_data,
-            ground_truth=ground_truth,
             presentation_json=presentation_json,
         )
     else:
