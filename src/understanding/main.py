@@ -95,7 +95,7 @@ def main(
                     max_tokens=2048,
                     json_mode=True,
                     timeout=60,
-                    csv_path=results_dir / f"{model_name}.csv",
+                    csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
                     overwrite=True,
                 )
             ] = (provider, model_name)
@@ -111,7 +111,7 @@ def main(
     print("Formatting answers...")
 
     for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name}.csv"
+        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
         if csv_path.exists():
             results_df = format_answer_csv_shared(
                 csv_path=csv_path,
@@ -126,7 +126,7 @@ def main(
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
         results_df = judge_answer_df(
-            csv_path=results_dir / f"{model_name}.csv",
+            csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
             overwrite=True,
         )
         print(f"Judged {len(results_df)} entries")
@@ -136,7 +136,7 @@ def main(
     # Evaluate answers and combine results
     evaluation_results = []
     for _, model_name in models_to_run:
-        judged_df = pd.read_csv(results_dir / f"{model_name}.csv")
+        judged_df = pd.read_csv(results_dir / f"{model_name.replace('.', '-')}.csv")
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
         evaluation_results.append(eval_df)
