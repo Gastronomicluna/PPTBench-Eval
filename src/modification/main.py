@@ -121,7 +121,7 @@ def main(
                     json_mode=True,
                     timeout=60,
                     csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
-                    overwrite=True,
+                    # overwrite=True,
                 )
             ] = (model_name, provider)
             time.sleep(job_delay)  # Add delay between job submissions
