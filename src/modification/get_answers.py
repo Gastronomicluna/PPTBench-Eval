@@ -1,9 +1,10 @@
+import json
 import logging
 import time
 import traceback
 from pathlib import Path
 from typing import Any, Dict, Optional
-import json
+
 import pandas as pd
 
 from ..shared.get_answers import get_answers
@@ -128,7 +129,7 @@ def get_answer_single_modification(
 
             llm_answer = call_vision_model(**kwargs)
             llm_answer_str = llm_answer if not json_mode else json.dumps(llm_answer)
-            
+
             return {
                 "hash": hash_value,
                 "file_hash": file_hash,
