@@ -332,6 +332,7 @@ def main() -> None:
     print(result)
     result_json = json.loads(result)
     print(result_json)
+    assert isinstance(result_json, dict)
 
 if __name__ == "__main__":
     main()
