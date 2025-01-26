@@ -18,7 +18,7 @@ def get_answers_generation(
     provider: str,
     temperature: float,
     max_tokens: int,
-    json: bool,
+    json_mode: bool,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
     csv_path: Optional[Path] = None,
@@ -34,7 +34,7 @@ def get_answers_generation(
         provider (str): Provider of the model.
         temperature (float): Sampling temperature.
         max_tokens (int): Maximum tokens in response.
-        json (bool): Whether to return JSON format.
+        json_mode (bool): Whether to return JSON format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
         pure_text (bool): If True, only use text data without images.
@@ -52,7 +52,7 @@ def get_answers_generation(
         provider=provider,
         temperature=temperature,
         max_tokens=max_tokens,
-        json=json,
+        json_mode=json_mode,
         timeout=timeout,
         retry=retry,
         csv_path=csv_path,
@@ -67,7 +67,7 @@ def get_answer_single_generation(
     provider: str,
     temperature: float,
     max_tokens: int,
-    json: bool,
+    json_mode: bool,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
     pure_text: bool = False,
@@ -81,7 +81,7 @@ def get_answer_single_generation(
         provider (str): Provider of the model.
         temperature (float): Sampling temperature.
         max_tokens (int): Maximum tokens in response.
-        json (bool): Whether to return JSON format.
+        json_mode (bool): Whether to return JSON format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
         pure_text (bool): If True, only use text data without images.
@@ -117,7 +117,7 @@ def get_answer_single_generation(
                 "prompt": prompt,
                 "temperature": temperature,
                 "max_tokens": max_tokens,
-                "json": json,
+                "json_mode": json_mode,
             }
             if timeout is not None:
                 kwargs["timeout"] = timeout
@@ -191,7 +191,7 @@ def main(
         provider="api",
         temperature=0.0,
         max_tokens=3200,
-        json=True,
+        json_mode=True,
         timeout=60,
         csv_path=Path(csv_path),
         overwrite=True,
