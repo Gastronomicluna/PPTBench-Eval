@@ -15,4 +15,4 @@ def test_api_executor(base_presentation_json):
     lines = ['choose_slide(263)', "add_text_box(334800, 1000000, 8477280, 800000, 'Objectives')", "set_font('Arial')", 'set_font_size(72)']
     result = api_executor(lines, json=base_presentation_json)
     # assert result is not None
-    
+    print(result)
