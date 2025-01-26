@@ -60,8 +60,9 @@ def judge_answer_add_shape(
         json=minus_one_shape_presentation_json,
         mode="json",
     )
-    # print(modified_presentation_json)
-    # Get the modified slide
+    if modified_presentation_json is None:
+        return False, "Error executing API calls"
+    
     modified_slide = get_slide_from_presentation(
         slide_id=slide_id,
         presentation=modified_presentation_json,
