@@ -43,6 +43,7 @@ def build_prompt(
 
 def build_prompt_element_modification(
     query: str,
+    task: Literal["add_shape", "resize_shape", "reposition_shape"],
     slide_json: Dict[str, Any],
     shape_to_modify: Dict[str, Any],
 ) -> str:
