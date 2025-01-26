@@ -18,6 +18,7 @@ def build_prompt(
     query: str,
     slide_json: Dict[str, Any],
     subcategory: Literal["element_modification", "refinement", "text_modification"],
+    task: Optional[Literal["add_shape", "resize_shape", "reposition_shape"]] = None,
     shape_to_modify: Optional[Dict[str, Any]] = None,
 ) -> str:
     """
@@ -33,7 +34,12 @@ def build_prompt(
         str: The prompt text.
     """
     if subcategory == "element_modification":
-        return build_prompt_element_modification(query, slide_json, shape_to_modify)
+        return build_prompt_element_modification(
+            query=query,
+            task=task,
+            slide_json=slide_json,
+            shape_to_modify=shape_to_modify,
+        )
     elif subcategory == "refinement":
         return build_prompt_refinement(query, slide_json)
     elif subcategory == "text_modification":
