@@ -13,8 +13,7 @@ def judge_answer_reposition(
     shape_to_modify: Dict[str, Any],
     json_data: Dict[str, Any],
     presentation_json: Dict[str, Any],
-    debug: bool = False,
-) -> Union[Tuple[bool, str], Tuple[bool, str, float]]:
+) -> Tuple[bool, str]:
     """
     Judge the answer based on the API calls and ground truth.
 
@@ -23,11 +22,9 @@ def judge_answer_reposition(
         shape_to_modify (Dict[str, Any]): The shape to modify.
         json_data (Dict[str, Any]): The JSON data.
         presentation_json (Dict[str, Any]): The presentation JSON data.
-        debug (bool, optional): Whether to return the score. Defaults to False.
 
     Returns:
-        Union[Tuple[bool, str], Tuple[bool, str, float]]: 
-            (success, message) or (success, message, score) if debug is True
+        Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
     """
     # Get slide ID
     slide_json = json_data.get("slide", {})
@@ -50,7 +47,7 @@ def judge_answer_reposition(
         mode="json",
     )
     if modified_presentation_json is None:
-        return (False, "Error executing API calls") if not debug else (False, "Error executing API calls", 1.0)
+        return False, "Error executing API calls"
 
     shape_id = shape_to_modify["shape_id"]
 
@@ -64,9 +61,6 @@ def judge_answer_reposition(
 
     # Compare the shapes
     flag, score = compare_shape_position(ground_truth_shape, modified_shape)
-
-    if debug:
-        return flag, "Success" if flag else f"Position difference too large: {score:.4f}", score
     return flag, "Success" if flag else f"Position difference too large: {score:.4f}"
 
 
