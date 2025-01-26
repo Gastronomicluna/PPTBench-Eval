@@ -2,6 +2,8 @@ import pytest
 
 from src.shared.pptx_api.api_executor_json import (
     JSON_CURRENT_SHAPE,
+    JSON_DATA,
+    JSON_CURRENT_SLIDE,
     add_text_box,
     choose_shape,
     choose_slide,
@@ -70,22 +72,34 @@ def test_set_font_no_shape_selected(sample_json):
 def test_text_box_creation_with_formatting():
     # Setup initial JSON
     json_data = {"slides": [{"slide_id": 263, "shapes": []}]}
-
+    
     # Test sequence
     set_json(json_data)
-    assert choose_slide(263) is None
-    assert add_text_box(334800, 1000000, 8477280, 800000, "Objectives") is None
-    assert set_font("Arial") is None
-    assert set_font_size(72) is None
+    assert JSON_DATA is not None, "JSON_DATA should not be None after set_json"
+    
+    result = choose_slide(263)
+    assert result is None, f"choose_slide failed with: {result}"
+    assert JSON_CURRENT_SLIDE is not None, "JSON_CURRENT_SLIDE should not be None"
+    
+    result = add_text_box(334800, 1000000, 8477280, 800000, "Objectives")
+    assert result is None, f"add_text_box failed with: {result}"
+    assert JSON_CURRENT_SHAPE is not None, "JSON_CURRENT_SHAPE should not be None"
+    
+    result = set_font("Arial")
+    assert result is None, f"set_font failed with: {result}"
+    
+    result = set_font_size(72)
+    assert result is None, f"set_font_size failed with: {result}"
 
     # Verify the results
     shape = JSON_CURRENT_SHAPE
-    assert shape is not None
+    assert shape is not None, "Shape is None after operations"
     assert shape["text"] == "Objectives"
     assert shape["left"] == 334800
     assert shape["top"] == 1000000
     assert shape["width"] == 8477280
     assert shape["height"] == 800000
+    assert "font_details" in shape, "font_details missing from shape"
     assert shape["font_details"][0]["font_name"] == "Arial"
     assert shape["font_details"][0]["font_size"] == 72
 

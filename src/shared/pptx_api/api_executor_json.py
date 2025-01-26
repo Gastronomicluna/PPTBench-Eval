@@ -254,9 +254,13 @@ def add_text_box(
     Returns:
         Optional error message if operation fails.
     """
-    global JSON_CURRENT_SHAPE
+    global JSON_CURRENT_SHAPE, JSON_CURRENT_SLIDE
     if JSON_CURRENT_SLIDE is None:
         return "No slide selected"
+    
+    if "shapes" not in JSON_CURRENT_SLIDE:
+        JSON_CURRENT_SLIDE["shapes"] = []
+        
     new_shape = {
         "name": f"TextBox_{len(JSON_CURRENT_SLIDE['shapes'])}",
         "shape_id": assign_shape_id(JSON_CURRENT_SLIDE),
@@ -267,10 +271,20 @@ def add_text_box(
         "left": left,
         "top": top,
         "text": text or "",
-        "font_details": [],
+        "font_details": [
+            {
+                "paragraph_index": 0,
+                "run_index": 0,
+                "text": text or "",
+                "font_name": None,
+                "font_size": None,
+            }
+        ],
     }
+    
     if placeholder_type:
         new_shape["placeholder_type"] = placeholder_type
+    
     JSON_CURRENT_SLIDE["shapes"].append(new_shape)
     JSON_CURRENT_SHAPE = new_shape
     return None
