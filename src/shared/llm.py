@@ -305,7 +305,7 @@ def generate_api_messages(
 
 def main() -> None:
     from ..shared.load_save_dataset import load_save_huggingface_dataset_df
-
+    import json
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
     df = load_save_huggingface_dataset_df(
@@ -320,7 +320,7 @@ def main() -> None:
     # with open("image.jpg", "wb") as f:
     #     f.write(image_bytes)
     result = call_vision_model(
-        model_name="gpt-4o",
+        model_name="gemini-2.0-flash-exp",
         provider="api",
         prompt="describe the image",
         temperature=0.7,
@@ -330,8 +330,8 @@ def main() -> None:
         timeout=30,
     )
     print(result)
-    assert isinstance(result, dict)
-
+    result_json = json.loads(result)
+    print(result_json)
 
 if __name__ == "__main__":
     main()
