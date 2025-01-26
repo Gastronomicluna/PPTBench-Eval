@@ -1,4 +1,4 @@
-# llm.py
+import json
 import base64
 import io
 import logging
@@ -170,8 +170,13 @@ def generate_with_image_ollama(
         if images:  # Only include images if list is not None and not empty
             kwargs["images"] = images
 
-        return ollama.generate(**kwargs)["response"]
+        response_str = ollama.generate(**kwargs)["response"]
 
+        if json_mode:
+            return json.loads(response_str)
+        else:
+            return response_str
+        
     except requests.exceptions.Timeout:
         raise TimeoutError(f"Request timed out after {timeout} seconds")
     except Exception as e:
@@ -222,7 +227,13 @@ def generate_with_api(
                 seed=42,
                 timeout=timeout,
             )
-            return response.choices[0].message.content
+            response_str = response.choices[0].message.content
+            
+            if json_mode:
+                return json.loads(response_str)
+            else:
+                return response_str
+            
         except requests.exceptions.Timeout:
             raise TimeoutError(f"API request timed out after {timeout} seconds")
 
@@ -304,7 +315,6 @@ def generate_api_messages(
 
 
 def main() -> None:
-    import json
 
     from ..shared.load_save_dataset import load_save_huggingface_dataset_df
 
