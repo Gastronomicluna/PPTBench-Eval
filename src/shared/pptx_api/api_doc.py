@@ -79,7 +79,7 @@ api_list = [
     API(
         name="add_text_box",
         parameters="left: int, top: int, width: int, height: int, text: str",
-        description="Add a text box to the current slide.",
+        description="Add a text box to the current slide, and select the shape as the current shape.",
         parameters_description="It takes five parameters: 'left', 'top', 'width', 'height', and 'text'. 'left', 'top', 'width', and 'height' are in emu units as integers. 'text' is a string.",
         notes="The current slide must be set before calling this function.",
         example="add_text_box(1000000, 1000000, 1000000, 1000000, 'Hello, World!')",
@@ -87,7 +87,7 @@ api_list = [
     API(
         name="add_picture",
         parameters="left: int, top: int, width: int, height: int, image_path: str",
-        description="Add a picture to the current slide.",
+        description="Add a picture to the current slide, and select the shape as the current shape.",
         parameters_description="It takes five parameters: 'left', 'top', 'width', 'height', and 'image_path'. 'left', 'top', 'width', and 'height' are in emu units as integers. 'image_path' is the path to the image file to add.",
         notes="The current slide must be set before calling this function.",
         example="add_picture(1000000, 1000000, 1000000, 1000000, 'path/to/image.jpg')",
