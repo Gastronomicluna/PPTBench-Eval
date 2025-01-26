@@ -42,13 +42,14 @@ def judge_answer_resize(
         slide_json=slide_json,
     )
 
-    modified_presentation_json = api_executor(
-        lines=api_calls,
-        json=produced_presentation_json,
-        mode="json",
-    )
-    if modified_presentation_json is None:
-        return False, "Error executing API calls"
+    try:
+        modified_presentation_json = api_executor(
+            lines=api_calls,
+            json=produced_presentation_json,
+            mode="json",
+        )
+    except Exception as e:
+        return False, f"Error executing API calls: {str(e)}"
 
     shape_id = shape_to_modify["shape_id"]
 

@@ -42,13 +42,17 @@ def judge_answer_reposition(
         slide_json=slide_json,
     )
 
-    modified_presentation_json = api_executor(
-        lines=api_calls,
-        json=produced_presentation_json,
-        mode="json",
-    )
+    try:
+        modified_presentation_json = api_executor(
+            lines=api_calls,
+            json=produced_presentation_json,
+            mode="json",
+        )
+    except Exception as e:
+        return False, f"Error executing API calls: {str(e)}"
+        
     if modified_presentation_json is None:
-        return False, "Error executing API calls"
+        return False, "Error executing API calls: returned None"
 
     shape_id = shape_to_modify["shape_id"]
 

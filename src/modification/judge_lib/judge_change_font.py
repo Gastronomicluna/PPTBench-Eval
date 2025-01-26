@@ -27,11 +27,17 @@ def judge_answer_change_font(
     shape_id = shape_to_modify["shape_id"]
 
     # Execute the API calls
-    modified_presentation_json = api_executor(
-        lines=api_calls, json=presentation_json, mode="json"
-    )
+    try:
+        modified_presentation_json = api_executor(
+            lines=api_calls, 
+            json=presentation_json, 
+            mode="json"
+        )
+    except Exception as e:
+        return False, f"Error executing API calls: {str(e)}"
+
     if modified_presentation_json is None:
-        return False, "Error executing API calls"
+        return False, "Error executing API calls: returned None"
 
     # Get the shape from the slide
     llm_modified_shape = get_shape_from_presentation(
