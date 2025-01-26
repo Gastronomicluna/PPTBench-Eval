@@ -88,7 +88,9 @@ def judge_answer_add_shape(
         slide_with_n_plus_one_shape=modified_slide,
     )
 
-    # print(added_shape)
+    if added_shape is None:
+        return False
+    
     return compare_shape(
         gold_shape=shape_to_modify,
         shape_to_test=added_shape,
@@ -129,8 +131,8 @@ def get_new_shape(
             new_shape = shape
             break
 
-    if new_shape is None:
-        raise ValueError("New shape not found! ")
+    # if new_shape is None:
+    #     raise ValueError("New shape not found! ")
 
     return new_shape
 
