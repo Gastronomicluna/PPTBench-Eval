@@ -3,6 +3,7 @@ import time
 import traceback
 from pathlib import Path
 from typing import Any, Dict, Optional
+import json
 
 import pandas as pd
 
@@ -99,8 +100,8 @@ def get_answer_single_detection(
             task = row["task"]
             description = row["description"]
             image_data = row["image"]
-            json_data = row["json_data"]
-            ground_truth = row.get("ground_truth", "")
+            json_data = json.loads(row["json_data"])
+            ground_truth = json.loads(row["ground_truth"])
 
             # Extract image bytes from dictionary format
             image_bytes = get_image_bytes(image_data) if not pure_text else None
