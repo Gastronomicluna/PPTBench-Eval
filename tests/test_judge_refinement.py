@@ -265,4 +265,4 @@ def test_judge_answer_refinement_success(
         presentation_json=base_presentation_json,
     )
 
-    assert result is True
+    assert result[0] is True

@@ -272,4 +272,4 @@ def test_successful_shape_addition(base_presentation_json, shape_to_modify, json
         presentation_json=base_presentation_json,
     )
 
-    assert result is True
+    assert result[0] is True

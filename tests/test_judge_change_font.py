@@ -192,7 +192,7 @@ def test_successful_font_change(
         ground_truth=sample_ground_truth,
         presentation_json=sample_presentation_json,
     )
-    assert result is True
+    assert result[0] is True
 
 
 def test_incorrect_font_change(
@@ -210,7 +210,8 @@ def test_incorrect_font_change(
         ground_truth=sample_ground_truth,
         presentation_json=sample_presentation_json,
     )
-    assert result is False
+    assert result[0] is False
+    assert "Font mismatch" in result[1]
 
 
 def test_invalid_api_calls(
@@ -228,4 +229,5 @@ def test_invalid_api_calls(
         ground_truth=sample_ground_truth,
         presentation_json=sample_presentation_json,
     )
-    assert result is False
+    assert result[0] is False
+    assert "Font mismatch" in result[1]

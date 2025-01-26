@@ -30,10 +30,9 @@ def sample_json():
         ]
     }
 
-def test_set_font():
+def test_set_font(sample_json):
     # Setup
-    json_data = sample_json()
-    set_json(json_data)
+    set_json(sample_json)
     choose_slide(1)
     choose_shape(1)
     
@@ -48,9 +47,9 @@ def test_set_font():
     # Reset globals after test
     reset_globals()
 
-def test_set_font_no_shape_selected():
+def test_set_font_no_shape_selected(sample_json):
     # Setup
-    set_json(sample_json())
+    set_json(sample_json)
     
     # Test without selecting shape
     result = set_font("Arial")
