@@ -60,30 +60,34 @@ def judge_answer_reposition(
     ground_truth_shape = shape_to_modify
 
     # Compare the shapes
-    flag, score = compare_shape_position(ground_truth_shape, modified_shape)
-    return flag, "Success" if flag else f"Position difference too large: {score:.4f}"
+    flag, message, score = compare_shape_position(ground_truth_shape, modified_shape)
+    return flag, f"{message} (diff: {score:.4f})"
 
 
 def compare_shape_position(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
     threshold: float = 0.001,
-) -> Tuple[bool, float]:
+) -> Tuple[bool, str, float]:
     """
     Compare the ground truth shape with the result shape.
 
     Args:
         ground_truth_shape (Dict[str, Any]): The ground truth shape.
         result_shape (Dict[str, Any]): The result shape.
+        threshold (float, optional): Maximum allowed position difference. Defaults to 0.001.
 
     Returns:
-        bool: Whether the shapes are the same.
+        Tuple[bool, str, float]: Success flag, error message, and difference score.
     """
     position_percentage_diff = calculate_position_diff(ground_truth_shape, result_shape)
-
     size_percentage_diff = calculate_size_diff(ground_truth_shape, result_shape)
-
-    return (
-        position_percentage_diff <= threshold and size_percentage_diff == 0,
-        position_percentage_diff + size_percentage_diff,
-    )
+    
+    total_diff = position_percentage_diff + size_percentage_diff
+    
+    if size_percentage_diff > 0:
+        return False, "Shape size was modified", total_diff
+    if position_percentage_diff > threshold:
+        return False, "Position difference exceeds threshold", total_diff
+        
+    return True, "Success", total_diff
