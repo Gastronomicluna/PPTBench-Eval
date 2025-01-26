@@ -85,8 +85,10 @@ def judge_answer_df(
             print(traceback.format_exc())
             return False
 
-    # print(answers_df)x
-    answers_df["is_correct"] = answers_df.apply(process_row, axis=1)
+    # Apply the process to each row
+    results = answers_df.apply(process_row, axis=1, result_type="expand")
+    answers_df["is_correct"] = results[0]
+    answers_df["reason"] = results[1]
 
     # Save results
     if overwrite:
