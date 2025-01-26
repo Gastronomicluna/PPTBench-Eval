@@ -100,8 +100,13 @@ def build_prompt_add_shape(
     """
     divider = "#" * 80
     example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
-    # text_content = build_add_shape_text_content(shape_to_add)
-    
+    if "text" in shape_to_add:
+        text_content = build_add_shape_text_content(shape_to_add)
+    elif "image_path" in shape_to_add:
+        text_content = build_add_shape_image_content(shape_to_add)
+    else:
+        raise ValueError("Shape to add must contain either 'text' or 'image_path'.")
+
     prompt = ""
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
@@ -117,6 +122,7 @@ def build_prompt_add_shape(
     prompt += f"{json.dumps(slide_json, indent=2)}\n\n"
     prompt += f"{divider}\n"
     prompt += f"Query: {query}\n"
+    prompt += f"{text_content}\n"
     # prompt += f"{text_content}\n"
     prompt += "Answer:\n"
     return prompt
