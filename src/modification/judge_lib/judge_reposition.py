@@ -5,7 +5,7 @@ from ..utils import (
     calculate_position_diff,
     calculate_size_diff,
     get_shape_from_presentation,
-    produce_modified_presentation_json
+    produce_modified_presentation_json,
 )
 
 
