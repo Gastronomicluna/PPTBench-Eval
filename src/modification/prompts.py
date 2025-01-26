@@ -82,6 +82,44 @@ def build_prompt_element_modification(
     return prompt
 
 
+def build_prompt_add_shape(
+    query: str,
+    slide_json: Dict[str, Any],
+    shape_to_add: Dict[str, Any],
+) -> str:
+    """
+    Builds a prompt for the model based on the query and slide JSON, instructing the model to add a shape to the slide.
+
+    Args:
+        query (str): The query text.
+        slide_json (dict): The JSON data for the slide.
+        shape_to_add (dict): The shape to add.
+
+    Returns:
+        str: The prompt text.
+    """
+    divider = "#" * 80
+    example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
+
+    prompt = ""
+    prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
+    prompt += f"{query}\n"
+    prompt += "To achieve this task, you can use the following functions:\n"
+    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += "Instructions:\n"
+    prompt += "- Return in JSON dict format only the requested information without any additional text or explanations.\n"
+    prompt += "- Abide by JSON formatting rules.\n\n"
+    prompt += "Examples:\n"
+    prompt += f"{example_json_str}\n\n"
+    prompt += f"{divider}\n"
+    prompt += "Slide JSON:\n"
+    prompt += f"{json.dumps(slide_json, indent=2)}\n\n"
+    prompt += f"{divider}\n"
+    prompt += f"Query: {query}\n"
+    prompt += f"Shape to Add: {json.dumps(shape_to_add, indent=2)}\n"
+    prompt += "Answer:\n"
+    return prompt
+
 def build_prompt_refinement(
     query: str,
     slide_json: Dict[str, Any],
