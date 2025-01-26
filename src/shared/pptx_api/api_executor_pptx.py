@@ -144,8 +144,7 @@ def set_current_slide(slide_idx: int) -> Optional[str]:
     if SLIDES is None:
         return "Slides list is not initialized"
     try:
-        CURRENT_SLIDE = SLIDES[slide_idx]
-        SHAPES = CURRENT_SLIDE.shapes
+        CURRENT_SLIDE = [s for s in SLIDES if s.slide_id == slide_idx][0]
         return None
     except Exception as e:
         return f"Failed to set current slide: {str(e)}"
@@ -185,7 +184,7 @@ def choose_slide(
     if SLIDES is None:
         return "No slides list available. Set current presentation first."
     try:
-        current_slide = next((s for s in SLIDES if s.slide_id == slide_id), None)
+        current_slide = [s for s in SLIDES if s.slide_id == slide_id][0]
         if current_slide is None:
             return f"Slide with ID {slide_id} not found"
         CURRENT_SLIDE = current_slide
