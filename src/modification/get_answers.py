@@ -200,7 +200,7 @@ def main(
     if test:
         df = df[df["subcategory"] == "refinement"]
 
-    sample_size = 20
+    sample_size = 100
     df = df.sample(sample_size, random_state=42)
 
     results = get_answers(

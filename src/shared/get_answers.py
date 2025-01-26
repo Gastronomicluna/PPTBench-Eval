@@ -15,7 +15,7 @@ def get_answers(
     provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
     temperature: float = 0.1,
     max_tokens: int = 3200,
-    json: bool = False,
+    json_mode: bool = False,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
     csv_path: Optional[Path] = None,
@@ -31,7 +31,7 @@ def get_answers(
         provider (str): Provider of the model (ollama, api, etc.).
         temperature (float): Sampling temperature.
         max_tokens (int): Maximum tokens in response.
-        json (bool): Whether to return JSON format.
+        json_mode (bool): Whether to return JSON format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
         csv_path (Optional[Path]): Path to save/load results. If provided,
@@ -72,7 +72,7 @@ def get_answers(
                 provider=provider,
                 temperature=temperature,
                 max_tokens=max_tokens,
-                json=json,
+                json_mode=json_mode,
                 timeout=timeout,
                 retry=retry,
                 pure_text=pure_text,

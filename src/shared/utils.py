@@ -214,7 +214,7 @@ def process_model(
     provider: str,
     temperature: float,
     max_tokens: int,
-    json: bool,
+    json_mode: bool,
     timeout: int,
     csv_path: Union[str, Path],
     overwrite: bool = False,
@@ -227,7 +227,7 @@ def process_model(
         provider: Provider of the model
         temperature: Sampling temperature
         max_tokens: Maximum tokens in response
-        json: Whether to return JSON format
+        json_mode: Whether to return JSON format
         timeout: Timeout in seconds
         csv_path: Path to save results
         overwrite: Whether to overwrite existing results
@@ -243,7 +243,7 @@ def process_model(
             provider=provider,
             temperature=temperature,
             max_tokens=max_tokens,
-            json=json,
+            json_mode=json_mode,
             timeout=timeout,
             csv_path=csv_path,
             overwrite=overwrite,
