@@ -59,22 +59,22 @@ def test_set_font_no_shape_selected(sample_json):
 def test_text_box_creation_with_formatting():
     # Setup initial JSON
     json_data = {"slides": [{"slide_id": 263, "shapes": []}]}
-    
+
     # Test sequence
     pjson.set_json(json_data)
     assert pjson.JSON_DATA is not None, "JSON_DATA should not be None after set_json"
-    
+
     result = pjson.choose_slide(263)
     assert result is None, f"choose_slide failed with: {result}"
     assert pjson.JSON_CURRENT_SLIDE is not None, "JSON_CURRENT_SLIDE should not be None"
-    
+
     result = pjson.add_text_box(334800, 1000000, 8477280, 800000, "Objectives")
     assert result is None, f"add_text_box failed with: {result}"
     assert pjson.JSON_CURRENT_SHAPE is not None, "JSON_CURRENT_SHAPE should not be None"
-    
+
     result = pjson.set_font("Arial")
     assert result is None, f"set_font failed with: {result}"
-    
+
     result = pjson.set_font_size(72)
     assert result is None, f"set_font_size failed with: {result}"
 
