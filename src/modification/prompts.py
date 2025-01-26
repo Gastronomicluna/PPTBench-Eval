@@ -33,6 +33,10 @@ def build_prompt(
     Returns:
         str: The prompt text.
     """
+    if not isinstance(slide_json, dict):
+        raise ValueError("slide_json must be a dictionary.")
+    if not isinstance(shape_to_modify, dict) and shape_to_modify is not None:
+        raise ValueError("shape_to_modify must be a dictionary.")
     if subcategory == "element_modification":
         return build_prompt_element_modification(
             query=query,
@@ -181,8 +185,8 @@ def build_add_shape_image_content(
     Returns:
         str: The image content for the shape.
     """
-    if not isinstance(shape_to_add, dict):
-        raise ValueError("shape_to_add must be a dictionary.")
+    # if not isinstance(shape_to_add, dict):
+    #     raise ValueError("shape_to_add must be a dictionary.")
     image_path = shape_to_add["image_path"]
     result = f"Add a shape to the slide with the following image: '{image_path}'.\n"
     return result
