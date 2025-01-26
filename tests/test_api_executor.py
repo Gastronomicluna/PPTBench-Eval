@@ -13,12 +13,7 @@ def base_presentation_json():
 
 
 def test_api_executor(base_presentation_json):
-    lines = [
-        "choose_slide(263)",
-        "add_text_box(334800, 1000000, 8477280, 800000, 'Objectives')",
-        "set_font('Arial')",
-        "set_font_size(72)",
-    ]
+    lines = ['choose_slide(263)', "add_text_box(456840, 2000000, 8458200, 3000000, '  Security\\n  Availability\\n  Integrity and Effectiveness\\n  Cost')", "set_font('Times New Roman')", 'set_font_size(32)']
     result = api_executor(lines, json=base_presentation_json)
     # assert result is not None
     print(result)
