@@ -58,28 +58,31 @@ def build_prompt_element_modification(
     Returns:
         str: The prompt text.
     """
-    divider = "#" * 80
-    example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
+    if task == "add_shape":
+        return build_prompt_add_shape(query, slide_json, shape_to_modify)
+    elif task == "resize_shape" or task == "reposition_shape":
+        divider = "#" * 80
+        example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
 
-    prompt = ""
-    prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
-    prompt += f"{query}\n"
-    prompt += "To achieve this task, you can use the following functions:\n"
-    prompt += f"{api_to_string(api_list)}\n\n"
-    prompt += "Instructions:\n"
-    prompt += "- Return in JSON dict format only the requested information without any additional text or explanations.\n"
-    prompt += "- Abide by JSON formatting rules.\n\n"
-    prompt += "Examples:\n"
-    prompt += f"{example_json_str}\n\n"
-    prompt += f"{divider}\n"
-    prompt += "Slide JSON:\n"
-    prompt += f"{json.dumps(slide_json, indent=2)}\n\n"
-    prompt += f"{divider}\n"
-    prompt += f"Query: {query}\n"
-    prompt += f"Shape to Modify: {json.dumps(shape_to_modify, indent=2)}\n"
-    prompt += "Answer:\n"
+        prompt = ""
+        prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
+        prompt += f"{query}\n"
+        prompt += "To achieve this task, you can use the following functions:\n"
+        prompt += f"{api_to_string(api_list)}\n\n"
+        prompt += "Instructions:\n"
+        prompt += "- Return in JSON dict format only the requested information without any additional text or explanations.\n"
+        prompt += "- Abide by JSON formatting rules.\n\n"
+        prompt += "Examples:\n"
+        prompt += f"{example_json_str}\n\n"
+        prompt += f"{divider}\n"
+        prompt += "Slide JSON:\n"
+        prompt += f"{json.dumps(slide_json, indent=2)}\n\n"
+        prompt += f"{divider}\n"
+        prompt += f"Query: {query}\n"
+        prompt += f"Shape to Modify: {json.dumps(shape_to_modify, indent=2)}\n"
+        prompt += "Answer:\n"
 
-    return prompt
+        return prompt
 
 
 def build_prompt_add_shape(
