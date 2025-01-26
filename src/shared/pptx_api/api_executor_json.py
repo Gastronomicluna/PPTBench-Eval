@@ -54,7 +54,7 @@ def api_executor_json(
 
     if JSON_DATA is None:
         raise ValueError("No JSON data available")
-    
+
     return JSON_DATA
 
 
