@@ -99,21 +99,28 @@ def extract_functions_from_json(
             (e.g., "function1", "function2", etc.) with function call strings as values.
 
     Returns:
-        List[str]: The list of function call strings in order.
+        List[str]: The list of function call strings in order. Returns empty list
+            only for empty dictionary.
 
     Raises:
         TypeError: If json_data is not a dictionary.
-        ValueError: If no valid function keys found or invalid function values.
+        ValueError: If no valid function keys found in non-empty dictionary,
+            or if function values are invalid.
     """
     if not isinstance(json_data, dict):
         raise TypeError(f"Expected dictionary input, got {type(json_data)}")
+
+    # Special case: empty dictionary returns empty list
+    if not json_data:
+        return []
 
     function_keys = sorted(
         key for key in json_data.keys() if key.startswith("function")
     )
     
+    # For non-empty dictionaries, require valid function keys
     if not function_keys:
-        raise ValueError("No valid function keys found in input")
+        raise ValueError("No valid function keys found in non-empty input")
 
     functions = []
     for key in function_keys:
