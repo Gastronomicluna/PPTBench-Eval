@@ -53,9 +53,6 @@ def judge_answer_refinement(
     except Exception as e:
         return False, f"Error executing API calls: {str(e)}"
 
-    if llm_modified_presentation is None:
-        return False, "Error executing API calls: returned None"
-
     # Get the llm modified slide
     llm_modified_slide = get_slide_from_presentation(
         slide_id=slide_id,

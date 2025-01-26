@@ -50,9 +50,6 @@ def judge_answer_reposition(
         )
     except Exception as e:
         return False, f"Error executing API calls: {str(e)}"
-        
-    if modified_presentation_json is None:
-        return False, "Error executing API calls: returned None"
 
     shape_id = shape_to_modify["shape_id"]
 
