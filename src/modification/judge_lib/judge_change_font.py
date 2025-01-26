@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import get_font, get_font_from_shape, get_shape_from_presentation
@@ -10,7 +10,7 @@ def judge_answer_change_font(
     shape_to_modify: Dict[str, Any],
     ground_truth: Dict[str, Any],
     presentation_json: Dict[str, Any],
-) -> bool:
+) -> Tuple[bool, str]:
     """
     Judge the answer based on the API calls and ground truth.
 
@@ -18,10 +18,10 @@ def judge_answer_change_font(
         api_calls (List[str]): The API calls made by the model.
         shape_to_modify (Dict[str, Any]): The shape to modify.
         ground_truth (Dict[str, Any]): The ground truth JSON data.
-        json_path (str): The path to the JSON data.
+        presentation_json (Dict[str, Any]): The presentation JSON data.
 
     Returns:
-        bool: Whether the answer is correct.
+        Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
     """
     # Get the slide ID and shape ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
@@ -32,8 +32,7 @@ def judge_answer_change_font(
         lines=api_calls, json=presentation_json, mode="json"
     )
     if modified_presentation_json is None:
-        logging.error("Error executing API calls, result is None.")
-        return False
+        return False, "Error executing API calls"
 
     # Get the shape from the slide
     llm_modified_shape = get_shape_from_presentation(
@@ -43,11 +42,9 @@ def judge_answer_change_font(
     )
     llm_modified_font = get_font_from_shape(llm_modified_shape)
     if llm_modified_font is None:
-        logging.error("Error getting font names from the result JSON.")
-        return False
+        return False, "No font found in modified shape"
     if len(llm_modified_font) > 1:
-        logging.error("More than one font name found in the result JSON.")
-        return False
+        return False, "Multiple fonts found in modified shape"
 
     llm_modified_font_name = llm_modified_font.pop()
 
@@ -58,12 +55,13 @@ def judge_answer_change_font(
     )
 
     if gold_font is None:
-        logging.error("Error getting font names from the ground truth.")
-        return False
+        return False, "No font found in ground truth"
     if len(gold_font) > 1:
-        logging.error("More than one font name found in the ground truth.")
-        return False
+        return False, "Multiple fonts found in ground truth"
 
     gold_font_name = gold_font.pop()
 
-    return gold_font_name == llm_modified_font_name
+    if gold_font_name != llm_modified_font_name:
+        return False, f"Font mismatch: expected {gold_font_name}, got {llm_modified_font_name}"
+
+    return True, "Success"
