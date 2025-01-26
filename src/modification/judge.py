@@ -1,7 +1,7 @@
 import json
 import traceback
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union, Tuple
 
 import pandas as pd
 
@@ -51,7 +51,16 @@ def judge_answer_df(
 
     # print(answers_df["ground_truth"].iloc[0])
     # Process answers
-    def process_row(row: pd.Series) -> bool:
+    def process_row(row: pd.Series) -> Tuple[bool, str]:
+        """
+        Process the row and judge the answer.
+        
+        Args:
+            row (pd.Series): The row to process.
+            
+        Returns:
+            Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
+        """
         try:
             # assert isinstance(row["answer"], list)
             answer = row["answer"]
@@ -95,7 +104,7 @@ def judge_answer(
     json_data: Dict[str, Any],
     ground_truth: Dict[str, Any],
     shape_to_modify: Optional[Dict[str, Any]] = None,
-) -> bool:
+) -> Tuple[bool, str]:
     """
     Judge the answer based on the task type.
 
@@ -107,14 +116,14 @@ def judge_answer(
         json_path (str): The path to the JSON data.
 
     Returns:
-        bool: Whether the answer is correct.
+        Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
     """
     json_path = build_json_path(
         file_hash=file_hash,
         json_dir=Path("dataset/json"),  # Changed from data/json to dataset/json
     )
     if api_calls is None:
-        return False
+        return False, "No API calls found"
     presentation_json = json.load(open(json_path, "r"))
     if task == "add_shape":
         return judge_answer_add_shape(
