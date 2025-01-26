@@ -72,7 +72,7 @@ def main(
     df = load_save_dataset_df(
         dataset_name=dataset_name,
         dataset_path=dataset_path,
-        force_download=False,
+        force_download=True,
         source="huggingface",
     )
 
@@ -121,7 +121,7 @@ def main(
                     json=True,
                     timeout=60,
                     csv_path=results_dir / f"{model_name}.csv",
-                    overwrite=True,
+                    # overwrite=True,
                 )
             ] = (model_name, provider)
             time.sleep(job_delay)  # Add delay between job submissions

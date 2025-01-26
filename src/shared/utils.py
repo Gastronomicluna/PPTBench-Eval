@@ -217,7 +217,7 @@ def process_model(
     json: bool,
     timeout: int,
     csv_path: Union[str, Path],
-    overwrite: bool,
+    overwrite: bool = False,
 ) -> pd.DataFrame:
     """Process a single model's answers.
 
