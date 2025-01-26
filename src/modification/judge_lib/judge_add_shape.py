@@ -3,11 +3,11 @@ from typing import Any, Dict, List
 from ...shared.pptx_api.api_executor import api_executor
 from ...shared.utils import fuzzy_match
 from ..utils import (
+    get_font_from_shape,
     get_slide_from_presentation,
     has_out_of_bounds,
     has_overlap,
     produce_modified_presentation_json,
-    get_font_from_shape,
 )
 
 
@@ -179,7 +179,7 @@ def compare_shape(
         if original_font_set != modified_font_set:
             # print("Font does not match")
             return False
-    
+
     # Compare images
     original_image = gold_shape.get("image_path")
     modified_image = shape_to_test.get("image_path")
@@ -194,5 +194,5 @@ def compare_shape(
         print("Original image: ", original_image)
         print("Modified image: ", modified_image)
         return False
-    
+
     return True
