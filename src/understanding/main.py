@@ -93,7 +93,7 @@ def main(
                     provider=provider,
                     temperature=0.0,
                     max_tokens=2048,
-                    json=True,
+                    json_mode=True,
                     timeout=60,
                     csv_path=results_dir / f"{model_name}.csv",
                     overwrite=True,

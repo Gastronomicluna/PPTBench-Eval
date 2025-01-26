@@ -55,7 +55,7 @@ def call_vision_model(
     images: Union[
         str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None
     ] = None,
-    json: bool = False,
+    json_mode: bool = False,
     timeout: Optional[int] = None,
 ) -> Union[str, Dict[str, Any]]:
     """
@@ -69,7 +69,7 @@ def call_vision_model(
         max_tokens (int): Maximum number of tokens in the response.
         images (Union[str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None]):
             Image file paths, bytes, PIL Images, or lists of any of these. If None, runs in text-only mode.
-        json (bool): Whether the response should be in JSON format.
+        json_mode (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
 
     Returns:
@@ -107,7 +107,7 @@ def call_vision_model(
             temperature=temperature,
             max_tokens=max_tokens,
             images=processed_images,
-            json=json,
+            json_mode=json_mode,
             timeout=timeout,
         )
     elif provider == "api":
@@ -117,7 +117,7 @@ def call_vision_model(
             temperature=temperature,
             max_tokens=max_tokens,
             images=processed_images,
-            json=json,
+            json_mode=json_mode,
             timeout=timeout,
         )
     elif provider == "openai":
@@ -134,7 +134,7 @@ def generate_with_image_ollama(
     temperature: float,
     max_tokens: int,
     images: Optional[List[str | bytes]] = None,
-    json: bool = False,
+    json_mode: bool = False,
     timeout: int = 30,  # Default 30 seconds
 ) -> Union[str, Dict[str, Any]]:
     """
@@ -147,7 +147,7 @@ def generate_with_image_ollama(
         max_tokens (int): Maximum number of tokens in the response.
         images (Optional[List[str | bytes]]): Paths to image files or image data.
             If None or empty list, runs in text-only mode.
-        json (bool): Whether the response should be in JSON format.
+        json_mode (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
 
     Returns:
@@ -164,7 +164,7 @@ def generate_with_image_ollama(
             "model": model_name,
             "prompt": prompt,
             "options": options,
-            "format": "json" if json else "",
+            "format": "json" if json_mode else "",
         }
 
         if images:  # Only include images if list is not None and not empty
@@ -185,7 +185,7 @@ def generate_with_api(
     temperature: float,
     max_tokens: int,
     images: Optional[List[str | bytes]] = None,
-    json: bool = False,
+    json_mode: bool = False,
     timeout: int = 30,  # Default 30 seconds
 ) -> Union[str, Dict[str, Any]]:
     """
@@ -198,7 +198,7 @@ def generate_with_api(
         max_tokens (int): Maximum number of tokens in the response.
         images (Optional[list[str | bytes]]): Paths to image files or image data.
             If None, runs in text-only mode.
-        json (bool): Whether the response should be in JSON format.
+        json_mode (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
 
     Returns:
@@ -218,7 +218,7 @@ def generate_with_api(
                 messages=messages,
                 max_tokens=max_tokens,
                 temperature=temperature,
-                response_format={"type": "json_object"} if json else None,
+                response_format={"type": "json_object"} if json_mode else None,
                 seed=42,
                 timeout=timeout,
             )
@@ -326,7 +326,7 @@ def main() -> None:
         temperature=0.7,
         max_tokens=1000,
         images=image_bytes,
-        json=False,
+        json_mode=False,
         timeout=30,
     )
     print(result)
