@@ -7,6 +7,7 @@ from ..utils import (
     has_out_of_bounds,
     has_overlap,
     produce_modified_presentation_json,
+    get_font_from_shape,
 )
 
 
@@ -172,6 +173,13 @@ def compare_shape(
         # print("Text does not match")
         return False
 
+    original_font_set = get_font_from_shape(gold_shape)
+    if len(original_font_set) == 1:
+        modified_font_set = get_font_from_shape(shape_to_test)
+        if original_font_set != modified_font_set:
+            # print("Font does not match")
+            return False
+    
     # Compare images
     original_image = gold_shape.get("image_path")
     modified_image = shape_to_test.get("image_path")
@@ -186,5 +194,5 @@ def compare_shape(
         print("Original image: ", original_image)
         print("Modified image: ", modified_image)
         return False
-
+    
     return True
