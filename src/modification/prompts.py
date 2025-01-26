@@ -4,6 +4,7 @@ from typing import Any, Dict, Literal, Optional
 from ..shared.pptx_api.api_doc import api_list
 from ..shared.utils import api_to_string
 from .utils import get_font_from_shape
+
 # JSON templates for examples
 MODIFICATION_EXAMPLE = {
     "function1": "choose_slide(0)",
@@ -145,16 +146,17 @@ def build_add_shape_text_content(
     """
     text = shape_to_add["text"]
     result = f"Add a shape to the slide with the following text: '{text}'.\n"
-    
+
     font_set = get_font_from_shape(shape_to_add)
-    
+
     if len(font_set) > 1:
         return result
     else:
         font_name = font_set.pop()
         result += f" The font used should be '{font_name}'."
         return result
-    
+
+
 def build_add_shape_image_content(
     shape_to_add: Dict[str, Any],
 ) -> str:
@@ -169,6 +171,7 @@ def build_add_shape_image_content(
     """
     image_path = shape_to_add["image_path"]
     result = f"Add a shape to the slide with the following image: '{image_path}'.\n"
+
 
 def build_prompt_refinement(
     query: str,
