@@ -110,24 +110,6 @@ def set_json(json_input: Union[str, Dict[str, Any]]) -> Optional[str]:
         return f"Failed to set JSON: {str(e)}"
 
 
-def set_current_slide(slide_idx: int) -> Optional[str]:
-    """Set the current slide to work with.
-
-    Args:
-        slide_idx: The index of the slide to set as the current slide.
-
-    Returns:
-        Optional error message if operation fails.
-    """
-    global JSON_CURRENT_SLIDE
-    if JSON_DATA is None:
-        return "No JSON data available"
-    try:
-        JSON_CURRENT_SLIDE = JSON_DATA["slides"][slide_idx]
-        return None
-    except Exception as e:
-        return f"Failed to set current JSON slide: {str(e)}"
-
 
 def choose_slide(slide_id: int) -> Optional[str]:
     """Choose a slide to work with by ID.
@@ -141,11 +123,11 @@ def choose_slide(slide_id: int) -> Optional[str]:
     global JSON_CURRENT_SLIDE
     if JSON_DATA is None:
         return "No JSON data available"
-
-    JSON_CURRENT_SLIDE = next(
-        (slide for slide in JSON_DATA["slides"] if slide["slide_id"] == slide_id),
-        None,
-    )
+    slides = JSON_DATA.get("slides", [])
+    for slide in slides:
+        if slide["slide_id"] == slide_id:
+            JSON_CURRENT_SLIDE = slide
+            return None
     if JSON_CURRENT_SLIDE is None:
         return f"Slide with ID {slide_id} not found"
     return None
@@ -163,11 +145,11 @@ def choose_shape(shape_id: int) -> Optional[str]:
     global JSON_CURRENT_SHAPE
     if JSON_CURRENT_SLIDE is None:
         return "No current slide selected"
-
-    JSON_CURRENT_SHAPE = next(
-        (s for s in JSON_CURRENT_SLIDE["shapes"] if s["shape_id"] == shape_id),
-        None,
-    )
+    shapes = JSON_CURRENT_SLIDE.get("shapes", [])
+    for shape in shapes:
+        if shape["shape_id"] == shape_id:
+            JSON_CURRENT_SHAPE = shape
+            return None
     if JSON_CURRENT_SHAPE is None:
         return f"Shape with ID {shape_id} not found"
     return None
