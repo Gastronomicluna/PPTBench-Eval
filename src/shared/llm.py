@@ -304,8 +304,10 @@ def generate_api_messages(
 
 
 def main() -> None:
-    from ..shared.load_save_dataset import load_save_huggingface_dataset_df
     import json
+
+    from ..shared.load_save_dataset import load_save_huggingface_dataset_df
+
     dataset_name = "tyrionhuu/PPTBench-Detection"
     dataset_path = "data/PPTBench-Detection"
     df = load_save_huggingface_dataset_df(
@@ -333,6 +335,7 @@ def main() -> None:
     result_json = json.loads(result)
     print(result_json)
     assert isinstance(result_json, dict)
+
 
 if __name__ == "__main__":
     main()
