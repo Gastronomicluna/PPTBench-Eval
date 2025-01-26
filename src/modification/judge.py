@@ -76,7 +76,7 @@ def judge_answer_df(
             print(traceback.format_exc())
             return False
 
-    # print(answers_df)
+    # print(answers_df)x
     answers_df["is_correct"] = answers_df.apply(process_row, axis=1)
 
     # Save results
