@@ -101,9 +101,9 @@ def get_answer_single_modification(
             task = row["task"]
             description = row["description"]
             image_data = row["image"]
-            shape_to_modify = row["shape_to_modify"]
-            json_data = row["json_data"]
-            ground_truth = row["ground_truth"]
+            shape_to_modify = json.loads(row["shape_to_modify"])
+            json_data = json.loads(row["json_data"])
+            ground_truth = json.loads(row["ground_truth"])
 
             image_bytes = get_image_bytes(image_data) if not pure_text else None
 
