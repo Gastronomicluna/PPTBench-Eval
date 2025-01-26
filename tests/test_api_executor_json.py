@@ -1,17 +1,6 @@
 import pytest
 
-from src.shared.pptx_api.api_executor_json import (
-    JSON_CURRENT_SHAPE,
-    JSON_DATA,
-    JSON_CURRENT_SLIDE,
-    add_text_box,
-    choose_shape,
-    choose_slide,
-    reset_globals,
-    set_font,
-    set_font_size,
-    set_json,
-)
+import src.shared.pptx_api.api_executor_json as pjson
 
 
 @pytest.fixture
@@ -40,33 +29,31 @@ def sample_json():
 
 def test_set_font(sample_json):
     # Setup
-    set_json(sample_json)
-    choose_slide(1)
-    choose_shape(1)
+    pjson.set_json(sample_json)
+    pjson.choose_slide(1)
+    pjson.choose_shape(1)
 
     # Test setting font
-    result = set_font("Arial")
+    result = pjson.set_font("Arial")
     assert result is None
 
     # Verify font was set
-    from src.shared.pptx_api.api_executor_json import JSON_CURRENT_SHAPE
-
-    assert JSON_CURRENT_SHAPE["font_details"][0]["font_name"] == "Arial"
+    assert pjson.JSON_CURRENT_SHAPE["font_details"][0]["font_name"] == "Arial"
 
     # Reset globals after test
-    reset_globals()
+    pjson.reset_globals()
 
 
 def test_set_font_no_shape_selected(sample_json):
     # Setup
-    set_json(sample_json)
+    pjson.set_json(sample_json)
 
     # Test without selecting shape
-    result = set_font("Arial")
+    result = pjson.set_font("Arial")
     assert result == "No shape selected"
 
     # Reset globals after test
-    reset_globals()
+    pjson.reset_globals()
 
 
 def test_text_box_creation_with_formatting():
@@ -74,25 +61,25 @@ def test_text_box_creation_with_formatting():
     json_data = {"slides": [{"slide_id": 263, "shapes": []}]}
     
     # Test sequence
-    set_json(json_data)
-    assert JSON_DATA is not None, "JSON_DATA should not be None after set_json"
+    pjson.set_json(json_data)
+    assert pjson.JSON_DATA is not None, "JSON_DATA should not be None after set_json"
     
-    result = choose_slide(263)
+    result = pjson.choose_slide(263)
     assert result is None, f"choose_slide failed with: {result}"
-    assert JSON_CURRENT_SLIDE is not None, "JSON_CURRENT_SLIDE should not be None"
+    assert pjson.JSON_CURRENT_SLIDE is not None, "JSON_CURRENT_SLIDE should not be None"
     
-    result = add_text_box(334800, 1000000, 8477280, 800000, "Objectives")
+    result = pjson.add_text_box(334800, 1000000, 8477280, 800000, "Objectives")
     assert result is None, f"add_text_box failed with: {result}"
-    assert JSON_CURRENT_SHAPE is not None, "JSON_CURRENT_SHAPE should not be None"
+    assert pjson.JSON_CURRENT_SHAPE is not None, "JSON_CURRENT_SHAPE should not be None"
     
-    result = set_font("Arial")
+    result = pjson.set_font("Arial")
     assert result is None, f"set_font failed with: {result}"
     
-    result = set_font_size(72)
+    result = pjson.set_font_size(72)
     assert result is None, f"set_font_size failed with: {result}"
 
     # Verify the results
-    shape = JSON_CURRENT_SHAPE
+    shape = pjson.JSON_CURRENT_SHAPE
     assert shape is not None, "Shape is None after operations"
     assert shape["text"] == "Objectives"
     assert shape["left"] == 334800
@@ -104,4 +91,4 @@ def test_text_box_creation_with_formatting():
     assert shape["font_details"][0]["font_size"] == 72
 
     # Reset globals after test
-    reset_globals()
+    pjson.reset_globals()
