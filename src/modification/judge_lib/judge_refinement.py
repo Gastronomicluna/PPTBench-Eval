@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import (
@@ -13,7 +13,7 @@ def judge_answer_refinement(
     api_calls: List[str],
     json_data: Dict[str, Any],
     presentation_json: Dict[str, Any],
-) -> bool:
+) -> Tuple[bool, str]:
     """
     Judge the answer based on the API calls and ground truth.
 
@@ -22,7 +22,7 @@ def judge_answer_refinement(
         json_path (str): The path to the JSON data.
 
     Returns:
-        bool: Whether the answer is correct.
+        Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
     """
     slide_height = json_data["slide_height"]
     slide_width = json_data["slide_width"]
@@ -48,7 +48,7 @@ def judge_answer_refinement(
         lines=api_calls, json=produced_presentation_json, mode="json"
     )
     if llm_modified_presentation is None:
-        raise ValueError("Error executing API calls, result is None.")
+        return False, "Error executing API calls"
 
     # Get the llm modified slide
     llm_modified_slide = get_slide_from_presentation(
@@ -58,6 +58,8 @@ def judge_answer_refinement(
 
     # Check if the slide has overlapping shapes
     has_overlap_result = has_overlap(llm_modified_slide)
+    if has_overlap_result:
+        return False, "Shapes overlap in the modified slide"
 
     # Check if the slide has out of bounds shapes
     has_out_of_bounds_result = has_out_of_bounds(
@@ -65,5 +67,7 @@ def judge_answer_refinement(
         slide_height=slide_height,
         slide_width=slide_width,
     )
+    if has_out_of_bounds_result:
+        return False, "Shapes are out of bounds in the modified slide"
 
-    return not has_overlap_result and not has_out_of_bounds_result
+    return True, "Success"
