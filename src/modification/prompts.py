@@ -18,7 +18,7 @@ def build_prompt(
     query: str,
     slide_json: Dict[str, Any],
     subcategory: Literal["element_modification", "refinement", "text_modification"],
-    task: Optional[Literal["add_shape", "resize_shape", "reposition_shape"]] = None,
+    task: Optional[str] = None,
     shape_to_modify: Optional[Dict[str, Any]] = None,
 ) -> str:
     """

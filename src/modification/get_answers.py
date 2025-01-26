@@ -110,6 +110,7 @@ def get_answer_single_modification(
             prompt = build_prompt(
                 query=description,
                 slide_json=json_data,
+                task=task,
                 subcategory=subcategory,
                 shape_to_modify=shape_to_modify,
             )
