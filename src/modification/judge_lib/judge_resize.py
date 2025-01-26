@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import (
@@ -13,18 +13,18 @@ def judge_answer_resize(
     shape_to_modify: Dict[str, Any],
     json_data: Dict[str, Any],
     presentation_json: Dict[str, Any],
-) -> bool:
+) -> Tuple[bool, str]:
     """
     Judge the answer based on the API calls and ground truth.
 
     Args:
         api_calls (List[str]): The API calls made by the model.
         shape_to_modify (Dict[str, Any]): The shape to modify.
-        ground_truth (Dict[str, Any]): The ground truth JSON data.
-        json_path (str): The path to the JSON data.
+        json_data (Dict[str, Any]): The JSON data.
+        presentation_json (Dict[str, Any]): The presentation JSON data.
 
     Returns:
-        bool: Whether the answer is correct.
+        Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
     """
     # Get slide ID
     slide_json = json_data.get("slide", {})
@@ -46,6 +46,8 @@ def judge_answer_resize(
         json=produced_presentation_json,
         mode="json",
     )
+    if modified_presentation_json is None:
+        return False, "Error executing API calls"
 
     shape_id = shape_to_modify["shape_id"]
 
@@ -65,16 +67,17 @@ def compare_shape_size(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
     threshold: float = 0.001,
-) -> bool:
+) -> Tuple[bool, str]:
     """
     Compare the ground truth shape with the result shape.
 
     Args:
         ground_truth_shape (Dict[str, Any]): The ground truth shape.
         result_shape (Dict[str, Any]): The result shape.
+        threshold (float, optional): Maximum allowed difference. Defaults to 0.001.
 
     Returns:
-        bool: Whether the shapes are the same.
+        Tuple[bool, str]: Success flag and error message.
     """
 
     # Get the position of the shapes
@@ -91,5 +94,9 @@ def compare_shape_size(
     # Calculate the difference in size
     size_diff = calculate_size_diff(ground_truth_size, result_size)
 
-    # Check if the difference is within the threshold
-    return position_diff <= threshold and size_diff <= threshold
+    if position_diff > threshold:
+        return False, f"Position changed unexpectedly (diff: {position_diff:.4f})"
+    if size_diff > threshold:
+        return False, f"Size difference too large (diff: {size_diff:.4f})"
+
+    return True, "Success"
