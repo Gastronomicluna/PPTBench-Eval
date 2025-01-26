@@ -141,3 +141,22 @@ def test_format_answer_quoted_args(
     """
     result = format_answer(input_str)
     assert result == expected_output
+
+
+def test_format_answer_multiline_complex() -> None:
+    """Test format_answer with multiline JSON and complex function arguments."""
+    input_str = (
+        '{\\n  "function1": "choose_slide(302)",\\n  '
+        '"function2": "add_picture(6324480, 1828800, 2492640, 3753000, '
+        '\\"dataset/extracted_images/HU34OGSYJRWDNIPBOH5QHHZ4KNJSRSLG/46'
+        '/image_46_3.jpg\\")"\\n}'
+    )
+    expected = [
+        "choose_slide(302)",
+        'add_picture(6324480, 1828800, 2492640, 3753000, '
+        '"dataset/extracted_images/HU34OGSYJRWDNIPBOH5QHHZ4KNJSRSLG/46'
+        '/image_46_3.jpg")',
+    ]
+    result = format_answer(input_str)
+    assert result == expected
+
