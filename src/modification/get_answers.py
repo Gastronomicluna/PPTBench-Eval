@@ -3,7 +3,7 @@ import time
 import traceback
 from pathlib import Path
 from typing import Any, Dict, Optional
-
+import json
 import pandas as pd
 
 from ..shared.get_answers import get_answers
@@ -67,7 +67,7 @@ def get_answer_single_modification(
     provider: str,
     temperature: float,
     max_tokens: int,
-    json: bool,
+    json_mode: bool,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
     pure_text: bool = False,
@@ -81,7 +81,7 @@ def get_answer_single_modification(
         provider (str): Provider of the model.
         temperature (float): Sampling temperature.
         max_tokens (int): Maximum tokens in response.
-        json (bool): Whether to return JSON format.
+        json_mode (bool): Whether to return json_mode format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
         pure_text (bool): If True, only use text data without images.
@@ -119,7 +119,7 @@ def get_answer_single_modification(
                 "prompt": prompt,
                 "temperature": temperature,
                 "max_tokens": max_tokens,
-                "json": json,
+                "json_mode": json_mode,
             }
             if timeout is not None:
                 kwargs["timeout"] = timeout
@@ -127,6 +127,7 @@ def get_answer_single_modification(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
+            llm_answer_str = llm_answer if not json_mode else json.dumps(llm_answer)
             return {
                 "hash": hash_value,
                 "file_hash": file_hash,
@@ -207,7 +208,7 @@ def main(
         provider="api",
         temperature=0.0,
         max_tokens=3200,
-        json=True,
+        json_mode=True,
         timeout=60,
         csv_path=Path(csv_path),
         overwrite=True,
