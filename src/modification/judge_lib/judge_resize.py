@@ -5,6 +5,7 @@ from ..utils import (
     calculate_position_diff,
     calculate_size_diff,
     get_shape_from_presentation,
+    produce_modified_presentation_json,
 )
 
 
@@ -35,7 +36,7 @@ def judge_answer_resize(
     if slide_id is None:
         raise ValueError("The slide ID is not found in the shape to modify.")
 
-    produced_presentation_json = produced_presentation_json(
+    produced_presentation_json = produce_modified_presentation_json(
         presentation=presentation_json,
         slide_id=slide_id,
         slide_json=slide_json,
