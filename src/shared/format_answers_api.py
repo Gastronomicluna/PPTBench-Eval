@@ -60,9 +60,7 @@ def format_answer_csv(
         raise Exception(f"Error processing CSV file: {e}")
 
 
-def format_answer(
-    answer: str,
-) -> List[str]:
+def format_answer(answer: str) -> List[str]:
     """
     Format the extracted functions for the detection tasks.
 
@@ -71,13 +69,23 @@ def format_answer(
 
     Returns:
         List[str]: The formatted list of functions.
+
+    Raises:
+        TypeError: If answer is not a string.
+        ValueError: If answer is empty or invalid JSON format.
     """
+    if not isinstance(answer, str):
+        raise TypeError(f"Expected string input, got {type(answer)}")
+    
+    if not answer.strip():
+        raise ValueError("Empty input string")
+
     try:
         json_answer = parse_json_answer(answer)
         functions = extract_functions_from_json(json_answer)
         return functions
     except Exception as e:
-        raise Exception(f"Error formatting answer: {e}")
+        raise ValueError(f"Error formatting answer: {str(e)}")
 
 
 def extract_functions_from_json(
@@ -92,15 +100,32 @@ def extract_functions_from_json(
 
     Returns:
         List[str]: The list of function call strings in order.
+
+    Raises:
+        TypeError: If json_data is not a dictionary.
+        ValueError: If function values are not strings or invalid format.
     """
+    if not isinstance(json_data, dict):
+        raise TypeError(f"Expected dictionary input, got {type(json_data)}")
+
     functions = []
-    if isinstance(json_data, dict):
-        # Sort keys to maintain order (function1, function2, etc.)
-        for key in sorted(json_data.keys()):
-            if key.startswith("function"):
-                functions.append(json_data[key])
-    else:
-        raise ValueError("Invalid JSON data format.")
+    function_keys = sorted(
+        key for key in json_data.keys() if key.startswith("function")
+    )
+    
+    if not function_keys:
+        return []
+
+    for key in function_keys:
+        value = json_data[key]
+        if not isinstance(value, str):
+            raise ValueError(
+                f"Function value must be string, got {type(value)} for {key}"
+            )
+        if not value.strip():
+            raise ValueError(f"Empty function value for {key}")
+        functions.append(value)
+
     return functions
 
 
