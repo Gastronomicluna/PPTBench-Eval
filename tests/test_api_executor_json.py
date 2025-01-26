@@ -1,5 +1,3 @@
-import json
-
 import pytest
 
 import src.shared.pptx_api.api_executor_json as pjson
