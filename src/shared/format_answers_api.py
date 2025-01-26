@@ -31,6 +31,9 @@ def format_answer_csv(
         # Initialize error column with string dtype if it doesn't exist
         if "error" not in df.columns:
             df["error"] = pd.Series(dtype="string")
+        else:
+            # Ensure existing error column is string type
+            df["error"] = df["error"].astype("string")
 
         if "answer" in df.columns and not overwrite:
             if not df["answer"].isna().all():
@@ -44,9 +47,8 @@ def format_answer_csv(
             try:
                 return format_answer(row["llm_answer"])
             except Exception as e:
-                # Explicitly convert index and error message to appropriate types
-                idx = pd.Index([row.name], dtype=df.index.dtype)
-                df.loc[idx, "error"] = str(e)
+                # Use loc with string dtype error column
+                df.at[row.name, "error"] = str(e)
                 return pd.NA
 
         df["answer"] = df.apply(apply_format_safely, axis=1)

@@ -326,10 +326,11 @@ def main() -> None:
         temperature=0.7,
         max_tokens=1000,
         images=image_bytes,
-        json_mode=False,
+        json_mode=True,
         timeout=30,
     )
     print(result)
+    assert isinstance(result, dict)
 
 
 if __name__ == "__main__":
