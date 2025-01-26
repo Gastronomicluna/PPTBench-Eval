@@ -1,14 +1,14 @@
 import pytest
 
 from src.shared.pptx_api.api_executor_json import (
+    JSON_CURRENT_SHAPE,
+    add_text_box,
     choose_shape,
     choose_slide,
     reset_globals,
     set_font,
-    set_json,
-    add_text_box,
     set_font_size,
-    JSON_CURRENT_SHAPE,
+    set_json,
 )
 
 
@@ -69,20 +69,13 @@ def test_set_font_no_shape_selected(sample_json):
 
 def test_text_box_creation_with_formatting():
     # Setup initial JSON
-    json_data = {
-        "slides": [
-            {
-                "slide_id": 263,
-                "shapes": []
-            }
-        ]
-    }
-    
+    json_data = {"slides": [{"slide_id": 263, "shapes": []}]}
+
     # Test sequence
     set_json(json_data)
     assert choose_slide(263) is None
-    assert add_text_box(334800, 1000000, 8477280, 800000, 'Objectives') is None
-    assert set_font('Arial') is None
+    assert add_text_box(334800, 1000000, 8477280, 800000, "Objectives") is None
+    assert set_font("Arial") is None
     assert set_font_size(72) is None
 
     # Verify the results
