@@ -36,9 +36,6 @@ def judge_answer_change_font(
     except Exception as e:
         return False, f"Error executing API calls: {str(e)}"
 
-    if modified_presentation_json is None:
-        return False, "Error executing API calls: returned None"
-
     # Get the shape from the slide
     llm_modified_shape = get_shape_from_presentation(
         slide_id=slide_id,

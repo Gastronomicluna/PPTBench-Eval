@@ -62,7 +62,7 @@ def judge_answer_add_shape(
             mode="json",
         )
     except Exception as e:
-        return False, str(e)
+        return False, f"Error executing API calls: {str(e)}"
 
     modified_slide = get_slide_from_presentation(
         slide_id=slide_id,
