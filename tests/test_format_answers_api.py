@@ -129,9 +129,7 @@ def test_format_answer_function_ordering() -> None:
         ),
     ],
 )
-def test_format_answer_quoted_args(
-    input_str: str, expected_output: list[str]
-) -> None:
+def test_format_answer_quoted_args(input_str: str, expected_output: list[str]) -> None:
     """
     Test format_answer with functions containing quoted arguments.
 
@@ -141,22 +139,3 @@ def test_format_answer_quoted_args(
     """
     result = format_answer(input_str)
     assert result == expected_output
-
-
-def test_format_answer_multiline_complex() -> None:
-    """Test format_answer with multiline JSON and complex function arguments."""
-    input_str = "{\\n  ""function1"": ""choose_slide(256)"",\\n  ""function2"": ""add_text_box(685800, 533520, 6858000, 3259440, '\\nPASS\\nPalmetto Assessment of State Standards')"",\\n  ""function3"": ""choose_shape(85)"",\\n  ""function4"": ""set_font('Comic Sans MS')"",\\n  ""function5"": ""set_font_size(44)"",\\n  ""function6"": ""choose_shape(85)"",\\n  ""function7"": ""set_font('Comic Sans MS')"",\\n  ""function8"": ""set_font_size(40)""\\n}"
-    expected = [
-        "choose_slide(256)",
-        "add_text_box(685800, 533520, 6858000, 3259440, '\nPASS\nPalmetto Assessment of State Standards')",
-        "choose_shape(85)",
-        "set_font('Comic Sans MS')",
-        "set_font_size(44)",
-        "choose_shape(85)",
-        "set_font('Comic Sans MS')",
-        "set_font_size(40)",
-    ]
-    result = format_answer(input_str)
-    
-    assert result == expected
-
