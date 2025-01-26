@@ -62,6 +62,9 @@ def judge_answer_change_font(
     gold_font_name = gold_font.pop()
 
     if gold_font_name != llm_modified_font_name:
-        return False, f"Font mismatch: expected {gold_font_name}, got {llm_modified_font_name}"
+        return (
+            False,
+            f"Font mismatch: expected {gold_font_name}, got {llm_modified_font_name}",
+        )
 
     return True, "Success"
