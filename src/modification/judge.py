@@ -165,7 +165,7 @@ def main():
         new_dir_name="json",
     )
 
-    csv_path = Path("data/modification_results.csv")
+    csv_path = Path("data/modification_results/claude-3-5-sonnet-20241022.csv")
     format_answer_csv(csv_path, overwrite=True)
     judge_answer_df(csv_path, overwrite=True)
 
