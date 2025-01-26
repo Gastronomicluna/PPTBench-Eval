@@ -1,7 +1,7 @@
 import json
 import traceback
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Optional, Union, Tuple
+from typing import Any, Dict, List, Literal, Optional, Tuple, Union
 
 import pandas as pd
 
@@ -54,10 +54,10 @@ def judge_answer_df(
     def process_row(row: pd.Series) -> Tuple[bool, str]:
         """
         Process the row and judge the answer.
-        
+
         Args:
             row (pd.Series): The row to process.
-            
+
         Returns:
             Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
         """
