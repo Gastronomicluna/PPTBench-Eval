@@ -40,7 +40,7 @@ def judge_answer_change_font(
         presentation=modified_presentation_json,
     )
     llm_modified_font = get_font_from_shape(llm_modified_shape)
-    
+
     if llm_modified_font is None:
         return False, "No font found in modified shape"
     if len(llm_modified_font) > 1:
