@@ -100,7 +100,8 @@ def build_prompt_add_shape(
     """
     divider = "#" * 80
     example_json_str = json.dumps(MODIFICATION_EXAMPLE, indent=2)
-
+    # text_content = build_add_shape_text_content(shape_to_add)
+    
     prompt = ""
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
@@ -116,7 +117,7 @@ def build_prompt_add_shape(
     prompt += f"{json.dumps(slide_json, indent=2)}\n\n"
     prompt += f"{divider}\n"
     prompt += f"Query: {query}\n"
-    prompt += f"Shape to Add: {json.dumps(shape_to_add, indent=2)}\n"
+    # prompt += f"{text_content}\n"
     prompt += "Answer:\n"
     return prompt
 
@@ -134,7 +135,7 @@ def build_add_shape_text_content(
         str: The text content for the shape.
     """
     text = shape_to_add["text"]
-    result = f"Add a shape to the slide with the following text: '{text}'."
+    result = f"Add a shape to the slide with the following text: '{text}'.\n"
     
     font_set = get_font_from_shape(shape_to_add)
     
@@ -144,6 +145,21 @@ def build_add_shape_text_content(
         font_name = font_set.pop()
         result += f" The font used should be '{font_name}'."
         return result
+    
+def build_add_shape_image_content(
+    shape_to_add: Dict[str, Any],
+) -> str:
+    """
+    Builds the image content for a shape to add to the slide.
+
+    Args:
+        shape_to_add (dict): The shape to add.
+
+    Returns:
+        str: The image content for the shape.
+    """
+    image_path = shape_to_add["image_path"]
+    result = f"Add a shape to the slide with the following image: '{image_path}'.\n"
 
 def build_prompt_refinement(
     query: str,
