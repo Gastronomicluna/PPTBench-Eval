@@ -27,74 +27,60 @@ def api_executor_json(
         json: Optional JSON data to use directly instead of loading from file
 
     Returns:
-        The result of the API calls and any errors encountered
+        The result of the API calls
+
+    Raises:
+        ValueError: If JSON operations fail
+        FileNotFoundError: If JSON file operations fail
     """
     global JSON_DATA
 
-    errors = []
     if json is not None:
-        error = set_json(json)
-        if error:
-            errors.append(error)
+        set_json(json)
     elif json_path is not None:
-        error = set_json(str(json_path))
-        if error:
-            errors.append(error)
+        set_json(str(json_path))
 
     for line in lines:
-        try:
-            api_name = line.split("(")[0]
-            if api_in_list(api_name):
-                try:
-                    result = eval(line)
-                    if isinstance(result, str):  # If function returned an error
-                        errors.append(result)
-                except Exception as e:
-                    errors.append(f"Error executing {line}: {str(e)}")
-            else:
-                errors.append(f"API '{line}' not found in JSON API list")
-        except Exception as e:
-            errors.append(f"Error parsing {line}: {str(e)}")
+        api_name = line.split("(")[0]
+        if api_in_list(api_name):
+            try:
+                eval(line)
+            except Exception as e:
+                raise ValueError(f"Error executing {line}: {str(e)}")
+        else:
+            raise ValueError(f"API '{line}' not found in JSON API list")
 
     if output_path is not None:
-        error = save_json(str(output_path))
-        if error:
-            errors.append(error)
-
-    if errors:
-        logging.warning("Errors occurred during API execution:")
-        for error in errors:
-            logging.warning(error)
+        save_json(str(output_path))
 
     return JSON_DATA
 
 
-def save_json(json_path: str) -> Optional[str]:
+def save_json(json_path: str) -> None:
     """Save the JSON data.
 
     Args:
         json_path: The path to save the JSON.
 
-    Returns:
-        Optional error message if saving fails.
+    Raises:
+        FileNotFoundError: If file cannot be written
     """
     global JSON_DATA
     try:
         with open(json_path, "w") as f:
             json.dump(JSON_DATA, f, indent=4)
-        return None
     except Exception as e:
-        return f"Failed to save JSON: {str(e)}"
+        raise FileNotFoundError(f"Failed to save JSON: {str(e)}")
 
 
-def set_json(json_input: Union[str, Dict[str, Any]]) -> Optional[str]:
+def set_json(json_input: Union[str, Dict[str, Any]]) -> None:
     """Set the JSON data to work with.
 
     Args:
         json_input: Either a path to the JSON file or a dictionary containing JSON data.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If JSON data cannot be loaded or processed
     """
     global JSON_DATA, JSON_CURRENT_SLIDE, JSON_CURRENT_SHAPE
     try:
@@ -105,113 +91,104 @@ def set_json(json_input: Union[str, Dict[str, Any]]) -> Optional[str]:
             JSON_DATA = deepcopy(json_input)
         JSON_CURRENT_SLIDE = None
         JSON_CURRENT_SHAPE = None
-        return None
     except Exception as e:
-        return f"Failed to set JSON: {str(e)}"
+        raise ValueError(f"Failed to set JSON: {str(e)}")
 
 
-def choose_slide(slide_id: int) -> Optional[str]:
+def choose_slide(slide_id: int) -> None:
     """Choose a slide to work with by ID.
 
     Args:
         slide_id: The ID of the slide to choose.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If slide cannot be found or no JSON data available
     """
     global JSON_CURRENT_SLIDE
     if JSON_DATA is None:
-        return "No JSON data available"
+        raise ValueError("No JSON data available")
     slides = JSON_DATA.get("slides", [])
     for slide in slides:
         if slide["slide_id"] == slide_id:
             JSON_CURRENT_SLIDE = slide
-            return None
-    if JSON_CURRENT_SLIDE is None:
-        return f"Slide with ID {slide_id} not found"
-    return None
+            return
+    raise ValueError(f"Slide with ID {slide_id} not found")
 
 
-def choose_shape(shape_id: int) -> Optional[str]:
+def choose_shape(shape_id: int) -> None:
     """Choose a shape to work with.
 
     Args:
         shape_id: The ID of the shape to choose.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If shape cannot be found or no current slide selected
     """
     global JSON_CURRENT_SHAPE
     if JSON_CURRENT_SLIDE is None:
-        return "No current slide selected"
+        raise ValueError("No current slide selected")
     shapes = JSON_CURRENT_SLIDE.get("shapes", [])
     for shape in shapes:
         if shape["shape_id"] == shape_id:
             JSON_CURRENT_SHAPE = shape
-            return None
-    if JSON_CURRENT_SHAPE is None:
-        return f"Shape with ID {shape_id} not found"
-    return None
+            return
+    raise ValueError(f"Shape with ID {shape_id} not found")
 
 
-def set_width(width: int) -> Optional[str]:
+def set_width(width: int) -> None:
     """Set the width of a shape.
 
     Args:
         width: The width to set.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["width"] = width
-    return None
 
 
-def set_height(height: int) -> Optional[str]:
+def set_height(height: int) -> None:
     """Set the height of a shape.
 
     Args:
         height: The height to set.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["height"] = height
-    return None
 
 
-def set_top(top: int) -> Optional[str]:
+def set_top(top: int) -> None:
     """Set the top of a shape.
 
     Args:
         top: The top to set.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["top"] = top
-    return None
 
 
-def set_left(left: int) -> Optional[str]:
+def set_left(left: int) -> None:
     """Set the left of a shape.
 
     Args:
         left: The left to set.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["left"] = left
-    return None
 
 
 def add_text_box(
@@ -221,7 +198,7 @@ def add_text_box(
     height: int,
     text: Optional[str] = None,
     placeholder_type: Optional[str] = None,
-) -> Optional[str]:
+) -> None:
     """Add a text box to a slide.
 
     Args:
@@ -232,12 +209,12 @@ def add_text_box(
         text: Optional text to add to the text box.
         placeholder_type: Optional placeholder type for the shape.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no slide is selected
     """
     global JSON_CURRENT_SHAPE, JSON_CURRENT_SLIDE
     if JSON_CURRENT_SLIDE is None:
-        return "No slide selected"
+        raise ValueError("No slide selected")
 
     if "shapes" not in JSON_CURRENT_SLIDE:
         JSON_CURRENT_SLIDE["shapes"] = []
@@ -268,7 +245,6 @@ def add_text_box(
 
     JSON_CURRENT_SLIDE["shapes"].append(new_shape)
     JSON_CURRENT_SHAPE = new_shape
-    return None
 
 
 def add_picture(
@@ -277,7 +253,7 @@ def add_picture(
     width: int,
     height: int,
     image_file: Optional[str] = None,
-) -> Optional[str]:
+) -> None:
     """Add a picture to a slide.
 
     Args:
@@ -287,14 +263,14 @@ def add_picture(
         height: The height of the picture.
         image_file: The path to the image file to add.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no slide is selected or image file path is not provided
     """
     global JSON_CURRENT_SHAPE
     if JSON_CURRENT_SLIDE is None:
-        return "No slide selected"
+        raise ValueError("No slide selected")
     if image_file is None:
-        return "Image file path is required"
+        raise ValueError("Image file path is required")
     new_shape = {
         "name": f"Picture_{len(JSON_CURRENT_SLIDE['shapes'])}",
         "shape_id": assign_shape_id(JSON_CURRENT_SLIDE),
@@ -308,35 +284,33 @@ def add_picture(
     }
     JSON_CURRENT_SLIDE["shapes"].append(new_shape)
     JSON_CURRENT_SHAPE = new_shape
-    return None
 
 
-def insert_text(text: str) -> Optional[str]:
+def insert_text(text: str) -> None:
     """Insert text into a shape.
 
     Args:
         text: The text to insert.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     JSON_CURRENT_SHAPE["text"] += text
-    return None
 
 
-def set_font_size(font_size: float) -> Optional[str]:
+def set_font_size(font_size: float) -> None:
     """Set the font size of a shape.
 
     Args:
         font_size: The font size to set (can be floating point).
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     # Create a new font detail if none exists
     if not JSON_CURRENT_SHAPE["font_details"]:
         JSON_CURRENT_SHAPE["font_details"].append(
@@ -350,55 +324,51 @@ def set_font_size(font_size: float) -> Optional[str]:
     else:
         for detail in JSON_CURRENT_SHAPE["font_details"]:
             detail["font_size"] = font_size
-    return None
 
 
-def set_font_style(font_style: Literal["bold", "italic"]) -> Optional[str]:
+def set_font_style(font_style: Literal["bold", "italic"]) -> None:
     """Set the font style of a shape.
 
     Args:
         font_style: The font style to set.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     for detail in JSON_CURRENT_SHAPE.get("font_details", []):
         detail[font_style] = True
-    return None
 
 
-def set_font(font_name: str) -> Optional[str]:
+def set_font(font_name: str) -> None:
     """Set the font of a shape.
 
     Args:
         font_name: The font name to set.
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     for detail in JSON_CURRENT_SHAPE.get("font_details", []):
         detail["font_name"] = font_name
-    return None
 
 
-def set_font_color(font_color: str = "000000") -> Optional[str]:
+def set_font_color(font_color: str = "000000") -> None:
     """Set the font color of a shape.
 
     Args:
         font_color: The font color to set in hex format (e.g. 'FF0000' for red)
 
-    Returns:
-        Optional error message if operation fails.
+    Raises:
+        ValueError: If no shape is selected
     """
     if JSON_CURRENT_SHAPE is None:
-        return "No shape selected"
+        raise ValueError("No shape selected")
     for detail in JSON_CURRENT_SHAPE.get("font_details", []):
         detail["color"] = font_color
-    return None
 
 
 def assign_shape_id(
