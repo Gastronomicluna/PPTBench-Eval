@@ -320,8 +320,8 @@ def main() -> None:
     # with open("image.jpg", "wb") as f:
     #     f.write(image_bytes)
     result = call_vision_model(
-        model_name="llama3.2-vision:11b",
-        provider="ollama",
+        model_name="gpt-4o",
+        provider="api",
         prompt="describe the image",
         temperature=0.7,
         max_tokens=1000,
