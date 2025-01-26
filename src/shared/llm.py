@@ -1,6 +1,6 @@
-import json
 import base64
 import io
+import json
 import logging
 import os
 from typing import Any, Dict, List, Literal, Optional, Union
@@ -176,7 +176,7 @@ def generate_with_image_ollama(
             return json.loads(response_str)
         else:
             return response_str
-        
+
     except requests.exceptions.Timeout:
         raise TimeoutError(f"Request timed out after {timeout} seconds")
     except Exception as e:
@@ -228,12 +228,12 @@ def generate_with_api(
                 timeout=timeout,
             )
             response_str = response.choices[0].message.content
-            
+
             if json_mode:
                 return json.loads(response_str)
             else:
                 return response_str
-            
+
         except requests.exceptions.Timeout:
             raise TimeoutError(f"API request timed out after {timeout} seconds")
 
@@ -315,7 +315,6 @@ def generate_api_messages(
 
 
 def main() -> None:
-
     from ..shared.load_save_dataset import load_save_huggingface_dataset_df
 
     dataset_name = "tyrionhuu/PPTBench-Detection"
