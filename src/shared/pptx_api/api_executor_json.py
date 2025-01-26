@@ -52,6 +52,9 @@ def api_executor_json(
     if output_path is not None:
         save_json(str(output_path))
 
+    if JSON_DATA is None:
+        raise ValueError("No JSON data available")
+    
     return JSON_DATA
 
 
