@@ -76,7 +76,7 @@ def format_answer(answer: str) -> List[str]:
     """
     if not isinstance(answer, str):
         raise TypeError(f"Expected string input, got {type(answer)}")
-    
+
     if not answer.strip():
         raise ValueError("Empty input string")
 
@@ -117,7 +117,7 @@ def extract_functions_from_json(
     function_keys = sorted(
         key for key in json_data.keys() if key.startswith("function")
     )
-    
+
     # For non-empty dictionaries, require valid function keys
     if not function_keys:
         raise ValueError("No valid function keys found in non-empty input")
