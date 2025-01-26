@@ -1,6 +1,9 @@
-import pytest
-from src.shared.format_answers_api import format_answer
 from typing import Any
+
+import pytest
+
+from src.shared.format_answers_api import format_answer
+
 
 @pytest.mark.parametrize(
     "input_str,expected_output",
@@ -16,9 +19,7 @@ from typing import Any
         ('{"function1": "single_function()"}', ["single_function()"]),
     ],
 )
-def test_format_answer_success(
-    input_str: str, expected_output: list[str]
-) -> None:
+def test_format_answer_success(input_str: str, expected_output: list[str]) -> None:
     """
     Test successful cases of format_answer function.
 
@@ -59,9 +60,7 @@ def test_format_answer_empty_dict() -> None:
 
 def test_format_answer_mixed_keys() -> None:
     """Test format_answer with mixed valid and invalid keys."""
-    input_str = (
-        '{"function1": "first()", "invalid": "skip()", "function2": "last()"}'
-    )
+    input_str = '{"function1": "first()", "invalid": "skip()", "function2": "last()"}'
     expected = ["first()", "last()"]
     result = format_answer(input_str)
     assert result == expected
@@ -101,8 +100,7 @@ def test_format_answer_specific_errors(
 def test_format_answer_function_ordering() -> None:
     """Test that functions are returned in correct order."""
     input_str = (
-        '{"function2": "second()", "function1": "first()", '
-        '"function3": "third()"}'
+        '{"function2": "second()", "function1": "first()", ' '"function3": "third()"}'
     )
     expected = ["first()", "second()", "third()"]
     result = format_answer(input_str)
