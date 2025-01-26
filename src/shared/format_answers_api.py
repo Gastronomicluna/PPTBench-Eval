@@ -103,19 +103,19 @@ def extract_functions_from_json(
 
     Raises:
         TypeError: If json_data is not a dictionary.
-        ValueError: If function values are not strings or invalid format.
+        ValueError: If no valid function keys found or invalid function values.
     """
     if not isinstance(json_data, dict):
         raise TypeError(f"Expected dictionary input, got {type(json_data)}")
 
-    functions = []
     function_keys = sorted(
         key for key in json_data.keys() if key.startswith("function")
     )
     
     if not function_keys:
-        return []
+        raise ValueError("No valid function keys found in input")
 
+    functions = []
     for key in function_keys:
         value = json_data[key]
         if not isinstance(value, str):
