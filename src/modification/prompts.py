@@ -73,7 +73,9 @@ def build_prompt_element_modification(
         prompt += "Instructions:\n"
         prompt += "- Return in JSON dict format only the requested information without any additional text or explanations.\n"
         prompt += "- Abide by JSON formatting rules.\n\n"
-        prompt += "- The result should not have overlapping shapes or out-of-bounds shapes.\n"
+        prompt += (
+            "- The result should not have overlapping shapes or out-of-bounds shapes.\n"
+        )
         prompt += "Examples:\n"
         prompt += f"{example_json_str}\n\n"
         prompt += f"{divider}\n"
@@ -120,7 +122,9 @@ def build_prompt_add_shape(
     prompt += "Instructions:\n"
     prompt += "- Return in JSON dict format only the requested information without any additional text or explanations.\n"
     prompt += "- Abide by JSON formatting rules.\n\n"
-    prompt += "- The result should not have overlapping shapes or out-of-bounds shapes.\n"
+    prompt += (
+        "- The result should not have overlapping shapes or out-of-bounds shapes.\n"
+    )
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
