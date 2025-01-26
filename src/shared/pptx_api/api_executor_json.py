@@ -110,7 +110,6 @@ def set_json(json_input: Union[str, Dict[str, Any]]) -> Optional[str]:
         return f"Failed to set JSON: {str(e)}"
 
 
-
 def choose_slide(slide_id: int) -> Optional[str]:
     """Choose a slide to work with by ID.
 
@@ -239,10 +238,10 @@ def add_text_box(
     global JSON_CURRENT_SHAPE, JSON_CURRENT_SLIDE
     if JSON_CURRENT_SLIDE is None:
         return "No slide selected"
-    
+
     if "shapes" not in JSON_CURRENT_SLIDE:
         JSON_CURRENT_SLIDE["shapes"] = []
-        
+
     new_shape = {
         "name": f"TextBox_{len(JSON_CURRENT_SLIDE['shapes'])}",
         "shape_id": assign_shape_id(JSON_CURRENT_SLIDE),
@@ -263,10 +262,10 @@ def add_text_box(
             }
         ],
     }
-    
+
     if placeholder_type:
         new_shape["placeholder_type"] = placeholder_type
-    
+
     JSON_CURRENT_SLIDE["shapes"].append(new_shape)
     JSON_CURRENT_SHAPE = new_shape
     return None
