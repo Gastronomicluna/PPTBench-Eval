@@ -176,7 +176,9 @@ def compare_shape(
     if len(original_font_set) == 1:
         modified_font_set = get_font_from_shape(shape_to_test)
         if original_font_set != modified_font_set:
-            return False, "Font does not match"
+            return False, "Font does not match, expected: {}, got: {}".format(
+                original_font_set, modified_font_set
+            )
 
     # Compare images
     original_image = gold_shape.get("image_path")
