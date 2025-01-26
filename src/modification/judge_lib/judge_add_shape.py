@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from ...shared.pptx_api.api_executor import api_executor
 from ...shared.utils import fuzzy_match
@@ -16,7 +16,7 @@ def judge_answer_add_shape(
     shape_to_modify: Dict[str, Any],
     json_data: Dict[str, Any],  # JSON data, minus one shape
     presentation_json: Dict[str, Any],  # Original Presentation JSON data
-) -> bool:
+) -> Tuple[bool, str]:
     """
     Judge the answer based on the API calls and ground truth.
 
@@ -76,10 +76,10 @@ def judge_answer_add_shape(
         slide_height=slide_height,
         slide_width=slide_width,
     ):
-        return False
+        return False, "Shape is out of bounds"
 
     if has_overlap(slide_json=modified_slide):
-        return False
+        return False, "Shape overlaps with existing shapes"
 
     # print("Minus one shape slide: ", minus_one_shape_slide_json)
     # print("Modified slide: ", modified_slide)
@@ -90,7 +90,7 @@ def judge_answer_add_shape(
     )
 
     if added_shape is None:
-        return False
+        return False, "No new shape was added"
 
     return compare_shape(
         gold_shape=shape_to_modify,
@@ -142,7 +142,7 @@ def compare_shape(
     gold_shape: Dict[str, Any],
     shape_to_test: Dict[str, Any],
     text_threshold: float = 0.95,
-) -> bool:
+) -> Tuple[bool, str]:
     """
     Compare the original shape with the modified shape.
 
@@ -151,7 +151,7 @@ def compare_shape(
         shape_to_test (Dict[str, Any]): The modified shape data.
 
     Returns:
-        bool: Whether the shapes are the same.
+        Tuple[bool, str]: (Whether the shapes are the same, reason if False)
     """
     # Compare text if it exists in either shape
     original_text = gold_shape.get("text")
@@ -159,8 +159,7 @@ def compare_shape(
 
     # If text exists in one shape but not the other, return False
     if bool(original_text) != bool(modified_text):
-        # print("Text exists in one shape but not the other")
-        return False
+        return False, "Text presence mismatch"
 
     # If both have text, compare them
     text_match = fuzzy_match(
@@ -170,15 +169,13 @@ def compare_shape(
     )
 
     if not text_match:
-        # print("Text does not match")
-        return False
+        return False, "Text content does not match"
 
     original_font_set = get_font_from_shape(gold_shape)
     if len(original_font_set) == 1:
         modified_font_set = get_font_from_shape(shape_to_test)
         if original_font_set != modified_font_set:
-            # print("Font does not match")
-            return False
+            return False, "Font does not match"
 
     # Compare images
     original_image = gold_shape.get("image_path")
@@ -186,13 +183,12 @@ def compare_shape(
 
     # If image exists in one shape but not the other, return False
     if bool(original_image) != bool(modified_image):
-        # print("Image exists in one shape but not the other")
-        return False
+        return False, "Image presence mismatch"
 
     # If both have images, compare them
     if original_image and modified_image and original_image != modified_image:
         print("Original image: ", original_image)
         print("Modified image: ", modified_image)
-        return False
+        return False, "Image content does not match"
 
-    return True
+    return True, "Success"
