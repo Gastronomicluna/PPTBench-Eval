@@ -18,7 +18,7 @@ def get_answers_modification(
     provider: str,
     temperature: float,
     max_tokens: int,
-    json: bool,
+    json_mode: bool,
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
     csv_path: Optional[Path] = None,
@@ -34,7 +34,7 @@ def get_answers_modification(
         provider (str): Provider of the model.
         temperature (float): Sampling temperature.
         max_tokens (int): Maximum tokens in response.
-        json (bool): Whether to return JSON format.
+        json_mode (bool): Whether to return JSON format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
         pure_text (bool): If True, only use text data without images.
@@ -52,7 +52,7 @@ def get_answers_modification(
         provider=provider,
         temperature=temperature,
         max_tokens=max_tokens,
-        json=json,
+        json_mode=json_mode,
         timeout=timeout,
         retry=retry,
         csv_path=csv_path,
@@ -81,7 +81,7 @@ def get_answer_single_modification(
         provider (str): Provider of the model.
         temperature (float): Sampling temperature.
         max_tokens (int): Maximum tokens in response.
-        json_mode (bool): Whether to return json_mode format.
+        json_mode (bool): Whether to return JSON format.
         timeout (Optional[int]): Request timeout in seconds. None for no timeout.
         retry (Optional[int]): Number of retries on timeout. None for no retries.
         pure_text (bool): If True, only use text data without images.
@@ -128,6 +128,7 @@ def get_answer_single_modification(
 
             llm_answer = call_vision_model(**kwargs)
             llm_answer_str = llm_answer if not json_mode else json.dumps(llm_answer)
+            
             return {
                 "hash": hash_value,
                 "file_hash": file_hash,
@@ -136,7 +137,7 @@ def get_answer_single_modification(
                 "shape_to_modify": shape_to_modify,
                 "json_data": json_data,
                 "ground_truth": ground_truth,
-                "llm_answer": llm_answer,
+                "llm_answer": llm_answer_str,
                 "error": None,
             }
         except TimeoutError as e:
