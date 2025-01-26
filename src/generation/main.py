@@ -116,7 +116,7 @@ def main(
                     max_tokens=2048,
                     json_mode=True,
                     timeout=60,
-                    csv_path=results_dir / f"{model_name}.csv",
+                    csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
                     overwrite=True,
                 )
             ] = (provider, model_name)
@@ -132,7 +132,7 @@ def main(
     print("Formatting answers...")
 
     for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name}.csv"
+        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
         if csv_path.exists():
             results_df = format_answer_csv(
                 csv_path=csv_path,
@@ -144,7 +144,7 @@ def main(
 
     print("Generating PPTX files...")
     for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name}.csv"
+        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
         if csv_path.exists():
             generate_pptx_files_csv(
                 csv_path=csv_path,
