@@ -3,7 +3,7 @@ import time
 import traceback
 from pathlib import Path
 from typing import Any, Dict, Optional
-
+import json
 import pandas as pd
 
 from ..shared.get_answers import get_answers
@@ -99,8 +99,8 @@ def get_answer_single_generation(
             description = row["description"]
             content_images = row["content_images"]
             image_data = row["image"]
-            json_data = row["json_content"]
-            ground_truth = row["ground_truth"]
+            json_data = json.loads(row["json_content"])
+            ground_truth = json.loads(row["ground_truth"])
 
             image_bytes = get_image_bytes(image_data) if not pure_text else None
 
