@@ -1,4 +1,3 @@
-import logging
 from typing import Any, Dict, List, Tuple
 
 from ...shared.pptx_api.api_executor import api_executor
