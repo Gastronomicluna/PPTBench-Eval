@@ -129,8 +129,8 @@ def get_new_shape(
             new_shape = shape
             break
 
-    # if new_shape is None:
-    #     raise ValueError("New shape not found! ")
+    if new_shape is None:
+        raise ValueError("New shape not found! ")
 
     return new_shape
 
