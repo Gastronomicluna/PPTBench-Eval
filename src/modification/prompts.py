@@ -3,7 +3,7 @@ from typing import Any, Dict, Literal, Optional
 
 from ..shared.pptx_api.api_doc import api_list
 from ..shared.utils import api_to_string
-
+from .utils import get_font_from_shape
 # JSON templates for examples
 MODIFICATION_EXAMPLE = {
     "function1": "choose_slide(0)",
@@ -119,6 +119,31 @@ def build_prompt_add_shape(
     prompt += f"Shape to Add: {json.dumps(shape_to_add, indent=2)}\n"
     prompt += "Answer:\n"
     return prompt
+
+
+def build_add_shape_text_content(
+    shape_to_add: Dict[str, Any],
+) -> str:
+    """
+    Builds the text content for a shape to add to the slide.
+
+    Args:
+        shape_to_add (dict): The shape to add.
+
+    Returns:
+        str: The text content for the shape.
+    """
+    text = shape_to_add["text"]
+    result = f"Add a shape to the slide with the following text: '{text}'."
+    
+    font_set = get_font_from_shape(shape_to_add)
+    
+    if len(font_set) > 1:
+        return result
+    else:
+        font_name = font_set.pop()
+        result += f" The font used should be '{font_name}'."
+        return result
 
 def build_prompt_refinement(
     query: str,
