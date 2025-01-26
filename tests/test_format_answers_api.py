@@ -105,3 +105,39 @@ def test_format_answer_function_ordering() -> None:
     expected = ["first()", "second()", "third()"]
     result = format_answer(input_str)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    "input_str,expected_output",
+    [
+        # Add new test cases with quoted arguments
+        (
+            '{"function1": "process(\\"quoted string\\")"}',
+            ['process("quoted string")'],
+        ),
+        (
+            '{"function1": "detect(\\"hello\\", \\"world\\")"}',
+            ['detect("hello", "world")'],
+        ),
+        (
+            '{"function1": "func(\\"a\\", \\"b\\")", "function2": "other()"}',
+            ['func("a", "b")', "other()"],
+        ),
+        (
+            '{"function1": "nested(\\"outer(\\\\\\"inner\\\\\\")\\")"}',
+            ['nested("outer(\\"inner\\")")'],
+        ),
+    ],
+)
+def test_format_answer_quoted_args(
+    input_str: str, expected_output: list[str]
+) -> None:
+    """
+    Test format_answer with functions containing quoted arguments.
+
+    Args:
+        input_str: Input JSON string containing functions with quoted arguments
+        expected_output: Expected list of function strings
+    """
+    result = format_answer(input_str)
+    assert result == expected_output
