@@ -181,9 +181,11 @@ def build_add_shape_image_content(
     Returns:
         str: The image content for the shape.
     """
+    if not isinstance(shape_to_add, dict):
+        raise ValueError("shape_to_add must be a dictionary.")
     image_path = shape_to_add["image_path"]
     result = f"Add a shape to the slide with the following image: '{image_path}'.\n"
-
+    return result
 
 def build_prompt_refinement(
     query: str,
