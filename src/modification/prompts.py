@@ -191,6 +191,7 @@ def build_add_shape_image_content(
     result = f"Add a shape to the slide with the following image: '{image_path}'.\n"
     return result
 
+
 def build_prompt_refinement(
     query: str,
     slide_json: Dict[str, Any],
