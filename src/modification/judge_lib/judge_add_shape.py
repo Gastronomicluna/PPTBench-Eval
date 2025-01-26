@@ -55,13 +55,14 @@ def judge_answer_add_shape(
     )
 
     # Execute the API calls
-    modified_presentation_json = api_executor(
-        lines=api_calls,
-        json=minus_one_shape_presentation_json,
-        mode="json",
-    )
-    if modified_presentation_json is None:
-        return False, "Error executing API calls"
+    try:
+        modified_presentation_json = api_executor(
+            lines=api_calls,
+            json=minus_one_shape_presentation_json,
+            mode="json",
+        )
+    except Exception as e:
+        return False, str(e)
 
     modified_slide = get_slide_from_presentation(
         slide_id=slide_id,
