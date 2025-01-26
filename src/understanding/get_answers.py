@@ -3,7 +3,7 @@ import time
 import traceback
 from pathlib import Path
 from typing import Any, Dict, Optional
-
+import json
 import pandas as pd
 
 from ..shared.get_answers import get_answers
@@ -99,8 +99,8 @@ def get_answer_single_understanding(
             question = row["question"]
             options = row["options"]
             image_data = row["image"]
-            json_content = row["json_content"]
-            ground_truth = row["ground_truth"]
+            json_content = json.loads(row["json_content"])
+            ground_truth = json.loads(row["ground_truth"])
 
             # Extract image bytes from dictionary format
             image_bytes = get_image_bytes(image_data) if not pure_text else None
