@@ -230,7 +230,10 @@ def generate_with_api(
             response_str = response.choices[0].message.content
 
             if json_mode:
-                return json.loads(response_str)
+                try:
+                    return json.loads(response_str)
+                except json.JSONDecodeError:
+                    return response_str
             else:
                 return response_str
 
