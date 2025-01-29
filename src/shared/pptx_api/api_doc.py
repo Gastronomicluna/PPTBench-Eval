@@ -132,4 +132,12 @@ api_list = [
         notes="The shape must be selected before calling this function.",
         example="set_font_color('FF0000')",
     ),
+    API(
+        name="set_notes_font",
+        parameters="font_name: str)",
+        description="Set the font of the notes in the presentation.",
+        parameters_description="It takes one parameter 'font_name', which is a string.",
+        notes="This function sets the font of the notes in the presentation, and it does not require a shape to be selected.",
+        example="set_notes_font('Arial')",
+    ),
 ]

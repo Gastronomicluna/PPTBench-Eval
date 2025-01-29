@@ -373,7 +373,7 @@ def set_font_color(font_color: str = "000000") -> None:
         detail["color"] = font_color
 
 
-def set_note_font(font_name: str) -> None:
+def set_notes_font(font_name: str) -> None:
     """Set the font of the notes section.
 
     Args:
