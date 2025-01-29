@@ -137,7 +137,6 @@ def judge_answer(
     elif task == "change_font":
         return judge_answer_change_font(
             api_calls=api_calls,
-            shape_to_modify=shape_to_modify,
             ground_truth=ground_truth,
             presentation_json=presentation_json,
         )
