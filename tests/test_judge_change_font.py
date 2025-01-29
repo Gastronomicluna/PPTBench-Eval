@@ -1,4 +1,5 @@
 import pytest
+import json
 
 from src.modification.judge_lib.judge_change_font import (
     compare_slides,
@@ -7,21 +8,10 @@ from src.modification.judge_lib.judge_change_font import (
 
 
 @pytest.fixture
-def sample_presentation_json():
-    return {
-        "slides": [
-            {
-                "slide_id": "slide1",
-                "shapes": [
-                    {
-                        "shape_id": "shape1",
-                        "text": "Hello",
-                        "font": {"name": "Arial", "size": 12},
-                    }
-                ],
-            }
-        ]
-    }
+def base_presentation_json():
+    json_file = "tests/data/test_judge_change_font.json"
+    with open(json_file, "r") as f:
+        return json.load(f)
 
 
 @pytest.fixture
