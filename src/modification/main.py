@@ -85,7 +85,7 @@ def main(
 
     # Test mode
     if test_mode:
-        df = df[df["task"] == "add_shape"]
+        df = df[df["task"] == "change_font"]
         df = df.sample(20, random_state=42)
 
     print(f"Dataset shape: {df.shape}")
