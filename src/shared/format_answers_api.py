@@ -134,7 +134,7 @@ def extract_functions_from_json(
         if not value.strip():
             raise ValueError(f"Empty function value for {key}")
         # Replace \n with \\n in the function string
-        escaped_value = value.replace('\n', '\\n')
+        escaped_value = value.replace("\n", "\\n")
         functions.append(escaped_value)
 
     return functions
