@@ -188,7 +188,6 @@ def test_successful_font_change(
     ]
     result = judge_answer_change_font(
         api_calls=api_calls,
-        shape_to_modify=sample_shape_to_modify,
         ground_truth=sample_ground_truth,
         presentation_json=sample_presentation_json,
     )
@@ -206,7 +205,6 @@ def test_incorrect_font_change(
     ]
     result = judge_answer_change_font(
         api_calls=api_calls,
-        shape_to_modify=sample_shape_to_modify,
         ground_truth=sample_ground_truth,
         presentation_json=sample_presentation_json,
     )
@@ -225,7 +223,6 @@ def test_invalid_api_calls(
     ]
     result = judge_answer_change_font(
         api_calls=api_calls,
-        shape_to_modify=sample_shape_to_modify,
         ground_truth=sample_ground_truth,
         presentation_json=sample_presentation_json,
     )
