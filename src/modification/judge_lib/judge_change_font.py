@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Tuple
 
 from ...shared.pptx_api.api_executor import api_executor
-from ..utils import get_font, get_font_from_shape, get_shape_from_presentation
+from ..utils import get_font, get_font_from_shape, get_slide_from_presentation
 
 
 def judge_answer_change_font(
@@ -34,8 +34,8 @@ def judge_answer_change_font(
 
     gold_slide = ground_truth.get("slide", {})
 
-    modified_slide = get_shape_from_presentation(
-        presentation_json=modified_presentation_json,
+    modified_slide = get_slide_from_presentation(
+        presentation=modified_presentation_json,
         slide_id=slide_id,
     )
 
