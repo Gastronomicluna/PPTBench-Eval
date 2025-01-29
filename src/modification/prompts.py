@@ -47,7 +47,7 @@ def build_prompt(
     elif subcategory == "refinement":
         return build_prompt_refinement(query, slide_json)
     elif subcategory == "text_modification":
-        return build_prompt_text_modification(query, slide_json, shape_to_modify)
+        return build_prompt_text_modification(query, slide_json)
     else:
         raise ValueError(f"Invalid subcategory: {subcategory}")
 
@@ -231,7 +231,6 @@ def build_prompt_refinement(
 def build_prompt_text_modification(
     query: str,
     slide_json: Dict[str, Any],
-    shape_to_modify: Dict[str, Any],
 ) -> str:
     """
     Builds a prompt for the model based on the query and slide JSON, instructing the model to modify the text in the slide.
@@ -262,7 +261,6 @@ def build_prompt_text_modification(
     prompt += f"{json.dumps(slide_json, indent=2)}\n\n"
     prompt += f"{divider}\n"
     prompt += f"Query: {query}\n"
-    prompt += f"Shape to Modify: {json.dumps(shape_to_modify, indent=2)}\n"
     prompt += "Answer:\n"
     return prompt
 
