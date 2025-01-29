@@ -94,15 +94,15 @@ def extract_functions_from_json(
     json_data: Dict[str, Any],
 ) -> List[str]:
     """
-    Extract the functions from the JSON data.
+    Extract the functions from the JSON data and escape newlines.
 
     Args:
         json_data (Dict[str, Any]): The JSON data containing numbered function keys
             (e.g., "function1", "function2", etc.) with function call strings as values.
 
     Returns:
-        List[str]: The list of function call strings in order. Returns empty list
-            only for empty dictionary.
+        List[str]: The list of function call strings in order, with escaped newlines.
+            Returns empty list only for empty dictionary.
 
     Raises:
         TypeError: If json_data is not a dictionary.
@@ -133,7 +133,9 @@ def extract_functions_from_json(
             )
         if not value.strip():
             raise ValueError(f"Empty function value for {key}")
-        functions.append(value)
+        # Replace \n with \\n in the function string
+        escaped_value = value.replace('\n', '\\n')
+        functions.append(escaped_value)
 
     return functions
 
