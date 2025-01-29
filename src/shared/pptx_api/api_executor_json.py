@@ -373,6 +373,20 @@ def set_font_color(font_color: str = "000000") -> None:
         detail["color"] = font_color
 
 
+def set_note_font(font_name: str) -> None:
+    """Set the font of the notes section.
+
+    Args:
+        font_name: The font name to set.
+
+    Raises:
+        ValueError: If no slide is selected
+    """
+    if JSON_CURRENT_SLIDE is None:
+        raise ValueError("No slide selected")
+    for detail in JSON_CURRENT_SLIDE.get("notes", {}).get("font_details", []):
+        detail["font_name"] = font_name        
+
 def assign_shape_id(
     slide: Dict[str, Any],
 ) -> int:
