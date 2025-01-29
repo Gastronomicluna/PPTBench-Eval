@@ -385,7 +385,8 @@ def set_note_font(font_name: str) -> None:
     if JSON_CURRENT_SLIDE is None:
         raise ValueError("No slide selected")
     for detail in JSON_CURRENT_SLIDE.get("notes", {}).get("font_details", []):
-        detail["font_name"] = font_name        
+        detail["font_name"] = font_name
+
 
 def assign_shape_id(
     slide: Dict[str, Any],
