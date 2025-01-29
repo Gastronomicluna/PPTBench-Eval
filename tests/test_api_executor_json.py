@@ -49,8 +49,8 @@ def test_set_font_no_shape_selected(sample_json):
     pjson.set_json(sample_json)
 
     # Test without selecting shape
-    result = pjson.set_font("Arial")
-    assert result == "No shape selected"
+    with pytest.raises(ValueError, match="No shape selected"):
+        pjson.set_font("Arial")
 
     # Reset globals after test
     pjson.reset_globals()

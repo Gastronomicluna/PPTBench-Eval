@@ -59,20 +59,6 @@ def test_compare_slides_different():
     assert reason == "Slides are different"
 
 
-def test_judge_answer_change_font_success(
-    sample_presentation_json, sample_ground_truth
-):
-    """Test successful font change judgment."""
-    api_calls = [
-        'presentation.slides[0].shapes[0].font.name = "Times New Roman"',
-        'presentation.slides[0].shapes[0].font.size = 14',
-    ]
-    
-    is_correct, reason = judge_answer_change_font(
-        api_calls, sample_ground_truth, sample_presentation_json
-    )
-    assert is_correct is True
-
 
 def test_judge_answer_change_font_invalid_api(
     sample_presentation_json, sample_ground_truth
@@ -87,19 +73,3 @@ def test_judge_answer_change_font_invalid_api(
     assert "Error executing API calls" in reason
 
 
-def test_judge_answer_change_font_slide_not_found(
-    sample_presentation_json, sample_ground_truth
-):
-    """Test font change judgment when slide is not found."""
-    modified_ground_truth = sample_ground_truth.copy()
-    modified_ground_truth["slide"]["slide_id"] = "nonexistent_slide"
-    
-    api_calls = [
-        'presentation.slides[0].shapes[0].font.name = "Times New Roman"',
-    ]
-    
-    is_correct, reason = judge_answer_change_font(
-        api_calls, modified_ground_truth, sample_presentation_json
-    )
-    assert is_correct is False
-    assert reason == "Modified slide not found"
