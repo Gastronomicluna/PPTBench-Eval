@@ -6,7 +6,6 @@ from ..utils import get_font, get_font_from_shape, get_shape_from_presentation
 
 def judge_answer_change_font(
     api_calls: List[str],
-    shape_to_modify: Dict[str, Any],
     ground_truth: Dict[str, Any],
     presentation_json: Dict[str, Any],
 ) -> Tuple[bool, str]:
@@ -24,7 +23,6 @@ def judge_answer_change_font(
     """
     # Get the slide ID and shape ID from the ground truth
     slide_id = ground_truth.get("slide", {}).get("slide_id")
-    shape_id = shape_to_modify["shape_id"]
 
     # Execute the API calls
     try:
@@ -34,38 +32,37 @@ def judge_answer_change_font(
     except Exception as e:
         return False, f"Error executing API calls: {str(e)}"
 
-    # Get the shape from the slide
-    llm_modified_shape = get_shape_from_presentation(
+    gold_slide = ground_truth.get("slide", {})
+
+    modified_slide = get_shape_from_presentation(
+        presentation_json=modified_presentation_json,
         slide_id=slide_id,
-        shape_id=shape_id,
-        presentation=modified_presentation_json,
-    )
-    llm_modified_font = get_font_from_shape(llm_modified_shape)
-
-    if llm_modified_font is None:
-        return False, "No font found in modified shape"
-    if len(llm_modified_font) > 1:
-        return False, "Multiple fonts found in modified shape"
-
-    llm_modified_font_name = llm_modified_font.pop()
-
-    # Get the font names from the ground truth
-    gold_font = get_font(
-        shape_id=shape_id,
-        ground_truth=ground_truth,
     )
 
-    if gold_font is None:
-        return False, "No font found in ground truth"
-    if len(gold_font) > 1:
-        return False, "Multiple fonts found in ground truth"
+    if modified_slide is None:
+        return False, "Modified slide not found"
 
-    gold_font_name = gold_font.pop()
+    # Compare the slides
+    is_same, reason = compare_slides(gold_slide, modified_slide)
 
-    if gold_font_name != llm_modified_font_name:
-        return (
-            False,
-            f"Font mismatch: expected {gold_font_name}, got {llm_modified_font_name}",
-        )
+    return is_same, reason
 
-    return True, "Success"
+
+def compare_slides(
+    slide1: Dict[str, Any],
+    slide2: Dict[str, Any],
+) -> Tuple[bool, str]:
+    """
+    Compare two slides to determine if they are the same.
+
+    Args:
+        slide1 (Dict[str, Any]): The first slide.
+        slide2 (Dict[str, Any]): The second slide.
+
+    Returns:
+        Tuple[bool, str]: Whether the slides are the same and reason if not.
+    """
+    if slide1 == slide2:
+        return True, "Slides are the same"
+    else:
+        return False, "Slides are different"
