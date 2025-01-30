@@ -140,14 +140,14 @@ def judge_answer(
             ground_truth=ground_truth,
             presentation_json=presentation_json,
         )
-    elif task == "reposition":
+    elif task == "reposition_shape":
         return judge_answer_reposition(
             api_calls=api_calls,
             shape_to_modify=shape_to_modify,
             json_data=json_data,
             presentation_json=presentation_json,
         )
-    elif task == "resize":
+    elif task == "resize_shape":
         return judge_answer_resize(
             api_calls=api_calls,
             shape_to_modify=shape_to_modify,
