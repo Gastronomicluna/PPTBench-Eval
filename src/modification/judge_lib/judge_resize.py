@@ -86,7 +86,10 @@ def compare_shape_size(
     size_percentage_diff = calculate_size_diff(ground_truth_shape, result_shape)
 
     if position_percentage_diff > threshold:
-        return False, f"Position changed unexpectedly (diff: {position_percentage_diff:.4f})"
+        return (
+            False,
+            f"Position changed unexpectedly (diff: {position_percentage_diff:.4f})",
+        )
     if size_percentage_diff > threshold:
         return False, f"Size difference too large (diff: {size_percentage_diff:.4f})"
 
