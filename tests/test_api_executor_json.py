@@ -22,6 +22,16 @@ def sample_json():
                         ],
                     }
                 ],
+                "notes": {
+                    "text": "Sample Notes",
+                    "font_details": [
+                        {
+                            "paragraph_index": 0,
+                            "run_index": 0,
+                            "text": "Sample Notes",
+                        }
+                    ],
+                },
             }
         ]
     }
@@ -104,7 +114,7 @@ def test_set_notes_font(sample_json):
     assert result is None
 
     # Verify font was set
-    assert pjson.JSON_CURRENT_SLIDE["notes_font_details"][0]["font_name"] == "Arial"
+    assert pjson.JSON_CURRENT_SLIDE["notes"]["font_details"][0]["font_name"] == "Arial"
 
     # Reset globals after test
     pjson.reset_globals()
