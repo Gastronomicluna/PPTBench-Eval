@@ -19,7 +19,7 @@ def build_prompt(
     slide_json: Dict[str, Any],
     subcategory: Literal["element_modification", "refinement", "text_modification"],
     task: Optional[str] = None,
-    shape_to_modify: Optional[Dict[str, Any]] = None,
+    shape_to_modify: Optional[Any] = None,
 ) -> str:
     """
     Builds a prompt for the model based on the query and slide JSON.
@@ -35,8 +35,7 @@ def build_prompt(
     """
     if not isinstance(slide_json, dict):
         raise ValueError("slide_json must be a dictionary.")
-    if not isinstance(shape_to_modify, dict) and shape_to_modify is not None:
-        raise ValueError("shape_to_modify must be a dictionary.")
+
     if subcategory == "element_modification":
         return build_prompt_element_modification(
             query=query,
@@ -69,6 +68,9 @@ def build_prompt_element_modification(
     Returns:
         str: The prompt text.
     """
+    if not isinstance(shape_to_modify, dict) and shape_to_modify is not None:
+        raise ValueError("shape_to_modify must be a dictionary.")
+    
     if task == "add_shape":
         return build_prompt_add_shape(query, slide_json, shape_to_modify)
     elif task == "resize_shape" or task == "reposition_shape":
