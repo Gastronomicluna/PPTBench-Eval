@@ -81,24 +81,13 @@ def compare_shape_size(
     Returns:
         Tuple[bool, str]: Success flag and error message.
     """
-
     # Get the position of the shapes
-    ground_truth_position = ground_truth_shape["position"]
-    result_position = result_shape["position"]
+    position_percentage_diff = calculate_position_diff(ground_truth_shape, result_shape)
+    size_percentage_diff = calculate_size_diff(ground_truth_shape, result_shape)
 
-    # Get the size of the shapes
-    ground_truth_size = ground_truth_shape["size"]
-    result_size = result_shape["size"]
-
-    # Calculate the difference in position
-    position_diff = calculate_position_diff(ground_truth_position, result_position)
-
-    # Calculate the difference in size
-    size_diff = calculate_size_diff(ground_truth_size, result_size)
-
-    if position_diff > threshold:
-        return False, f"Position changed unexpectedly (diff: {position_diff:.4f})"
-    if size_diff > threshold:
-        return False, f"Size difference too large (diff: {size_diff:.4f})"
+    if position_percentage_diff > threshold:
+        return False, f"Position changed unexpectedly (diff: {position_percentage_diff:.4f})"
+    if size_percentage_diff > threshold:
+        return False, f"Size difference too large (diff: {size_percentage_diff:.4f})"
 
     return True, "Success"
