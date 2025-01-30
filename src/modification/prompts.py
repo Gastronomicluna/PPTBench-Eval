@@ -70,7 +70,7 @@ def build_prompt_element_modification(
     """
     if not isinstance(shape_to_modify, dict) and shape_to_modify is not None:
         raise ValueError("shape_to_modify must be a dictionary.")
-    
+
     if task == "add_shape":
         return build_prompt_add_shape(query, slide_json, shape_to_modify)
     elif task == "resize_shape" or task == "reposition_shape":
