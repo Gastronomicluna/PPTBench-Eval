@@ -12,7 +12,7 @@ from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import download_kaggle_dataset, get_project_root, process_model
 from .evaluation import evaluate_answers
-from .get_answers import get_answers_modification
+from .get_answers_modification import get_answers_modification
 from .judge import judge_answer_df
 
 
