@@ -92,3 +92,19 @@ def test_text_box_creation_with_formatting():
 
     # Reset globals after test
     pjson.reset_globals()
+
+
+def test_set_notes_font(sample_json):
+    # Setup
+    pjson.set_json(sample_json)
+    pjson.choose_slide(1)
+
+    # Test setting font
+    result = pjson.set_notes_font("Arial")
+    assert result is None
+
+    # Verify font was set
+    assert pjson.JSON_CURRENT_SLIDE["notes_font_details"][0]["font_name"] == "Arial"
+
+    # Reset globals after test
+    pjson.reset_globals()
