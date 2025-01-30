@@ -137,7 +137,7 @@ api_list = [
         parameters="font_name: str)",
         description="Set the font of the notes in the presentation.",
         parameters_description="It takes one parameter 'font_name', which is a string.",
-        notes="This function sets the font of the notes in the presentation, and it does not require a shape to be selected.",
+        notes="The slide must be selected before calling this function, and it does not require a shape to be selected.",
         example="set_notes_font('Arial')",
     ),
 ]
