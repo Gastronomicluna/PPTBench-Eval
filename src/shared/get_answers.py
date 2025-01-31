@@ -56,7 +56,7 @@ def get_answers(
         if csv_path and not overwrite
         else pd.DataFrame()
     )
-    print(existing_answers.head())
+    # print(existing_answers.info())
     result_data = []
     total = len(df)
 
@@ -72,6 +72,9 @@ def get_answers(
                     existing_answers["hash"] == hash_value
                 ].to_dict("records")
 
+                # debug
+                if hash_value == "6545241eb87170523ef11baa1944c8e3":
+                    print(existing_result["llm_answer"])
                 if existing_result:
                     existing_result = existing_result[0]
                     if "llm_answer" in existing_result and (
