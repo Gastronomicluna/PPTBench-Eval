@@ -52,46 +52,48 @@ def get_answers(
 
     # Load existing results if csv_path provided and not overwriting
     existing_answers = (
-        load_existing_answers(csv_path) if csv_path and not overwrite else {}
+        load_existing_answers(csv_path) if csv_path and not overwrite else pd.DataFrame()
     )
-    # print(f"Existing answers: ")
+    
     result_data = []
     total = len(df)
-    # print(df.info())
     
     # Add progress bar with model name in description
     with tqdm(total=total, desc=f"Processing with {model_name}") as pbar:
         for _, row in df.iterrows():
             hash_value = row["hash"]
             should_retry = False
-
-            # debug
-            # if hash_value == "6545241eb87170523ef11baa1944c8e3":
-            #     print("##################")
-            #     print(row)
+            
+            # Check if hash exists in existing answers
+            if not overwrite and not existing_answers.empty:
+                existing_result = existing_answers[
+                    existing_answers["hash"] == hash_value
+                ].to_dict("records")
                 
-            # Check if existing answer does not contain llm_answer
-            if not overwrite and hash_value in existing_answers:
-                existing_result = existing_answers[hash_value]
-                if (
-                    "llm_answer" in existing_result
-                    and (
-                        existing_result["llm_answer"] is None
-                        or existing_result["llm_answer"] == ""
-                    )
-                ):
-                    # print(f"Retrying hash {hash_value} due to missing answer")
-                    should_retry = True
-                    logging.info(f"Retrying hash {hash_value} due to missing answer")
-                else:
-                    result_data.append(existing_answers[hash_value])
+                if existing_result:
+                    existing_result = existing_result[0]
+                    if (
+                        "llm_answer" in existing_result
+                        and (
+                            existing_result["llm_answer"] is None
+                            or existing_result["llm_answer"] == ""
+                        )
+                    ):
+                        should_retry = True
+                        logging.info(f"Retrying hash {hash_value} due to missing answer")
+                    else:
+                        result_data.append(existing_result)
+                        pbar.update(1)
+                        continue
+
+            if not overwrite and not existing_answers.empty and not should_retry:
+                existing_result = existing_answers[
+                    existing_answers["hash"] == hash_value
+                ].to_dict("records")
+                if existing_result:
+                    result_data.append(existing_result[0])
                     pbar.update(1)
                     continue
-
-            if not overwrite and hash_value in existing_answers and not should_retry:
-                result_data.append(existing_answers[hash_value])
-                pbar.update(1)
-                continue
 
             result = get_answer_single(
                 row,

@@ -258,7 +258,7 @@ def process_model(
         return pd.DataFrame()  # Return empty DataFrame on error
 
 
-def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
+def load_existing_answers(csv_path: Path) -> pd.DataFrame:
     """
     Load existing answers from CSV file using the utility function.
 
@@ -266,13 +266,12 @@ def load_existing_answers(csv_path: Path) -> Dict[str, Dict[str, Any]]:
         csv_path (Path): Path to the CSV file.
 
     Returns:
-        Dict[str, Dict[str, Any]]: Dictionary of existing answers keyed by hash.
+        pd.DataFrame: DataFrame containing existing answers, empty if file not found.
     """
     df = csv_to_df(csv_path)
     if df is None:
-        return {}
-
-    return {row["hash"]: row.to_dict() for _, row in df.iterrows()}
+        return pd.DataFrame()
+    return df
 
 
 def build_json_path(
