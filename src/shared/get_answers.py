@@ -63,6 +63,10 @@ def get_answers(
             hash_value = row["hash"]
             should_retry = False
 
+            # debug
+            if hash_value == "ec6bd1211280bde5c11e5358dbe65a59":
+                print(row["llm_answer"])
+                
             # Check if existing answer does not contain llm_answer
             if not overwrite and hash_value in existing_answers:
                 existing_result = existing_answers[hash_value]
