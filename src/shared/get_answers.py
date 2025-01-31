@@ -61,7 +61,20 @@ def get_answers(
     with tqdm(total=total, desc=f"Processing with {model_name}") as pbar:
         for _, row in df.iterrows():
             hash_value = row["hash"]
+            should_retry = False
+            
+            # Check if existing answer had a timeout error
             if not overwrite and hash_value in existing_answers:
+                existing_result = existing_answers[hash_value]
+                if "error" in existing_result and "Request timed out." in str(existing_result["error"]):
+                    should_retry = True
+                    logging.info(f"Retrying hash {hash_value} due to previous timeout")
+                else:
+                    result_data.append(existing_answers[hash_value])
+                    pbar.update(1)
+                    continue
+
+            if not overwrite and hash_value in existing_answers and not should_retry:
                 result_data.append(existing_answers[hash_value])
                 pbar.update(1)
                 continue
