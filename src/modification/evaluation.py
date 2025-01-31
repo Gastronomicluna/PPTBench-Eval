@@ -27,7 +27,7 @@ def evaluate_answers(
 
     # Filter out timed out requests
     valid_df = answers_df[
-        (answers_df["llm_answer"].notnull()) & (answers_df["is_correct"].notnull())
+        answers_df["llm_answer"].notnull()
     ].copy()
 
     # Calculate overall metrics
