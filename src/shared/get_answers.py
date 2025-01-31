@@ -52,35 +52,36 @@ def get_answers(
 
     # Load existing results if csv_path provided and not overwriting
     existing_answers = (
-        load_existing_answers(csv_path) if csv_path and not overwrite else pd.DataFrame()
+        load_existing_answers(csv_path)
+        if csv_path and not overwrite
+        else pd.DataFrame()
     )
-    
+
     result_data = []
     total = len(df)
-    
+
     # Add progress bar with model name in description
     with tqdm(total=total, desc=f"Processing with {model_name}") as pbar:
         for _, row in df.iterrows():
             hash_value = row["hash"]
             should_retry = False
-            
+
             # Check if hash exists in existing answers
             if not overwrite and not existing_answers.empty:
                 existing_result = existing_answers[
                     existing_answers["hash"] == hash_value
                 ].to_dict("records")
-                
+
                 if existing_result:
                     existing_result = existing_result[0]
-                    if (
-                        "llm_answer" in existing_result
-                        and (
-                            existing_result["llm_answer"] is None
-                            or existing_result["llm_answer"] == ""
-                        )
+                    if "llm_answer" in existing_result and (
+                        existing_result["llm_answer"] is None
+                        or existing_result["llm_answer"] == ""
                     ):
                         should_retry = True
-                        logging.info(f"Retrying hash {hash_value} due to missing answer")
+                        logging.info(
+                            f"Retrying hash {hash_value} due to missing answer"
+                        )
                     else:
                         result_data.append(existing_result)
                         pbar.update(1)
