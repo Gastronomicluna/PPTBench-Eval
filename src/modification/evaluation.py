@@ -13,6 +13,7 @@ def evaluate_answers(
 ) -> pd.DataFrame:
     """
     Evaluate the answers in the DataFrame, both overall and by task.
+    Excludes rows where error is "Request timed out".
 
     Args:
         answers_df (pd.DataFrame): The DataFrame containing the answers.
@@ -24,19 +25,24 @@ def evaluate_answers(
     if "is_correct" not in answers_df.columns:
         raise ValueError("The input DataFrame must contain 'is_correct' column.")
 
+    # Filter out timed out requests
+    valid_df = answers_df[
+        (answers_df["error"].isna()) | (answers_df["error"] != "Request timed out")
+    ].copy()
+
     # Calculate overall metrics
     overall_metrics = {
         "category": "overall",
-        "accuracy": float(calculate_accuracy(answers_df)),
-        "precision": float(calculate_precision(answers_df)),
-        "recall": float(calculate_recall(answers_df)),
-        "f1_score": float(calculate_f1_score(answers_df)),
+        "accuracy": float(calculate_accuracy(valid_df)),
+        "precision": float(calculate_precision(valid_df)),
+        "recall": float(calculate_recall(valid_df)),
+        "f1_score": float(calculate_f1_score(valid_df)),
     }
 
     # Calculate per-task metrics if task exists
-    if "task" in answers_df.columns:
+    if "task" in valid_df.columns:
         task_metrics = []
-        for task, group in answers_df.groupby("task"):
+        for task, group in valid_df.groupby("task"):
             metrics = {
                 "category": task,
                 "accuracy": float(calculate_accuracy(group)),
