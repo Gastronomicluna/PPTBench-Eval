@@ -54,6 +54,8 @@ def get_answers(
     existing_answers = (
         load_existing_answers(csv_path) if csv_path and not overwrite else {}
     )
+    print(f"Existing answers: ")
+    print(existing_answers)
     result_data = []
     total = len(df)
 
@@ -64,9 +66,9 @@ def get_answers(
             should_retry = False
 
             # debug
-            if hash_value == "6545241eb87170523ef11baa1944c8e3":
-                print("##################")
-                print(row)
+            # if hash_value == "6545241eb87170523ef11baa1944c8e3":
+            #     print("##################")
+            #     print(row)
                 
             # Check if existing answer does not contain llm_answer
             if not overwrite and hash_value in existing_answers:
