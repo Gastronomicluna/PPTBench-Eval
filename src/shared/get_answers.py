@@ -65,6 +65,7 @@ def get_answers(
 
             # debug
             if hash_value == "6545241eb87170523ef11baa1944c8e3":
+                print("##################")
                 print(row["llm_answer"])
                 
             # Check if existing answer does not contain llm_answer
@@ -72,7 +73,10 @@ def get_answers(
                 existing_result = existing_answers[hash_value]
                 if (
                     "llm_answer" in existing_result
-                    and existing_result["llm_answer"] == "NULL"
+                    and (
+                        existing_result["llm_answer"] is None
+                        or existing_result["llm_answer"] == ""
+                    )
                 ):
                     # print(f"Retrying hash {hash_value} due to missing answer")
                     should_retry = True
