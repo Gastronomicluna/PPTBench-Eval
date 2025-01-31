@@ -56,7 +56,7 @@ def get_answers(
         if csv_path and not overwrite
         else pd.DataFrame()
     )
-
+    print(existing_answers.head())
     result_data = []
     total = len(df)
 
