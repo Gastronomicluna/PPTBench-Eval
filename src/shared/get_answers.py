@@ -54,11 +54,10 @@ def get_answers(
     existing_answers = (
         load_existing_answers(csv_path) if csv_path and not overwrite else {}
     )
-    print(f"Existing answers: ")
-    print(existing_answers)
+    # print(f"Existing answers: ")
     result_data = []
     total = len(df)
-
+    print(df.info())
     # Add progress bar with model name in description
     with tqdm(total=total, desc=f"Processing with {model_name}") as pbar:
         for _, row in df.iterrows():
