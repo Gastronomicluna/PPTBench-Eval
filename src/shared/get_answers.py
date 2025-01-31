@@ -70,6 +70,7 @@ def get_answers(
                     "llm_answer" in existing_result
                     and existing_result["llm_answer"] == "NULL"
                 ):
+                    # print(f"Retrying hash {hash_value} due to missing answer")
                     should_retry = True
                     logging.info(f"Retrying hash {hash_value} due to missing answer")
                 else:
