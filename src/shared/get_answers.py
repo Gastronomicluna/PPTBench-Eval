@@ -62,11 +62,14 @@ def get_answers(
         for _, row in df.iterrows():
             hash_value = row["hash"]
             should_retry = False
-            
+
             # Check if existing answer does not contain llm_answer
             if not overwrite and hash_value in existing_answers:
                 existing_result = existing_answers[hash_value]
-                if "llm_answer" in existing_result and (existing_result["llm_answer"] is None or existing_result["llm_answer"] == "NULL"):
+                if "llm_answer" in existing_result and (
+                    existing_result["llm_answer"] is None
+                    or existing_result["llm_answer"] == "NULL"
+                ):
                     should_retry = True
                     logging.info(f"Retrying hash {hash_value} due to missing answer")
                 else:
