@@ -84,8 +84,8 @@ def get_answers(
                     # debug
                     if hash_value == "6545241eb87170523ef11baa1944c8e3":
                         print("############")
-                        print(existing_result["llm_answer"])
-                        
+                        # print(existing_result["llm_answer"])
+                        print("Is None: ", existing_result["llm_answer"] is None)
                     if "llm_answer" in existing_result and (
                         existing_result["llm_answer"] is None
                         or existing_result["llm_answer"] == ""
