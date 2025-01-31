@@ -75,7 +75,9 @@ def get_answers(
                 # debug
                 if hash_value == "6545241eb87170523ef11baa1944c8e3":
                     print("################")
-                    print(existing_result["llm_answer"])
+                    # print(existing_result["llm_answer"])
+                    print(existing_result.info())
+                    
                 if existing_result:
                     existing_result = existing_result[0]
                     if "llm_answer" in existing_result and (
