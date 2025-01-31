@@ -65,21 +65,21 @@ def get_answers(
         for _, row in df.iterrows():
             hash_value = row["hash"]
             should_retry = False
-
+            
             # Check if hash exists in existing answers
             if not overwrite and not existing_answers.empty:
                 existing_result = existing_answers[
                     existing_answers["hash"] == hash_value
-                ].to_dict("records")
-
+                ]
+                
                 # debug
                 if hash_value == "6545241eb87170523ef11baa1944c8e3":
-                    print("################")
+                    print("############")
                     # print(existing_result["llm_answer"])
-                    print(existing_result.info())
+                    print(existing_result["llm_answer"].isnull())
                     
-                if existing_result:
-                    existing_result = existing_result[0]
+                if not existing_result.empty:
+                    existing_result = existing_result.iloc[0].to_dict()
                     if "llm_answer" in existing_result and (
                         existing_result["llm_answer"] is None
                         or existing_result["llm_answer"] == ""
@@ -96,9 +96,9 @@ def get_answers(
             if not overwrite and not existing_answers.empty and not should_retry:
                 existing_result = existing_answers[
                     existing_answers["hash"] == hash_value
-                ].to_dict("records")
-                if existing_result:
-                    result_data.append(existing_result[0])
+                ]
+                if not existing_result.empty:
+                    result_data.append(existing_result.iloc[0].to_dict())
                     pbar.update(1)
                     continue
 
