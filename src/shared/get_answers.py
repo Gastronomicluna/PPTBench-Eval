@@ -73,10 +73,10 @@ def get_answers(
                 ]
                 
                 # debug
-                if hash_value == "6545241eb87170523ef11baa1944c8e3":
-                    print("############")
-                    # print(existing_result["llm_answer"])
-                    print(existing_result["llm_answer"].isnull())
+                # if hash_value == "6545241eb87170523ef11baa1944c8e3":
+                #     print("############")
+                #     # print(existing_result["llm_answer"])
+                #     print(existing_result["llm_answer"].isnull())
                     
                 if not existing_result.empty:
                     existing_result = existing_result.iloc[0].to_dict()
@@ -84,6 +84,7 @@ def get_answers(
                         existing_result["llm_answer"] is None
                         or existing_result["llm_answer"] == ""
                     ):
+                        print("############")
                         should_retry = True
                         logging.info(
                             f"Retrying hash {hash_value} due to missing answer"
