@@ -13,7 +13,7 @@ def evaluate_answers(
 ) -> pd.DataFrame:
     """
     Evaluate the answers in the DataFrame, both overall and by task.
-    Excludes rows where error is "Request timed out".
+    Excludes rows where llm_answer is None.
 
     Args:
         answers_df (pd.DataFrame): The DataFrame containing the answers.
@@ -27,7 +27,7 @@ def evaluate_answers(
 
     # Filter out timed out requests
     valid_df = answers_df[
-        (answers_df["error"].isna()) | (answers_df["error"] != "Request timed out")
+        (answers_df["llm_answer"].notnull()) & (answers_df["is_correct"].notnull())
     ].copy()
 
     # Calculate overall metrics
