@@ -86,6 +86,8 @@ def get_answers(
                         print("############")
                         # print(existing_result["llm_answer"])
                         print("Is None: ", existing_result["llm_answer"] is None)
+                        print("Is Empty: ", existing_result["llm_answer"] == "")
+                        print("Is nan: ", existing_result["llm_answer"].lower() == "nan")
                     if "llm_answer" in existing_result and (
                         existing_result["llm_answer"] is None
                         or existing_result["llm_answer"] == ""
