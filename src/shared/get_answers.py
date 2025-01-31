@@ -66,7 +66,7 @@ def get_answers(
             # debug
             if hash_value == "6545241eb87170523ef11baa1944c8e3":
                 print("##################")
-                print(row.to_dict())
+                print(row)
                 
             # Check if existing answer does not contain llm_answer
             if not overwrite and hash_value in existing_answers:
