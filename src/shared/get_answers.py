@@ -87,10 +87,12 @@ def get_answers(
                         print(existing_result["llm_answer"])
                         print("Is None: ", existing_result["llm_answer"] is None)
                         print("Is Empty: ", existing_result["llm_answer"] == "")
-                        print("Is nan: ", existing_result["llm_answer"] == "nan")
+                        print("Is nan: ", pd.isna(existing_result["llm_answer"]))
+                        
                     if "llm_answer" in existing_result and (
                         existing_result["llm_answer"] is None
                         or existing_result["llm_answer"] == ""
+                        or pd.isna(existing_result["llm_answer"])  # Changed this line
                     ):
                         print("############")
                         should_retry = True
