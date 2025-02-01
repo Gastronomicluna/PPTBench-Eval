@@ -65,22 +65,22 @@ def get_answers(
         for _, row in df.iterrows():
             hash_value = row["hash"]
             should_retry = False
-            
+
             # Check if hash exists in existing answers
             if not overwrite and not existing_answers.empty:
                 existing_result = existing_answers[
                     existing_answers["hash"] == hash_value
                 ]
-                
+
                 # debug
                 # if hash_value == "6545241eb87170523ef11baa1944c8e3":
                 #     print("############")
                 #     # print(existing_result["llm_answer"])
                 #     print(existing_result["llm_answer"].isnull())
-                    
+
                 if not existing_result.empty:
                     existing_result = existing_result.iloc[0].to_dict()
-                    
+
                     # debug
                     if hash_value == "6545241eb87170523ef11baa1944c8e3":
                         print("############")
@@ -88,7 +88,7 @@ def get_answers(
                         print("Is None: ", existing_result["llm_answer"] is None)
                         print("Is Empty: ", existing_result["llm_answer"] == "")
                         print("Is nan: ", pd.isna(existing_result["llm_answer"]))
-                        
+
                     if "llm_answer" in existing_result and (
                         existing_result["llm_answer"] is None
                         or existing_result["llm_answer"] == ""
