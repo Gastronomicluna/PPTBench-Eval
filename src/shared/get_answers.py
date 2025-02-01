@@ -94,7 +94,7 @@ def get_answers(
                         or existing_result["llm_answer"] == ""
                         or pd.isna(existing_result["llm_answer"])  # Changed this line
                     ):
-                        print("############")
+                        # print("############")
                         should_retry = True
                         logging.info(
                             f"Retrying hash {hash_value} due to missing answer"
