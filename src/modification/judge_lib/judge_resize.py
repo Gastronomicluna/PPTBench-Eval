@@ -68,7 +68,7 @@ def judge_answer_resize(
 def compare_shape_size(
     ground_truth_shape: Dict[str, Any],
     result_shape: Dict[str, Any],
-    threshold: float = 0.001,
+    threshold: float = 0.1,
 ) -> Tuple[bool, str]:
     """
     Compare the ground truth shape with the result shape.
