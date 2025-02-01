@@ -26,7 +26,7 @@ def evaluate_answers(
         raise ValueError("The input DataFrame must contain 'is_correct' column.")
 
     # Filter out timed out requests
-    valid_df = answers_df[answers_df["llm_answer"].notnull()].copy()
+    valid_df = answers_df[~pd.isna(answers_df["llm_answer"])].copy()
 
     # Calculate overall metrics
     overall_metrics = {
