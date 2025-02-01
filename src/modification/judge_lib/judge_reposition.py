@@ -77,7 +77,7 @@ def compare_shape_position(
     Args:
         ground_truth_shape (Dict[str, Any]): The ground truth shape.
         result_shape (Dict[str, Any]): The result shape.
-        threshold (float, optional): Maximum allowed position difference. Defaults to 0.001.
+        threshold (float, optional): Maximum allowed position difference. Defaults to 0.1.
 
     Returns:
         Tuple[bool, str]: Success flag and error message.
