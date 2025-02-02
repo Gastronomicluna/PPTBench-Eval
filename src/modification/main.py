@@ -85,7 +85,7 @@ def main(
 
     # Test mode
     if test_mode:
-        df = df[df["subcategory"] == "element_modification"]
+        df = df[df["task"] == "resize_shape"]
         # df = df[df["task"] == "reposition"]
         df = df.sample(20, random_state=42)
 
