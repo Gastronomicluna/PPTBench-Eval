@@ -87,8 +87,8 @@ def main(
 
     # only get category == "content extraction"
     if test_mode:
-        # df = df[df["subcategory"] == "content extraction"]
-        df = df.sample(n=50, random_state=42)
+        df = df[df["subcategory"] == "content extraction"]
+        df = df.sample(n=5, random_state=42)
 
     # print(df.head())
     if ollama_mode:
