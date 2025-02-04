@@ -101,8 +101,10 @@ def get_answer_single_detection(
             description = row["description"]
             image_data = row["image"]
             json_data = json.loads(row["json_data"])
-            ground_truth = json.loads(row["ground_truth"])
-
+            try:
+                ground_truth = json.loads(row["ground_truth"])
+            except json.JSONDecodeError:
+                ground_truth = row["ground_truth"]
             # Extract image bytes from dictionary format
             image_bytes = get_image_bytes(image_data) if not pure_text else None
 
