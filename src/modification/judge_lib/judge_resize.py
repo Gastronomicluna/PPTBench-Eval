@@ -82,7 +82,7 @@ def compare_shape_size(
         Tuple[bool, str]: Success flag and error message.
     """
     # Get the position of the shapes
-    position_percentage_diff = calculate_position_diff(ground_truth_shape, result_shape)
+    # position_percentage_diff = calculate_position_diff(ground_truth_shape, result_shape)
     size_percentage_diff = calculate_size_diff(ground_truth_shape, result_shape)
 
     # if position_percentage_diff > threshold:
