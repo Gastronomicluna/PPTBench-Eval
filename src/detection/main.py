@@ -18,7 +18,7 @@ from .judge import judge_answer_df
 
 def main(
     max_workers: int = 4,
-    ollama_mode: bool = True,
+    ollama_mode: bool = False,
     test_mode: bool = False,
     non_magic_mode: bool = False,
     job_delay: float = 0.5,
@@ -178,7 +178,7 @@ def main(
 if __name__ == "__main__":
     main(
         max_workers=4,
-        ollama_mode=True,
-        test_mode=False,
+        ollama_mode=False,
+        test_mode=True,
         job_delay=0.5,
     )
