@@ -2,7 +2,6 @@ from typing import Any, Dict, List, Tuple
 
 from ...shared.pptx_api.api_executor import api_executor
 from ..utils import (
-    calculate_position_diff,
     calculate_size_diff,
     get_shape_from_presentation,
     produce_modified_presentation_json,
