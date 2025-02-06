@@ -66,9 +66,10 @@ def format_content_extraction_answer(
     try:
         if isinstance(answer, str):
             json_answer = parse_json_answer(answer)
-            print(json_answer)
+            # print(json_answer)
         else:
             json_answer = answer
+            print(json_answer)
         answer = json_answer["answer"]
         # print(answer)
     except Exception as e:
