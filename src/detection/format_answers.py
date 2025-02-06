@@ -53,7 +53,7 @@ def format_answer(
 
 def format_content_extraction_answer(
     answer: Union[str, Dict[str, Any]],
-) -> Optional[str]:
+) -> str:
     """
     Format the extracted content for content extraction tasks.
 
@@ -69,6 +69,7 @@ def format_content_extraction_answer(
         else:
             json_answer = answer
         answer = json_answer["answer"]
+        print(answer)
     except Exception as e:
         raise Exception(f"Error formatting content extraction answer: {e}")
     return answer
