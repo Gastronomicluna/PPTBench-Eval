@@ -130,7 +130,7 @@ def get_answer_single_detection(
 
             llm_answer = call_vision_model(**kwargs)
             llm_answer_str = llm_answer if json_mode else json.dumps(llm_answer)
-
+            ground_truth = json.dumps(ground_truth) if isinstance(ground_truth, dict) else ground_truth
             return {
                 "hash": hash_value,
                 "file_hash": file_hash,  # Add this field
@@ -156,7 +156,7 @@ def get_answer_single_detection(
                 "subcategory": row.get("subcategory", ""),
                 "task": row.get("task", ""),
                 "json_data": row.get("json_data", ""),  # Add this field
-                "ground_truth": row.get("ground_truth", ""),
+                "ground_truth": ground_truth,
                 "llm_answer": None,
                 "error": str(e),
             }
@@ -169,7 +169,7 @@ def get_answer_single_detection(
                 "subcategory": row.get("subcategory", ""),
                 "task": row.get("task", ""),
                 "json_data": row.get("json_data", ""),  # Add this field
-                "ground_truth": row.get("ground_truth", ""),
+                "ground_truth": ground_truth,
                 "llm_answer": None,
                 "error": str(e),
             }
