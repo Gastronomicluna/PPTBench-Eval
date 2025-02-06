@@ -1,7 +1,10 @@
 from pathlib import Path
 from typing import Callable
+
 import pandas as pd
+
 from .utils import csv_to_df, df_to_csv
+
 
 def format_answer_csv_shared(
     format_answer_function: Callable,
@@ -35,7 +38,9 @@ def format_answer_csv_shared(
 
         try:
             df["answer"] = df.apply(
-                lambda row: format_answer_function(row["llm_answer"], row["subcategory"]),
+                lambda row: format_answer_function(
+                    row["llm_answer"], row["subcategory"]
+                ),
                 axis=1,
             )
         except KeyError as e:
