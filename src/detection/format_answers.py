@@ -66,8 +66,8 @@ def format_content_extraction_answer(
     try:
         json_answer = parse_json_answer(answer)
         answer = json_answer["answer"]
-    except Exception:
-        return None
+    except Exception as e:
+        raise Exception(f"Error formatting content extraction answer: {e}")
     return answer
 
 
@@ -86,8 +86,8 @@ def format_style_detection_answer(
     try:
         json_answer = parse_json_answer(answer)
         answer = json_answer["answer"]
-    except Exception:
-        return None
+    except Exception as e:
+        raise Exception(f"Error formatting style detection answer: {e}")
     return answer
 
 
@@ -105,6 +105,6 @@ def format_layout_detection_answer(
     """
     try:
         json_answer = parse_json_answer(answer)
-    except Exception:
-        return None
+    except Exception as e:
+        raise Exception(f"Error formatting layout detection answer: {e}")
     return json.dumps(json_answer)
