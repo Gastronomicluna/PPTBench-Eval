@@ -128,6 +128,7 @@ def get_answer_single_detection(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
+            llm_answer_str = llm_answer if json_mode else json.dumps(llm_answer)
 
             return {
                 "hash": hash_value,
