@@ -85,7 +85,7 @@ def main(
             source="huggingface",
         )
 
-    # only get category == "content extraction"
+    # only get subcategory == "content extraction"
     if test_mode:
         df = df[df["subcategory"] == "content extraction"]
         df = df.sample(n=5, random_state=42)
