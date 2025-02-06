@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, Literal, Optional, Union
+from typing import Dict, Literal, Optional, Union, Any
 
 import pandas as pd
 
@@ -55,7 +55,7 @@ def judge_answer_df(
 
 def judge_answer(
     subcategory: Literal["content extraction", "layout detection", "style detection"],
-    ground_truth: str,
+    ground_truth: Union[str, Dict[str, Any]],
     answer: Optional[str],
 ) -> bool:
     """
@@ -63,7 +63,7 @@ def judge_answer(
 
     Args:
         subcategory (str): The subcategory type.
-        ground_truth (str): The ground truth answer.
+        ground_truth (Union[str, Dict[str, Any]]): The ground truth answer.
         answer (str): The answer from the model.
 
     Returns:
@@ -82,10 +82,9 @@ def judge_answer(
 
     if subcategory == "layout detection":
         try:
-            ground_truth = parse_json_answer(ground_truth)
+            if isinstance(ground_truth, str):
+                ground_truth = parse_json_answer(ground_truth)
             answer = json.loads(answer)
-            # print("Ground Truth:" , ground_truth)
-            # print("Answer:", answer)
         except (ValueError, SyntaxError) as e:
             print(e)
             return False
