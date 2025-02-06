@@ -69,7 +69,7 @@ def format_content_extraction_answer(
             # print(json_answer)
         else:
             json_answer = answer
-            print(json_answer)
+            print(answer)
         answer = json_answer["answer"]
         # print(answer)
     except Exception as e:
