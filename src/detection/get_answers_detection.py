@@ -129,7 +129,7 @@ def get_answer_single_detection(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
-            llm_answer_str = llm_answer if json_mode else json.dumps(llm_answer)
+            llm_answer_str = json.dumps(llm_answer) if isinstance(llm_answer, dict) else llm_answer
             ground_truth = json.dumps(ground_truth) if isinstance(ground_truth, dict) else ground_truth
             return {
                 "hash": hash_value,
