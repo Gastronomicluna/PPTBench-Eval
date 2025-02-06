@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Callable, Union
+
 import pandas as pd
+
 
 def format_answer_csv_shared(
     format_func: Callable,
@@ -18,7 +20,7 @@ def format_answer_csv_shared(
         DataFrame with formatted answers
     """
     df = pd.read_csv(csv_path)
-    
+
     # Initialize columns with appropriate dtypes
     if "formatted_answer" not in df.columns:
         df["formatted_answer"] = pd.NA
