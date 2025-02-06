@@ -129,7 +129,8 @@ def get_answer_single_modification(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
-            llm_answer_str = llm_answer if not json_mode else json.dumps(llm_answer)
+            # llm_answer_str = llm_answer if not json_mode else json.dumps(llm_answer)
+            llm_answer_str = json.dumps(llm_answer) if isinstance(llm_answer, dict) else llm_answer
 
             return {
                 "hash": hash_value,
