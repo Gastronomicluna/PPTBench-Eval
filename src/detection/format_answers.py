@@ -69,8 +69,8 @@ def format_content_extraction_answer(
             # print(json_answer)
         else:
             json_answer = answer
-            print(answer)
-        answer = json_answer["llm_answer"]
+            # print(answer)
+        answer = json_answer["answer"]
         # print(answer)
     except Exception as e:
         raise Exception(f"Error formatting content extraction answer: {e}")
