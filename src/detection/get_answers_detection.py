@@ -96,6 +96,7 @@ def get_answer_single_detection(
     while attempts <= max_attempts:
         try:
             hash_value = row["hash"]
+            file_hash = row["file_hash"]  # Add this line
             subcategory = row["subcategory"]
             task = row["task"]
             description = row["description"]
@@ -132,8 +133,10 @@ def get_answer_single_detection(
 
             return {
                 "hash": hash_value,
+                "file_hash": file_hash,  # Add this field
                 "task": task,
                 "subcategory": subcategory,
+                "json_data": json.dumps(json_data),  # Add this field
                 "ground_truth": ground_truth,
                 "llm_answer": llm_answer,
                 "error": None,
@@ -149,8 +152,10 @@ def get_answer_single_detection(
             logging.error(f"All retry attempts failed: {str(e)}")
             return {
                 "hash": row["hash"],
+                "file_hash": row.get("file_hash", ""),  # Add this field
                 "subcategory": row.get("subcategory", ""),
                 "task": row.get("task", ""),
+                "json_data": row.get("json_data", ""),  # Add this field
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": None,
                 "error": str(e),
@@ -160,8 +165,10 @@ def get_answer_single_detection(
             logging.error(traceback.format_exc())
             return {
                 "hash": row["hash"],
+                "file_hash": row.get("file_hash", ""),  # Add this field
                 "subcategory": row.get("subcategory", ""),
                 "task": row.get("task", ""),
+                "json_data": row.get("json_data", ""),  # Add this field
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": None,
                 "error": str(e),
