@@ -138,7 +138,7 @@ def get_answer_single_detection(
                 "subcategory": subcategory,
                 "json_data": json.dumps(json_data),  # Add this field
                 "ground_truth": ground_truth,
-                "llm_answer": llm_answer,
+                "llm_answer": llm_answer_str,
                 "error": None,
             }
         except TimeoutError as e:
