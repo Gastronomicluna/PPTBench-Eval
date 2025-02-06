@@ -28,14 +28,14 @@ def format_answer_csv(
 
 
 def format_answer(
-    answer: str,
+    answer: Union[str, Dict[str, Any]],
     subcategory: Literal["content extraction", "layout detection", "style detection"],
 ) -> Union[str, Dict[str, Any]]:
     """
     Format the extracted content for the detection tasks.
 
     Args:
-        answer (str): The extracted content.
+        answer (Union[str, Dict[str, Any]]): The extracted content.
         subcategory (str): The subcategory type.
 
     Returns:
@@ -52,19 +52,22 @@ def format_answer(
 
 
 def format_content_extraction_answer(
-    answer: str,
+    answer: Union[str, Dict[str, Any]],
 ) -> Optional[str]:
     """
     Format the extracted content for content extraction tasks.
 
     Args:
-        answer (str): The extracted content.
+        answer (Union[str, Dict[str, Any]]): The extracted content.
 
     Returns:
         str: The formatted answer.
     """
     try:
-        json_answer = parse_json_answer(answer)
+        if isinstance(answer, str):
+            json_answer = parse_json_answer(answer)
+        else:
+            json_answer = answer
         answer = json_answer["answer"]
     except Exception as e:
         raise Exception(f"Error formatting content extraction answer: {e}")
@@ -72,19 +75,22 @@ def format_content_extraction_answer(
 
 
 def format_style_detection_answer(
-    answer: str,
+    answer: Union[str, Dict[str, Any]],
 ) -> Optional[Union[str, int]]:
     """
     Format the extracted style for style detection tasks.
 
     Args:
-        answer (str): The extracted style.
+        answer (Union[str, Dict[str, Any]]): The extracted style.
 
     Returns:
         Union[str, int]: The formatted answer.
     """
     try:
-        json_answer = parse_json_answer(answer)
+        if isinstance(answer, str):
+            json_answer = parse_json_answer(answer)
+        else:
+            json_answer = answer
         answer = json_answer["answer"]
     except Exception as e:
         raise Exception(f"Error formatting style detection answer: {e}")
@@ -92,19 +98,22 @@ def format_style_detection_answer(
 
 
 def format_layout_detection_answer(
-    answer: str,
+    answer: Union[str, Dict[str, Any]],
 ) -> str:
     """
     Format the detected layout for layout detection tasks.
 
     Args:
-        answer (str): The detected layout.
+        answer (Union[str, Dict[str, Any]]): The detected layout.
 
     Returns:
         Dict[str, int]: The formatted answer.
     """
     try:
-        json_answer = parse_json_answer(answer)
+        if isinstance(answer, str):
+            json_answer = parse_json_answer(answer)
+        else:
+            json_answer = answer
     except Exception as e:
         raise Exception(f"Error formatting layout detection answer: {e}")
     return json.dumps(json_answer)
