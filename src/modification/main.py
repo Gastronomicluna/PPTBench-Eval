@@ -85,8 +85,8 @@ def main(
 
     # Test mode
     if test_mode:
-        # df = df[df["task"] == "resize_shape"]
-        df = df[df["task"] == "reposition_shape"]
+        df = df[df["task"] == "resize_shape"]
+        # df = df[df["task"] == "reposition_shape"]
         # df = df.sample(20, random_state=42)
 
     print(f"Dataset shape: {df.shape}")
