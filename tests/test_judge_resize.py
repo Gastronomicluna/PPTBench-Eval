@@ -25,3 +25,4 @@ def json_data():
 def test_judge_answer_resize(base_presentation_json, ground_truth, shape_to_modify, json_data):
     api_calls = ['choose_slide(257)', 'choose_shape(19)', 'set_top(0)']
     result = judge_answer_resize(api_calls, shape_to_modify, json_data, base_presentation_json)
+    print(result)
