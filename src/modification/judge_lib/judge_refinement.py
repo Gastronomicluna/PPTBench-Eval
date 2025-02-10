@@ -46,7 +46,9 @@ def judge_answer_refinement(
 
     try:
         llm_modified_presentation = api_executor(
-            lines=api_calls, json=produced_presentation_json, mode="json"
+            lines=api_calls, 
+            json=produced_presentation_json, 
+            mode="json"
         )
     except Exception as e:
         return False, f"Error executing API calls: {str(e)}"
