@@ -85,8 +85,8 @@ def main(
 
     # Test mode
     if test_mode:
-        df = df[df["task"] == "resize_shape"]
-        # df = df[df["task"] == "reposition"]
+        # df = df[df["task"] == "resize_shape"]
+        df = df[df["task"] == "reposition"]
         df = df.sample(20, random_state=42)
 
     print(f"Dataset shape: {df.shape}")
@@ -178,6 +178,6 @@ if __name__ == "__main__":
     main(
         max_workers=4,
         ollama_mode=True,
-        test_mode=False,
+        test_mode=True,
         job_delay=0.5,
     )
