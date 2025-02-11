@@ -48,7 +48,7 @@ def judge_answer_reposition(
     )
     if produced_presentation_json == {}:
         return False, "Error producing modified presentation JSON"
-    
+
     try:
         modified_presentation_json = api_executor(
             lines=api_calls,
