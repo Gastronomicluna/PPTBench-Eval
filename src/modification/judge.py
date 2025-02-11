@@ -112,7 +112,7 @@ def judge_answer_df(
 
 def judge_answer(
     task: Literal[
-        "add_shape", "change_font", "reposition", "resize", "overlap", "out_of_bounds"
+        "add_shape", "change_font", "reposition_shape", "resize_shape", "overlap", "out_of_bounds"
     ],
     api_calls: Optional[List[str]],
     file_hash: str,
