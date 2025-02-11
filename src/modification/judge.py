@@ -70,13 +70,6 @@ def judge_answer_df(
                 api_calls = parse_api_calls(row["answer"])
             else:
                 api_calls = answer
-            # assert isinstance(api_calls, list)
-            # print("task: ", row["task"])
-            # print("api_calls: ", api_calls)
-            # print("file_hash: ", row["file_hash"])
-            # print("ground_truth: ", json.loads(row["ground_truth"]))
-            # print("shape_to_modify: ", json.loads(row["shape_to_modify"]))
-            # print("json_data: ", json.loads(row["json_data"]))
             # assert row["task"] == "reposition_shape"
             # assert row["file_hash"] == "LAZMY7ZW7GNF43JIMDAHTBRZWW4S5TIV"
             # assert api_calls == ['choose_slide(257)', 'choose_shape(19)', 'set_top(0)']
