@@ -27,13 +27,15 @@ def judge_answer_reposition(
     Returns:
         Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
     """
-    print(presentation_json)
+    # print(presentation_json)
     # Get slide ID
     slide_json = json_data.get("slide", {})
+    # print(slide_json)
     if slide_json is None:
         raise ValueError("The slide JSON data is not found in the JSON data.")
 
     slide_id = slide_json.get("slide_id")
+    # print(slide_id)
     if slide_id is None:
         raise ValueError("The slide ID is not found in the shape to modify.")
 
