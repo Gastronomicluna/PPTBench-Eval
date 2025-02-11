@@ -87,7 +87,10 @@ def judge_answer_df(
             json_data = json.loads(row["json_data"])
             # print("ground_truth: ", ground_truth)
             # print("shape_to_modify: ", shape_to_modify)
-            print("json_data: ", json_data)
+            # print("json_data: ", json_data)
+            # assert isinstance(ground_truth, dict)
+            # assert isinstance(shape_to_modify, dict)
+            # assert isinstance(json_data, dict)
             return judge_answer(
                 task=task,
                 api_calls=api_calls,
