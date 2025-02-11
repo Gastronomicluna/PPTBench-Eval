@@ -154,7 +154,7 @@ def judge_answer(
             presentation_json=presentation_json,
         )
     elif task == "reposition_shape":
-        print("api_calls: ", api_calls)
+        # print("api_calls: ", api_calls)
         # print("shape_to_modify: ", shape_to_modify)
         # print("json_data: ", json_data)
         # print("presentation_json: ", presentation_json)
