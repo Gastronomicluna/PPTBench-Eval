@@ -174,7 +174,10 @@ def generate_with_image_ollama(
         response_str = ollama.generate(**kwargs)["response"]
 
         if json_mode:
-            return json.loads(response_str)
+            try:
+                return json.loads(response_str)
+            except json.JSONDecodeError:
+                return response_str
         else:
             return response_str
 
