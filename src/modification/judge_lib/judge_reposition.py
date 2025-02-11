@@ -5,6 +5,7 @@ from ..utils import (
     calculate_position_diff,
     calculate_size_diff,
     get_shape_from_presentation,
+    get_shape_from_slide,
     produce_modified_presentation_json,
 )
 
@@ -13,6 +14,7 @@ def judge_answer_reposition(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
     json_data: Dict[str, Any],
+    ground_truth: Dict[str, Any],
     presentation_json: Dict[str, Any],
 ) -> Tuple[bool, str]:
     """
@@ -64,7 +66,10 @@ def judge_answer_reposition(
         presentation=modified_presentation_json,
     )
 
-    ground_truth_shape = shape_to_modify
+    ground_truth_shape = get_shape_from_slide(
+        shape_id=shape_id,
+        slide=ground_truth,
+    )
 
     # Compare the shapes
     flag, message = compare_shape_position(ground_truth_shape, modified_shape)

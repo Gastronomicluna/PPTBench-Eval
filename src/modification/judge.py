@@ -167,6 +167,7 @@ def judge_answer(
             api_calls=api_calls,
             shape_to_modify=shape_to_modify,
             json_data=json_data,
+            ground_truth=ground_truth,
             presentation_json=presentation_json,
         )
     elif task == "resize_shape":
