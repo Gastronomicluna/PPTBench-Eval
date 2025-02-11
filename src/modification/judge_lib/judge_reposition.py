@@ -65,10 +65,10 @@ def judge_answer_reposition(
         shape_id=shape_id,
         presentation=modified_presentation_json,
     )
-
+    ground_truth_slide = ground_truth.get("slide", {})
     ground_truth_shape = get_shape_from_slide(
         shape_id=shape_id,
-        slide=ground_truth,
+        slide=ground_truth_slide,
     )
     if ground_truth_shape == {}:
         return False, "Error getting ground truth shape"
