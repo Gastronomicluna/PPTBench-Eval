@@ -78,6 +78,7 @@ def judge_answer_df(
             ground_truth = json.loads(row["ground_truth"])
             shape_to_modify = json.loads(row["shape_to_modify"])
             json_data = json.loads(row["json_data"])
+            print("task: ", task)
             # print("ground_truth: ", ground_truth)
             # print("shape_to_modify: ", shape_to_modify)
             # print("json_data: ", json_data)
