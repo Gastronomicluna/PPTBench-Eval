@@ -115,7 +115,7 @@ def choose_slide(slide_id: int) -> None:
         print(slide)
         if slide["slide_id"] == slide_id:
             JSON_CURRENT_SLIDE = slide
-            # print("Slide chosen:", slide_id)
+            print("Slide chosen:", slide_id)
             return
     raise ValueError(f"Slide with ID {slide_id} not found")
 
