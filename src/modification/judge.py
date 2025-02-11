@@ -71,7 +71,13 @@ def judge_answer_df(
             else:
                 api_calls = answer
             # assert isinstance(api_calls, list)
-            # print(f"API calls: {api_calls}")
+            print("task: ", row["task"])
+            print("api_calls: ", api_calls)
+            print("file_hash: ", row["file_hash"])
+            print("ground_truth: ", json.loads(row["ground_truth"]))
+            print("shape_to_modify: ", json.loads(row["shape_to_modify"]))
+            print("json_data: ", json.loads(row["json_data"]))
+            
             return judge_answer(
                 task=row["task"],
                 api_calls=api_calls,
