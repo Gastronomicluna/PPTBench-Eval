@@ -16,4 +16,4 @@ def test_api_executor(base_presentation_json):
     lines = ['choose_slide(257)', 'choose_shape(19)', 'set_top(0)']
     result = api_executor(lines, json=base_presentation_json, mode="json")
     assert result is not None
-    # print(result)
+    print(result)
