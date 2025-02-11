@@ -112,7 +112,7 @@ def choose_slide(slide_id: int) -> None:
     slides = JSON_DATA.get("slides", [])
     print("Target slide ID:", slide_id)
     for slide in slides:
-        # print(slide)
+        print(slide["slide_id"])
         if slide["slide_id"] == slide_id:
             JSON_CURRENT_SLIDE = slide
             print("Slide chosen:", slide_id)
