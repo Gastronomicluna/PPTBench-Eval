@@ -27,9 +27,7 @@ def judge_answer_change_font(
     # Execute the API calls
     try:
         modified_presentation_json = api_executor(
-            lines=api_calls, 
-            json=presentation_json, 
-            mode="json"
+            lines=api_calls, json=presentation_json, mode="json"
         )
     except Exception as e:
         return False, f"Error executing API calls: {str(e)}"
