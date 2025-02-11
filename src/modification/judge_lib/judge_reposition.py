@@ -70,7 +70,8 @@ def judge_answer_reposition(
         shape_id=shape_id,
         slide=ground_truth,
     )
-
+    if ground_truth_shape == {}:
+        return False, "Error getting ground truth shape"
     # Compare the shapes
     flag, message = compare_shape_position(ground_truth_shape, modified_shape)
     return flag, message
