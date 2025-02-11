@@ -27,6 +27,7 @@ def judge_answer_reposition(
     Returns:
         Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
     """
+    print(presentation_json)
     # Get slide ID
     slide_json = json_data.get("slide", {})
     if slide_json is None:
@@ -41,7 +42,9 @@ def judge_answer_reposition(
         slide_id=slide_id,
         slide_json=slide_json,
     )
-
+    if produced_presentation_json == {}:
+        return False, "Error producing modified presentation JSON"
+    
     try:
         modified_presentation_json = api_executor(
             lines=api_calls,

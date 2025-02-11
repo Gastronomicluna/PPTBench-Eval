@@ -110,9 +110,10 @@ def choose_slide(slide_id: int) -> None:
     if JSON_DATA is None:
         raise ValueError("No JSON data available")
     slides = JSON_DATA.get("slides", [])
+    # print("json_data:", JSON_DATA)
     print("Target slide ID:", slide_id)
     for slide in slides:
-        print(slide["slide_id"])
+        # print(slide["slide_id"])
         if slide["slide_id"] == slide_id:
             JSON_CURRENT_SLIDE = slide
             print("Slide chosen:", slide_id)
