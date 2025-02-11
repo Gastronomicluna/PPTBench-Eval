@@ -86,6 +86,7 @@ def main(
     # Test mode
     if test_mode:
         df = df[df["task"] == "resize_shape"]
+        df = df[df["hash"] == "af3bd6ab8b154f4ac3e5863efd5ff89c"]
         # df = df[df["task"] == "reposition_shape"]
         # df = df.sample(20, random_state=42)
 
