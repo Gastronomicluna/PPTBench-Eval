@@ -57,9 +57,9 @@ def judge_answer_resize(
         shape_id=shape_id,
         presentation=modified_presentation_json,
     )
-    print("Modified shape:", modified_shape)
+    # print("Modified shape:", modified_shape)
     ground_truth_shape = shape_to_modify
-
+    print("Ground truth shape:", ground_truth_shape)
     # Compare the shapes
     return compare_shape_size(ground_truth_shape, modified_shape)
 
