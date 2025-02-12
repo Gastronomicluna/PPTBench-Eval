@@ -5,12 +5,14 @@ from ..utils import (
     calculate_size_diff,
     get_shape_from_presentation,
     produce_modified_presentation_json,
+    get_shape_from_slide,
 )
 
 
 def judge_answer_resize(
     api_calls: List[str],
     shape_to_modify: Dict[str, Any],
+    ground_truth: Dict[str, Any],
     json_data: Dict[str, Any],
     presentation_json: Dict[str, Any],
 ) -> Tuple[bool, str]:
@@ -58,7 +60,13 @@ def judge_answer_resize(
         presentation=modified_presentation_json,
     )
     # print("Modified shape:", modified_shape)
-    ground_truth_shape = shape_to_modify
+    ground_truth_slide = ground_truth.get("slide", {})
+    if ground_truth_slide is None:
+        raise ValueError("The slide data is not found in the ground truth.")
+    ground_truth_shape = get_shape_from_slide(
+        shape_id=shape_id,
+        slide=ground_truth_slide,
+    )
     print("Ground truth shape:", ground_truth_shape)
     # Compare the shapes
     return compare_shape_size(ground_truth_shape, modified_shape)
