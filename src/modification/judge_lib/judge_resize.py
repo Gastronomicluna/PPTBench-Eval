@@ -63,11 +63,12 @@ def judge_answer_resize(
     ground_truth_slide = ground_truth.get("slide", {})
     if ground_truth_slide is None:
         raise ValueError("The slide data is not found in the ground truth.")
+    
     ground_truth_shape = get_shape_from_slide(
         shape_id=shape_id,
         slide=ground_truth_slide,
     )
-    print("Ground truth shape:", ground_truth_shape)
+    # print("Ground truth shape:", ground_truth_shape)
     # Compare the shapes
     return compare_shape_size(ground_truth_shape, modified_shape)
 
