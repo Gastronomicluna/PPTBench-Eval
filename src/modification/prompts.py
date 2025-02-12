@@ -162,7 +162,7 @@ def build_add_shape_text_content(
 
     font_set = get_font_from_shape(shape_to_add)
 
-    if len(font_set) > 1:
+    if len(font_set) > 1 or len(font_set) == 0:
         return result
     else:
         font_name = font_set.pop()
