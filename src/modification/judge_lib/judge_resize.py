@@ -4,8 +4,8 @@ from ...shared.pptx_api.api_executor import api_executor
 from ..utils import (
     calculate_size_diff,
     get_shape_from_presentation,
-    produce_modified_presentation_json,
     get_shape_from_slide,
+    produce_modified_presentation_json,
 )
 
 
@@ -63,7 +63,7 @@ def judge_answer_resize(
     ground_truth_slide = ground_truth.get("slide", {})
     if ground_truth_slide is None:
         raise ValueError("The slide data is not found in the ground truth.")
-    
+
     ground_truth_shape = get_shape_from_slide(
         shape_id=shape_id,
         slide=ground_truth_slide,
