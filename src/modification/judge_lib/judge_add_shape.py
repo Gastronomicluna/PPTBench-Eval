@@ -173,13 +173,13 @@ def compare_shape(
     if not text_match:
         return False, "Text content does not match"
 
-    # original_font_set = get_font_from_shape(gold_shape)
-    # if len(original_font_set) == 1:
-    #     modified_font_set = get_font_from_shape(shape_to_test)
-    #     if original_font_set != modified_font_set:
-    #         return False, "Font does not match, expected: {}, got: {}".format(
-    #             original_font_set, modified_font_set
-    #         )
+    original_font_set = get_font_from_shape(gold_shape)
+    if len(original_font_set) == 1:
+        modified_font_set = get_font_from_shape(shape_to_test)
+        if original_font_set != modified_font_set:
+            return False, "Font does not match, expected: {}, got: {}".format(
+                original_font_set, modified_font_set
+            )
 
     # Compare images
     original_image = gold_shape.get("image_path")
