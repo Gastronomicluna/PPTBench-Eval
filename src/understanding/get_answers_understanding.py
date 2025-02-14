@@ -96,6 +96,8 @@ def get_answer_single_understanding(
     while attempts <= max_attempts:
         try:
             hash_value = row["hash"]
+            file_hash = row["file_hash"]
+            # subcategory = row["subcategory"]
             task = row["task"]
             question = row["question"]
             options = row["options"]
@@ -129,6 +131,8 @@ def get_answer_single_understanding(
 
             return {
                 "hash": hash_value,
+                "file_hash": file_hash,
+                # "subcategory": subcategory,
                 "task": task,
                 "ground_truth": ground_truth,
                 "llm_answer": llm_answer,
@@ -145,6 +149,8 @@ def get_answer_single_understanding(
             logging.error(f"All retry attempts failed: {str(e)}")
             return {
                 "hash": row["hash"],
+                "file_hash": file_hash,
+                # "subcategory": subcategory,
                 "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": None,
@@ -155,6 +161,8 @@ def get_answer_single_understanding(
             traceback.print_exc()
             return {
                 "hash": row["hash"],
+                "file_hash": file_hash,
+                # "subcategory": subcategory,
                 "task": row.get("task", ""),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": None,

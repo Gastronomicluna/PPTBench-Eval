@@ -44,7 +44,12 @@ def format_answer_csv_shared(
                 axis=1,
             )
         except KeyError as e:
-            raise ValueError(f"Required column missing: {e}")
+            df["answer"] = df.apply(
+                lambda row: format_answer_function(
+                    row["llm_answer"]
+                ),
+                axis=1,
+            )
         except Exception as e:
             raise ValueError(f"Error formatting answers: {e}")
 

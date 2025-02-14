@@ -7,7 +7,7 @@ from typing import Dict
 
 import pandas as pd
 
-from ..shared.format_answers_csv import format_answer_csv_shared
+from .format_answers import format_answer_csv
 from ..shared.llm import API_LLM_MODELS
 from ..shared.load_save_dataset import load_save_dataset_df
 from ..shared.utils import get_project_root, process_model
@@ -113,7 +113,7 @@ def main(
     for _, model_name in models_to_run:
         csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
         if csv_path.exists():
-            results_df = format_answer_csv_shared(
+            results_df = format_answer_csv(
                 csv_path=csv_path,
                 overwrite=True,
             )
