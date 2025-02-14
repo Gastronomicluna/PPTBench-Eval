@@ -111,40 +111,40 @@ def main(
 
     print("Formatting answers...")
 
-    for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
-        if csv_path.exists():
-            results_df = format_answer_csv(
-                csv_path=csv_path,
-                overwrite=True,
-            )
-            print(f"Formatted {len(results_df)} entries")
-        else:
-            logging.warning(f"Results file not found for {model_name}")
+    # for _, model_name in models_to_run:
+    #     csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
+    #     if csv_path.exists():
+    #         results_df = format_answer_csv(
+    #             csv_path=csv_path,
+    #             overwrite=True,
+    #         )
+    #         print(f"Formatted {len(results_df)} entries")
+    #     else:
+    #         logging.warning(f"Results file not found for {model_name}")
 
     print("Judging answers...")
 
     # Judge answers and save to CSV
-    for _, model_name in models_to_run:
-        results_df = judge_answer_df(
-            csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
-            overwrite=True,
-        )
-        print(f"Judged {len(results_df)} entries")
+    # for _, model_name in models_to_run:
+    #     results_df = judge_answer_df(
+    #         csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
+    #         overwrite=True,
+    #     )
+    #     print(f"Judged {len(results_df)} entries")
 
     print("Evaluating answers...")
 
     # Evaluate answers and combine results
-    evaluation_results = []
-    for _, model_name in models_to_run:
-        judged_df = pd.read_csv(results_dir / f"{model_name.replace('.', '-')}.csv")
-        eval_df = evaluate_answers(judged_df)
-        eval_df["model"] = model_name
-        evaluation_results.append(eval_df)
+    # evaluation_results = []
+    # for _, model_name in models_to_run:
+    #     judged_df = pd.read_csv(results_dir / f"{model_name.replace('.', '-')}.csv")
+    #     eval_df = evaluate_answers(judged_df)
+    #     eval_df["model"] = model_name
+    #     evaluation_results.append(eval_df)
 
     # Combine all results and save
-    combined_results = pd.concat(evaluation_results, ignore_index=True)
-    combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
+    # combined_results = pd.concat(evaluation_results, ignore_index=True)
+    # combined_results.to_csv(results_dir / "evaluation_results.csv", index=False)
 
     print("Evaluation complete. Results saved to evaluation_results.csv")
     print("Pipeline completed successfully.")
