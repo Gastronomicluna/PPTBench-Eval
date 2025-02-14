@@ -37,19 +37,20 @@ def format_answer_csv_shared(
                 return df
 
         try:
-            df["answer"] = df.apply(
-                lambda row: format_answer_function(
-                    row["llm_answer"], row["subcategory"]
-                ),
-                axis=1,
-            )
-        except KeyError as e:
-            df["answer"] = df.apply(
-                lambda row: format_answer_function(
-                    row["llm_answer"]
-                ),
-                axis=1,
-            )
+            if "subcategory" in df.columns:
+                df["answer"] = df.apply(
+                    lambda row: format_answer_function(
+                        row["llm_answer"], row["subcategory"]
+                    ),
+                    axis=1,
+                )
+            else:
+                df["answer"] = df.apply(
+                    lambda row: format_answer_function(
+                        row["llm_answer"]
+                    ),
+                    axis=1,
+                )
         except Exception as e:
             raise ValueError(f"Error formatting answers: {e}")
 

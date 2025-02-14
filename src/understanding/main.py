@@ -3,7 +3,7 @@ import logging
 import os
 import time
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 import pandas as pd
 
@@ -20,7 +20,7 @@ def main(
     max_workers: int = 4,
     ollama_mode: bool = True,
     test_mode: bool = False,
-    target_task: str = "table understanding",
+    target_task: Optional[str] = "table understanding",
     job_delay: float = 0.5,
 ) -> None:
     project_root = get_project_root()
@@ -60,8 +60,9 @@ def main(
     )
 
     # Filter for specific task
-    df = df[df["task"] == target_task]
+
     if test_mode:
+        df = df[df["task"] == target_task]
         sample_size = 20
         df = df.sample(sample_size, random_state=42)
 
@@ -154,6 +155,6 @@ if __name__ == "__main__":
         max_workers=4,
         ollama_mode=True,
         test_mode=False,
-        target_task="table understanding",
+        # target_task="table understanding",
         job_delay=0.5,
     )
