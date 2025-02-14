@@ -7,6 +7,8 @@ from typing import Any, Dict, Optional
 
 import pandas as pd
 
+from tests.test_judge_resize import ground_truth
+
 from ..shared.get_answers import get_answers
 from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
@@ -103,7 +105,8 @@ def get_answer_single_understanding(
             options = row["options"]
             image_data = row["image"]
             json_content = json.loads(row["json_content"])
-            ground_truth = json.loads(row["ground_truth"])
+            # ground_truth = json.loads(row["ground_truth"])
+            ground_truth = row["ground_truth"]
 
             # Extract image bytes from dictionary format
             image_bytes = get_image_bytes(image_data) if not pure_text else None
