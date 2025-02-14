@@ -85,7 +85,7 @@ def main(
 
     # Test mode
     if test_mode:
-        df = df[df["task"] == "add_shape"]
+        df = df[df["task"] == "change_font"]
         # df = df[df["hash"] == "af3bd6ab8b154f4ac3e5863efd5ff89c"]
         # df = df[df["task"] == "reposition_shape"]
         # df = df.sample(20, random_state=42)
@@ -179,6 +179,6 @@ if __name__ == "__main__":
     main(
         max_workers=4,
         ollama_mode=True,
-        test_mode=True,
+        test_mode=False,
         job_delay=0.5,
     )
