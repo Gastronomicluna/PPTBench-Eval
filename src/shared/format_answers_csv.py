@@ -46,9 +46,7 @@ def format_answer_csv_shared(
                 )
             else:
                 df["answer"] = df.apply(
-                    lambda row: format_answer_function(
-                        row["llm_answer"]
-                    ),
+                    lambda row: format_answer_function(row["llm_answer"]),
                     axis=1,
                 )
         except Exception as e:
