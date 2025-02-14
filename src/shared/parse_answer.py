@@ -54,7 +54,10 @@ def parse_json_answer(
         Dict[str, Any]: The parsed answer.
     """
     try:
-        parsed_answer = json.loads(answer)
+        if isinstance(answer, str):
+            parsed_answer = json.loads(answer)
+        else:
+            parsed_answer = answer
     except json.JSONDecodeError:
         # Try unescaping the string first
         try:
