@@ -63,7 +63,7 @@ def main(
 
     if test_mode:
         df = df[df["task"] == target_task]
-        sample_size = 20
+        sample_size = 2
         df = df.sample(sample_size, random_state=42)
 
     if ollama_mode:
