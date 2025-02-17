@@ -102,6 +102,7 @@ def get_answer_single_generation(
             image_data = row["image"]
             json_data = json.loads(row["json_content"])
             ground_truth = json.loads(row["ground_truth"])
+            file_hash = row["file_hash"]
 
             image_bytes = get_image_bytes(image_data) if not pure_text else None
 
@@ -128,8 +129,10 @@ def get_answer_single_generation(
             llm_answer = call_vision_model(**kwargs)
             return {
                 "hash": hash_value,
+                "file_hash": file_hash,
                 "task": task,
-                "ground_truth": ground_truth,
+                "json_data": json.dumps(json_data),
+                "ground_truth": json.dumps(ground_truth),
                 "llm_answer": llm_answer,
                 "error": None,
             }
@@ -144,8 +147,10 @@ def get_answer_single_generation(
             logging.error(f"All retry attempts failed: {str(e)}")
             return {
                 "hash": hash_value,
+                "file_hash": file_hash,
                 "task": task,
-                "ground_truth": ground_truth,
+                "json_data": json.dumps(json_data),
+                "ground_truth": json.dumps(ground_truth),
                 "llm_answer": None,
                 "error": str(e),
             }
@@ -154,8 +159,10 @@ def get_answer_single_generation(
             logging.error(traceback.format_exc())
             return {
                 "hash": hash_value,
+                "file_hash": file_hash,
                 "task": task,
-                "ground_truth": ground_truth,
+                "json_data": json.dumps(json_data),
+                "ground_truth": json.dumps(ground_truth),
                 "llm_answer": None,
                 "error": str(e),
             }
