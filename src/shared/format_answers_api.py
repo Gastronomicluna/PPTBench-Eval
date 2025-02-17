@@ -35,6 +35,7 @@ def format_answer_csv(
             # Ensure existing error column is string type
             df["error"] = df["error"].astype("string")
 
+        # Only check for existing answers if overwrite is False
         if "answer" in df.columns and not overwrite:
             if not df["answer"].isna().all():
                 return df
