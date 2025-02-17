@@ -39,6 +39,7 @@ def format_answer(
         Optional[str]: The formatted answer.
     """
     answer = parse_json_answer(llm_answer)
+    # print(answer)
     if answer is None:
         return None
 
