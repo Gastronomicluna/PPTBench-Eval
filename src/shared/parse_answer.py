@@ -53,6 +53,8 @@ def parse_json_answer(
     Returns:
         Dict[str, Any]: The parsed answer.
     """
+    print("Input answer:", answer)
+    print("Type of input answer:", type(answer))
     try:
         if isinstance(answer, str):
             parsed_answer = json.loads(answer)
