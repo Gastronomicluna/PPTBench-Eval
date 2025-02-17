@@ -131,6 +131,9 @@ def get_answer_single_understanding(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
+            llm_answer_str = (
+                json.dumps(llm_answer) if isinstance(llm_answer, dict) else llm_answer
+            )
 
             return {
                 "hash": hash_value,
@@ -138,7 +141,7 @@ def get_answer_single_understanding(
                 # "subcategory": subcategory,
                 "task": task,
                 "ground_truth": ground_truth,
-                "llm_answer": llm_answer,
+                "llm_answer": llm_answer_str,
                 "error": None,
             }
         except TimeoutError as e:
