@@ -27,7 +27,7 @@ def format_answer_csv(
 
 
 def format_answer(
-    llm_answer: Union[str, Dict[str, Any]],
+    llm_answer: str,
 ) -> Optional[str]:
     """
     Format the LLM answer.
@@ -38,9 +38,19 @@ def format_answer(
     Returns:
         Optional[str]: The formatted answer.
     """
-    answer = parse_json_answer(llm_answer)
-    # print(answer)
-    if answer is None:
-        return None
+    if not isinstance(llm_answer, str):
+        raise ValueError("Expected LLM answer to be a string.")
+    if not llm_answer.strip():
+        raise ValueError("Expected LLM answer to be a non-empty string.")
+    
+    try:
+        answer = parse_json_answer(llm_answer)
+        # print(answer)
+        if answer is None:
+            return None
+        return answer["answer"]
+    
+    except Exception as e:
+        raise ValueError(f"Error parsing LLM answer: {str(e)}")
 
-    return answer["answer"]
+    
