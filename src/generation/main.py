@@ -167,6 +167,6 @@ if __name__ == "__main__":
     main(
         max_workers=4,
         ollama_mode=True,
-        test_mode=False,
+        test_mode=True,
         job_delay=0.5,
     )
