@@ -41,10 +41,6 @@ def format_answer_csv(
                 return df
 
         def apply_format_safely(row):
-            # Skip if there's already an error
-            if pd.notna(row["error"]):
-                return pd.NA
-
             try:
                 result = format_answer(row["llm_answer"])
                 # Convert list to string representation for safe storage
