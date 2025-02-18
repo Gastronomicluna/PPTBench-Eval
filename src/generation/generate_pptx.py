@@ -2,7 +2,7 @@ import logging
 import os
 import traceback
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 import pandas as pd
 
@@ -141,7 +141,7 @@ def generate_pptx(
     if pptx_path.exists():
         logger.info(f"pptx_path exists: {pptx_path}")
         # print(f"pptx_path already exists: {pptx_path}")
-    
+
     if isinstance(api_calls, list):
         try:
             api_executor(
@@ -160,6 +160,7 @@ def generate_pptx(
         logger.info(f"pptx_path is not a list: {pptx_path}")
         # print(f"pptx_path is not a list: {pptx_path}")
         return False
+
 
 def build_png_path(
     output_dir: Path,

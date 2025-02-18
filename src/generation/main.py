@@ -3,8 +3,9 @@ import logging
 import os
 import time
 from datetime import datetime
-from typing import Dict
 from pathlib import Path
+from typing import Dict
+
 import pandas as pd
 
 from ..shared.format_answers_api import format_answer_csv
