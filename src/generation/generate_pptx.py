@@ -10,7 +10,7 @@ import pandas as pd
 from ..shared.pptx_api.api_executor import api_executor
 from ..shared.utils import csv_to_df, df_to_csv, generate_hash, pptx_to_png
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
