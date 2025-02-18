@@ -449,107 +449,30 @@ def get_notes_from_json_data(json_data: Dict[str, Any]) -> str:
     note = notes["text"]
     return note
 
+def str_to_list(s: str) -> List[str]:
+    """
+    Safely convert string representation of list back to list.
 
-def main() -> None:
-    json_data = {
-        "slide_width": 9144000,
-        "slide_height": 6858000,
-        "measurement_unit": "emu",
-        "slide": {
-            "slide_id": 264,
-            "slide_name": "",
-            "shapes": [
-                {
-                    "name": "PlaceHolder 1",
-                    "shape_id": 177,
-                    "shape_type": "PLACEHOLDER",
-                    "measurement_unit": "emu",
-                    "height": 830160,
-                    "width": 8391600,
-                    "left": 488880,
-                    "top": 639720,
-                    "text": "NEOGOV Insight – Online Hiring Center",
-                    "font_details": [
-                        {
-                            "paragraph_index": 0,
-                            "run_index": 0,
-                            "text": "NEOGOV Insight – Online Hiring Center",
-                            "font_name": "Arial Black",
-                            "font_size": 28.0,
-                        }
-                    ],
-                    "placeholder_type": "TITLE",
-                },
-                {
-                    "name": "Content Placeholder 5",
-                    "shape_id": 178,
-                    "shape_type": "PICTURE",
-                    "measurement_unit": "emu",
-                    "height": 3849840,
-                    "width": 7932600,
-                    "left": 797040,
-                    "top": 1938240,
-                    "auto_shape_type": "RECTANGLE",
-                    "image_path": "dataset/extracted_images/MZQPJKFSDHY2HXUX7CLFFQSHYDC5O3RV/8/image_8_2.jpg",
-                },
-                {
-                    "name": "Slide Number Placeholder 4",
-                    "shape_id": 179,
-                    "shape_type": "AUTO_SHAPE",
-                    "measurement_unit": "emu",
-                    "height": 476280,
-                    "width": 2133720,
-                    "left": 6553080,
-                    "top": 6245280,
-                    "text": "<number>",
-                    "font_details": [],
-                },
-            ],
-            "notes": {
-                "text": "This slide shows the OHC roles – note there are several roles available to agencies.\nEach agency must have a minimum of 1 person with the following 2 roles: Recruiter/Analyst (which is an Insight role) and HR Liaison (which is an OHC role).\nLiaisons can set up other Liaisons and the other roles within your agency only.\nIf you decide to involve hiring managers/supervisors or even admin to do some tasks, you may opt to use other roles.\n\nNote: If you have OHC and Insight-HR access, you may have two different passwords. When you are granted initial access, your password will be the same for both.",
-                "font_details": [
-                    {
-                        "paragraph_index": 0,
-                        "run_index": 0,
-                        "text": "This slide shows the OHC roles – note there are several roles available to agencies.",
-                        "font_name": "Arial",
-                        "font_size": 12.0,
-                    },
-                    {
-                        "paragraph_index": 1,
-                        "run_index": 0,
-                        "text": "Each agency must have a minimum of 1 person with the following 2 roles: Recruiter/Analyst (which is an Insight role) and HR Liaison (which is an OHC role).",
-                        "font_name": "Arial",
-                        "font_size": 12.0,
-                    },
-                    {
-                        "paragraph_index": 2,
-                        "run_index": 0,
-                        "text": "Liaisons can set up other Liaisons and the other roles within your agency only.",
-                        "font_name": "Arial",
-                        "font_size": 12.0,
-                    },
-                    {
-                        "paragraph_index": 3,
-                        "run_index": 0,
-                        "text": "If you decide to involve hiring managers/supervisors or even admin to do some tasks, you may opt to use other roles.",
-                        "font_name": "Arial",
-                        "font_size": 12.0,
-                    },
-                    {
-                        "paragraph_index": 5,
-                        "run_index": 0,
-                        "text": "Note: If you have OHC and Insight-HR access, you may have two different passwords. When you are granted initial access, your password will be the same for both.",
-                        "font_name": "Arial",
-                        "font_size": 12.0,
-                    },
-                ],
-            },
-        },
-    }
-    notes = get_notes_from_json_data(json_data)
-    print(notes)
+    Args:
+        s (str): String representation of a list.
 
+    Returns:
+        List[str]: Converted list of strings.
 
-if __name__ == "__main__":
-    main()
+    Raises:
+        ValueError: If input is not a valid list representation.
+    """
+    try:
+        # Remove potential whitespace and verify format
+        s = s.strip()
+        if not (s.startswith("[") and s.endswith("]")):
+            raise ValueError("Invalid list format")
+
+        # Use ast.literal_eval for safe evaluation
+        result = literal_eval(s)
+        if not isinstance(result, list):
+            raise ValueError("Parsed result is not a list")
+
+        return result
+    except Exception as e:
+        raise ValueError(f"Failed to convert string to list: {str(e)}")

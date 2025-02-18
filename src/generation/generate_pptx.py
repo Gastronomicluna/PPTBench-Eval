@@ -1,14 +1,14 @@
-import ast
 import logging
 import os
 import traceback
 from pathlib import Path
 from typing import List, Optional
+import ast
 
 import pandas as pd
 
 from ..shared.pptx_api.api_executor import api_executor
-from ..shared.utils import csv_to_df, df_to_csv, generate_hash, pptx_to_png
+from ..shared.utils import csv_to_df, df_to_csv, pptx_to_png, str_to_list
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -58,33 +58,7 @@ def generate_pptx_files_csv(
         return pd.DataFrame()
 
 
-def str_to_list(s: str) -> List[str]:
-    """
-    Safely convert string representation of list back to list.
 
-    Args:
-        s (str): String representation of a list.
-
-    Returns:
-        List[str]: Converted list of strings.
-
-    Raises:
-        ValueError: If input is not a valid list representation.
-    """
-    try:
-        # Remove potential whitespace and verify format
-        s = s.strip()
-        if not (s.startswith("[") and s.endswith("]")):
-            raise ValueError("Invalid list format")
-
-        # Use ast.literal_eval for safe evaluation
-        result = ast.literal_eval(s)
-        if not isinstance(result, list):
-            raise ValueError("Parsed result is not a list")
-
-        return result
-    except Exception as e:
-        raise ValueError(f"Failed to convert string to list: {str(e)}")
 
 
 def generate_pptx_files_with_png_files(
