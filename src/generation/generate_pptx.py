@@ -97,7 +97,9 @@ def generate_pptx_files_with_png_files(
                 df.at[index, "png_path"] = str(png_dir / hash_str)
 
             except Exception as e:
-                logger.error(f"Failed to convert PPTX to PNG for index {index}: {str(e)}")
+                logger.error(
+                    f"Failed to convert PPTX to PNG for index {index}: {str(e)}"
+                )
                 continue
 
         except Exception as e:
