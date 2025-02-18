@@ -20,7 +20,7 @@ __pycache__/
 # Generated files
 data/
 dataset/
-
+datasets/
 # Cache
 .mypy_cache/
 .pytest_cache
