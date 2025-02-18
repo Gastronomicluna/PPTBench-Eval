@@ -18,7 +18,6 @@ def generate_pptx_files_csv(
     csv_path: Path,
     base_dir: Path,
     output_dir: Path,
-    model_name: str,
     overwrite: bool = False,
 ) -> pd.DataFrame:
     """
@@ -28,7 +27,6 @@ def generate_pptx_files_csv(
         csv_path (Path): Path to the CSV file containing API calls.
         base_dir (Path): Base directory for input files.
         output_dir (Path): Directory where generated files will be saved.
-        model_name (str): Name of the model being evaluated.
         overwrite (bool, optional): Whether to overwrite existing files. Defaults to False.
 
     Returns:
@@ -45,6 +43,8 @@ def generate_pptx_files_csv(
             if df.empty:
                 logger.info("No new files to generate")
                 return df
+
+        model_name = csv_path.stem  # derive model_name from CSV file name
 
         result_df = generate_pptx_files_with_png_files(
             df=df, base_dir=base_dir, output_dir=output_dir, model_name=model_name
