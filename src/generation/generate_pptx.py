@@ -88,7 +88,7 @@ def generate_pptx_files_with_png_files(
             os.makedirs(output_dir.parent, exist_ok=True)
 
             if not generate_pptx(
-                api_calls=api_calls, 
+                api_calls=api_calls,
                 pptx_path=pptx_path,
                 output_path=output_dir,
             ):
