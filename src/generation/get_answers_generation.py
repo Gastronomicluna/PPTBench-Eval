@@ -5,8 +5,8 @@ import traceback
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from numpy import isin
 import pandas as pd
+from numpy import isin
 
 from ..shared.get_answers import get_answers
 from ..shared.llm import call_vision_model
@@ -128,7 +128,7 @@ def get_answer_single_generation(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
-            
+
             llm_answer_str = (
                 json.dumps(llm_answer) if isinstance(llm_answer, dict) else llm_answer
             )
