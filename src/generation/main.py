@@ -4,7 +4,7 @@ import os
 import time
 from datetime import datetime
 from typing import Dict
-
+from pathlib import Path
 import pandas as pd
 
 from ..shared.format_answers_api import format_answer_csv
@@ -66,7 +66,7 @@ def main(
     dataset_base_dir = "datasets"
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "generation_results"
-    base_dir = project_root / dataset_base_dir / "pptx"
+    base_dir = Path("/Users/tyrionhuu/projects/research_projects/PPTBench/dataset/pptx")
     os.makedirs(results_dir, exist_ok=True)
 
     print("Loading dataset...")
