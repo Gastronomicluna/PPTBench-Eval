@@ -153,6 +153,7 @@ def generate_pptx(
             return False
     else:
         logger.info(f"pptx_path is not a list: {pptx_path}")
+        print(f"pptx_path is not a list: {pptx_path}")
         return False
 
 def build_png_path(
