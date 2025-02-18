@@ -146,7 +146,7 @@ def generate_pptx(
         )
         return True
     except Exception as e:
-        logger.info(
+        logger.error(
             f"Error generating PPTX {pptx_path}: {str(e)}\n"
             f"Traceback:\n{traceback.format_exc()}"
         )
