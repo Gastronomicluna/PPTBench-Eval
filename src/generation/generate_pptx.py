@@ -77,11 +77,6 @@ def generate_pptx_files_with_png_files(
     os.makedirs(png_dir, exist_ok=True)
 
     for index, row in df.iterrows():
-        # Skip if there's already an error message
-        if pd.notna(row.get("error")):
-            logger.info(f"Skipping index {index} - existing error: {row['error']}")
-            continue
-
         try:
             api_calls = row["answer"]
             task = row["task"]
