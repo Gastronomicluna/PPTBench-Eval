@@ -2,7 +2,7 @@ import logging
 import os
 import traceback
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 import pandas as pd
 
@@ -113,7 +113,7 @@ def generate_pptx_files_with_png_files(
 
         except Exception as e:
             error_msg = f"Error processing row: {str(e)}"
-            logger.info(
+            logger.error(
                 f"{error_msg} for index {index}\n"
                 f"Traceback:\n{traceback.format_exc()}"
             )
@@ -124,7 +124,7 @@ def generate_pptx_files_with_png_files(
 
 
 def generate_pptx(
-    api_calls: list[str],
+    api_calls: List[str],
     pptx_path: Path,
 ) -> bool:
     """
@@ -137,21 +137,23 @@ def generate_pptx(
     Returns:
         bool: True if successful, False otherwise.
     """
-    # assert isinstance(api_calls, list)
-    try:
-        api_executor(
-            lines=api_calls,
-            pptx_path=str(pptx_path),
-            mode="pptx",
-        )
-        return True
-    except Exception as e:
-        logger.error(
-            f"Error generating PPTX {pptx_path}: {str(e)}\n"
-            f"Traceback:\n{traceback.format_exc()}"
-        )
+    if isinstance(pptx_path, list):
+        try:
+            api_executor(
+                lines=api_calls,
+                pptx_path=str(pptx_path),
+                mode="pptx",
+            )
+            return True
+        except Exception as e:
+            logger.error(
+                f"Error generating PPTX {pptx_path}: {str(e)}\n"
+                f"Traceback:\n{traceback.format_exc()}"
+            )
+            return False
+    else:
+        logger.info(f"pptx_path is not a list: {pptx_path}")
         return False
-
 
 def build_png_path(
     output_dir: Path,
