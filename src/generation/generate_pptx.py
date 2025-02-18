@@ -161,6 +161,7 @@ def generate_pptx(
                 f"Error generating PPTX {pptx_path}: {str(e)}\n"
                 f"Traceback:\n{traceback.format_exc()}"
             )
+            # print(f"Error generating PPTX {pptx_path}: {str(e)}")
             return False
     else:
         logger.info(f"pptx_path is not a list: {pptx_path}")
