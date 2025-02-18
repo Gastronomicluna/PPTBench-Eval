@@ -64,7 +64,7 @@ def main(
 
     dataset_name = "tyrionhuu/PPTBench-Generation"
     dataset_path = "data/PPTBench-Generation"
-    dataset_base_dir = "datasets"
+
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "generation_results"
     base_dir = Path("/Users/tyrionhuu/projects/research_projects/PPTBench/dataset")
