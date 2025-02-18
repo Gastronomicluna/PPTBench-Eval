@@ -83,10 +83,7 @@ def generate_pptx_files_with_png_files(
             file_hash = row["file_hash"]
             # hash_str = generate_hash(api_calls, task, hash)
 
-            pptx_path = build_pptx_path(
-                base_dir=base_dir, 
-                file_name=file_hash
-                )
+            pptx_path = build_pptx_path(base_dir=base_dir, file_name=file_hash)
             os.makedirs(pptx_path.parent, exist_ok=True)
 
             if not generate_pptx(api_calls=api_calls, pptx_path=pptx_path):
