@@ -1,4 +1,3 @@
-import ast
 import logging
 import os
 import traceback
@@ -93,8 +92,12 @@ def generate_pptx_files_with_png_files(
 
             file_hash = row["file_hash"]
 
-            pptx_path = build_pptx_path(base_dir=base_dir, file_name=file_hash, model_name=model_name)
-            output_dir = build_pptx_path(base_dir=output_dir, file_name=file_hash, model_name=model_name)
+            pptx_path = build_pptx_path(
+                base_dir=base_dir, file_name=file_hash, model_name=model_name
+            )
+            output_dir = build_pptx_path(
+                base_dir=output_dir, file_name=file_hash, model_name=model_name
+            )
             os.makedirs(output_dir.parent, exist_ok=True)
 
             if not generate_pptx(
