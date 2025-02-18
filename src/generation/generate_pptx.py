@@ -79,11 +79,14 @@ def generate_pptx_files_with_png_files(
     for index, row in df.iterrows():
         try:
             api_calls = row["answer"]
-            task = row["task"]
-            hash = row["hash"]
-            hash_str = generate_hash(api_calls, task, hash)
+            # task = row["task"]
+            file_hash = row["file_hash"]
+            # hash_str = generate_hash(api_calls, task, hash)
 
-            pptx_path = build_pptx_path(base_dir=base_dir, file_name=hash_str)
+            pptx_path = build_pptx_path(
+                base_dir=base_dir, 
+                file_name=file_hash
+                )
             os.makedirs(pptx_path.parent, exist_ok=True)
 
             if not generate_pptx(api_calls=api_calls, pptx_path=pptx_path):
@@ -100,7 +103,7 @@ def generate_pptx_files_with_png_files(
                     remove_pdf=True,
                 )
                 df.at[index, "pptx_path"] = str(pptx_path)
-                df.at[index, "png_path"] = str(png_dir / hash_str)
+                df.at[index, "png_path"] = str(png_dir / file_hash)
                 # Only clear error if there wasn't one before
                 if pd.isna(row.get("error")):
                     df.at[index, "error"] = None
@@ -126,6 +129,7 @@ def generate_pptx_files_with_png_files(
 def generate_pptx(
     api_calls: List[str],
     pptx_path: Path,
+    output_path: Optional[Path] = None,
 ) -> bool:
     """
     Generate a PowerPoint file based on the API calls.
@@ -145,7 +149,8 @@ def generate_pptx(
         try:
             api_executor(
                 lines=api_calls,
-                pptx_path=str(pptx_path),
+                pptx_path=pptx_path,
+                output_path=output_path,
                 mode="pptx",
             )
             return True
