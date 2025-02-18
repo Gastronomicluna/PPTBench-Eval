@@ -167,7 +167,7 @@ def generate_pptx(
             # print(f"Error generating PPTX {pptx_path}: {str(e)}")
             return False
     else:
-        print(f"api_calls is not a list: {api_calls}")
+        # print(f"api_calls is not a list: {api_calls}")
         return False
 
 
