@@ -113,7 +113,7 @@ def generate_pptx_files_with_png_files(
 
         except Exception as e:
             error_msg = f"Error processing row: {str(e)}"
-            logger.error(
+            logger.info(
                 f"{error_msg} for index {index}\n"
                 f"Traceback:\n{traceback.format_exc()}"
             )
@@ -146,7 +146,7 @@ def generate_pptx(
         )
         return True
     except Exception as e:
-        logger.error(
+        logger.info(
             f"Error generating PPTX {pptx_path}: {str(e)}\n"
             f"Traceback:\n{traceback.format_exc()}"
         )
