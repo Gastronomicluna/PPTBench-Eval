@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 def generate_pptx_files_csv(
     csv_path: Path,
     base_dir: Path,
+    output_dir: Path,
     overwrite: bool = False,
 ) -> pd.DataFrame:
     """
@@ -23,6 +24,8 @@ def generate_pptx_files_csv(
 
     Args:
         csv_path (Path): Path to the CSV file containing API calls.
+        base_dir (Path): Base directory for input files.
+        output_dir (Path): Directory where generated files will be saved.
         overwrite (bool, optional): Whether to overwrite existing files. Defaults to False.
 
     Returns:
@@ -33,15 +36,18 @@ def generate_pptx_files_csv(
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
 
         df = csv_to_df(csv_path=csv_path)
-        # print(df.info())
+        
         if not overwrite:
-            # Filter out rows that already have generated files
             df = df[df["pptx_path"].isna() | df["png_path"].isna()]
             if df.empty:
                 logger.info("No new files to generate")
                 return df
 
-        result_df = generate_pptx_files_with_png_files(df=df, base_dir=base_dir)
+        result_df = generate_pptx_files_with_png_files(
+            df=df, 
+            base_dir=base_dir,
+            output_dir=output_dir
+        )
 
         if df_to_csv(df=result_df, csv_path=csv_path):
             return result_df
@@ -56,20 +62,22 @@ def generate_pptx_files_csv(
 def generate_pptx_files_with_png_files(
     df: pd.DataFrame,
     base_dir: Path,
+    output_dir: Path,
 ) -> pd.DataFrame:
     """
     Generate the PowerPoint files based on the DataFrame.
 
     Args:
         df (pd.DataFrame): The DataFrame containing the API calls.
-        base_dir (Path): The base directory for the PowerPoint files.
+        base_dir (Path): Base directory for input files.
+        output_dir (Path): Directory where generated files will be saved.
 
     Returns:
         pd.DataFrame: The DataFrame with the generated PowerPoint files.
     """
-    png_dir = base_dir / "png"
+    png_dir = output_dir / "png"
     os.makedirs(png_dir, exist_ok=True)
-
+    
     for index, row in df.iterrows():
         # Skip if there's already an error message
         if pd.notna(row.get("error")):
@@ -153,23 +161,23 @@ def generate_pptx(
 
 
 def build_png_path(
-    base_dir: Path,
+    output_dir: Path,
     file_name: str,
 ) -> Optional[Path]:
     """
     Build the path to the PNG file based on the hash.
 
     Args:
-        base_dir (Path): The base directory for the PNG file.
+        output_dir (Path): Directory where generated files will be saved.
         file_name (str): The hash string.
 
     Returns:
         Optional[Path]: The path to the PNG file, or None if invalid input.
     """
     try:
-        if not base_dir or not file_name:
-            raise ValueError("base_dir and file_name must not be empty")
-        return base_dir / "png" / f"{file_name}.png"
+        if not output_dir or not file_name:
+            raise ValueError("output_dir and file_name must not be empty")
+        return output_dir / "png" / f"{file_name}.png"
     except Exception as e:
         logger.error(f"Error building PNG path: {str(e)}")
         return None
