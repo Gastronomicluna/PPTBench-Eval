@@ -3,7 +3,7 @@ import os
 import traceback
 from pathlib import Path
 from typing import Optional
-
+import json
 import pandas as pd
 
 from ..shared.pptx_api.api_executor import api_executor
@@ -72,7 +72,7 @@ def generate_pptx_files_with_png_files(
 
     for index, row in df.iterrows():
         try:
-            api_calls = row["answer"]
+            api_calls = json.loads(row["api_calls"])
             task = row["task"]
             hash = row["hash"]
             hash_str = generate_hash(api_calls, task, hash)
