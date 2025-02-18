@@ -69,7 +69,7 @@ def generate_pptx_files_with_png_files(
     """
     for index, row in df.iterrows():
         try:
-            api_calls = row["api_calls"]
+            api_calls = row["answer"]
             task = row["task"]
             hash = row["hash"]
             hash_str = generate_hash(api_calls, task, hash)
