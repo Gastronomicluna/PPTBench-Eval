@@ -52,6 +52,22 @@ def get_texts_from_json_data(
     return texts
 
 
+def check_unoconv_installation() -> bool:
+    """Check if unoconv is installed and accessible.
+
+    Returns:
+        bool: True if unoconv is installed and accessible, False otherwise.
+    """
+    try:
+        subprocess.run(
+            ["unoconv", "--version"], 
+            check=True, 
+            capture_output=True
+        )
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
 def pptx_to_png(
     pptx_path: str,
     output_dir: str,
@@ -66,7 +82,17 @@ def pptx_to_png(
         output_dir (str): The directory to save the PNG images.
         dpi (int, optional): The DPI of the PNG images. Defaults to 300.
         remove_pdf (bool, optional): Whether to remove the PDF file after conversion. Defaults to True.
+
+    Raises:
+        RuntimeError: If unoconv is not installed or accessible
+        subprocess.CalledProcessError: If conversion fails
     """
+    if not check_unoconv_installation():
+        raise RuntimeError(
+            "unoconv is not installed or not accessible. "
+            "Please install it using: sudo apt-get install unoconv"
+        )
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
 
@@ -75,16 +101,23 @@ def pptx_to_png(
     ppt_output_dir = os.path.join(output_dir, pptx_name)
     os.makedirs(ppt_output_dir, exist_ok=True)
 
-    # 1. Convert PPTX -> PDF using unoconv
-    # -------------------------------------------------
-    # By default, unoconv will create a PDF with the same base filename
-    # but with a .pdf extension in the same folder as the input PPTX.
+    # Convert PPTX -> PDF using unoconv
     base_name, _ = os.path.splitext(pptx_path)
     pdf_path = f"{base_name}.pdf"
 
-    print(f"Converting {pptx_path} to PDF...")
-    subprocess.run(["unoconv", "-f", "pdf", pptx_path], check=True)
-    print(f"Created PDF: {pdf_path}")
+    try:
+        print(f"Converting {pptx_path} to PDF...")
+        result = subprocess.run(
+            ["unoconv", "-f", "pdf", pptx_path],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        if result.stderr:
+            print(f"Warning during conversion: {result.stderr}")
+        print(f"Created PDF: {pdf_path}")
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"Failed to convert PPTX to PDF: {str(e)}")
 
     # 2. Convert PDF -> Images (one per PDF page) using pdf2image
     # -----------------------------------------------------------
