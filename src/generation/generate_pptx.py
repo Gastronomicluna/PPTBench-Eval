@@ -84,9 +84,14 @@ def generate_pptx_files_with_png_files(
             # hash_str = generate_hash(api_calls, task, hash)
 
             pptx_path = build_pptx_path(base_dir=base_dir, file_name=file_hash)
-            os.makedirs(pptx_path.parent, exist_ok=True)
+            output_dir = build_pptx_path(base_dir=output_dir, file_name=file_hash)
+            os.makedirs(output_dir.parent, exist_ok=True)
 
-            if not generate_pptx(api_calls=api_calls, pptx_path=pptx_path):
+            if not generate_pptx(
+                api_calls=api_calls, 
+                pptx_path=pptx_path,
+                output_path=output_dir,
+            ):
                 error_msg = f"Failed to generate PPTX"
                 logger.error(f"{error_msg} for index {index}")
                 df.at[index, "error"] = error_msg
