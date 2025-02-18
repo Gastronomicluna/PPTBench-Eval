@@ -73,6 +73,8 @@ def generate_pptx_files_with_png_files(
     for index, row in df.iterrows():
         try:
             api_calls = row["answer"]
+            if not isinstance(api_calls, list):
+                api_calls = [api_calls]
             task = row["task"]
             hash = row["hash"]
             hash_str = generate_hash(api_calls, task, hash)
@@ -126,7 +128,7 @@ def generate_pptx(
     Returns:
         bool: True if successful, False otherwise.
     """
-    # print(api_calls)
+    # assert isinstance(api_calls, list)
     try:
         api_executor(
             lines=api_calls,
