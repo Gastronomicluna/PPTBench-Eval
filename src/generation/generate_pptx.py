@@ -71,6 +71,11 @@ def generate_pptx_files_with_png_files(
     os.makedirs(png_dir, exist_ok=True)
 
     for index, row in df.iterrows():
+        # Skip if there's already an error message
+        if pd.notna(row.get("error")):
+            logger.info(f"Skipping index {index} - existing error: {row['error']}")
+            continue
+            
         try:
             api_calls = row["answer"]
             task = row["task"]
@@ -95,7 +100,9 @@ def generate_pptx_files_with_png_files(
                 )
                 df.at[index, "pptx_path"] = str(pptx_path)
                 df.at[index, "png_path"] = str(png_dir / hash_str)
-                df.at[index, "error"] = None  # Clear any previous errors
+                # Only clear error if there wasn't one before
+                if pd.isna(row.get("error")):
+                    df.at[index, "error"] = None
 
             except Exception as e:
                 error_msg = f"Failed to convert PPTX to PNG: {str(e)}"
