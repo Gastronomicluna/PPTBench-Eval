@@ -449,6 +449,7 @@ def get_notes_from_json_data(json_data: Dict[str, Any]) -> str:
     note = notes["text"]
     return note
 
+
 def str_to_list(s: str) -> List[str]:
     """
     Safely convert string representation of list back to list.

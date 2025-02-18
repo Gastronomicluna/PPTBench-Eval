@@ -1,9 +1,9 @@
+import ast
 import logging
 import os
 import traceback
 from pathlib import Path
 from typing import List, Optional
-import ast
 
 import pandas as pd
 
@@ -56,9 +56,6 @@ def generate_pptx_files_csv(
     except Exception as e:
         logger.error(f"Error processing CSV file: {str(e)}")
         return pd.DataFrame()
-
-
-
 
 
 def generate_pptx_files_with_png_files(
