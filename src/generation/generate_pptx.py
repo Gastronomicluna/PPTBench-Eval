@@ -148,6 +148,7 @@ def generate_pptx(
         print(f"pptx_path does not exist: {pptx_path}")
 
     if isinstance(api_calls, list):
+        print(f"api_calls is a list: {api_calls}")
         try:
             api_executor(
                 lines=api_calls,
