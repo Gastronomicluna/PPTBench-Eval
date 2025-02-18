@@ -36,7 +36,7 @@ def generate_pptx_files_csv(
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
 
         df = csv_to_df(csv_path=csv_path)
-        
+
         if not overwrite:
             df = df[df["pptx_path"].isna() | df["png_path"].isna()]
             if df.empty:
@@ -44,9 +44,7 @@ def generate_pptx_files_csv(
                 return df
 
         result_df = generate_pptx_files_with_png_files(
-            df=df, 
-            base_dir=base_dir,
-            output_dir=output_dir
+            df=df, base_dir=base_dir, output_dir=output_dir
         )
 
         if df_to_csv(df=result_df, csv_path=csv_path):
@@ -77,13 +75,13 @@ def generate_pptx_files_with_png_files(
     """
     png_dir = output_dir / "png"
     os.makedirs(png_dir, exist_ok=True)
-    
+
     for index, row in df.iterrows():
         # Skip if there's already an error message
         if pd.notna(row.get("error")):
             logger.info(f"Skipping index {index} - existing error: {row['error']}")
             continue
-            
+
         try:
             api_calls = row["answer"]
             task = row["task"]
