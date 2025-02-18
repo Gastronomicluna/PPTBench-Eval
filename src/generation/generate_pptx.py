@@ -126,6 +126,7 @@ def generate_pptx(
     Returns:
         bool: True if successful, False otherwise.
     """
+    # print(api_calls)
     try:
         api_executor(
             lines=api_calls,
