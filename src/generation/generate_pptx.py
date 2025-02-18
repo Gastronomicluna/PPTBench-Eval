@@ -137,7 +137,7 @@ def generate_pptx(
     Returns:
         bool: True if successful, False otherwise.
     """
-    if isinstance(pptx_path, list):
+    if isinstance(api_calls, list):
         try:
             api_executor(
                 lines=api_calls,
@@ -153,7 +153,7 @@ def generate_pptx(
             return False
     else:
         logger.info(f"pptx_path is not a list: {pptx_path}")
-        print(f"pptx_path is not a list: {pptx_path}")
+        # print(f"pptx_path is not a list: {pptx_path}")
         return False
 
 def build_png_path(
