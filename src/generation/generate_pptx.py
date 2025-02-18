@@ -105,7 +105,7 @@ def generate_pptx_files_with_png_files(
                 pptx_path=pptx_path,
                 output_path=output_dir,
             ):
-                error_msg = f"Failed to generate PPTX"
+                error_msg = "Failed to generate PPTX"
                 logger.error(f"{error_msg} for index {index}")
                 df.at[index, "error"] = error_msg
                 continue

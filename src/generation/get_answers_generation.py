@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 import pandas as pd
-from numpy import isin
 
 from ..shared.get_answers import get_answers
 from ..shared.llm import call_vision_model
