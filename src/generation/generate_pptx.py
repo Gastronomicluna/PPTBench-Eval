@@ -1,9 +1,10 @@
+import json
 import logging
 import os
 import traceback
 from pathlib import Path
 from typing import Optional
-import json
+
 import pandas as pd
 
 from ..shared.pptx_api.api_executor import api_executor
