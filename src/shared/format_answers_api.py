@@ -44,15 +44,17 @@ def format_answer_csv(
             # Skip if there's already an error
             if pd.notna(row["error"]):
                 return pd.NA
-
+            
             try:
-                return format_answer(row["llm_answer"])
+                result = format_answer(row["llm_answer"])
+                # Convert list to string representation for safe storage
+                return str(result) if result is not None else pd.NA
             except Exception as e:
-                # Use loc with string dtype error column
                 df.at[row.name, "error"] = str(e)
                 return pd.NA
 
-        df["answer"] = df.apply(apply_format_safely, axis=1)
+        # Ensure answer column is string type
+        df["answer"] = df.apply(apply_format_safely, axis=1).astype("string")
 
         if not df_to_csv(df, csv_path):
             raise ValueError("Failed to save the formatted answers.")

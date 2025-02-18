@@ -3,6 +3,7 @@ import os
 import traceback
 from pathlib import Path
 from typing import List, Optional
+import ast
 
 import pandas as pd
 
@@ -57,6 +58,34 @@ def generate_pptx_files_csv(
         return pd.DataFrame()
 
 
+def str_to_list(s: str) -> List[str]:
+    """
+    Safely convert string representation of list back to list.
+
+    Args:
+        s (str): String representation of a list.
+
+    Returns:
+        List[str]: Converted list of strings.
+
+    Raises:
+        ValueError: If input is not a valid list representation.
+    """
+    try:
+        # Remove potential whitespace and verify format
+        s = s.strip()
+        if not (s.startswith("[") and s.endswith("]")):
+            raise ValueError("Invalid list format")
+        
+        # Use ast.literal_eval for safe evaluation
+        result = ast.literal_eval(s)
+        if not isinstance(result, list):
+            raise ValueError("Parsed result is not a list")
+            
+        return result
+    except Exception as e:
+        raise ValueError(f"Failed to convert string to list: {str(e)}")
+
 def generate_pptx_files_with_png_files(
     df: pd.DataFrame,
     base_dir: Path,
@@ -78,12 +107,14 @@ def generate_pptx_files_with_png_files(
 
     for index, row in df.iterrows():
         try:
-            api_calls = row["answer"]
-            # print(f"api_calls: {api_calls}")
-            # print(f"api_calls type: {type(api_calls)}")
-            # task = row["task"]
+            # Convert string representation back to list
+            api_calls = str_to_list(row["answer"]) if pd.notna(row["answer"]) else []
+            
+            if not api_calls:
+                df.at[index, "error"] = "Empty or invalid API calls list"
+                continue
+
             file_hash = row["file_hash"]
-            # hash_str = generate_hash(api_calls, task, hash)
 
             pptx_path = build_pptx_path(base_dir=base_dir, file_name=file_hash)
             output_dir = build_pptx_path(base_dir=output_dir, file_name=file_hash)
