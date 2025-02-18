@@ -81,10 +81,11 @@ def generate_pptx_files_with_png_files(
             os.makedirs(pptx_path.parent, exist_ok=True)
 
             if not generate_pptx(api_calls=api_calls, pptx_path=pptx_path):
-                logger.error(f"Failed to generate PPTX for index {index}")
+                error_msg = f"Failed to generate PPTX"
+                logger.error(f"{error_msg} for index {index}")
+                df.at[index, "error"] = error_msg
                 continue
 
-            # Convert PPTX to PNGs in the shared png directory
             try:
                 pptx_to_png(
                     pptx_path=str(pptx_path),
@@ -92,21 +93,23 @@ def generate_pptx_files_with_png_files(
                     dpi=300,
                     remove_pdf=True,
                 )
-                # Store the base directory path for PNGs
                 df.at[index, "pptx_path"] = str(pptx_path)
                 df.at[index, "png_path"] = str(png_dir / hash_str)
+                df.at[index, "error"] = None  # Clear any previous errors
 
             except Exception as e:
-                logger.error(
-                    f"Failed to convert PPTX to PNG for index {index}: {str(e)}"
-                )
+                error_msg = f"Failed to convert PPTX to PNG: {str(e)}"
+                logger.error(f"{error_msg} for index {index}")
+                df.at[index, "error"] = error_msg
                 continue
 
         except Exception as e:
+            error_msg = f"Error processing row: {str(e)}"
             logger.error(
-                f"Error processing index {index}: {str(e)}\n"
+                f"{error_msg} for index {index}\n"
                 f"Traceback:\n{traceback.format_exc()}"
             )
+            df.at[index, "error"] = error_msg
             continue
 
     return df
