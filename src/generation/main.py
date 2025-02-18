@@ -152,6 +152,7 @@ def main(
             generate_pptx_files_csv(
                 csv_path=csv_path,
                 base_dir=base_dir,
+                output_dir=results_dir,
                 overwrite=True,
             )
             print(f"Generated PPTX files for {model_name}")
