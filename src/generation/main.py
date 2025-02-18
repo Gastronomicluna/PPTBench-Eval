@@ -67,7 +67,7 @@ def main(
     dataset_base_dir = "datasets"
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "generation_results"
-    base_dir = Path("/Users/tyrionhuu/projects/research_projects/PPTBench/dataset/pptx")
+    base_dir = Path("/Users/tyrionhuu/projects/research_projects/PPTBench/dataset")
     os.makedirs(results_dir, exist_ok=True)
 
     print("Loading dataset...")
