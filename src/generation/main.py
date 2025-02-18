@@ -20,6 +20,7 @@ def main(
     ollama_mode: bool = True,
     test_mode: bool = False,
     job_delay: float = 0.5,
+    sample_size: int = 2,
 ) -> None:
     """Main entry point for the detection pipeline.
 
@@ -32,6 +33,7 @@ def main(
         ollama_mode: Whether to only run OLLAMA models. Defaults to True.
         test_mode: Whether to run in test mode. Defaults to False.
         job_delay: Delay between job submissions in seconds. Defaults to 1.0.
+        sample_size: Number of samples to process in test mode. Defaults to 2.
 
     Returns:
         None
@@ -85,7 +87,7 @@ def main(
     # Test mode
     if test_mode:
         df = df[df["task"] == "text_to_slide"]
-        df = df.sample(n=2, random_state=42)
+        df = df.sample(n=sample_size, random_state=42)
 
     if ollama_mode:
         models_to_run = [
@@ -169,4 +171,5 @@ if __name__ == "__main__":
         ollama_mode=True,
         test_mode=True,
         job_delay=0.5,
+        sample_size=2,
     )

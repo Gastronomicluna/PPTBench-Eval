@@ -166,7 +166,6 @@ def get_answer_single_detection(
                 "llm_answer": None,
                 "error": str(e),
             }
-
         except Exception as e:
             logging.error(f"Error in get_answer_single: {str(e)}")
             logging.error(traceback.format_exc())
