@@ -1,5 +1,6 @@
 import logging
 import os
+import traceback
 from pathlib import Path
 from typing import Optional
 
@@ -91,7 +92,10 @@ def generate_pptx_files_with_png_files(
             df.at[index, "png_path"] = str(png_path)
 
         except Exception as e:
-            logger.error(f"Error processing index {index}: {str(e)}")
+            logger.error(
+                f"Error processing index {index}: {str(e)}\n"
+                f"Traceback:\n{traceback.format_exc()}"
+            )
             continue
 
     return df
@@ -119,7 +123,10 @@ def generate_pptx(
         )
         return True
     except Exception as e:
-        logger.error(f"Error generating PPTX {pptx_path}: {str(e)}")
+        logger.error(
+            f"Error generating PPTX {pptx_path}: {str(e)}\n"
+            f"Traceback:\n{traceback.format_exc()}"
+        )
         return False
 
 
