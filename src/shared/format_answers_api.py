@@ -144,16 +144,9 @@ def extract_functions_from_json(
 
 
 def main() -> None:
-    csv_path = Path("data/modification_results/claude-3-5-sonnet-20241022.csv")
-    df = csv_to_df(csv_path=csv_path, list_columns=["answer"])
-    row = df[df["hash"] == "2bea6a2949d62d49f4773bc977326625"].iloc[0]
-    print(row)
-    answer_str = row["llm_answer"]
-    print(answer_str)
-    functions = row["answer"]
-    print(functions)
-    assert functions == format_answer(answer_str)
-
+    llm_answer = {"function1": "create_slide()", "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Are there any time limits for filing?')", "function3": "set_font('Times New Roman')", "function4": "set_font_size(440000)", "function5": "set_font_style('bold')", "function6": "add_text_box(50000, 150000, 8000000, 3000000, 'Complainants must contact an EEO counselor within 45 days of the effective date of the personnel action or within 45 days of the occurrence of the action which led to EEO contact.')", "function7": "set_font('Arial')", "function8": "set_font_size(360000)"}
+    answers = extract_functions_from_json(llm_answer)
+    print(answers)
 
 if __name__ == "__main__":
     main()
