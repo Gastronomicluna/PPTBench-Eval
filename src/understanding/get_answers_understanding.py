@@ -7,8 +7,6 @@ from typing import Any, Dict, Optional
 
 import pandas as pd
 
-from tests.test_judge_resize import ground_truth
-
 from ..shared.get_answers import get_answers
 from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
