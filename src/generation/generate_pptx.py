@@ -67,6 +67,9 @@ def generate_pptx_files_with_png_files(
     Returns:
         pd.DataFrame: The DataFrame with the generated PowerPoint files.
     """
+    png_dir = base_dir / "png"
+    os.makedirs(png_dir, exist_ok=True)
+
     for index, row in df.iterrows():
         try:
             api_calls = row["answer"]
@@ -75,21 +78,27 @@ def generate_pptx_files_with_png_files(
             hash_str = generate_hash(api_calls, task, hash)
 
             pptx_path = build_pptx_path(base_dir=base_dir, file_name=hash_str)
-            png_path = build_png_path(base_dir=base_dir, file_name=hash_str)
-
             os.makedirs(pptx_path.parent, exist_ok=True)
-            os.makedirs(png_path.parent, exist_ok=True)
 
             if not generate_pptx(api_calls=api_calls, pptx_path=pptx_path):
                 logger.error(f"Failed to generate PPTX for index {index}")
                 continue
 
-            if not pptx_to_png(pptx_path=pptx_path, png_path=png_path):
-                logger.error(f"Failed to convert PPTX to PNG for index {index}")
-                continue
+            # Convert PPTX to PNGs in the shared png directory
+            try:
+                pptx_to_png(
+                    pptx_path=str(pptx_path),
+                    output_dir=str(png_dir),
+                    dpi=300,
+                    remove_pdf=True,
+                )
+                # Store the base directory path for PNGs
+                df.at[index, "pptx_path"] = str(pptx_path)
+                df.at[index, "png_path"] = str(png_dir / hash_str)
 
-            df.at[index, "pptx_path"] = str(pptx_path)
-            df.at[index, "png_path"] = str(png_path)
+            except Exception as e:
+                logger.error(f"Failed to convert PPTX to PNG for index {index}: {str(e)}")
+                continue
 
         except Exception as e:
             logger.error(
