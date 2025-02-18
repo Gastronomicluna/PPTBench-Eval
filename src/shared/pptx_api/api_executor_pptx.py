@@ -28,7 +28,7 @@ def api_executor_pptx(
     pptx_path: Optional[Union[str, Path]] = None,
     output_path: Optional[Union[str, Path]] = None,
 ) -> Optional[Dict[str, Any]]:
-    """Execute the API calls.
+    """Execute the API calls.xxxxxxx
 
     Args:
         lines: The API calls to execute
@@ -48,7 +48,7 @@ def api_executor_pptx(
     error = set_presentation(pptx_path_str)
     if error:
         errors.append(error)
-
+    # print(lines)
     for line in lines:
         try:
             api_name = line.split("(")[0]
