@@ -86,7 +86,7 @@ def main(
     if test_mode:
         df = df[df["task"] == "text_to_slide"]
         df = df.sample(n=2, random_state=42)
-        
+
     if ollama_mode:
         models_to_run = [
             (provider, model_name)

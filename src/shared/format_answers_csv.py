@@ -51,9 +51,7 @@ def format_answer_csv_shared(
 
             try:
                 if "subcategory" in df.columns:
-                    return format_answer_function(
-                        row["llm_answer"], row["subcategory"]
-                    )
+                    return format_answer_function(row["llm_answer"], row["subcategory"])
                 return format_answer_function(row["llm_answer"])
             except Exception as e:
                 df.at[row.name, "error"] = str(e)

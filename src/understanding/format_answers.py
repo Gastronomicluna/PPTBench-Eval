@@ -42,15 +42,13 @@ def format_answer(
         raise ValueError("Expected LLM answer to be a string.")
     if not llm_answer.strip():
         raise ValueError("Expected LLM answer to be a non-empty string.")
-    
+
     try:
         answer = parse_json_answer(llm_answer)
         # print(answer)
         if answer is None:
             return None
         return answer["answer"]
-    
+
     except Exception as e:
         raise ValueError(f"Error parsing LLM answer: {str(e)}")
-
-    
