@@ -138,7 +138,7 @@ def get_answer_single_generation(
                 "task": task,
                 "json_data": json.dumps(json_data),
                 "ground_truth": json.dumps(ground_truth),
-                "llm_answer": llm_answer,
+                "llm_answer": llm_answer_str,
                 "error": None,
             }
         except TimeoutError as e:
