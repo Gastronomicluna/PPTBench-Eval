@@ -1,9 +1,9 @@
+import ast
 import logging
 import os
 import traceback
 from pathlib import Path
 from typing import List, Optional
-import ast
 
 import pandas as pd
 
@@ -76,15 +76,16 @@ def str_to_list(s: str) -> List[str]:
         s = s.strip()
         if not (s.startswith("[") and s.endswith("]")):
             raise ValueError("Invalid list format")
-        
+
         # Use ast.literal_eval for safe evaluation
         result = ast.literal_eval(s)
         if not isinstance(result, list):
             raise ValueError("Parsed result is not a list")
-            
+
         return result
     except Exception as e:
         raise ValueError(f"Failed to convert string to list: {str(e)}")
+
 
 def generate_pptx_files_with_png_files(
     df: pd.DataFrame,
@@ -109,7 +110,7 @@ def generate_pptx_files_with_png_files(
         try:
             # Convert string representation back to list
             api_calls = str_to_list(row["answer"]) if pd.notna(row["answer"]) else []
-            
+
             if not api_calls:
                 df.at[index, "error"] = "Empty or invalid API calls list"
                 continue

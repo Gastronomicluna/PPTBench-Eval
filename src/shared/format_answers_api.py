@@ -44,7 +44,7 @@ def format_answer_csv(
             # Skip if there's already an error
             if pd.notna(row["error"]):
                 return pd.NA
-            
+
             try:
                 result = format_answer(row["llm_answer"])
                 # Convert list to string representation for safe storage
@@ -144,9 +144,19 @@ def extract_functions_from_json(
 
 
 def main() -> None:
-    llm_answer = {"function1": "create_slide()", "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Are there any time limits for filing?')", "function3": "set_font('Times New Roman')", "function4": "set_font_size(440000)", "function5": "set_font_style('bold')", "function6": "add_text_box(50000, 150000, 8000000, 3000000, 'Complainants must contact an EEO counselor within 45 days of the effective date of the personnel action or within 45 days of the occurrence of the action which led to EEO contact.')", "function7": "set_font('Arial')", "function8": "set_font_size(360000)"}
+    llm_answer = {
+        "function1": "create_slide()",
+        "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Are there any time limits for filing?')",
+        "function3": "set_font('Times New Roman')",
+        "function4": "set_font_size(440000)",
+        "function5": "set_font_style('bold')",
+        "function6": "add_text_box(50000, 150000, 8000000, 3000000, 'Complainants must contact an EEO counselor within 45 days of the effective date of the personnel action or within 45 days of the occurrence of the action which led to EEO contact.')",
+        "function7": "set_font('Arial')",
+        "function8": "set_font_size(360000)",
+    }
     answers = extract_functions_from_json(llm_answer)
     print(answers)
+
 
 if __name__ == "__main__":
     main()
