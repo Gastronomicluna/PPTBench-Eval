@@ -33,7 +33,7 @@ def generate_pptx_files_csv(
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
 
         df = csv_to_df(csv_path=csv_path)
-
+        print(df.info())
         if not overwrite:
             # Filter out rows that already have generated files
             df = df[df["pptx_path"].isna() | df["png_path"].isna()]
