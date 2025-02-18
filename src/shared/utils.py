@@ -59,14 +59,11 @@ def check_unoconv_installation() -> bool:
         bool: True if unoconv is installed and accessible, False otherwise.
     """
     try:
-        subprocess.run(
-            ["unoconv", "--version"], 
-            check=True, 
-            capture_output=True
-        )
+        subprocess.run(["unoconv", "--version"], check=True, capture_output=True)
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
+
 
 def pptx_to_png(
     pptx_path: str,
@@ -111,7 +108,7 @@ def pptx_to_png(
             ["unoconv", "-f", "pdf", pptx_path],
             check=True,
             capture_output=True,
-            text=True
+            text=True,
         )
         if result.stderr:
             print(f"Warning during conversion: {result.stderr}")
