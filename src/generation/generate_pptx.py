@@ -95,15 +95,15 @@ def generate_pptx_files_with_png_files(
             pptx_path = build_pptx_path(
                 base_dir=base_dir, file_name=file_hash, model_name=model_name
             )
-            output_dir = build_pptx_path(
+            output_path = build_pptx_path(
                 base_dir=output_dir, file_name=file_hash, model_name=model_name
             )
             os.makedirs(output_dir.parent, exist_ok=True)
 
             if not generate_pptx(
                 api_calls=api_calls,
-                pptx_path=pptx_path,
-                output_path=output_dir,
+                # pptx_path=pptx_path,
+                output_path=output_path,
             ):
                 error_msg = "Failed to generate PPTX"
                 logger.error(f"{error_msg} for index {index}")
@@ -112,12 +112,12 @@ def generate_pptx_files_with_png_files(
 
             try:
                 pptx_to_png(
-                    pptx_path=str(pptx_path),
+                    pptx_path=str(output_path),
                     output_dir=str(png_dir),
                     dpi=300,
                     remove_pdf=True,
                 )
-                df.at[index, "pptx_path"] = str(pptx_path)
+                df.at[index, "pptx_path"] = str(output_path)
                 df.at[index, "png_path"] = str(png_dir / file_hash)
                 # Only clear error if there wasn't one before
                 if pd.isna(row.get("error")):
