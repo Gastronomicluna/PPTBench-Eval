@@ -15,9 +15,9 @@ logger = logging.getLogger(__name__)
 
 def generate_pptx_files_csv(
     csv_path: Path,
-    base_dir: Path,
     output_dir: Path,
     overwrite: bool = False,
+    base_dir: Optional[Path] = None,
 ) -> pd.DataFrame:
     """
     Generate PowerPoint files from a CSV file containing API calls.
