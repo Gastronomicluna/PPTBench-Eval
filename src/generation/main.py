@@ -77,8 +77,6 @@ def main(
         source="huggingface",
     )
 
-
-
     print("Downloading Extracted Images from Kaggle...")
     # download_kaggle_dataset(
     #     dataset_name="PPTBench-Images",
