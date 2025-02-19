@@ -46,7 +46,7 @@ def generate_pptx_files_csv(
         model_name = csv_path.stem  # derive model_name from CSV file name
 
         result_df = generate_pptx_files_with_png_files(
-            df=df, base_dir=base_dir, output_dir=output_dir, model_name=model_name
+            df=df, input_pptx_dir=base_dir, output_dir=output_dir, model_name=model_name
         )
 
         if df_to_csv(df=result_df, csv_path=csv_path):
@@ -63,14 +63,14 @@ def generate_pptx_files_with_png_files(
     df: pd.DataFrame,
     output_dir: Path,
     model_name: str,
-    base_dir: Optional[Path] = None,
+    input_pptx_dir: Optional[Path] = None,
 ) -> pd.DataFrame:
     """
     Generate the PowerPoint files based on the DataFrame.
 
     Args:
         df (pd.DataFrame): The DataFrame containing the API calls.
-        base_dir (Path): Base directory for input files.
+        input_pptx_dir (Path): Base directory for input files.
         output_dir (Path): Directory where generated files will be saved.
         model_name (str): Name of the model being evaluated.
 
@@ -91,10 +91,12 @@ def generate_pptx_files_with_png_files(
                 continue
 
             file_hash = row["file_hash"]
-
-            # pptx_path = build_pptx_path(
-            #     base_dir=base_dir, file_name=file_hash, model_name=model_name
-            # )
+            if input_pptx_dir:
+                pptx_path = build_pptx_path(
+                    base_dir=input_pptx_dir, file_name=file_hash, model_name=model_name
+                )
+            else:
+                pptx_path = None
             output_path = build_pptx_path(
                 base_dir=output_dir, file_name=file_hash, model_name=model_name
             )
@@ -102,7 +104,7 @@ def generate_pptx_files_with_png_files(
 
             if not generate_pptx(
                 api_calls=api_calls,
-                # pptx_path=pptx_path,
+                pptx_path=pptx_path,
                 output_path=output_path,
             ):
                 error_msg = "Failed to generate PPTX"
