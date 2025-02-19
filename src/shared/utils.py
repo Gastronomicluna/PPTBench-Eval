@@ -84,6 +84,9 @@ def pptx_to_png(
         RuntimeError: If unoconv is not installed or accessible
         subprocess.CalledProcessError: If conversion fails
     """
+    if not os.path.exists(pptx_path):
+        raise FileNotFoundError(f"PPTX file does not exist: {pptx_path}")
+
     if not check_unoconv_installation():
         raise RuntimeError(
             "unoconv is not installed or not accessible. "
