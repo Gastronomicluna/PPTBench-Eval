@@ -96,12 +96,12 @@ def generate_pptx_files_with_png_files(
 
             # file_hash = row["file_hash"]
             hash = row["hash"]
-            
+
             if input_pptx_dir:
                 pptx_path = input_pptx_dir / f"{hash}.pptx"
             else:
                 pptx_path = None
-                
+
             output_path = pptx_output_dir / f"{hash}.pptx"
             os.makedirs(output_dir.parent, exist_ok=True)
 
@@ -181,4 +181,3 @@ def generate_pptx(
     else:
         # print(f"api_calls is not a list: {api_calls}")
         return False
-
