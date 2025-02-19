@@ -77,6 +77,8 @@ def main(
         source="huggingface",
     )
 
+
+
     print("Downloading Extracted Images from Kaggle...")
     # download_kaggle_dataset(
     #     dataset_name="PPTBench-Images",
@@ -87,6 +89,8 @@ def main(
     # Test mode
     if test_mode:
         df = df[df["task"] == "text_to_slide"]
+        if df.empty:
+            raise ValueError("The dataset is empty. Please check the task.")
         df = df.sample(n=sample_size, random_state=42)
 
     if ollama_mode:
