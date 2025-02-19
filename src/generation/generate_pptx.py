@@ -156,10 +156,6 @@ def generate_pptx(
     Returns:
         bool: True if successful, False otherwise.
     """
-    # Check if pptx exists
-    if not pptx_path.exists():
-        print(f"pptx_path does not exist: {pptx_path}")
-
     if isinstance(api_calls, list):
         # print(f"api_calls is a list: {api_calls}")
         try:
