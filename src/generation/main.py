@@ -86,7 +86,7 @@ def main(
 
     # Test mode
     if test_mode:
-        df = df[df["task"] == "text_to_slide"]
+        df = df[df["task"] == "note_to_slide"]
         if df.empty:
             raise ValueError("The dataset is empty. Please check the task.")
         df = df.sample(n=sample_size, random_state=42)
