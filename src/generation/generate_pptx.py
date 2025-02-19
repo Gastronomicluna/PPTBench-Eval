@@ -82,6 +82,7 @@ def generate_pptx_files_with_png_files(
     """
     model_dir = output_dir / model_name
     png_dir = model_dir / "png"
+    pptx_output_dir = model_dir / "pptx"
     os.makedirs(png_dir, exist_ok=True)
 
     for index, row in df.iterrows():
@@ -93,16 +94,15 @@ def generate_pptx_files_with_png_files(
                 df.at[index, "error"] = "Empty or invalid API calls list"
                 continue
 
-            file_hash = row["file_hash"]
+            # file_hash = row["file_hash"]
+            hash = row["hash"]
+            
             if input_pptx_dir:
-                pptx_path = build_pptx_path(
-                    base_dir=input_pptx_dir, file_name=file_hash, model_name=model_name
-                )
+                pptx_path = input_pptx_dir / f"{hash}.pptx"
             else:
                 pptx_path = None
-            output_path = build_pptx_path(
-                base_dir=output_dir, file_name=file_hash, model_name=model_name
-            )
+                
+            output_path = pptx_output_dir / f"{hash}.pptx"
             os.makedirs(output_dir.parent, exist_ok=True)
 
             if not generate_pptx(
@@ -123,7 +123,7 @@ def generate_pptx_files_with_png_files(
                     remove_pdf=True,
                 )
                 df.at[index, "pptx_path"] = str(output_path)
-                df.at[index, "png_path"] = str(png_dir / file_hash)
+                df.at[index, "png_dir"] = str(png_dir / hash)
                 # Only clear error if there wasn't one before
                 if pd.isna(row.get("error")):
                     df.at[index, "error"] = None
@@ -182,52 +182,3 @@ def generate_pptx(
         # print(f"api_calls is not a list: {api_calls}")
         return False
 
-
-def build_png_path(
-    output_dir: Path,
-    file_name: str,
-    model_name: str,
-) -> Optional[Path]:
-    """
-    Build the path to the PNG file based on the hash.
-
-    Args:
-        output_dir (Path): Directory where generated files will be saved.
-        file_name (str): The hash string.
-        model_name (str): Name of the model being evaluated.
-
-    Returns:
-        Optional[Path]: The path to the PNG file, or None if invalid input.
-    """
-    try:
-        if not output_dir or not file_name or not model_name:
-            raise ValueError("output_dir, file_name and model_name must not be empty")
-        return output_dir / model_name / "png" / f"{file_name}.png"
-    except Exception as e:
-        logger.error(f"Error building PNG path: {str(e)}")
-        return None
-
-
-def build_pptx_path(
-    base_dir: Path,
-    file_name: str,
-    model_name: str,
-) -> Optional[Path]:
-    """
-    Build the path to the PowerPoint file based on the task and hash.
-
-    Args:
-        base_dir (Path): The base directory for the PowerPoint file.
-        file_name (str): The hash string.
-        model_name (str): Name of the model being evaluated.
-
-    Returns:
-        Optional[Path]: The path to the PowerPoint file, or None if invalid input.
-    """
-    try:
-        if not base_dir or not file_name or not model_name:
-            raise ValueError("base_dir, file_name and model_name must not be empty")
-        return base_dir / model_name / "pptx" / f"{file_name}.pptx"
-    except Exception as e:
-        logger.error(f"Error building PPTX path: {str(e)}")
-        return None
