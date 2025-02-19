@@ -67,7 +67,7 @@ def main(
 
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "generation_results"
-    base_dir = Path("/Users/tyrionhuu/projects/research_projects/PPTBench/dataset")
+    # input_pptx_dir = Path("/Users/tyrionhuu/projects/research_projects/PPTBench/dataset")
     os.makedirs(results_dir, exist_ok=True)
 
     print("Loading dataset...")
@@ -152,7 +152,7 @@ def main(
         if csv_path.exists():
             generate_pptx_files_csv(
                 csv_path=csv_path,
-                base_dir=base_dir,
+                # input_pptx_dir=input_pptx_dir,
                 output_dir=results_dir,
                 overwrite=True,
             )
