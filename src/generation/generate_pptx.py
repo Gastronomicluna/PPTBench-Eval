@@ -17,7 +17,7 @@ def generate_pptx_files_csv(
     csv_path: Path,
     output_dir: Path,
     overwrite: bool = False,
-    base_dir: Optional[Path] = None,
+    input_pptx_dir: Optional[Path] = None,
 ) -> pd.DataFrame:
     """
     Generate PowerPoint files from a CSV file containing API calls.
@@ -46,7 +46,7 @@ def generate_pptx_files_csv(
         model_name = csv_path.stem  # derive model_name from CSV file name
 
         result_df = generate_pptx_files_with_png_files(
-            df=df, input_pptx_dir=base_dir, output_dir=output_dir, model_name=model_name
+            df=df, input_pptx_dir=input_pptx_dir, output_dir=output_dir, model_name=model_name
         )
 
         if df_to_csv(df=result_df, csv_path=csv_path):
