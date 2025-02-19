@@ -46,7 +46,10 @@ def generate_pptx_files_csv(
         model_name = csv_path.stem  # derive model_name from CSV file name
 
         result_df = generate_pptx_files_with_png_files(
-            df=df, input_pptx_dir=input_pptx_dir, output_dir=output_dir, model_name=model_name
+            df=df,
+            input_pptx_dir=input_pptx_dir,
+            output_dir=output_dir,
+            model_name=model_name,
         )
 
         if df_to_csv(df=result_df, csv_path=csv_path):
