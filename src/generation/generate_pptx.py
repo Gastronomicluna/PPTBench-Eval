@@ -143,7 +143,7 @@ def generate_pptx_files_with_png_files(
 
 def generate_pptx(
     api_calls: List[str],
-    pptx_path: Path,
+    pptx_path: Optional[Path] = None,
     output_path: Optional[Path] = None,
 ) -> bool:
     """
