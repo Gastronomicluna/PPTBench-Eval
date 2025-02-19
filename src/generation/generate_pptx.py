@@ -84,6 +84,7 @@ def generate_pptx_files_with_png_files(
     png_dir = model_dir / "png"
     pptx_output_dir = model_dir / "pptx"
     os.makedirs(png_dir, exist_ok=True)
+    os.makedirs(pptx_output_dir, exist_ok=True)
 
     for index, row in df.iterrows():
         try:
