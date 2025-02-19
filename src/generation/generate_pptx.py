@@ -61,9 +61,9 @@ def generate_pptx_files_csv(
 
 def generate_pptx_files_with_png_files(
     df: pd.DataFrame,
-    base_dir: Path,
     output_dir: Path,
     model_name: str,
+    base_dir: Optional[Path] = None,
 ) -> pd.DataFrame:
     """
     Generate the PowerPoint files based on the DataFrame.
@@ -92,9 +92,9 @@ def generate_pptx_files_with_png_files(
 
             file_hash = row["file_hash"]
 
-            pptx_path = build_pptx_path(
-                base_dir=base_dir, file_name=file_hash, model_name=model_name
-            )
+            # pptx_path = build_pptx_path(
+            #     base_dir=base_dir, file_name=file_hash, model_name=model_name
+            # )
             output_path = build_pptx_path(
                 base_dir=output_dir, file_name=file_hash, model_name=model_name
             )
