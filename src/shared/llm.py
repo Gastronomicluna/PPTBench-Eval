@@ -25,6 +25,8 @@ API_LLM_MODELS = [
     ("ollama", "llama3.2-vision:11b"),
     ("ollama", "llava:13b"),
     ("ollama", "llama3.2-vision:90b"),
+    ("ollama", "llava:34b"),
+    ("ollama", "minicpm-v"), 
 ]
 
 # API key and model directory configuration
