@@ -41,9 +41,7 @@ def judge_answer_df(
     # Process answers with error handling
     def safe_judge(row) -> bool:
         try:
-            return judge_answer(
-                row["subcategory"], row["ground_truth"], row["answer"]
-            )
+            return judge_answer(row["subcategory"], row["ground_truth"], row["answer"])
         except ValueError as e:
             print(f"ValueError while judging answer: {e}")
             return False
