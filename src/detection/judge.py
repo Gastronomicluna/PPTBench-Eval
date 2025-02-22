@@ -38,13 +38,20 @@ def judge_answer_df(
             "and 'answer' columns."
         )
 
-    # Process answers
-    answers_df["is_correct"] = answers_df.apply(
-        lambda row: judge_answer(
-            row["subcategory"], row["ground_truth"], row["answer"]
-        ),
-        axis=1,
-    )
+    # Process answers with error handling
+    def safe_judge(row) -> bool:
+        try:
+            return judge_answer(
+                row["subcategory"], row["ground_truth"], row["answer"]
+            )
+        except ValueError as e:
+            print(f"ValueError while judging answer: {e}")
+            return False
+        except Exception as e:
+            print(f"Unexpected error while judging answer: {e}")
+            return False
+
+    answers_df["is_correct"] = answers_df.apply(safe_judge, axis=1)
 
     # Save results
     if overwrite:
