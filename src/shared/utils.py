@@ -3,12 +3,12 @@ import hashlib
 import logging
 import os
 import shutil
+import signal
 import subprocess
 from ast import literal_eval
+from functools import wraps
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
-import signal
-from functools import wraps
 
 import httpx
 import pandas as pd
@@ -16,6 +16,7 @@ from pdf2image import convert_from_path
 from thefuzz import fuzz
 
 from .pptx_api.api_doc import API
+
 
 class TimeoutException(Exception):
     """Raised when a function execution time exceeds the timeout."""
@@ -55,6 +56,8 @@ def with_timeout(timeout: Optional[int] = None):
         return wrapper
 
     return decorator
+
+
 def generate_hash(
     *args: Any,
 ) -> str:

@@ -9,7 +9,9 @@ import ollama
 from ollama import Options
 from openai import OpenAI
 from PIL import Image
-from .utils import with_timeout, TimeoutException
+
+from .utils import TimeoutException, with_timeout
+
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 API_LLM_MODELS = [
@@ -129,9 +131,6 @@ def call_vision_model(
         raise NotImplementedError("Anthropic API integration is not implemented yet.")
     else:
         raise ValueError(f"Unsupported provider: {provider}")
-
-
-
 
 
 def generate_with_image_ollama(
