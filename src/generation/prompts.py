@@ -97,12 +97,18 @@ def build_prompt(
     if task == "note_to_slide":
         notes = get_notes_from_json_data(slide_json)
         return build_prompt_for_note_to_slide(
-            query=query, notes=notes, content_images=content_images, template_dir=template_dir
+            query=query,
+            notes=notes,
+            content_images=content_images,
+            template_dir=template_dir,
         )
     if task == "multimedia_to_slide":
         texts = get_texts_from_json_data(slide_json)
         return build_prompt_for_multimedia_to_slide(
-            query=query, content_images=content_images, texts=texts, template_dir=template_dir
+            query=query,
+            content_images=content_images,
+            texts=texts,
+            template_dir=template_dir,
         )
     if task == "screenshot_to_slide":
         return build_prompt_for_screenshot_to_slide(
@@ -110,7 +116,9 @@ def build_prompt(
         )
     if task == "text_to_slide":
         texts = get_texts_from_json_data(slide_json)
-        return build_prompt_for_text_to_slide(query=query, texts=texts, template_dir=template_dir)
+        return build_prompt_for_text_to_slide(
+            query=query, texts=texts, template_dir=template_dir
+        )
     raise ValueError(f"Invalid task: {task}")
 
 
