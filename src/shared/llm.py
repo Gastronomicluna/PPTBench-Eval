@@ -8,7 +8,6 @@ from functools import wraps
 from typing import Any, Dict, List, Literal, Optional, Union
 
 import ollama
-import requests.exceptions
 from ollama import Options
 from openai import OpenAI
 from PIL import Image
