@@ -26,20 +26,49 @@ def get_slide_layout_examples(template_dir: Path) -> str:
         template_dir (Path): The path to the template directory.
 
     Returns:
-        Dict[str, Any]: The slide layout examples.
+        str: The slide layout examples as a formatted string.
+
+    Raises:
+        FileNotFoundError: If template_dir doesn't exist or required JSON files are missing.
+        json.JSONDecodeError: If any JSON file is malformed.
     """
-    example_str = ""
-    example_str += "You can choose to use the following slide layouts:\n"
-    example_str += "1. Title Slide\n"
-    example_str += json.load(open(template_dir / "title_slide.json"))
-    example_str += "2. Title and Content\n"
-    example_str += json.load(open(template_dir / "title_and_content.json"))
-    example_str += "3. Section Header\n"
-    example_str += json.load(open(template_dir / "section_header.json"))
-    example_str += "4. Two Content\n"
-    example_str += json.load(open(template_dir / "two_content.json"))
-    example_str += "5. Picture with Caption\n"
-    example_str += json.load(open(template_dir / "picture_with_caption.json"))
+    if not template_dir.exists():
+        raise FileNotFoundError(f"Template directory not found: {template_dir}")
+
+    required_files = [
+        "title_slide.json",
+        "title_and_content.json",
+        "section_header.json",
+        "two_content.json",
+        "picture_with_caption.json"
+    ]
+
+    # Verify all required files exist
+    missing_files = [f for f in required_files if not (template_dir / f).exists()]
+    if missing_files:
+        raise FileNotFoundError(
+            f"Missing required template files: {', '.join(missing_files)}"
+        )
+
+    example_str = "You can choose to use the following slide layouts:\n"
+    try:
+        # Load and append each layout section
+        example_str += "1. Title Slide\n"
+        example_str += json.load(open(template_dir / "title_slide.json"))
+        example_str += "2. Title and Content\n"
+        example_str += json.load(open(template_dir / "title_and_content.json"))
+        example_str += "3. Section Header\n"
+        example_str += json.load(open(template_dir / "section_header.json"))
+        example_str += "4. Two Content\n"
+        example_str += json.load(open(template_dir / "two_content.json"))
+        example_str += "5. Picture with Caption\n"
+        example_str += json.load(open(template_dir / "picture_with_caption.json"))
+        
+        return example_str
+    except json.JSONDecodeError as e:
+        raise json.JSONDecodeError(
+            f"Error parsing JSON template file: {e.doc}", e.doc, e.pos
+        ) from e
 
 
 def build_prompt(
