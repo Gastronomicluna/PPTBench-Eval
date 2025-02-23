@@ -6,12 +6,11 @@ import os
 import time
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from requests.exceptions import ConnectionError
-
 import ollama
 from ollama import Options
 from openai import OpenAI
 from PIL import Image
+from requests.exceptions import ConnectionError
 
 from .utils import TimeoutException, with_timeout
 
@@ -202,7 +201,7 @@ def generate_with_image_ollama(
                 )
                 time.sleep(2 * (attempt + 1))  # Exponential backoff
                 continue
-            
+
             if attempt == retry - 1:  # Last attempt
                 if isinstance(e, TimeoutException):
                     raise TimeoutError(f"Request timed out after {timeout} seconds")
@@ -278,7 +277,7 @@ def generate_with_api(
                 )
                 time.sleep(2 * (attempt + 1))  # Exponential backoff
                 continue
-            
+
             if attempt == retry - 1:  # Last attempt
                 if isinstance(e, TimeoutException):
                     raise TimeoutError(f"Request timed out after {timeout} seconds")
