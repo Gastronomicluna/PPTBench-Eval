@@ -65,7 +65,10 @@ def judge_answer_df(
             Tuple[bool, str]: Whether the answer is correct and reason if incorrect.
         """
         try:
-            # assert isinstance(row["answer"], list)
+            # Skip if error cell is not empty
+            if "error" in row and pd.notna(row["error"]):
+                return False, "Skipped due to existing error"
+                
             answer = row["answer"]
             if answer is pd.NA or None:
                 return False
