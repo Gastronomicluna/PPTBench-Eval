@@ -31,11 +31,15 @@ def get_slide_layout_examples(template_dir: Path) -> str:
     example_str = ""
     example_str += "You can choose to use the following slide layouts:\n"
     example_str += "1. Title Slide\n"
+    example_str += json.load(open(template_dir / "title_slide.json"))
     example_str += "2. Title and Content\n"
+    example_str += json.load(open(template_dir / "title_and_content.json"))
     example_str += "3. Section Header\n"
+    example_str += json.load(open(template_dir / "section_header.json"))
     example_str += "4. Two Content\n"
+    example_str += json.load(open(template_dir / "two_content.json"))
     example_str += "5. Picture with Caption\n"
-
+    example_str += json.load(open(template_dir / "picture_with_caption.json"))
 
 def build_prompt(
     query: str,
