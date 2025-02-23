@@ -40,7 +40,7 @@ def get_slide_layout_examples(template_dir: Path) -> str:
         "title_and_content.json",
         "section_header.json",
         "two_content.json",
-        "picture_with_caption.json"
+        "picture_with_caption.json",
     ]
 
     # Verify all required files exist
@@ -63,7 +63,7 @@ def get_slide_layout_examples(template_dir: Path) -> str:
         example_str += json.load(open(template_dir / "two_content.json"))
         example_str += "5. Picture with Caption\n"
         example_str += json.load(open(template_dir / "picture_with_caption.json"))
-        
+
         return example_str
     except json.JSONDecodeError as e:
         raise json.JSONDecodeError(
