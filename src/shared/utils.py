@@ -7,6 +7,8 @@ import subprocess
 from ast import literal_eval
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
+import signal
+from functools import wraps
 
 import httpx
 import pandas as pd
@@ -15,7 +17,44 @@ from thefuzz import fuzz
 
 from .pptx_api.api_doc import API
 
+class TimeoutException(Exception):
+    """Raised when a function execution time exceeds the timeout."""
 
+    pass
+
+
+def timeout_handler(signum: int, frame: Any) -> None:
+    """Signal handler for timeout."""
+    raise TimeoutException("Function call timed out")
+
+
+def with_timeout(timeout: Optional[int] = None):
+    """Decorator to add timeout functionality to a function.
+
+    Args:
+        timeout: Maximum execution time in seconds. None means no timeout.
+    """
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if timeout is None:
+                return func(*args, **kwargs)
+
+            # Set up the signal handler
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(timeout)
+
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                # Disable the alarm
+                signal.alarm(0)
+            return result
+
+        return wrapper
+
+    return decorator
 def generate_hash(
     *args: Any,
 ) -> str:

@@ -3,15 +3,13 @@ import io
 import json
 import logging
 import os
-import signal
-from functools import wraps
 from typing import Any, Dict, List, Literal, Optional, Union
 
 import ollama
 from ollama import Options
 from openai import OpenAI
 from PIL import Image
-
+from .utils import with_timeout, TimeoutException
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 API_LLM_MODELS = [
@@ -133,44 +131,7 @@ def call_vision_model(
         raise ValueError(f"Unsupported provider: {provider}")
 
 
-class TimeoutException(Exception):
-    """Raised when a function execution time exceeds the timeout."""
 
-    pass
-
-
-def timeout_handler(signum: int, frame: Any) -> None:
-    """Signal handler for timeout."""
-    raise TimeoutException("Function call timed out")
-
-
-def with_timeout(timeout: Optional[int] = None):
-    """Decorator to add timeout functionality to a function.
-
-    Args:
-        timeout: Maximum execution time in seconds. None means no timeout.
-    """
-
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if timeout is None:
-                return func(*args, **kwargs)
-
-            # Set up the signal handler
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(timeout)
-
-            try:
-                result = func(*args, **kwargs)
-            finally:
-                # Disable the alarm
-                signal.alarm(0)
-            return result
-
-        return wrapper
-
-    return decorator
 
 
 def generate_with_image_ollama(
