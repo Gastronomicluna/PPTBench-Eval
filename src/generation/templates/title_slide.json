@@ -1,0 +1,38 @@
+{
+    "slide_width": 12192000,
+    "slide_height": 6858000,
+    "slides": [
+        {
+            "slide_id": 256,
+            "slide_name": "",
+            "shapes": [
+                {
+                    "name": "Title 1",
+                    "shape_id": 2,
+                    "shape_type": "PLACEHOLDER",
+                    "measurement_unit": "emu",
+                    "height": 2387600,
+                    "width": 9144000,
+                    "left": 1524000,
+                    "top": 1122363,
+                    "text": "",
+                    "font_details": [],
+                    "placeholder_type": "CENTER_TITLE"
+                },
+                {
+                    "name": "Subtitle 2",
+                    "shape_id": 3,
+                    "shape_type": "PLACEHOLDER",
+                    "measurement_unit": "emu",
+                    "height": 1655762,
+                    "width": 9144000,
+                    "left": 1524000,
+                    "top": 3602038,
+                    "text": "",
+                    "font_details": [],
+                    "placeholder_type": "SUBTITLE"
+                }
+            ]
+        }
+    ]
+}
