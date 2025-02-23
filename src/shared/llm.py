@@ -160,7 +160,7 @@ def generate_with_image_ollama(
     """
 
     @with_timeout(timeout)
-    def _generate():
+    def _generate() -> str:
         options = Options(
             temperature=temperature,
             num_ctx=max_tokens,

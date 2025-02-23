@@ -3,7 +3,6 @@ import hashlib
 import logging
 import os
 import shutil
-import signal
 import subprocess
 from ast import literal_eval
 from functools import wraps
@@ -17,44 +16,52 @@ from thefuzz import fuzz
 
 from .pptx_api.api_doc import API
 
+import threading
+from functools import wraps
+from typing import Any, Callable, Optional, TypeVar
+
+T = TypeVar("T")
 
 class TimeoutException(Exception):
     """Raised when a function execution time exceeds the timeout."""
-
     pass
 
-
-def timeout_handler(signum: int, frame: Any) -> None:
-    """Signal handler for timeout."""
-    raise TimeoutException("Function call timed out")
-
-
-def with_timeout(timeout: Optional[int] = None):
-    """Decorator to add timeout functionality to a function.
-
+def with_timeout(timeout: Optional[int] = None) -> Callable:
+    """Thread-based timeout decorator.
+    
     Args:
         timeout: Maximum execution time in seconds. None means no timeout.
     """
-
-    def decorator(func):
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> T:
             if timeout is None:
                 return func(*args, **kwargs)
-
-            # Set up the signal handler
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(timeout)
-
-            try:
-                result = func(*args, **kwargs)
-            finally:
-                # Disable the alarm
-                signal.alarm(0)
-            return result
-
+            
+            result = []
+            error = []
+            
+            def worker():
+                try:
+                    result.append(func(*args, **kwargs))
+                except Exception as e:
+                    error.append(e)
+            
+            thread = threading.Thread(target=worker)
+            thread.daemon = True
+            thread.start()
+            thread.join(timeout)
+            
+            if thread.is_alive():
+                thread.join(0)  # Don't wait for thread
+                raise TimeoutException(f"Function call timed out after {timeout} seconds")
+            
+            if error:
+                raise error[0]
+            
+            return result[0]
+            
         return wrapper
-
     return decorator
 
 
