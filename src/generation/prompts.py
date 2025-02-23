@@ -1,7 +1,8 @@
 import json
 from typing import Any, Dict, List, Literal
-
+from pathlib import Path
 from ..shared.pptx_api.api_doc import api_list
+
 from ..shared.utils import (
     api_to_string,
     get_notes_from_json_data,
@@ -16,6 +17,24 @@ GENERATION_EXAMPLES = {
     "function4": "insert_text('Hello, World!')",
 }
 
+def get_slide_layout_examples(template_dir: Path) -> str:
+    """
+    Get slide layout examples from the given template directory.
+
+    Args:
+        template_dir (Path): The path to the template directory.
+
+    Returns:
+        Dict[str, Any]: The slide layout examples.
+    """
+    example_str = ""
+    example_str += "You can choose to use the following slide layouts:\n"
+    example_str += "1. Title Slide\n"
+    example_str += "2. Title and Content\n"
+    example_str += "3. Section Header\n"
+    example_str += "4. Two Content\n"
+    example_str += "5. Picture with Caption\n"
+    
 
 def build_prompt(
     query: str,
