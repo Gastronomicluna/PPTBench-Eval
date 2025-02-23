@@ -6,6 +6,8 @@ import os
 import time
 from typing import Any, Dict, List, Literal, Optional, Union
 
+from requests.exceptions import ConnectionError
+
 import ollama
 from ollama import Options
 from openai import OpenAI
@@ -165,6 +167,7 @@ def generate_with_image_ollama(
     Returns:
         str: The generated response from the model.
     """
+    last_error = None
     for attempt in range(retry):
         try:
 
@@ -191,13 +194,25 @@ def generate_with_image_ollama(
                 except json.JSONDecodeError:
                     return response_str
             return response_str
-        except (TimeoutException, Exception) as e:
+        except (TimeoutException, ConnectionError, Exception) as e:
+            last_error = e
+            if "EOF" in str(e) or isinstance(e, ConnectionError):
+                logging.warning(
+                    f"Attempt {attempt + 1}/{retry}: Connection error occurred: {str(e)}"
+                )
+                time.sleep(2 * (attempt + 1))  # Exponential backoff
+                continue
+            
             if attempt == retry - 1:  # Last attempt
                 if isinstance(e, TimeoutException):
                     raise TimeoutError(f"Request timed out after {timeout} seconds")
                 logging.error(f"Error in generate_with_image_ollama: {str(e)}")
                 raise
-            time.sleep(1)  # Wait before retrying
+            logging.warning(f"Attempt {attempt + 1}/{retry} failed: {str(e)}")
+            time.sleep(1)
+
+    # If we get here, all retries failed
+    raise Exception(f"All {retry} attempts failed. Last error: {str(last_error)}")
 
 
 def generate_with_api(
@@ -227,6 +242,7 @@ def generate_with_api(
     Returns:
         str: The generated response from the API.
     """
+    last_error = None
     for attempt in range(retry):
         try:
 
@@ -254,13 +270,25 @@ def generate_with_api(
                 except json.JSONDecodeError:
                     return response_str
             return response_str
-        except (TimeoutException, Exception) as e:
+        except (TimeoutException, ConnectionError, Exception) as e:
+            last_error = e
+            if "EOF" in str(e) or isinstance(e, ConnectionError):
+                logging.warning(
+                    f"Attempt {attempt + 1}/{retry}: Connection error occurred: {str(e)}"
+                )
+                time.sleep(2 * (attempt + 1))  # Exponential backoff
+                continue
+            
             if attempt == retry - 1:  # Last attempt
                 if isinstance(e, TimeoutException):
                     raise TimeoutError(f"Request timed out after {timeout} seconds")
                 logging.error(f"Error in generate_with_api: {str(e)}")
                 raise
-            time.sleep(1)  # Wait before retrying
+            logging.warning(f"Attempt {attempt + 1}/{retry} failed: {str(e)}")
+            time.sleep(1)
+
+    # If we get here, all retries failed
+    raise Exception(f"All {retry} attempts failed. Last error: {str(last_error)}")
 
 
 def generate_api_messages(
