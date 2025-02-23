@@ -3,6 +3,8 @@ import io
 import json
 import logging
 import os
+import signal
+from functools import wraps
 from typing import Any, Dict, List, Literal, Optional, Union
 
 import ollama
@@ -132,6 +134,39 @@ def call_vision_model(
         raise ValueError(f"Unsupported provider: {provider}")
 
 
+class TimeoutException(Exception):
+    """Raised when a function execution time exceeds the timeout."""
+    pass
+
+def timeout_handler(signum: int, frame: Any) -> None:
+    """Signal handler for timeout."""
+    raise TimeoutException("Function call timed out")
+
+def with_timeout(timeout: Optional[int] = None):
+    """Decorator to add timeout functionality to a function.
+    
+    Args:
+        timeout: Maximum execution time in seconds. None means no timeout.
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if timeout is None:
+                return func(*args, **kwargs)
+            
+            # Set up the signal handler
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(timeout)
+            
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                # Disable the alarm
+                signal.alarm(0)
+            return result
+        return wrapper
+    return decorator
+
 def generate_with_image_ollama(
     model_name: str,
     prompt: str,
@@ -157,34 +192,31 @@ def generate_with_image_ollama(
     Returns:
         str: The generated response from the model.
     """
-    try:
+    @with_timeout(timeout)
+    def _generate():
         options = Options(
             temperature=temperature,
             num_ctx=max_tokens,
-            request_timeout=timeout,
         )
-
         kwargs = {
             "model": model_name,
             "prompt": prompt,
             "options": options,
             "format": "json" if json_mode else "",
         }
-
-        if images:  # Only include images if list is not None and not empty
+        if images:
             kwargs["images"] = images
+        return ollama.generate(**kwargs)["response"]
 
-        response_str = ollama.generate(**kwargs)["response"]
-
+    try:
+        response_str = _generate()
         if json_mode:
             try:
                 return json.loads(response_str)
             except json.JSONDecodeError:
                 return response_str
-        else:
-            return response_str
-
-    except requests.exceptions.Timeout:
+        return response_str
+    except TimeoutException:
         raise TimeoutError(f"Request timed out after {timeout} seconds")
     except Exception as e:
         logging.error(f"Error in generate_with_image_ollama: {str(e)}")
@@ -216,37 +248,33 @@ def generate_with_api(
     Returns:
         str: The generated response from the API.
     """
-    try:
-        # Initialize OpenAI client with timeout
+    @with_timeout(timeout)
+    def _generate():
         client = OpenAI(
             base_url="https://api2.aigcbest.top/v1",
             api_key=key,
         )
         messages = generate_api_messages(images=images, prompt=prompt)
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            response_format={"type": "json_object"} if json_mode else None,
+            seed=42,
+        )
+        return response.choices[0].message.content
 
-        try:
-            response = client.chat.completions.create(
-                model=model_name,
-                messages=messages,
-                max_tokens=max_tokens,
-                temperature=temperature,
-                response_format={"type": "json_object"} if json_mode else None,
-                seed=42,
-                timeout=timeout,
-            )
-            response_str = response.choices[0].message.content
-
-            if json_mode:
-                try:
-                    return json.loads(response_str)
-                except json.JSONDecodeError:
-                    return response_str
-            else:
+    try:
+        response_str = _generate()
+        if json_mode:
+            try:
+                return json.loads(response_str)
+            except json.JSONDecodeError:
                 return response_str
-
-        except requests.exceptions.Timeout:
-            raise TimeoutError(f"API request timed out after {timeout} seconds")
-
+        return response_str
+    except TimeoutException:
+        raise TimeoutError(f"Request timed out after {timeout} seconds")
     except Exception as e:
         logging.error(f"Error in generate_with_api: {str(e)}")
         raise
