@@ -17,7 +17,6 @@ GENERATION_EXAMPLES = {
 }
 
 
-
 def build_prompt(
     query: str,
     task: Literal[

@@ -169,6 +169,7 @@ def generate_with_image_ollama(
     last_error = None
     for attempt in range(retry):
         try:
+
             @with_timeout(timeout)
             def _generate() -> str:
                 options = Options(
@@ -198,7 +199,9 @@ def generate_with_image_ollama(
                 logging.warning(
                     f"Attempt {attempt + 1}/{retry}: Connection error occurred: {str(e)}"
                 )
-                print(f"Attempt {attempt + 1}/{retry}: Connection error occurred: {str(e)}")
+                print(
+                    f"Attempt {attempt + 1}/{retry}: Connection error occurred: {str(e)}"
+                )
                 time.sleep(2 * (attempt + 1))  # Exponential backoff
                 continue
 
