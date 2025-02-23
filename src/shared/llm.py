@@ -60,7 +60,7 @@ def call_vision_model(
         str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None
     ] = None,
     json_mode: bool = False,
-    timeout: Optional[int] = None,
+    timeout: Optional[int] = 120,
 ) -> Union[str, Dict[str, Any]]:
     """
     Routes the call to the appropriate vision model provider and returns the response.
