@@ -9,12 +9,13 @@ from ..shared.utils import (
 )
 
 # JSON templates for examples
-GENERATION_EXAMPLE = {
+GENERATION_EXAMPLES = {
     "function1": "choose_slide(0)",
     "function2": "choose_shape(1)",
     "function3": "set_width(1000000)",
     "function4": "insert_text('Hello, World!')",
 }
+
 
 
 def build_prompt(
@@ -73,7 +74,7 @@ def build_prompt_for_text_to_slide(
         str: The prompt for the query.
     """
     divider = "#" * 80
-    example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
+    example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
     prompt = ""
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
@@ -109,7 +110,7 @@ def build_prompt_for_screenshot_to_slide(
         str: The prompt for the query.
     """
     divider = "#" * 80
-    example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
+    example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
     prompt = ""
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
@@ -148,7 +149,7 @@ def build_prompt_for_multimedia_to_slide(
         str: The prompt for the query.
     """
     divider = "#" * 80
-    example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
+    example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
     prompt = ""
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
@@ -191,7 +192,7 @@ def build_prompt_for_note_to_slide(
         str: The prompt for the query.
     """
     divider = "#" * 80
-    example_json_str = json.dumps(GENERATION_EXAMPLE, indent=2)
+    example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
     prompt = ""
     prompt += f"{query}\n"
     prompt += "To achieve this task, you can use the following functions:\n"
