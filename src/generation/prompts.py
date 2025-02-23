@@ -53,19 +53,22 @@ def get_slide_layout_examples(template_dir: Path) -> str:
             f"Missing required template files: {', '.join(missing_files)}"
         )
 
-    example_str = "You can choose to use the following slide layouts:\n"
+    example_str = "You can choose to use the following slide layouts:\n\n"
     try:
-        # Load and append each layout section
-        example_str += "1. Title Slide\n"
-        example_str += json.load(open(template_dir / "title_slide.json"))
-        example_str += "2. Title and Content\n"
-        example_str += json.load(open(template_dir / "title_and_content.json"))
-        example_str += "3. Section Header\n"
-        example_str += json.load(open(template_dir / "section_header.json"))
-        example_str += "4. Two Content\n"
-        example_str += json.load(open(template_dir / "two_content.json"))
-        example_str += "5. Picture with Caption\n"
-        example_str += json.load(open(template_dir / "picture_with_caption.json"))
+        # Load and append each layout section with proper formatting
+        layouts = [
+            ("1. Title Slide", "title_slide.json"),
+            ("2. Title and Content", "title_and_content.json"),
+            ("3. Section Header", "section_header.json"),
+            ("4. Two Content", "two_content.json"),
+            ("5. Picture with Caption", "picture_with_caption.json"),
+        ]
+
+        for title, filename in layouts:
+            with open(template_dir / filename) as f:
+                layout_data = json.load(f)
+                example_str += f"{title}\n"
+                example_str += json.dumps(layout_data, indent=2) + "\n\n"
 
         return example_str
     except json.JSONDecodeError as e:
