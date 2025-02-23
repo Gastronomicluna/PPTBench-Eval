@@ -167,7 +167,8 @@ def get_answer_single_modification(
             }
         except Exception as e:
             logging.error(f"Error occurred: {str(e)}")
-            logging.error(traceback.format_exc())
+            # logging.error(traceback.format_exc())
+            
             return {
                 "hash": hash_value,
                 "file_hash": file_hash,
