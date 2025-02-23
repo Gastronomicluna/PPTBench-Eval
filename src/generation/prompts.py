@@ -78,6 +78,7 @@ def build_prompt(
     ],
     slide_json: Dict[str, Any],
     content_images: List[str] = [],
+    template_dir: Path = None,
 ) -> str:
     """
     Build the prompt for the given query.
@@ -88,6 +89,7 @@ def build_prompt(
         task (Literal["note_to_slide", "multimedia_to_slide", "screenshot_to_slide", "text_to_slide"]):
             The task to build the prompt for.
         content_images (List[str], optional): The list of content images. Defaults to
+        template_dir (Path, optional): The path to the template directory. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -95,26 +97,27 @@ def build_prompt(
     if task == "note_to_slide":
         notes = get_notes_from_json_data(slide_json)
         return build_prompt_for_note_to_slide(
-            query=query, notes=notes, content_images=content_images
+            query=query, notes=notes, content_images=content_images, template_dir=template_dir
         )
     if task == "multimedia_to_slide":
         texts = get_texts_from_json_data(slide_json)
         return build_prompt_for_multimedia_to_slide(
-            query=query, content_images=content_images, texts=texts
+            query=query, content_images=content_images, texts=texts, template_dir=template_dir
         )
     if task == "screenshot_to_slide":
         return build_prompt_for_screenshot_to_slide(
-            query=query, content_images=content_images
+            query=query, content_images=content_images, template_dir=template_dir
         )
     if task == "text_to_slide":
         texts = get_texts_from_json_data(slide_json)
-        return build_prompt_for_text_to_slide(query=query, texts=texts)
+        return build_prompt_for_text_to_slide(query=query, texts=texts, template_dir=template_dir)
     raise ValueError(f"Invalid task: {task}")
 
 
 def build_prompt_for_text_to_slide(
     query: str,
     texts: List[str],
+    template_dir: Path,
 ) -> str:
     """
     Build the prompt for the given query for the text_to_slide task.
@@ -122,6 +125,7 @@ def build_prompt_for_text_to_slide(
     Args:
         query (str): The query to build the prompt for.
         texts (List[str]): The list of texts.
+        template_dir (Path): The path to the template directory.
 
     Returns:
         str: The prompt for the query.
@@ -142,6 +146,10 @@ def build_prompt_for_text_to_slide(
     for text in texts:
         prompt += f"{text}\n"
     prompt += "\n"
+    try:
+        prompt += get_slide_layout_examples(template_dir) + "\n"
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Warning: Could not load slide layout examples: {e}")
     prompt += f"Query: {query}\n"
     prompt += "Answer:\n"
 
@@ -151,6 +159,7 @@ def build_prompt_for_text_to_slide(
 def build_prompt_for_screenshot_to_slide(
     query: str,
     content_images: List[str] = [],
+    template_dir: Path = None,
 ) -> str:
     """
     Build the prompt for the given query for the screenshot_to_slide task.
@@ -158,6 +167,7 @@ def build_prompt_for_screenshot_to_slide(
     Args:
         query (str): The query to build the prompt for.
         content_images (List[str], optional): The list of content images. Defaults to [].
+        template_dir (Path, optional): The path to the template directory. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -179,6 +189,11 @@ def build_prompt_for_screenshot_to_slide(
         prompt += "The remaining images are materials you can use, and their paths are "
         prompt += f"{content_images}"
         prompt += "\n"
+    if template_dir:
+        try:
+            prompt += get_slide_layout_examples(template_dir) + "\n"
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Warning: Could not load slide layout examples: {e}")
     prompt += f"Query: {query}\n"
     prompt += "Answer:\n"
 
@@ -189,6 +204,7 @@ def build_prompt_for_multimedia_to_slide(
     query: str,
     content_images: List[str] = [],
     texts: List[str] = [],
+    template_dir: Path = None,
 ) -> str:
     """
     Build the prompt for the given query for the multimedia_to_slide task.
@@ -197,6 +213,7 @@ def build_prompt_for_multimedia_to_slide(
         query (str): The query to build the prompt for.
         slide_json (Dict[str, Any]): The JSON data for the slide.
         content_images (List[str], optional): The list of content images. Defaults to [].
+        template_dir (Path, optional): The path to the template directory. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -222,6 +239,11 @@ def build_prompt_for_multimedia_to_slide(
         prompt += "The images given are materials you can use, and their paths are "
         prompt += f"{content_images}"
         prompt += "\n"
+    if template_dir:
+        try:
+            prompt += get_slide_layout_examples(template_dir) + "\n"
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Warning: Could not load slide layout examples: {e}")
     prompt += f"Query: {query}\n"
     prompt += "Answer:\n"
 
@@ -232,6 +254,7 @@ def build_prompt_for_note_to_slide(
     query: str,
     notes: str,
     content_images: List[str] = [],
+    template_dir: Path = None,
 ) -> str:
     """
     Build the prompt for the given query for the note_to_slide task.
@@ -240,6 +263,7 @@ def build_prompt_for_note_to_slide(
         query (str): The query to build the prompt for.
         slide_json (Dict[str, Any]): The JSON data for the slide.
         content_images (List[str], optional): The list of content images. Defaults to [].
+        template_dir (Path, optional): The path to the template directory. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -263,6 +287,11 @@ def build_prompt_for_note_to_slide(
         prompt += "The images given are materials you can use, and their paths are "
         prompt += f"{content_images}"
         prompt += "\n"
+    if template_dir:
+        try:
+            prompt += get_slide_layout_examples(template_dir) + "\n"
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Warning: Could not load slide layout examples: {e}")
     prompt += f"Query: {query}\n"
     prompt += "Answer:\n"
 
