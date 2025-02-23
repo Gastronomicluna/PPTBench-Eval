@@ -192,4 +192,3 @@ def judge_answer(
         )
     else:
         raise ValueError(f"Unknown task type: {task}")
-
