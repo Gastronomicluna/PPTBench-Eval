@@ -167,6 +167,7 @@ def generate_with_image_ollama(
     """
     for attempt in range(retry):
         try:
+
             @with_timeout(timeout)
             def _generate() -> str:
                 options = Options(
@@ -228,6 +229,7 @@ def generate_with_api(
     """
     for attempt in range(retry):
         try:
+
             @with_timeout(timeout)
             def _generate():
                 client = OpenAI(
