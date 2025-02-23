@@ -17,6 +17,8 @@ GENERATION_EXAMPLES = {
     "function4": "insert_text('Hello, World!')",
 }
 
+# Default template directory path
+DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "templates"
 
 def get_slide_layout_examples(template_dir: Path) -> str:
     """
@@ -78,7 +80,7 @@ def build_prompt(
     ],
     slide_json: Dict[str, Any],
     content_images: List[str] = [],
-    template_dir: Path = None,
+    template_dir: Path = DEFAULT_TEMPLATE_DIR,
 ) -> str:
     """
     Build the prompt for the given query.
@@ -125,7 +127,7 @@ def build_prompt(
 def build_prompt_for_text_to_slide(
     query: str,
     texts: List[str],
-    template_dir: Path,
+    template_dir: Path = DEFAULT_TEMPLATE_DIR,
 ) -> str:
     """
     Build the prompt for the given query for the text_to_slide task.
@@ -167,7 +169,7 @@ def build_prompt_for_text_to_slide(
 def build_prompt_for_screenshot_to_slide(
     query: str,
     content_images: List[str] = [],
-    template_dir: Path = None,
+    template_dir: Path = DEFAULT_TEMPLATE_DIR,
 ) -> str:
     """
     Build the prompt for the given query for the screenshot_to_slide task.
@@ -212,7 +214,7 @@ def build_prompt_for_multimedia_to_slide(
     query: str,
     content_images: List[str] = [],
     texts: List[str] = [],
-    template_dir: Path = None,
+    template_dir: Path = DEFAULT_TEMPLATE_DIR,
 ) -> str:
     """
     Build the prompt for the given query for the multimedia_to_slide task.
@@ -262,7 +264,7 @@ def build_prompt_for_note_to_slide(
     query: str,
     notes: str,
     content_images: List[str] = [],
-    template_dir: Path = None,
+    template_dir: Path = DEFAULT_TEMPLATE_DIR,
 ) -> str:
     """
     Build the prompt for the given query for the note_to_slide task.
