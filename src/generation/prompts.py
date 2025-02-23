@@ -307,3 +307,54 @@ def build_prompt_for_note_to_slide(
     prompt += "Answer:\n"
 
     return prompt
+
+
+def main() -> None:
+    """Test the prompt generation functionality with sample inputs."""
+    test_cases = [
+        {
+            "task": "text_to_slide",
+            "query": "Create a slide about Python programming",
+            "texts": ["Python is a popular programming language.", 
+                     "It's known for its simplicity and readability."],
+            "slide_json": {"texts": ["Sample text"]},
+            "content_images": [],
+        },
+        {
+            "task": "screenshot_to_slide",
+            "query": "Convert this screenshot to a slide",
+            "slide_json": {},
+            "content_images": ["path/to/screenshot.png"],
+        },
+        {
+            "task": "note_to_slide",
+            "query": "Create a slide from these notes",
+            "slide_json": {"notes": "Important meeting points:\n1. Project timeline\n2. Budget review"},
+            "content_images": [],
+        },
+        {
+            "task": "multimedia_to_slide",
+            "query": "Create a slide with these images and text",
+            "slide_json": {"texts": ["Caption for image"]},
+            "content_images": ["path/to/image1.png", "path/to/image2.png"],
+        },
+    ]
+
+    for i, test_case in enumerate(test_cases, 1):
+        print(f"\n{'='*40} Test Case {i} {'='*40}")
+        print(f"Task: {test_case['task']}")
+        try:
+            prompt = build_prompt(
+                query=test_case["query"],
+                task=test_case["task"],
+                slide_json=test_case["slide_json"],
+                content_images=test_case["content_images"],
+            )
+            print("\nGenerated Prompt:")
+            print(f"{'-'*80}\n{prompt}\n{'-'*80}")
+        except Exception as e:
+            print(f"Error generating prompt: {str(e)}")
+
+
+if __name__ == "__main__":
+    main()
