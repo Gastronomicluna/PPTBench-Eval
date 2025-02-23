@@ -3,6 +3,7 @@ import io
 import json
 import logging
 import os
+import time
 from typing import Any, Dict, List, Literal, Optional, Union
 
 import ollama
@@ -62,6 +63,7 @@ def call_vision_model(
     ] = None,
     json_mode: bool = False,
     timeout: Optional[int] = 120,
+    retry: int = 3,
 ) -> Union[str, Dict[str, Any]]:
     """
     Routes the call to the appropriate vision model provider and returns the response.
@@ -76,6 +78,7 @@ def call_vision_model(
             Image file paths, bytes, PIL Images, or lists of any of these. If None, runs in text-only mode.
         json_mode (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
+        retry (int, optional): Number of retry attempts. Defaults to 3.
 
     Returns:
         str: The generated response from the vision model.
@@ -114,6 +117,7 @@ def call_vision_model(
             images=processed_images,
             json_mode=json_mode,
             timeout=timeout,
+            retry=retry,
         )
     elif provider == "api":
         return generate_with_api(
@@ -124,6 +128,7 @@ def call_vision_model(
             images=processed_images,
             json_mode=json_mode,
             timeout=timeout,
+            retry=retry,
         )
     elif provider == "openai":
         raise NotImplementedError("OpenAI API integration is not implemented yet.")
@@ -141,6 +146,7 @@ def generate_with_image_ollama(
     images: Optional[List[str | bytes]] = None,
     json_mode: bool = False,
     timeout: int = 30,  # Default 30 seconds
+    retry: int = 3,
 ) -> Union[str, Dict[str, Any]]:
     """
     Generates a response using the Ollama model with optional images.
@@ -154,40 +160,43 @@ def generate_with_image_ollama(
             If None or empty list, runs in text-only mode.
         json_mode (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
+        retry (int): Number of retry attempts. Defaults to 3.
 
     Returns:
         str: The generated response from the model.
     """
+    for attempt in range(retry):
+        try:
+            @with_timeout(timeout)
+            def _generate() -> str:
+                options = Options(
+                    temperature=temperature,
+                    num_ctx=max_tokens,
+                )
+                kwargs = {
+                    "model": model_name,
+                    "prompt": prompt,
+                    "options": options,
+                    "format": "json" if json_mode else "",
+                }
+                if images:
+                    kwargs["images"] = images
+                return ollama.generate(**kwargs)["response"]
 
-    @with_timeout(timeout)
-    def _generate() -> str:
-        options = Options(
-            temperature=temperature,
-            num_ctx=max_tokens,
-        )
-        kwargs = {
-            "model": model_name,
-            "prompt": prompt,
-            "options": options,
-            "format": "json" if json_mode else "",
-        }
-        if images:
-            kwargs["images"] = images
-        return ollama.generate(**kwargs)["response"]
-
-    try:
-        response_str = _generate()
-        if json_mode:
-            try:
-                return json.loads(response_str)
-            except json.JSONDecodeError:
-                return response_str
-        return response_str
-    except TimeoutException:
-        raise TimeoutError(f"Request timed out after {timeout} seconds")
-    except Exception as e:
-        logging.error(f"Error in generate_with_image_ollama: {str(e)}")
-        raise
+            response_str = _generate()
+            if json_mode:
+                try:
+                    return json.loads(response_str)
+                except json.JSONDecodeError:
+                    return response_str
+            return response_str
+        except (TimeoutException, Exception) as e:
+            if attempt == retry - 1:  # Last attempt
+                if isinstance(e, TimeoutException):
+                    raise TimeoutError(f"Request timed out after {timeout} seconds")
+                logging.error(f"Error in generate_with_image_ollama: {str(e)}")
+                raise
+            time.sleep(1)  # Wait before retrying
 
 
 def generate_with_api(
@@ -198,6 +207,7 @@ def generate_with_api(
     images: Optional[List[str | bytes]] = None,
     json_mode: bool = False,
     timeout: int = 30,  # Default 30 seconds
+    retry: int = 3,
 ) -> Union[str, Dict[str, Any]]:
     """
     Generates a response using the API with optional images.
@@ -211,41 +221,44 @@ def generate_with_api(
             If None, runs in text-only mode.
         json_mode (bool): Whether the response should be in JSON format.
         timeout (int): Maximum time to wait for the response.
+        retry (int): Number of retry attempts. Defaults to 3.
 
     Returns:
         str: The generated response from the API.
     """
+    for attempt in range(retry):
+        try:
+            @with_timeout(timeout)
+            def _generate():
+                client = OpenAI(
+                    base_url="https://api2.aigcbest.top/v1",
+                    api_key=key,
+                )
+                messages = generate_api_messages(images=images, prompt=prompt)
+                response = client.chat.completions.create(
+                    model=model_name,
+                    messages=messages,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    response_format={"type": "json_object"} if json_mode else None,
+                    seed=42,
+                )
+                return response.choices[0].message.content
 
-    @with_timeout(timeout)
-    def _generate():
-        client = OpenAI(
-            base_url="https://api2.aigcbest.top/v1",
-            api_key=key,
-        )
-        messages = generate_api_messages(images=images, prompt=prompt)
-        response = client.chat.completions.create(
-            model=model_name,
-            messages=messages,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            response_format={"type": "json_object"} if json_mode else None,
-            seed=42,
-        )
-        return response.choices[0].message.content
-
-    try:
-        response_str = _generate()
-        if json_mode:
-            try:
-                return json.loads(response_str)
-            except json.JSONDecodeError:
-                return response_str
-        return response_str
-    except TimeoutException:
-        raise TimeoutError(f"Request timed out after {timeout} seconds")
-    except Exception as e:
-        logging.error(f"Error in generate_with_api: {str(e)}")
-        raise
+            response_str = _generate()
+            if json_mode:
+                try:
+                    return json.loads(response_str)
+                except json.JSONDecodeError:
+                    return response_str
+            return response_str
+        except (TimeoutException, Exception) as e:
+            if attempt == retry - 1:  # Last attempt
+                if isinstance(e, TimeoutException):
+                    raise TimeoutError(f"Request timed out after {timeout} seconds")
+                logging.error(f"Error in generate_with_api: {str(e)}")
+                raise
+            time.sleep(1)  # Wait before retrying
 
 
 def generate_api_messages(
