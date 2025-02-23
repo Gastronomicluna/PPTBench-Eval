@@ -318,8 +318,10 @@ def main() -> None:
         {
             "task": "text_to_slide",
             "query": "Create a slide about Python programming",
-            "texts": ["Python is a popular programming language.", 
-                     "It's known for its simplicity and readability."],
+            "texts": [
+                "Python is a popular programming language.",
+                "It's known for its simplicity and readability.",
+            ],
             "slide_json": {"texts": ["Sample text"]},
             "content_images": [],
         },
@@ -332,7 +334,9 @@ def main() -> None:
         {
             "task": "note_to_slide",
             "query": "Create a slide from these notes",
-            "slide_json": {"notes": "Important meeting points:\n1. Project timeline\n2. Budget review"},
+            "slide_json": {
+                "notes": "Important meeting points:\n1. Project timeline\n2. Budget review"
+            },
             "content_images": [],
         },
         {
