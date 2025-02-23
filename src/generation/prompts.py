@@ -41,6 +41,7 @@ def get_slide_layout_examples(template_dir: Path) -> str:
     example_str += "5. Picture with Caption\n"
     example_str += json.load(open(template_dir / "picture_with_caption.json"))
 
+
 def build_prompt(
     query: str,
     task: Literal[
