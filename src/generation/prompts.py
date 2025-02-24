@@ -163,8 +163,7 @@ def build_prompt_for_text_to_slide(
     example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
     prompt = ""
     prompt += f"{query}\n"
-    prompt += "To achieve this task, you can use the following functions:\n"
-    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
     prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
     prompt += "- Abide by JSON formatting rules.\n\n"
@@ -205,8 +204,7 @@ def build_prompt_for_screenshot_to_slide(
     example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
     prompt = ""
     prompt += f"{query}\n"
-    prompt += "To achieve this task, you can use the following functions:\n"
-    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
     prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
     prompt += "- Abide by JSON formatting rules.\n\n"
@@ -251,8 +249,7 @@ def build_prompt_for_multimedia_to_slide(
     example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
     prompt = ""
     prompt += f"{query}\n"
-    prompt += "To achieve this task, you can use the following functions:\n"
-    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
     prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
     prompt += "- Abide by JSON formatting rules.\n\n"
@@ -301,8 +298,7 @@ def build_prompt_for_note_to_slide(
     example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
     prompt = ""
     prompt += f"{query}\n"
-    prompt += "To achieve this task, you can use the following functions:\n"
-    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
     prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
     prompt += "- Abide by JSON formatting rules.\n\n"
