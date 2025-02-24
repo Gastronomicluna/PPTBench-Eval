@@ -14,9 +14,11 @@ import httpx
 import pandas as pd
 from pdf2image import convert_from_path
 from thefuzz import fuzz
+
 from .pptx_api.api_doc import API, api_list
 
 T = TypeVar("T")
+
 
 def get_api_list_prompt() -> str:
     """
@@ -34,6 +36,8 @@ def get_api_list_prompt() -> str:
         "Do not attempt to use any other functions or operations.\n\n"
     )
     return prompt
+
+
 class TimeoutException(Exception):
     """Raised when a function execution time exceeds the timeout."""
 

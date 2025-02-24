@@ -20,9 +20,6 @@ GENERATION_EXAMPLES = {
 DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "templates"
 
 
-
-
-
 def get_slide_layout_examples(template_dir: Path) -> str:
     """
     Get slide layout examples from the given template directory.
