@@ -148,18 +148,18 @@ def main(
             logging.warning(f"Results file not found for {model_name}")
 
     print("Generating PPTX files...")
-    for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
-        if csv_path.exists():
-            generate_pptx_files_csv(
-                csv_path=csv_path,
-                # input_pptx_dir=input_pptx_dir,
-                output_dir=results_dir,
-                overwrite=True,
-            )
-            print(f"Generated PPTX files for {model_name}")
-        else:
-            logging.warning(f"Results file not found for {model_name}")
+    # for _, model_name in models_to_run:
+    #     csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
+    #     if csv_path.exists():
+    #         generate_pptx_files_csv(
+    #             csv_path=csv_path,
+    #             # input_pptx_dir=input_pptx_dir,
+    #             output_dir=results_dir,
+    #             overwrite=True,
+    #         )
+    #         print(f"Generated PPTX files for {model_name}")
+    #     else:
+    #         logging.warning(f"Results file not found for {model_name}")
 
     print("Judging answers...")
     pass
@@ -171,7 +171,7 @@ def main(
 if __name__ == "__main__":
     main(
         max_workers=4,
-        ollama_mode=False,
+        ollama_mode=True,
         test_mode=True,
         job_delay=0.5,
         sample_size=20,
