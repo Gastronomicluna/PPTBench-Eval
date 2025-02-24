@@ -14,12 +14,26 @@ import httpx
 import pandas as pd
 from pdf2image import convert_from_path
 from thefuzz import fuzz
-
-from .pptx_api.api_doc import API
+from .pptx_api.api_doc import API, api_list
 
 T = TypeVar("T")
 
+def get_api_list_prompt() -> str:
+    """
+    Get the API list prompt with emphasis on using only the provided functions.
 
+    Returns:
+        str: The API list as a formatted string with usage restrictions.
+    """
+    api_list_str = api_to_string(api_list)
+    prompt = (
+        "IMPORTANT: You must use ONLY the following functions. "
+        "Any other functions or operations are not allowed:\n"
+        f"{api_list_str}\n"
+        "These are the only valid functions you can use. "
+        "Do not attempt to use any other functions or operations.\n\n"
+    )
+    return prompt
 class TimeoutException(Exception):
     """Raised when a function execution time exceeds the timeout."""
 

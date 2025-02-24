@@ -1,8 +1,7 @@
 import json
 from typing import Any, Dict, Literal, Optional
 
-from ..shared.pptx_api.api_doc import api_list
-from ..shared.utils import api_to_string
+from ..shared.utils import get_api_list_prompt
 from .utils import get_font_from_shape
 
 # JSON templates for examples
@@ -80,8 +79,7 @@ def build_prompt_element_modification(
         prompt = ""
         prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
         prompt += f"{query}\n"
-        prompt += "To achieve this task, you can use the following functions:\n"
-        prompt += f"{api_to_string(api_list)}\n\n"
+        prompt += get_api_list_prompt()
         prompt += "Required format:\n"
         prompt += "- Return ONLY a valid JSON dictionary\n"
         prompt += "- No explanation text before or after the JSON\n"
@@ -127,8 +125,7 @@ def build_prompt_add_shape(
     prompt = ""
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
-    prompt += "To achieve this task, you can use the following functions:\n"
-    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += get_api_list_prompt()
     prompt += "Required format:\n"
     prompt += "- Return ONLY a valid JSON dictionary\n"
     prompt += "- No explanation text before or after the JSON\n"
@@ -211,8 +208,7 @@ def build_prompt_refinement(
     prompt = ""
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
-    prompt += "To achieve this task, you can use the following functions:\n"
-    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += get_api_list_prompt()
     prompt += "Required format:\n"
     prompt += "- Return ONLY a valid JSON dictionary\n"
     prompt += "- No explanation text before or after the JSON\n"
@@ -249,8 +245,7 @@ def build_prompt_text_modification(
     prompt = ""
     prompt += "Task: You are given a slide from a presentation in the form of an image and JSON data.\n"
     prompt += f"{query}\n"
-    prompt += "To achieve this task, you can use the following functions:\n"
-    prompt += f"{api_to_string(api_list)}\n\n"
+    prompt += get_api_list_prompt()
     prompt += "Required format:\n"
     prompt += "- Return ONLY a valid JSON dictionary\n"
     prompt += "- No explanation text before or after the JSON\n"

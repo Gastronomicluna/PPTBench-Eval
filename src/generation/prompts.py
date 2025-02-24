@@ -2,9 +2,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Literal
 
-from ..shared.pptx_api.api_doc import api_list
 from ..shared.utils import (
-    api_to_string,
+    get_api_list_prompt,
     get_notes_from_json_data,
     get_texts_from_json_data,
 )
@@ -21,22 +20,7 @@ GENERATION_EXAMPLES = {
 DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "templates"
 
 
-def get_api_list_prompt() -> str:
-    """
-    Get the API list prompt with emphasis on using only the provided functions.
 
-    Returns:
-        str: The API list as a formatted string with usage restrictions.
-    """
-    api_list_str = api_to_string(api_list)
-    prompt = (
-        "IMPORTANT: You must use ONLY the following functions. "
-        "Any other functions or operations are not allowed:\n"
-        f"{api_list_str}\n"
-        "These are the only valid functions you can use. "
-        "Do not attempt to use any other functions or operations.\n\n"
-    )
-    return prompt
 
 
 def get_slide_layout_examples(template_dir: Path) -> str:
