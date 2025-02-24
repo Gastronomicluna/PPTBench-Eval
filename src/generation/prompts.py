@@ -20,6 +20,7 @@ GENERATION_EXAMPLES = {
 # Default template directory path
 DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "templates"
 
+
 def get_api_list_prompt() -> str:
     """
     Get the API list prompt.
@@ -33,6 +34,8 @@ def get_api_list_prompt() -> str:
         f"{api_list_str}\n\n"
     )
     return prompt
+
+
 def get_slide_layout_examples(template_dir: Path) -> str:
     """
     Get slide layout examples from the given template directory.
