@@ -23,15 +23,18 @@ DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "templates"
 
 def get_api_list_prompt() -> str:
     """
-    Get the API list prompt.
+    Get the API list prompt with emphasis on using only the provided functions.
 
     Returns:
-        str: The API list as a formatted string.
+        str: The API list as a formatted string with usage restrictions.
     """
     api_list_str = api_to_string(api_list)
     prompt = (
-        "To achieve this task, you can use the following functions:\n"
-        f"{api_list_str}\n\n"
+        "IMPORTANT: You must use ONLY the following functions. "
+        "Any other functions or operations are not allowed:\n"
+        f"{api_list_str}\n"
+        "These are the only valid functions you can use. "
+        "Do not attempt to use any other functions or operations.\n\n"
     )
     return prompt
 
