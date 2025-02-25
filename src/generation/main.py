@@ -172,5 +172,5 @@ if __name__ == "__main__":
         test_mode=True,
         job_delay=0.5,
         sample_size=20,
-        llm_generate=False,
+        llm_generate=True,
     )
