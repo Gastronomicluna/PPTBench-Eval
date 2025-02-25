@@ -22,6 +22,7 @@ def main(
     job_delay: float = 0.5,
     sample_size: int = 2,
     generate: bool = True,
+    llm_generate: bool = True,
 ) -> None:
     """Main entry point for the detection pipeline.
 
@@ -36,6 +37,7 @@ def main(
         job_delay: Delay between job submissions in seconds. Defaults to 1.0.
         sample_size: Number of samples to process in test mode. Defaults to 2.
         generate: Whether to generate PPTX files. Defaults to True.
+        llm_generate: Whether to generate LLM answers. Defaults to True.
 
     Returns:
         None
@@ -80,11 +82,6 @@ def main(
     )
 
     print("Downloading Extracted Images from Kaggle...")
-    # download_kaggle_dataset(
-    #     dataset_name="PPTBench-Images",
-    #     dataset_path="data",
-    #     new_dir_name="images",
-    # )
 
     # Test mode
     if test_mode:
@@ -106,35 +103,36 @@ def main(
         print("No models to run. Exiting.")
         return
 
-    print("Generating answers...")
-
     results: Dict[str, pd.DataFrame] = {}
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {}
-        for provider, model_name in models_to_run:
-            futures[
-                executor.submit(
-                    process_model,
-                    function=get_answers_generation,
-                    df=df,
-                    model_name=model_name,
-                    provider=provider,
-                    temperature=0.0,
-                    max_tokens=2048,
-                    json_mode=True,
-                    timeout=60,
-                    csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
-                    # overwrite=True,
-                )
-            ] = (provider, model_name)
-            time.sleep(job_delay)  # Add delay between job submissions
+    if llm_generate:
+        print("Generating LLM answers...")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {}
+            for provider, model_name in models_to_run:
+                futures[
+                    executor.submit(
+                        process_model,
+                        function=get_answers_generation,
+                        df=df,
+                        model_name=model_name,
+                        provider=provider,
+                        temperature=0.0,
+                        max_tokens=2048,
+                        json_mode=True,
+                        timeout=60,
+                        csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
+                    )
+                ] = (provider, model_name)
+                time.sleep(job_delay)
 
-        for future in concurrent.futures.as_completed(futures):
-            _, model_name = futures[future]
-            try:
-                results[model_name] = future.result()
-            except Exception as e:
-                logging.error(f"Error processing {model_name}: {str(e)}")
+            for future in concurrent.futures.as_completed(futures):
+                _, model_name = futures[future]
+                try:
+                    results[model_name] = future.result()
+                except Exception as e:
+                    logging.error(f"Error processing {model_name}: {str(e)}")
+    else:
+        print("Skipping LLM answer generation...")
 
     print("Formatting answers...")
 
@@ -181,4 +179,5 @@ if __name__ == "__main__":
         job_delay=0.5,
         sample_size=20,
         generate=True,
+        llm_generate=False,  # Set to False to skip LLM generation
     )
