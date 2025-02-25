@@ -29,7 +29,7 @@ def get_api_list_prompt() -> str:
     """
     api_list_str = api_to_string(api_list)
     prompt = (
-        "IMPORTANT: You must use ONLY the following functions. "
+        "IMPORTANT: You are ONLY allowed to use the following functions. "
         "Any other functions or operations are not allowed:\n"
         f"{api_list_str}\n"
         "These are the only valid functions you can use. "
