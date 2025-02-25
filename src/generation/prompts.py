@@ -52,7 +52,7 @@ def get_slide_layout_examples(template_dir: Path) -> str:
             f"Missing required template files: {', '.join(missing_files)}"
         )
 
-    example_str = "You can choose to use the following slide layouts:\n\n"
+    example_str = "Here is some example slide layouts:\n\n"
     try:
         # Load and append each layout section with proper formatting
         layouts = [
