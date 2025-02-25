@@ -22,6 +22,7 @@ def main(
     job_delay: float = 0.5,
     sample_size: int = 2,
     llm_generate: bool = True,
+    generate_pptx: bool = True,
 ) -> None:
     """Main entry point for the detection pipeline.
 
@@ -36,6 +37,7 @@ def main(
         job_delay: Delay between job submissions in seconds. Defaults to 1.0.
         sample_size: Number of samples to process in test mode. Defaults to 2.
         llm_generate: Whether to generate LLM answers. Defaults to True.
+        generate_pptx: Whether to generate PPTX files. Defaults to True.
 
     Returns:
         None
@@ -146,17 +148,20 @@ def main(
             logging.warning(f"Results file not found for {model_name}")
 
     print("Generating PPTX files...")
-    for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
-        if csv_path.exists():
-            generate_pptx_files_csv(
-                csv_path=csv_path,
-                output_dir=results_dir,
-                overwrite=True,
-            )
-            print(f"Generated PPTX files for {model_name}")
-        else:
-            logging.warning(f"Results file not found for {model_name}")
+    if generate_pptx:
+        for _, model_name in models_to_run:
+            csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
+            if csv_path.exists():
+                generate_pptx_files_csv(
+                    csv_path=csv_path,
+                    output_dir=results_dir,
+                    overwrite=True,
+                )
+                print(f"Generated PPTX files for {model_name}")
+            else:
+                logging.warning(f"Results file not found for {model_name}")
+    else:
+        print("Skipping PPTX generation...")
 
     print("Judging answers...")
     pass
@@ -173,4 +178,5 @@ if __name__ == "__main__":
         job_delay=0.5,
         sample_size=20,
         llm_generate=True,
+        generate_pptx=False,  # Set to False to skip PPTX generation
     )
