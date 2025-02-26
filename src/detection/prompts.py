@@ -162,8 +162,9 @@ def main() -> None:
     row = df.sample(random_state=seed).iloc[0]
     description = row["description"]
     json_data = row["json_data"]
+    subcategory = row["subcategory"]
     # print(json_data)
-    prompt = build_prompt(description, json_data)
+    prompt = build_prompt(description, json_data, subcategory)
     print(prompt)
 
 
