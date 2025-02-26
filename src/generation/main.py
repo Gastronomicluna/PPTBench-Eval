@@ -178,5 +178,5 @@ if __name__ == "__main__":
         job_delay=0.5,
         sample_size=20,
         llm_generate=True,
-        generate_pptx=False,  # Set to False to skip PPTX generation
+        generate_pptx=True,  # Set to False to skip PPTX generation
     )
