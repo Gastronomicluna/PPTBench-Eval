@@ -1,3 +1,5 @@
+from ..utils import SLIDE_LAYOUTS
+
 class API(object):
     def __init__(
         self,
