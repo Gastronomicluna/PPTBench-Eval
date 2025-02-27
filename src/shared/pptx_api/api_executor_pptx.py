@@ -508,10 +508,11 @@ def main() -> None:
     try:
         PRESENTATION = presentation()
         SLIDES = PRESENTATION.slides
-        create_slide()
-        add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
-        errors = api_executor_pptx(["choose_slide(999)"])
-        print(errors)
+        create_slide(6)
+        # add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
+        # errors = api_executor_pptx(["choose_slide(999)"])
+        # print(errors)
+        save_presentation("test.pptx")
     except Exception as e:
         print(f"Error in main: {str(e)}")
 
