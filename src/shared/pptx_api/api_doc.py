@@ -22,11 +22,11 @@ class API(object):
 api_list = [
     API(
         name="create_slide",
-        parameters="",
-        description="Create a new slide.",
-        parameters_description="It does not take any parameters.",
-        notes="This function creates a new slide in the presentation.",
-        example="create_slide()",
+        parameters="layout: int = 0",
+        description="Create a new slide with the specified layout.",
+        parameters_description="It takes one parameter 'layout', which is an integer representing the slide layout type: 0 (blank slide), 1 (title slide), 2 (title and content), 3 (section header), 4 (two content), 5 (picture with caption).",
+        notes="This function creates a new slide in the presentation with the specified layout. Default is 0 (blank slide).",
+        example="create_slide(1)  # Creates a title slide",
     ),
     API(
         name="choose_shape",

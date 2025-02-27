@@ -14,6 +14,7 @@ GENERATION_EXAMPLES = {
     "function2": "choose_shape(1)",
     "function3": "set_width(1000000)",
     "function4": "insert_text('Hello, World!')",
+    "function5": "create_slide(1)",
 }
 
 # Default template directory path
