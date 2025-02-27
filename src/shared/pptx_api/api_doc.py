@@ -40,7 +40,7 @@ api_list = [
     API(
         name="create_slide",
         parameters="layout: int = 6",
-        description="Create a new slide with the specified layout.",
+        description="Create a new slide with the specified layout, and choose the slide as the current slide.",
         parameters_description=(
             "It takes one parameter 'layout', which is an integer representing the slide layout type: "
             + ", ".join([f"{idx} ({name})" for idx, name in SLIDE_LAYOUTS.items()])
