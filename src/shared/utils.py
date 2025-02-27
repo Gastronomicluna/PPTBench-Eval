@@ -8,7 +8,7 @@ import threading
 from ast import literal_eval
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, TypeVar, Union, Final
+from typing import Any, Callable, Dict, Final, List, Optional, TypeVar, Union
 
 import httpx
 import pandas as pd
@@ -32,6 +32,7 @@ SLIDE_LAYOUTS: Final[Dict[int, str]] = {
     9: "Title and Vertical Text",
     10: "Vertical Title and Text",
 }
+
 
 def get_api_list_prompt() -> str:
     """
