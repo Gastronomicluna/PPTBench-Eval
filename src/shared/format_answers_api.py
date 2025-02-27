@@ -151,21 +151,11 @@ def extract_functions_from_json(
 
 
 def main() -> None:
-    # Test with both formats
-    dict_example = {
-        "function1": "create_slide()",
-        "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
-        "function3": "set_font('Arial')",
-    }
-
     list_example = [
         "create_slide()",
         "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
         "set_font('Arial')",
     ]
-
-    print("Dictionary format result:")
-    print(extract_functions_from_json(dict_example))
 
     print("\nList format result:")
     print(extract_functions_from_json(list_example))
