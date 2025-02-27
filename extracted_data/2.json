@@ -1,0 +1,38 @@
+{
+  "slide_width": 720.0,
+  "slide_height": 540.0,
+  "slides": [
+    {
+      "slide_id": 256,
+      "slide_name": "",
+      "shapes": [
+        {
+          "name": "Title 1",
+          "shape_id": 2,
+          "shape_type": "PLACEHOLDER",
+          "measurement_unit": "pt",
+          "height": 107.25,
+          "width": 612.0,
+          "left": 56.87503937007874,
+          "top": 347.0,
+          "text": "",
+          "font_details": [],
+          "placeholder_type": "TITLE"
+        },
+        {
+          "name": "Text Placeholder 2",
+          "shape_id": 3,
+          "shape_type": "PLACEHOLDER",
+          "measurement_unit": "pt",
+          "height": 118.12496062992126,
+          "width": 612.0,
+          "left": 56.87503937007874,
+          "top": 228.87503937007875,
+          "text": "",
+          "font_details": [],
+          "placeholder_type": "BODY"
+        }
+      ]
+    }
+  ]
+}

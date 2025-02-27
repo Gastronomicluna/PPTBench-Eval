@@ -1,0 +1,77 @@
+{
+  "slide_width": 720.0,
+  "slide_height": 540.0,
+  "slides": [
+    {
+      "slide_id": 256,
+      "slide_name": "",
+      "shapes": [
+        {
+          "name": "Title 1",
+          "shape_id": 2,
+          "shape_type": "PLACEHOLDER",
+          "measurement_unit": "pt",
+          "height": 90.0,
+          "width": 648.0,
+          "left": 36.0,
+          "top": 21.62503937007874,
+          "text": "",
+          "font_details": [],
+          "placeholder_type": "TITLE"
+        },
+        {
+          "name": "Text Placeholder 2",
+          "shape_id": 3,
+          "shape_type": "PLACEHOLDER",
+          "measurement_unit": "pt",
+          "height": 50.37496062992126,
+          "width": 318.12503937007875,
+          "left": 36.0,
+          "top": 120.87503937007874,
+          "text": "",
+          "font_details": [],
+          "placeholder_type": "BODY"
+        },
+        {
+          "name": "Content Placeholder 3",
+          "shape_id": 4,
+          "shape_type": "PLACEHOLDER",
+          "measurement_unit": "pt",
+          "height": 311.12503937007875,
+          "width": 318.12503937007875,
+          "left": 36.0,
+          "top": 171.25,
+          "text": "",
+          "font_details": [],
+          "placeholder_type": "OBJECT"
+        },
+        {
+          "name": "Text Placeholder 4",
+          "shape_id": 5,
+          "shape_type": "PLACEHOLDER",
+          "measurement_unit": "pt",
+          "height": 50.37496062992126,
+          "width": 318.25,
+          "left": 365.75,
+          "top": 120.87503937007874,
+          "text": "",
+          "font_details": [],
+          "placeholder_type": "BODY"
+        },
+        {
+          "name": "Content Placeholder 5",
+          "shape_id": 6,
+          "shape_type": "PLACEHOLDER",
+          "measurement_unit": "pt",
+          "height": 311.12503937007875,
+          "width": 318.25,
+          "left": 365.75,
+          "top": 171.25,
+          "text": "",
+          "font_details": [],
+          "placeholder_type": "OBJECT"
+        }
+      ]
+    }
+  ]
+}
