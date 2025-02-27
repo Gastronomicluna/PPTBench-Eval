@@ -18,7 +18,7 @@ GENERATION_EXAMPLES = {
 }
 
 # Default template directory path
-DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "templates"
+DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "json_templates"
 
 
 def get_slide_layout_examples(template_dir: Path) -> str:
@@ -38,15 +38,14 @@ def get_slide_layout_examples(template_dir: Path) -> str:
     if not template_dir.exists():
         raise FileNotFoundError(f"Template directory not found: {template_dir}")
 
-    required_files = [
-        "title_slide.json",
-        "title_and_content.json",
-        "section_header.json",
-        "two_content.json",
-        "picture_with_caption.json",
-    ]
-
+    # Use layout indices from 0 to 10
+    layout_indices = list(range(11))  # 0 to 10 inclusive
+    
+    # Build filenames based on layout indices
+    layout_files = {idx: f"{idx}.json" for idx in layout_indices}
+    
     # Verify all required files exist
+    required_files = list(layout_files.values())
     missing_files = [f for f in required_files if not (template_dir / f).exists()]
     if missing_files:
         raise FileNotFoundError(
@@ -55,19 +54,12 @@ def get_slide_layout_examples(template_dir: Path) -> str:
 
     example_str = "Here is some example slide layouts:\n\n"
     try:
-        # Load and append each layout section with proper formatting
-        layouts = [
-            ("1. Title Slide", "title_slide.json"),
-            ("2. Title and Content", "title_and_content.json"),
-            ("3. Section Header", "section_header.json"),
-            ("4. Two Content", "two_content.json"),
-            ("5. Picture with Caption", "picture_with_caption.json"),
-        ]
-
-        for title, filename in layouts:
+        # Use SLIDE_LAYOUTS to get the proper names when building examples
+        for layout_idx, filename in layout_files.items():
             with open(template_dir / filename) as f:
                 layout_data = json.load(f)
-                example_str += f"{title}\n"
+                layout_name = SLIDE_LAYOUTS.get(layout_idx, f"Layout {layout_idx}")
+                example_str += f"{layout_idx}. {layout_name}\n"
                 example_str += json.dumps(layout_data, indent=2) + "\n\n"
 
         return example_str
