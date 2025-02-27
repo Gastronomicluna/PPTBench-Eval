@@ -113,10 +113,10 @@ def extract_functions_from_json(
         # Check that all items are strings
         if not all(isinstance(item, str) for item in json_data):
             raise ValueError("All items in the list must be strings")
-            
+
         # Escape newlines in each function string
         return [value.replace("\n", "\\n") for value in json_data]
-    
+
     # Handle dictionary format (legacy format)
     elif isinstance(json_data, dict):
         # Special case: empty dictionary returns empty list
@@ -145,7 +145,7 @@ def extract_functions_from_json(
             functions.append(escaped_value)
 
         return functions
-    
+
     else:
         raise TypeError(f"Expected dictionary or list input, got {type(json_data)}")
 
@@ -157,16 +157,16 @@ def main() -> None:
         "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
         "function3": "set_font('Arial')",
     }
-    
+
     list_example = [
         "create_slide()",
         "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
         "set_font('Arial')",
     ]
-    
+
     print("Dictionary format result:")
     print(extract_functions_from_json(dict_example))
-    
+
     print("\nList format result:")
     print(extract_functions_from_json(list_example))
 

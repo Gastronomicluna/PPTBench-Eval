@@ -73,7 +73,9 @@ def parse_json_answer(
             try:
                 parsed_answer = eval(answer)  # For list/dict literals
                 if not isinstance(parsed_answer, (list, dict)):
-                    raise ValueError(f"Expected list or dict, got {type(parsed_answer)}")
+                    raise ValueError(
+                        f"Expected list or dict, got {type(parsed_answer)}"
+                    )
             except Exception:
                 raise ValueError(f"Error parsing JSON answer: {str(e)}")
 
