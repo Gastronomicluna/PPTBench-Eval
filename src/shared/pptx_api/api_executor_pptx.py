@@ -508,7 +508,7 @@ def main() -> None:
     try:
         PRESENTATION = presentation()
         SLIDES = PRESENTATION.slides
-        create_slide(6)
+        create_slide(10)
         # add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
         # errors = api_executor_pptx(["choose_slide(999)"])
         # print(errors)
