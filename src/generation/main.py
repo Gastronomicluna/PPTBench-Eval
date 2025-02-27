@@ -176,7 +176,7 @@ if __name__ == "__main__":
         ollama_mode=False,
         test_mode=True,
         job_delay=0.5,
-        sample_size=20,
+        sample_size=5,
         llm_generate=True,
         generate_pptx=True,  # Set to False to skip PPTX generation
     )
