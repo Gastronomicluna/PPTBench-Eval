@@ -134,7 +134,7 @@ api_list = [
     ),
     API(
         name="set_notes_font",
-        parameters="font_name: str)",
+        parameters="font_name: str",
         description="Set the font of the notes in the presentation.",
         parameters_description="It takes one parameter 'font_name', which is a string.",
         notes="The slide must be selected before calling this function, and it does not require a shape to be selected.",
