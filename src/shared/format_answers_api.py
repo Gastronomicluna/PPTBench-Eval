@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import pandas as pd
 
@@ -64,6 +64,7 @@ def format_answer_csv(
 def format_answer(answer: str) -> List[str]:
     """
     Format the extracted functions for the detection tasks.
+    Handles both list and dictionary formats.
 
     Args:
         answer (str): The extracted functions.
@@ -90,68 +91,84 @@ def format_answer(answer: str) -> List[str]:
 
 
 def extract_functions_from_json(
-    json_data: Dict[str, Any],
+    json_data: Union[Dict[str, Any], List[str]],
 ) -> List[str]:
     """
     Extract the functions from the JSON data and escape newlines.
+    Handles both dictionary format (legacy) and list format (new).
 
     Args:
-        json_data (Dict[str, Any]): The JSON data containing numbered function keys
-            (e.g., "function1", "function2", etc.) with function call strings as values.
+        json_data: Either a dictionary with function keys or a list of function strings.
 
     Returns:
         List[str]: The list of function call strings in order, with escaped newlines.
-            Returns empty list only for empty dictionary.
 
     Raises:
-        TypeError: If json_data is not a dictionary.
+        TypeError: If json_data is not a dictionary or list.
         ValueError: If no valid function keys found in non-empty dictionary,
             or if function values are invalid.
     """
-    if not isinstance(json_data, dict):
-        raise TypeError(f"Expected dictionary input, got {type(json_data)}")
+    # Handle list format (new format)
+    if isinstance(json_data, list):
+        # Check that all items are strings
+        if not all(isinstance(item, str) for item in json_data):
+            raise ValueError("All items in the list must be strings")
+            
+        # Escape newlines in each function string
+        return [value.replace("\n", "\\n") for value in json_data]
+    
+    # Handle dictionary format (legacy format)
+    elif isinstance(json_data, dict):
+        # Special case: empty dictionary returns empty list
+        if not json_data:
+            return []
 
-    # Special case: empty dictionary returns empty list
-    if not json_data:
-        return []
+        function_keys = sorted(
+            key for key in json_data.keys() if key.startswith("function")
+        )
 
-    function_keys = sorted(
-        key for key in json_data.keys() if key.startswith("function")
-    )
+        # For non-empty dictionaries, require valid function keys
+        if not function_keys:
+            raise ValueError("No valid function keys found in non-empty input")
 
-    # For non-empty dictionaries, require valid function keys
-    if not function_keys:
-        raise ValueError("No valid function keys found in non-empty input")
+        functions = []
+        for key in function_keys:
+            value = json_data[key]
+            if not isinstance(value, str):
+                raise ValueError(
+                    f"Function value must be string, got {type(value)} for {key}"
+                )
+            if not value.strip():
+                raise ValueError(f"Empty function value for {key}")
+            # Replace \n with \\n in the function string
+            escaped_value = value.replace("\n", "\\n")
+            functions.append(escaped_value)
 
-    functions = []
-    for key in function_keys:
-        value = json_data[key]
-        if not isinstance(value, str):
-            raise ValueError(
-                f"Function value must be string, got {type(value)} for {key}"
-            )
-        if not value.strip():
-            raise ValueError(f"Empty function value for {key}")
-        # Replace \n with \\n in the function string
-        escaped_value = value.replace("\n", "\\n")
-        functions.append(escaped_value)
-
-    return functions
+        return functions
+    
+    else:
+        raise TypeError(f"Expected dictionary or list input, got {type(json_data)}")
 
 
 def main() -> None:
-    llm_answer = {
+    # Test with both formats
+    dict_example = {
         "function1": "create_slide()",
-        "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Are there any time limits for filing?')",
-        "function3": "set_font('Times New Roman')",
-        "function4": "set_font_size(440000)",
-        "function5": "set_font_style('bold')",
-        "function6": "add_text_box(50000, 150000, 8000000, 3000000, 'Complainants must contact an EEO counselor within 45 days of the effective date of the personnel action or within 45 days of the occurrence of the action which led to EEO contact.')",
-        "function7": "set_font('Arial')",
-        "function8": "set_font_size(360000)",
+        "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
+        "function3": "set_font('Arial')",
     }
-    answers = extract_functions_from_json(llm_answer)
-    print(answers)
+    
+    list_example = [
+        "create_slide()",
+        "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
+        "set_font('Arial')",
+    ]
+    
+    print("Dictionary format result:")
+    print(extract_functions_from_json(dict_example))
+    
+    print("\nList format result:")
+    print(extract_functions_from_json(list_example))
 
 
 if __name__ == "__main__":

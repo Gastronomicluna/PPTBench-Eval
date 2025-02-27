@@ -1,17 +1,22 @@
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 
 def parse_api_calls(answer: str) -> Optional[List[str]]:
     """
-    Parse api calls from answer string.
+    Parse API calls from answer string, handling both list and dictionary formats.
 
     Args:
         answer (str): Raw answer string containing API calls.
 
     Returns:
-        Optional[List[str]]: List of
+        Optional[List[str]]: List of API call strings.
     """
+    # Handle case where answer is already a list of strings
+    if isinstance(answer, list):
+        if all(isinstance(x, str) for x in answer):
+            return answer
+
     try:
         # Try parsing as JSON first
         calls = answer
@@ -43,18 +48,16 @@ def parse_api_calls(answer: str) -> Optional[List[str]]:
 
 def parse_json_answer(
     answer: str,
-) -> Optional[Dict[str, Any]]:
+) -> Union[Dict[str, Any], List[str]]:
     """
-    Parse the answer from the model into a dictionary.
+    Parse the answer from the model into a dictionary or list.
 
     Args:
         answer (str): The answer from the model, potentially escaped JSON string.
 
     Returns:
-        Dict[str, Any]: The parsed answer.
+        Union[Dict[str, Any], List[str]]: The parsed answer as dictionary or list.
     """
-    # print("Input answer:", answer)
-    # print("Type of input answer:", type(answer))
     try:
         if isinstance(answer, str):
             parsed_answer = json.loads(answer)
@@ -66,7 +69,13 @@ def parse_json_answer(
             decoded_str = answer.encode().decode("unicode_escape")
             parsed_answer = json.loads(decoded_str)
         except (json.JSONDecodeError, UnicodeError) as e:
-            raise ValueError(f"Error parsing JSON answer: {str(e)}")
+            # Try Python literal evaluation as fallback
+            try:
+                parsed_answer = eval(answer)  # For list/dict literals
+                if not isinstance(parsed_answer, (list, dict)):
+                    raise ValueError(f"Expected list or dict, got {type(parsed_answer)}")
+            except Exception:
+                raise ValueError(f"Error parsing JSON answer: {str(e)}")
 
     return parsed_answer
 
