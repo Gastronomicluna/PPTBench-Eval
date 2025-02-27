@@ -9,14 +9,14 @@ from ..shared.utils import (
     get_texts_from_json_data,
 )
 
-# JSON templates for examples
-GENERATION_EXAMPLES = {
-    "function1": "choose_slide(0)",
-    "function2": "choose_shape(1)",
-    "function3": "set_width(1000000)",
-    "function4": "insert_text('Hello, World!')",
-    "function5": "create_slide(1)",
-}
+# JSON templates for examples - changed to list format
+GENERATION_EXAMPLES = [
+    "choose_slide(0)",
+    "choose_shape(1)",
+    "set_width(1000000)",
+    "insert_text('Hello, World!')",
+    "create_slide(1)"
+]
 
 # Default template directory path
 DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "json_templates"
@@ -143,8 +143,10 @@ def build_prompt_for_text_to_slide(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
-    prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
-    prompt += "- Abide by JSON formatting rules.\n\n"
+    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
+    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Do not include any additional text or explanations\n"
+    prompt += "- Abide by JSON formatting rules\n\n"
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
@@ -184,8 +186,10 @@ def build_prompt_for_screenshot_to_slide(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
-    prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
-    prompt += "- Abide by JSON formatting rules.\n\n"
+    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
+    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Do not include any additional text or explanations\n"
+    prompt += "- Abide by JSON formatting rules\n\n"
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
@@ -229,8 +233,10 @@ def build_prompt_for_multimedia_to_slide(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
-    prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
-    prompt += "- Abide by JSON formatting rules.\n\n"
+    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
+    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Do not include any additional text or explanations\n"
+    prompt += "- Abide by JSON formatting rules\n\n"
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
@@ -278,8 +284,10 @@ def build_prompt_for_note_to_slide(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
-    prompt += "- Return in JSON format only the requested information without any additional text or explanations.\n"
-    prompt += "- Abide by JSON formatting rules.\n\n"
+    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
+    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Do not include any additional text or explanations\n"
+    prompt += "- Abide by JSON formatting rules\n\n"
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
