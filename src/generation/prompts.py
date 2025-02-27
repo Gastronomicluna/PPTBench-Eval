@@ -2,12 +2,13 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Literal
 
+from ..shared.pptx_api.api_doc import SLIDE_LAYOUTS
 from ..shared.utils import (
     get_api_list_prompt,
     get_notes_from_json_data,
     get_texts_from_json_data,
 )
-from ..shared.pptx_api.api_doc import SLIDE_LAYOUTS
+
 # JSON templates for examples
 GENERATION_EXAMPLES = {
     "function1": "choose_slide(0)",
@@ -40,10 +41,10 @@ def get_slide_layout_examples(template_dir: Path) -> str:
 
     # Use layout indices from 0 to 10
     layout_indices = list(range(11))  # 0 to 10 inclusive
-    
+
     # Build filenames based on layout indices
     layout_files = {idx: f"{idx}.json" for idx in layout_indices}
-    
+
     # Verify all required files exist
     required_files = list(layout_files.values())
     missing_files = [f for f in required_files if not (template_dir / f).exists()]
