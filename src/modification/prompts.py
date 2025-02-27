@@ -4,13 +4,15 @@ from typing import Any, Dict, Literal, Optional
 from ..shared.utils import get_api_list_prompt
 from .utils import get_font_from_shape
 
-# JSON templates for examples - changed to list format
-MODIFICATION_EXAMPLE = [
-    "choose_slide(0)",
-    "choose_shape(1)",
-    "set_width(1000000)",
-    "insert_text('Hello, World!')",
-]
+# JSON templates for examples - changed to dictionary with functions array
+MODIFICATION_EXAMPLE = {
+    "functions": [
+        "choose_slide(0)",
+        "choose_shape(1)",
+        "set_width(1000000)",
+        "insert_text('Hello, World!')"
+    ]
+}
 
 
 def build_prompt(
@@ -81,8 +83,9 @@ def build_prompt_element_modification(
         prompt += f"{query}\n"
         prompt += get_api_list_prompt()
         prompt += "Required format:\n"
-        prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
-        prompt += "- Each function call should be a string with the function name and parameters\n"
+        prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+        prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+        prompt += "- The functions should be in the order they should be executed\n"
         prompt += "- Do not include any additional text or explanations\n"
         prompt += "- No markdown formatting\n\n"
         prompt += "Examples:\n"
@@ -128,8 +131,9 @@ def build_prompt_add_shape(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Required format:\n"
-    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
-    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+    prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+    prompt += "- The functions should be in the order they should be executed\n"
     prompt += "- Do not include any additional text or explanations\n"
     prompt += "- No markdown formatting\n"
     prompt += "- The added shape should not overlap with existing shapes\n"
@@ -212,8 +216,9 @@ def build_prompt_refinement(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Required format:\n"
-    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
-    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+    prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+    prompt += "- The functions should be in the order they should be executed\n"
     prompt += "- Do not include any additional text or explanations\n"
     prompt += "- No markdown formatting\n\n"
     prompt += "Examples:\n"
@@ -250,8 +255,9 @@ def build_prompt_text_modification(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Required format:\n"
-    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
-    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+    prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+    prompt += "- The functions should be in the order they should be executed\n"
     prompt += "- Do not include any additional text or explanations\n"
     prompt += "- No markdown formatting\n\n"
     prompt += "Examples:\n"

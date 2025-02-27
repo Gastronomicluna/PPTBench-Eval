@@ -95,29 +95,43 @@ def extract_functions_from_json(
 ) -> List[str]:
     """
     Extract the functions from the JSON data and escape newlines.
-    Handles both dictionary format (legacy) and list format (new).
+    Handles various formats:
+    1. Dictionary with "functions" key (new preferred format)
+    2. List of function strings
+    3. Dictionary with "function1", "function2", etc. keys (legacy format)
 
     Args:
-        json_data: Either a dictionary with function keys or a list of function strings.
+        json_data: The parsed JSON data.
 
     Returns:
         List[str]: The list of function call strings in order, with escaped newlines.
 
     Raises:
         TypeError: If json_data is not a dictionary or list.
-        ValueError: If no valid function keys found in non-empty dictionary,
-            or if function values are invalid.
+        ValueError: If no valid functions found in non-empty input.
     """
-    # Handle list format (new format)
-    if isinstance(json_data, list):
-        # Check that all items are strings
+    # Handle dictionary with "functions" key (new preferred format)
+    if isinstance(json_data, dict) and "functions" in json_data:
+        functions_list = json_data["functions"]
+        if not isinstance(functions_list, list):
+            raise ValueError(
+                f"'functions' key must contain a list, got {type(functions_list)}"
+            )
+        if not all(isinstance(item, str) for item in functions_list):
+            raise ValueError("All items in the functions list must be strings")
+        
+        # Escape newlines in each function string
+        return [value.replace("\n", "\\n") for value in functions_list]
+    
+    # Handle list format (direct list of functions)
+    elif isinstance(json_data, list):
         if not all(isinstance(item, str) for item in json_data):
             raise ValueError("All items in the list must be strings")
-
+            
         # Escape newlines in each function string
         return [value.replace("\n", "\\n") for value in json_data]
-
-    # Handle dictionary format (legacy format)
+    
+    # Handle dictionary format (legacy format with function1, function2, etc.)
     elif isinstance(json_data, dict):
         # Special case: empty dictionary returns empty list
         if not json_data:
@@ -127,7 +141,7 @@ def extract_functions_from_json(
             key for key in json_data.keys() if key.startswith("function")
         )
 
-        # For non-empty dictionaries, require valid function keys
+        # For non-empty dictionaries without functions key, require valid function keys
         if not function_keys:
             raise ValueError("No valid function keys found in non-empty input")
 
@@ -145,20 +159,41 @@ def extract_functions_from_json(
             functions.append(escaped_value)
 
         return functions
-
+    
     else:
         raise TypeError(f"Expected dictionary or list input, got {type(json_data)}")
 
 
 def main() -> None:
+    # Test with different formats
+    dict_functions_example = {
+        "functions": [
+            "create_slide()",
+            "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
+            "set_font('Arial')"
+        ]
+    }
+    
     list_example = [
         "create_slide()",
         "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
-        "set_font('Arial')",
+        "set_font('Arial')"
     ]
-
-    print("\nList format result:")
+    
+    legacy_dict_example = {
+        "function1": "create_slide()",
+        "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
+        "function3": "set_font('Arial')"
+    }
+    
+    print("Dictionary with 'functions' key (new format):")
+    print(extract_functions_from_json(dict_functions_example))
+    
+    print("\nList format:")
     print(extract_functions_from_json(list_example))
+    
+    print("\nLegacy dictionary format:")
+    print(extract_functions_from_json(legacy_dict_example))
 
 
 if __name__ == "__main__":

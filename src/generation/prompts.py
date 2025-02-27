@@ -9,14 +9,16 @@ from ..shared.utils import (
     get_texts_from_json_data,
 )
 
-# JSON templates for examples - changed to list format
-GENERATION_EXAMPLES = [
-    "choose_slide(0)",
-    "choose_shape(1)",
-    "set_width(1000000)",
-    "insert_text('Hello, World!')",
-    "create_slide(1)",
-]
+# JSON templates for examples - changed to dictionary with functions array
+GENERATION_EXAMPLES = {
+    "functions": [
+        "choose_slide(0)",
+        "choose_shape(1)",
+        "set_width(1000000)",
+        "insert_text('Hello, World!')",
+        "create_slide(1)"
+    ]
+}
 
 # Default template directory path
 DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "json_templates"
@@ -39,12 +41,15 @@ def get_slide_layout_examples(template_dir: Path) -> str:
     if not template_dir.exists():
         raise FileNotFoundError(f"Template directory not found: {template_dir}")
 
-    # Use layout indices from 0 to 10
-    layout_indices = list(range(11))  # 0 to 10 inclusive
-
-    # Build filenames based on layout indices
-    layout_files = {idx: f"{idx}.json" for idx in layout_indices}
-
+    # Map layout names to JSON files
+    layout_files = {
+        0: "title_slide.json",           # Title Slide
+        1: "title_and_content.json",     # Title and Content
+        3: "section_header.json",        # Section Header
+        4: "two_content.json",           # Comparison/Two Content
+        8: "picture_with_caption.json",  # Picture with Caption
+    }
+    
     # Verify all required files exist
     required_files = list(layout_files.values())
     missing_files = [f for f in required_files if not (template_dir / f).exists()]
@@ -143,8 +148,9 @@ def build_prompt_for_text_to_slide(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
-    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
-    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+    prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+    prompt += "- The functions should be in the order they should be executed\n"
     prompt += "- Do not include any additional text or explanations\n"
     prompt += "- Abide by JSON formatting rules\n\n"
     prompt += "Examples:\n"
@@ -186,8 +192,9 @@ def build_prompt_for_screenshot_to_slide(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
-    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
-    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+    prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+    prompt += "- The functions should be in the order they should be executed\n"
     prompt += "- Do not include any additional text or explanations\n"
     prompt += "- Abide by JSON formatting rules\n\n"
     prompt += "Examples:\n"
@@ -233,8 +240,9 @@ def build_prompt_for_multimedia_to_slide(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
-    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
-    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+    prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+    prompt += "- The functions should be in the order they should be executed\n"
     prompt += "- Do not include any additional text or explanations\n"
     prompt += "- Abide by JSON formatting rules\n\n"
     prompt += "Examples:\n"
@@ -284,8 +292,9 @@ def build_prompt_for_note_to_slide(
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()
     prompt += "Instructions:\n"
-    prompt += "- Return a JSON array (list) of function calls in the order they should be executed\n"
-    prompt += "- Each function call should be a string with the function name and parameters\n"
+    prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+    prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+    prompt += "- The functions should be in the order they should be executed\n"
     prompt += "- Do not include any additional text or explanations\n"
     prompt += "- Abide by JSON formatting rules\n\n"
     prompt += "Examples:\n"
@@ -310,31 +319,54 @@ def build_prompt_for_note_to_slide(
 
 
 def main() -> None:
-    """Test the prompt generation functionality with a sample input."""
-    test_case = {
-        "task": "text_to_slide",
-        "query": "Create a slide about Python programming",
-        "texts": [
-            "Python is a popular programming language.",
-            "It's known for its simplicity and readability.",
-        ],
-        "slide_json": {"texts": ["Sample text"]},
-        "content_images": [],
-    }
+    """Test the prompt generation functionality with sample inputs."""
+    test_cases = [
+        {
+            "task": "text_to_slide",
+            "query": "Create a slide about Python programming",
+            "texts": [
+                "Python is a popular programming language.",
+                "It's known for its simplicity and readability.",
+            ],
+            "slide_json": {"texts": ["Sample text"]},
+            "content_images": [],
+        },
+        {
+            "task": "screenshot_to_slide",
+            "query": "Convert this screenshot to a slide",
+            "slide_json": {},
+            "content_images": ["path/to/screenshot.png"],
+        },
+        {
+            "task": "note_to_slide",
+            "query": "Create a slide from these notes",
+            "slide_json": {
+                "notes": "Important meeting points:\n1. Project timeline\n2. Budget review"
+            },
+            "content_images": [],
+        },
+        {
+            "task": "multimedia_to_slide",
+            "query": "Create a slide with these images and text",
+            "slide_json": {"texts": ["Caption for image"]},
+            "content_images": ["path/to/image1.png", "path/to/image2.png"],
+        },
+    ]
 
-    print(f"\n{'='*40} Test Case: {test_case['task']} {'='*40}")
-    print(f"Task: {test_case['task']}")
-    try:
-        prompt = build_prompt(
-            query=test_case["query"],
-            task=test_case["task"],
-            slide_json=test_case["slide_json"],
-            content_images=test_case["content_images"],
-        )
-        print("\nGenerated Prompt:")
-        print(f"{'-'*80}\n{prompt}\n{'-'*80}")
-    except Exception as e:
-        print(f"Error generating prompt: {str(e)}")
+    for i, test_case in enumerate(test_cases, 1):
+        print(f"\n{'='*40} Test Case {i} {'='*40}")
+        print(f"Task: {test_case['task']}")
+        try:
+            prompt = build_prompt(
+                query=test_case["query"],
+                task=test_case["task"],
+                slide_json=test_case["slide_json"],
+                content_images=test_case["content_images"],
+            )
+            print("\nGenerated Prompt:")
+            print(f"{'-'*80}\n{prompt}\n{'-'*80}")
+        except Exception as e:
+            print(f"Error generating prompt: {str(e)}")
 
 
 if __name__ == "__main__":
