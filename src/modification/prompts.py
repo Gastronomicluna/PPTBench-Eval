@@ -9,7 +9,7 @@ MODIFICATION_EXAMPLE = [
     "choose_slide(0)",
     "choose_shape(1)",
     "set_width(1000000)",
-    "insert_text('Hello, World!')"
+    "insert_text('Hello, World!')",
 ]
 
 
