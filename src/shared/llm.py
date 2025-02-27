@@ -18,7 +18,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 API_LLM_MODELS = [
     # ("api", "claude-3-7-sonnet-202502192-all"),
-    # ("api", "o1-mini-2024-09-12"),
+    ("api", "gpt-4o-2024-11-20"),
     # ("api", "o3-mini"),
     # ("api", "o1-2024-12-17"),
     ("api", "gemini-2.0-flash-exp"),
