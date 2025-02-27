@@ -525,7 +525,7 @@ def main() -> None:
             create_slide(layout_idx)
 
             # Save the presentation
-            output_path = output_dir / f"layout_{layout_idx}.pptx"
+            output_path = output_dir / f"{layout_idx}.pptx"
             PRESENTATION.save(str(output_path))
             print(f"Created presentation with layout {layout_idx}: {output_path}")
 
