@@ -7,7 +7,7 @@ from ..shared.utils import (
     get_notes_from_json_data,
     get_texts_from_json_data,
 )
-
+from ..shared.pptx_api.api_doc import SLIDE_LAYOUTS
 # JSON templates for examples
 GENERATION_EXAMPLES = {
     "function1": "choose_slide(0)",
