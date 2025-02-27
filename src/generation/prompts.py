@@ -41,14 +41,9 @@ def get_slide_layout_examples(template_dir: Path) -> str:
     if not template_dir.exists():
         raise FileNotFoundError(f"Template directory not found: {template_dir}")
 
-    # Map layout names to JSON files
-    layout_files = {
-        0: "title_slide.json",  # Title Slide
-        1: "title_and_content.json",  # Title and Content
-        3: "section_header.json",  # Section Header
-        4: "two_content.json",  # Comparison/Two Content
-        8: "picture_with_caption.json",  # Picture with Caption
-    }
+    # Map layout indices to JSON files using all indices in SLIDE_LAYOUTS
+    # Use consistent naming: <layout_index>.json
+    layout_files = {idx: f"{idx}.json" for idx in SLIDE_LAYOUTS.keys()}
 
     # Verify all required files exist
     required_files = list(layout_files.values())
@@ -64,7 +59,7 @@ def get_slide_layout_examples(template_dir: Path) -> str:
         for layout_idx, filename in layout_files.items():
             with open(template_dir / filename) as f:
                 layout_data = json.load(f)
-                layout_name = SLIDE_LAYOUTS.get(layout_idx, f"Layout {layout_idx}")
+                layout_name = SLIDE_LAYOUTS[layout_idx]
                 example_str += f"{layout_idx}. {layout_name}\n"
                 example_str += json.dumps(layout_data, indent=2) + "\n\n"
 
