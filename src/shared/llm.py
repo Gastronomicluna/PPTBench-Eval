@@ -17,11 +17,11 @@ from .utils import TimeoutException, with_timeout
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 API_LLM_MODELS = [
-    ("api", "claude-3-7-sonnet-202502192-all"),
+    # ("api", "claude-3-7-sonnet-202502192-all"),
     # ("api", "o1-mini-2024-09-12"),
     ("api", "o3-mini"),
     # ("api", "o1-2024-12-17"),
-    # ("api", "gemini-2.0-flash-exp"),
+    ("api", "gemini-2.0-flash-exp"),
     # ("api", "gemini-2.0-flash-thinking-exp"),
     # ("api", "qwen-vl-max-0809"),
     # ("api", "llama-3.2-90b-vision-instruct"),
