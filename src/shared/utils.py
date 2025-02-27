@@ -551,3 +551,10 @@ def str_to_list(s: str) -> List[str]:
         return result
     except Exception as e:
         raise ValueError(f"Failed to convert string to list: {str(e)}")
+
+def main():
+    print(get_api_list_prompt())
+    
+    
+if __name__ == "__main__":
+    main()
