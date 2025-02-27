@@ -119,18 +119,18 @@ def extract_functions_from_json(
             )
         if not all(isinstance(item, str) for item in functions_list):
             raise ValueError("All items in the functions list must be strings")
-        
+
         # Escape newlines in each function string
         return [value.replace("\n", "\\n") for value in functions_list]
-    
+
     # Handle list format (direct list of functions)
     elif isinstance(json_data, list):
         if not all(isinstance(item, str) for item in json_data):
             raise ValueError("All items in the list must be strings")
-            
+
         # Escape newlines in each function string
         return [value.replace("\n", "\\n") for value in json_data]
-    
+
     # Handle dictionary format (legacy format with function1, function2, etc.)
     elif isinstance(json_data, dict):
         # Special case: empty dictionary returns empty list
@@ -159,7 +159,7 @@ def extract_functions_from_json(
             functions.append(escaped_value)
 
         return functions
-    
+
     else:
         raise TypeError(f"Expected dictionary or list input, got {type(json_data)}")
 
@@ -170,28 +170,28 @@ def main() -> None:
         "functions": [
             "create_slide()",
             "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
-            "set_font('Arial')"
+            "set_font('Arial')",
         ]
     }
-    
+
     list_example = [
         "create_slide()",
         "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
-        "set_font('Arial')"
+        "set_font('Arial')",
     ]
-    
+
     legacy_dict_example = {
         "function1": "create_slide()",
         "function2": "add_text_box(50000, 50000, 8000000, 1000000, 'Text')",
-        "function3": "set_font('Arial')"
+        "function3": "set_font('Arial')",
     }
-    
+
     print("Dictionary with 'functions' key (new format):")
     print(extract_functions_from_json(dict_functions_example))
-    
+
     print("\nList format:")
     print(extract_functions_from_json(list_example))
-    
+
     print("\nLegacy dictionary format:")
     print(extract_functions_from_json(legacy_dict_example))
 

@@ -16,7 +16,7 @@ GENERATION_EXAMPLES = {
         "choose_shape(1)",
         "set_width(1000000)",
         "insert_text('Hello, World!')",
-        "create_slide(1)"
+        "create_slide(1)",
     ]
 }
 
@@ -43,13 +43,13 @@ def get_slide_layout_examples(template_dir: Path) -> str:
 
     # Map layout names to JSON files
     layout_files = {
-        0: "title_slide.json",           # Title Slide
-        1: "title_and_content.json",     # Title and Content
-        3: "section_header.json",        # Section Header
-        4: "two_content.json",           # Comparison/Two Content
+        0: "title_slide.json",  # Title Slide
+        1: "title_and_content.json",  # Title and Content
+        3: "section_header.json",  # Section Header
+        4: "two_content.json",  # Comparison/Two Content
         8: "picture_with_caption.json",  # Picture with Caption
     }
-    
+
     # Verify all required files exist
     required_files = list(layout_files.values())
     missing_files = [f for f in required_files if not (template_dir / f).exists()]
