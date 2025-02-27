@@ -8,7 +8,7 @@ import threading
 from ast import literal_eval
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Dict, Final, List, Optional, TypeVar, Union
+from typing import Any, Callable, Dict, List, Optional, TypeVar, Union
 
 import httpx
 import pandas as pd
@@ -19,19 +19,7 @@ from .pptx_api.api_doc import API, api_list
 
 T = TypeVar("T")
 
-# Map of slide layout indices to their descriptive names
-SLIDE_LAYOUTS: Final[Dict[int, str]] = {
-    0: "Title Slide",
-    1: "Title and Content",
-    3: "Section Header",
-    4: "Comparison",
-    5: "Title Only",
-    6: "Blank",
-    7: "Content with Caption",
-    8: "Picture with Caption",
-    9: "Title and Vertical Text",
-    10: "Vertical Title and Text",
-}
+
 
 
 def get_api_list_prompt() -> str:

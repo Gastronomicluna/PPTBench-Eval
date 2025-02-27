@@ -1,4 +1,19 @@
-from ..utils import SLIDE_LAYOUTS
+from typing import Dict, Final
+
+# Map of slide layout indices to their descriptive names
+SLIDE_LAYOUTS: Final[Dict[int, str]] = {
+    0: "Title Slide",
+    1: "Title and Content",
+    3: "Section Header",
+    4: "Comparison",
+    5: "Title Only",
+    6: "Blank",
+    7: "Content with Caption",
+    8: "Picture with Caption",
+    9: "Title and Vertical Text",
+    10: "Vertical Title and Text",
+}
+
 
 class API(object):
     def __init__(
