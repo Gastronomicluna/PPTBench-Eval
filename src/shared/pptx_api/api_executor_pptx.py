@@ -503,18 +503,34 @@ def set_font_color(
 
 
 def main() -> None:
-    """Run the main function."""
-    global PRESENTATION, SLIDES
-    try:
-        PRESENTATION = presentation()
-        SLIDES = PRESENTATION.slides
-        create_slide(10)
-        # add_text_box(1000000, 1000000, 1000000, 1000000, "Hello, World!")
-        # errors = api_executor_pptx(["choose_slide(999)"])
-        # print(errors)
-        save_presentation("test.pptx")
-    except Exception as e:
-        print(f"Error in main: {str(e)}")
+    """Run the main function to create example presentations for each layout.
+    
+    Creates a directory 'layout_examples' and saves presentations with
+    one slide for each layout type from 0 to 10, preserving default content.
+    """
+    global PRESENTATION, SLIDES, CURRENT_SLIDE
+    
+    # Create output directory
+    output_dir = Path("layout_examples")
+    output_dir.mkdir(exist_ok=True)
+    
+    # Create a presentation for each layout
+    for layout_idx in range(11):  # 0 to 10
+        try:
+            # Create new presentation
+            PRESENTATION = presentation()
+            SLIDES = PRESENTATION.slides
+            
+            # Add a slide with the current layout, preserving default content
+            create_slide(layout_idx)
+            
+            # Save the presentation
+            output_path = output_dir / f"layout_{layout_idx}.pptx"
+            PRESENTATION.save(str(output_path))
+            print(f"Created presentation with layout {layout_idx}: {output_path}")
+            
+        except Exception as e:
+            print(f"Error creating layout {layout_idx}: {str(e)}")
 
 
 if __name__ == "__main__":
