@@ -1,6 +1,10 @@
 from typing import Any, Dict
 
-from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST, CHOOSE_API_LIST, INSERT_API_LIST
+from src.shared.pptx_api.api_doc import (
+    ADD_SHAPE_API_LIST,
+    CHOOSE_API_LIST,
+    INSERT_API_LIST,
+)
 
 DIVIDER = "*" * 50
 
@@ -94,8 +98,10 @@ def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> st
 
     # Adding available APIs for content insertion and selection
     prompt += "### Available APIs for Content Placement:\n"
-    prompt += "You can use the following APIs to place content into the slide layout:\n\n"
-    
+    prompt += (
+        "You can use the following APIs to place content into the slide layout:\n\n"
+    )
+
     # Adding CHOOSE_API_LIST to the available APIs
     prompt += "#### Selection APIs:\n"
     for api in CHOOSE_API_LIST:
@@ -105,7 +111,7 @@ def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> st
         prompt += f"  - **Notes**: {api.notes}\n"
         prompt += f"  - **Example**: {api.example}\n"
         prompt += "\n"
-    
+
     # Adding INSERT_API_LIST to the available APIs
     prompt += "#### Insertion APIs:\n"
     for api in INSERT_API_LIST:
