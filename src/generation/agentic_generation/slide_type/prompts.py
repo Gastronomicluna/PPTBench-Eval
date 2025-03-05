@@ -141,70 +141,35 @@ def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> st
 
 def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     """
-    Generate a prompt for providing feedback on a slide layout with an easily
-    parsable format that clearly indicates if major design flaws exist.
+    Generate a simplified prompt for providing feedback on a slide layout.
+    The output should be a JSON with a clear indication if major design flaws exist,
+    along with overall feedback.
 
     Args:
         slide_json (Dict[str, Any]): The JSON representation of the slide layout.
 
     Returns:
-        str: A structured prompt requesting parsable feedback that includes a
-             clear determination of major design flaws.
+        str: A prompt that instructs the reviewer to output feedback in a simplified JSON format.
     """
-    prompt = ""
-    prompt += "Your task is to provide feedback on the given slide layout. "
-    prompt += "Analyze the structure, design, and content placement in the slide and provide constructive feedback based on best practices.\n\n"
-
-    prompt += f"{DIVIDER}\n\n"
-
-    # Adding the slide layout information
-    prompt += "### Slide Layout Structure:\n"
-    prompt += "Below is the current layout of the slide with placeholders for content. "
-    prompt += "Analyze the structure and design elements to provide feedback on the layout.\n\n"
-    prompt += f"{slide_json}\n\n"
-
-    prompt += f"{DIVIDER}\n\n"
-
-    # Adding available APIs for content insertion and selection
-    prompt += "### Feedback Guidelines:\n"
-    prompt += "When providing feedback, consider the following aspects of the slide layout:\n\n"
-    prompt += "- **Content Placement**: Evaluate how well the content is distributed across the slide.\n"
-    prompt += "- **Visual Hierarchy**: Assess the visual hierarchy of the content and design elements.\n"
-    prompt += (
-        "- **Readability**: Check if the content is easy to read and understand.\n"
+    prompt = (
+        "Review the slide layout provided below and offer constructive feedback on its design.\n\n"
+        "Slide Layout:\n"
+        f"{slide_json}\n\n"
+        "Please consider the following aspects:\n"
+        "- Content placement and distribution\n"
+        "- Visual hierarchy and readability\n"
+        "- Use of design elements (e.g., text, images, shapes)\n"
+        "- Consistency in fonts, colors, and style\n"
+        "- Identification of any major flaws (e.g., unreadable text, poor contrast, overcrowding)\n"
+        "- Suggestions for improvement\n\n"
+        "Output your response in the following JSON format exactly:\n\n"
+        "```json\n"
+        "{\n"
+        '  "pass": true/false,\n'
+        '  "feedback": "Your overall feedback including strengths, weaknesses, and suggestions."\n'
+        "}\n"
+        "```\n\n"
+        "Feedback: "
     )
-    prompt += "- **Design Elements**: Comment on the use of shapes, text boxes, images, and other design elements.\n"
-    prompt += "- **Consistency**: Look for consistency in design, font usage, color schemes, etc.\n"
-    prompt += "- **Overall Impact**: Consider the overall impact and effectiveness of the slide layout.\n\n"
-
-    prompt += "Provide detailed feedback on the layout, highlighting both strengths and areas for improvement. "
-    prompt += "Suggest specific changes or modifications that could enhance the layout's visual appeal and effectiveness.\n\n"
-
-    prompt += f"{DIVIDER}\n\n"
-
-    prompt += "### Output Format Requirements:\n"
-    prompt += (
-        "You MUST structure your feedback in the following format for easy parsing:\n\n"
-    )
-    prompt += "```json\n"
-    prompt += "{\n"
-    prompt += '  "has_major_flaws": true/false,\n'
-    prompt += '  "major_flaws": ["List specific major design issues if any"],\n'
-    prompt += '  "strengths": ["List specific strengths of the design"],\n'
-    prompt += '  "improvement_areas": ["List specific areas that need improvement"],\n'
-    prompt += '  "suggested_changes": ["List specific suggested changes"],\n'
-    prompt += '  "overall_assessment": "Brief 1-2 sentence overall assessment"\n'
-    prompt += "}\n"
-    prompt += "```\n\n"
-
-    prompt += "A major flaw is defined as an issue that significantly impacts the slide's effectiveness, "
-    prompt += "such as unreadable text, poor contrast, overcrowding, confusing visual hierarchy, or inappropriate layout for the content type. "
-    prompt += (
-        "Major flaws require substantial redesign rather than minor adjustments.\n\n"
-    )
-
-    prompt += "Your response MUST follow this JSON format precisely to enable automated processing.\n\n"
-
-    prompt += "Feedback: "
-
     return prompt
+
