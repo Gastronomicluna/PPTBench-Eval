@@ -158,9 +158,7 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     # Adding the slide layout information
     prompt += "### Slide Layout Structure:\n"
     prompt += "Below is the current layout of the slide with placeholders for content. "
-    prompt += (
-        "Analyze the structure and design elements to provide feedback on the layout.\n\n"
-    )
+    prompt += "Analyze the structure and design elements to provide feedback on the layout.\n\n"
     prompt += f"{slide_json}\n\n"
 
     prompt += f"{DIVIDER}\n\n"
@@ -170,7 +168,9 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     prompt += "When providing feedback, consider the following aspects of the slide layout:\n\n"
     prompt += "- **Content Placement**: Evaluate how well the content is distributed across the slide.\n"
     prompt += "- **Visual Hierarchy**: Assess the visual hierarchy of the content and design elements.\n"
-    prompt += "- **Readability**: Check if the content is easy to read and understand.\n"
+    prompt += (
+        "- **Readability**: Check if the content is easy to read and understand.\n"
+    )
     prompt += "- **Design Elements**: Comment on the use of shapes, text boxes, images, and other design elements.\n"
     prompt += "- **Consistency**: Look for consistency in design, font usage, color schemes, etc.\n"
     prompt += "- **Overall Impact**: Consider the overall impact and effectiveness of the slide layout.\n\n"
