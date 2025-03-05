@@ -15,7 +15,7 @@ import pandas as pd
 from pdf2image import convert_from_path
 from thefuzz import fuzz
 
-from .pptx_api.api_doc import API, api_list
+from .pptx_api.api_doc import API, API_LIST
 
 T = TypeVar("T")
 
@@ -27,7 +27,7 @@ def get_api_list_prompt() -> str:
     Returns:
         str: The API list as a formatted string with usage restrictions.
     """
-    api_list_str = api_to_string(api_list)
+    api_list_str = api_to_string(API_LIST)
     prompt = (
         "IMPORTANT: You are ONLY allowed to use the following functions. "
         "Any other functions or operations are not allowed:\n"
@@ -482,19 +482,19 @@ def download_kaggle_dataset(
 
 
 def api_to_string(
-    api_list: List[API],
+    API_LIST: List[API],
 ) -> str:
     """
     Convert a list of API objects to a string representation.
 
     Args:
-        api_list (list): List of API objects.
+        API_LIST (list): List of API objects.
 
     Returns:
         str: String representation of the API list.
     """
     api_strings = []
-    for api in api_list:
+    for api in API_LIST:
         # Format each API with essential information only
         api_str = (
             f"{api.name}({api.parameters}) "

@@ -3,7 +3,7 @@ from typing import List
 from pptx.presentation import Presentation
 from pptx.slide import Slide
 
-from .api_doc import api_list
+from .api_doc import API_LIST
 
 
 def get_slide_ids(
@@ -51,7 +51,7 @@ def api_in_list(
     Returns:
         The parsed API.
     """
-    for api in api_list:
+    for api in API_LIST:
         if api.name == line:
             return True
     return False

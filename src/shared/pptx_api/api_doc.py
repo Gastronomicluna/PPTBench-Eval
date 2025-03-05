@@ -36,7 +36,7 @@ class API(object):
         return f"{self.name}: {self.description}"
 
 
-api_list = [
+API_LIST = [
     API(
         name="create_slide",
         parameters="layout: int = 6",
