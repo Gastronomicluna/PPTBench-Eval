@@ -170,18 +170,22 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     prompt += "When providing feedback, consider the following aspects of the slide layout:\n\n"
     prompt += "- **Content Placement**: Evaluate how well the content is distributed across the slide.\n"
     prompt += "- **Visual Hierarchy**: Assess the visual hierarchy of the content and design elements.\n"
-    prompt += "- **Readability**: Check if the content is easy to read and understand.\n"
+    prompt += (
+        "- **Readability**: Check if the content is easy to read and understand.\n"
+    )
     prompt += "- **Design Elements**: Comment on the use of shapes, text boxes, images, and other design elements.\n"
     prompt += "- **Consistency**: Look for consistency in design, font usage, color schemes, etc.\n"
     prompt += "- **Overall Impact**: Consider the overall impact and effectiveness of the slide layout.\n\n"
 
     prompt += "Provide detailed feedback on the layout, highlighting both strengths and areas for improvement. "
     prompt += "Suggest specific changes or modifications that could enhance the layout's visual appeal and effectiveness.\n\n"
-    
+
     prompt += f"{DIVIDER}\n\n"
-    
+
     prompt += "### Output Format Requirements:\n"
-    prompt += "You MUST structure your feedback in the following format for easy parsing:\n\n"
+    prompt += (
+        "You MUST structure your feedback in the following format for easy parsing:\n\n"
+    )
     prompt += "```json\n"
     prompt += "{\n"
     prompt += '  "has_major_flaws": true/false,\n'
@@ -192,10 +196,12 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     prompt += '  "overall_assessment": "Brief 1-2 sentence overall assessment"\n'
     prompt += "}\n"
     prompt += "```\n\n"
-    
+
     prompt += "A major flaw is defined as an issue that significantly impacts the slide's effectiveness, "
     prompt += "such as unreadable text, poor contrast, overcrowding, confusing visual hierarchy, or inappropriate layout for the content type. "
-    prompt += "Major flaws require substantial redesign rather than minor adjustments.\n\n"
+    prompt += (
+        "Major flaws require substantial redesign rather than minor adjustments.\n\n"
+    )
 
     prompt += "Your response MUST follow this JSON format precisely to enable automated processing.\n\n"
 
