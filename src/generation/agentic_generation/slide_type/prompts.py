@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST, CHOOSE_API_LIST
+from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST, CHOOSE_API_LIST, INSERT_API_LIST
 
 DIVIDER = "*" * 50
 
@@ -92,8 +92,35 @@ def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> st
 
     prompt += f"{DIVIDER}\n\n"
 
+    # Adding available APIs for content insertion and selection
+    prompt += "### Available APIs for Content Placement:\n"
+    prompt += "You can use the following APIs to place content into the slide layout:\n\n"
+    
+    # Adding CHOOSE_API_LIST to the available APIs
+    prompt += "#### Selection APIs:\n"
+    for api in CHOOSE_API_LIST:
+        prompt += f"- **{api.name}**\n"
+        prompt += f"  - **Description**: {api.description}\n"
+        prompt += f"  - **Parameters**: {api.parameters_description}\n"
+        prompt += f"  - **Notes**: {api.notes}\n"
+        prompt += f"  - **Example**: {api.example}\n"
+        prompt += "\n"
+    
+    # Adding INSERT_API_LIST to the available APIs
+    prompt += "#### Insertion APIs:\n"
+    for api in INSERT_API_LIST:
+        prompt += f"- **{api.name}**\n"
+        prompt += f"  - **Description**: {api.description}\n"
+        prompt += f"  - **Parameters**: {api.parameters_description}\n"
+        prompt += f"  - **Notes**: {api.notes}\n"
+        prompt += f"  - **Example**: {api.example}\n"
+        prompt += "\n"
+
+    prompt += f"{DIVIDER}\n\n"
+
     prompt += "### Content Placement Instructions:\n"
     prompt += "- Analyze the slide layout and identify appropriate places for different parts of the content.\n"
+    prompt += "- Use the Selection APIs to choose where to place content and the Insertion APIs to add content.\n"
     prompt += "- Ensure that the content is distributed logically across the slide.\n"
     prompt += (
         "- Maintain readability and visual hierarchy in your placement decisions.\n"
