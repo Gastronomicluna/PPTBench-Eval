@@ -37,7 +37,7 @@ def build_create_layout_prompt(input_data: str) -> str:
         prompt += f"  - **Notes**: {api.notes}\n"
         prompt += f"  - **Example**: {api.example}\n"
         prompt += "\n"
-    
+
     # Adding CHOOSE_API_LIST to the available APIs
     for api in CHOOSE_API_LIST:
         prompt += f"- **{api.name}**\n"
