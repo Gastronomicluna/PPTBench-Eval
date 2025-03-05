@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST
+from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST, CHOOSE_API_LIST
 
 DIVIDER = "*" * 50
 
@@ -31,6 +31,15 @@ def build_create_layout_prompt(input_data: str) -> str:
     prompt += "### Available APIs for Layout Creation:\n"
     prompt += "You can use the following APIs to build the layout. These APIs will allow you to add shapes, text, and other elements to organize the content effectively.\n"
     for api in ADD_SHAPE_API_LIST:
+        prompt += f"- **{api.name}**\n"
+        prompt += f"  - **Description**: {api.description}\n"
+        prompt += f"  - **Parameters**: {api.parameters_description}\n"
+        prompt += f"  - **Notes**: {api.notes}\n"
+        prompt += f"  - **Example**: {api.example}\n"
+        prompt += "\n"
+    
+    # Adding CHOOSE_API_LIST to the available APIs
+    for api in CHOOSE_API_LIST:
         prompt += f"- **{api.name}**\n"
         prompt += f"  - **Description**: {api.description}\n"
         prompt += f"  - **Parameters**: {api.parameters_description}\n"
