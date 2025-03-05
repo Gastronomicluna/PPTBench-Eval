@@ -141,13 +141,15 @@ def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> st
 
 def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     """
-    Generate a prompt for providing feedback on a slide layout.
+    Generate a prompt for providing feedback on a slide layout with an easily
+    parsable format that clearly indicates if major design flaws exist.
 
     Args:
         slide_json (Dict[str, Any]): The JSON representation of the slide layout.
 
     Returns:
-        str: A well-structured prompt to guide feedback on the slide layout.
+        str: A structured prompt requesting parsable feedback that includes a
+             clear determination of major design flaws.
     """
     prompt = ""
     prompt += "Your task is to provide feedback on the given slide layout. "
@@ -168,15 +170,34 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     prompt += "When providing feedback, consider the following aspects of the slide layout:\n\n"
     prompt += "- **Content Placement**: Evaluate how well the content is distributed across the slide.\n"
     prompt += "- **Visual Hierarchy**: Assess the visual hierarchy of the content and design elements.\n"
-    prompt += (
-        "- **Readability**: Check if the content is easy to read and understand.\n"
-    )
+    prompt += "- **Readability**: Check if the content is easy to read and understand.\n"
     prompt += "- **Design Elements**: Comment on the use of shapes, text boxes, images, and other design elements.\n"
     prompt += "- **Consistency**: Look for consistency in design, font usage, color schemes, etc.\n"
     prompt += "- **Overall Impact**: Consider the overall impact and effectiveness of the slide layout.\n\n"
 
     prompt += "Provide detailed feedback on the layout, highlighting both strengths and areas for improvement. "
     prompt += "Suggest specific changes or modifications that could enhance the layout's visual appeal and effectiveness.\n\n"
+    
+    prompt += f"{DIVIDER}\n\n"
+    
+    prompt += "### Output Format Requirements:\n"
+    prompt += "You MUST structure your feedback in the following format for easy parsing:\n\n"
+    prompt += "```json\n"
+    prompt += "{\n"
+    prompt += '  "has_major_flaws": true/false,\n'
+    prompt += '  "major_flaws": ["List specific major design issues if any"],\n'
+    prompt += '  "strengths": ["List specific strengths of the design"],\n'
+    prompt += '  "improvement_areas": ["List specific areas that need improvement"],\n'
+    prompt += '  "suggested_changes": ["List specific suggested changes"],\n'
+    prompt += '  "overall_assessment": "Brief 1-2 sentence overall assessment"\n'
+    prompt += "}\n"
+    prompt += "```\n\n"
+    
+    prompt += "A major flaw is defined as an issue that significantly impacts the slide's effectiveness, "
+    prompt += "such as unreadable text, poor contrast, overcrowding, confusing visual hierarchy, or inappropriate layout for the content type. "
+    prompt += "Major flaws require substantial redesign rather than minor adjustments.\n\n"
+
+    prompt += "Your response MUST follow this JSON format precisely to enable automated processing.\n\n"
 
     prompt += "Feedback: "
 
