@@ -172,4 +172,3 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
         "Feedback: "
     )
     return prompt
-
