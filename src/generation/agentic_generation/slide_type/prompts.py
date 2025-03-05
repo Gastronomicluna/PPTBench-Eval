@@ -50,4 +50,45 @@ def build_create_layout_prompt(input_data: str) -> str:
     return prompt
 
 
-# def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]
+def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> str:
+    """
+    Generate a prompt for filling content into a predefined slide layout.
+    
+    Args:
+        input_data (str): The content that needs to be placed into the slide.
+        slide_json (Dict[str, Any]): The JSON representation of the slide layout.
+        
+    Returns:
+        str: A well-structured prompt to guide content placement into the layout.
+    """
+    prompt = ""
+    prompt += "Your task is to fill the provided slide layout with the given content. "
+    prompt += "You need to distribute the content appropriately among the available shapes and text boxes in the layout.\n\n"
+    
+    prompt += f"{DIVIDER}\n\n"
+    
+    # Adding the content of the slide as part of the prompt
+    prompt += "### Content to Place in the Slide:\n"
+    prompt += f"{input_data}\n\n"
+    
+    prompt += f"{DIVIDER}\n\n"
+    
+    # Adding the slide layout information
+    prompt += "### Slide Layout Structure:\n"
+    prompt += "Below is the current layout of the slide with placeholders for content. "
+    prompt += "You need to determine what content goes where based on the structure.\n\n"
+    prompt += f"{slide_json}\n\n"
+    
+    prompt += f"{DIVIDER}\n\n"
+    
+    prompt += "### Content Placement Instructions:\n"
+    prompt += "- Analyze the slide layout and identify appropriate places for different parts of the content.\n"
+    prompt += "- Ensure that the content is distributed logically across the slide.\n"
+    prompt += "- Maintain readability and visual hierarchy in your placement decisions.\n"
+    prompt += "- If there's any content that doesn't fit naturally, suggest modifications to either the content or layout.\n"
+    prompt += "- Return a structured response indicating what content should go in which placeholder.\n\n"
+    
+    prompt += "Answer: "
+    
+    return prompt
+
