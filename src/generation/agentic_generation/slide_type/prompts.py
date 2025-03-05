@@ -1,4 +1,4 @@
-from src.shared.pptx_api.api_doc import add_shape_api_list
+from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST
 
 DIVIDER = "*" * 50
 

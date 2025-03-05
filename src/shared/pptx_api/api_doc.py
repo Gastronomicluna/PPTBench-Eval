@@ -163,7 +163,7 @@ API_LIST = [
     ),
 ]
 
-add_shape_api_list = [
+ADD_SHAPE_API_LIST = [
     API(
         name="add_text_box",
         parameters="left: int, top: int, width: int, height: int, text: str",
