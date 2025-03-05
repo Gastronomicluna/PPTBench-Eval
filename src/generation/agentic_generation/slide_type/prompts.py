@@ -151,24 +151,24 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     Returns:
         str: A prompt that instructs the reviewer to output feedback in a simplified JSON format.
     """
-    prompt = (
-        "Review the slide layout provided below and offer constructive feedback on its design.\n\n"
-        "Slide Layout:\n"
-        f"{slide_json}\n\n"
-        "Please consider the following aspects:\n"
-        "- Content placement and distribution\n"
-        "- Visual hierarchy and readability\n"
-        "- Use of design elements (e.g., text, images, shapes)\n"
-        "- Consistency in fonts, colors, and style\n"
-        "- Identification of any major flaws (e.g., unreadable text, poor contrast, overcrowding)\n"
-        "- Suggestions for improvement\n\n"
-        "Output your response in the following JSON format exactly:\n\n"
-        "```json\n"
-        "{\n"
-        '  "pass": true/false,\n'
-        '  "feedback": "Your overall feedback including strengths, weaknesses, and suggestions."\n'
-        "}\n"
-        "```\n\n"
-        "Feedback: "
-    )
+    prompt = ""
+    prompt += "Review the slide layout provided below and offer constructive feedback on its design.\n\n"
+    prompt += "Slide Layout:\n"
+    prompt += f"{slide_json}\n\n"
+    prompt += "Please consider the following aspects:\n"
+    prompt += "- Content placement and distribution\n"
+    prompt += "- Visual hierarchy and readability\n"
+    prompt += "- Use of design elements (e.g., text, images, shapes)\n"
+    prompt += "- Consistency in fonts, colors, and style\n"
+    prompt += "- Identification of any major flaws (e.g., unreadable text, poor contrast, overcrowding)\n"
+    prompt += "- Suggestions for improvement\n\n"
+    prompt += "Output your response in the following JSON format exactly:\n\n"
+    prompt += "```json\n"
+    prompt += "{\n"
+    prompt += '  "pass": true/false,\n'
+    prompt += '  "feedback": "Your overall feedback including strengths, weaknesses, and suggestions."\n'
+    prompt += "}\n"
+    prompt += "```\n\n"
+    prompt += "Feedback: "
+    
     return prompt
