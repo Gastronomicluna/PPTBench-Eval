@@ -27,3 +27,6 @@ def build_slide_type_prompt(input_data: str) -> str:
     prompt += "Your answer should be clear and concise. Answer: "
 
     return prompt
+
+
+# def build_create_layout_prompt
