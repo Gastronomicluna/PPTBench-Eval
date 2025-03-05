@@ -47,7 +47,9 @@ def build_create_layout_prompt(input_data: str) -> str:
     prompt += input_data + "\n"
     prompt += DIVIDER + "\n"
     prompt += "Please design a layout for this content. In your response, be sure to include the following:\n"
-    prompt += "1. The layout design, including the placement of text and visual elements.\n"
+    prompt += (
+        "1. The layout design, including the placement of text and visual elements.\n"
+    )
     prompt += (
         "2. The types and number of shapes or visual elements used in the layout.\n"
     )
