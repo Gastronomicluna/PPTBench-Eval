@@ -137,3 +137,47 @@ def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> st
     prompt += "Answer: "
 
     return prompt
+
+
+def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
+    """
+    Generate a prompt for providing feedback on a slide layout.
+
+    Args:
+        slide_json (Dict[str, Any]): The JSON representation of the slide layout.
+
+    Returns:
+        str: A well-structured prompt to guide feedback on the slide layout.
+    """
+    prompt = ""
+    prompt += "Your task is to provide feedback on the given slide layout. "
+    prompt += "Analyze the structure, design, and content placement in the slide and provide constructive feedback based on best practices.\n\n"
+
+    prompt += f"{DIVIDER}\n\n"
+
+    # Adding the slide layout information
+    prompt += "### Slide Layout Structure:\n"
+    prompt += "Below is the current layout of the slide with placeholders for content. "
+    prompt += (
+        "Analyze the structure and design elements to provide feedback on the layout.\n\n"
+    )
+    prompt += f"{slide_json}\n\n"
+
+    prompt += f"{DIVIDER}\n\n"
+
+    # Adding available APIs for content insertion and selection
+    prompt += "### Feedback Guidelines:\n"
+    prompt += "When providing feedback, consider the following aspects of the slide layout:\n\n"
+    prompt += "- **Content Placement**: Evaluate how well the content is distributed across the slide.\n"
+    prompt += "- **Visual Hierarchy**: Assess the visual hierarchy of the content and design elements.\n"
+    prompt += "- **Readability**: Check if the content is easy to read and understand.\n"
+    prompt += "- **Design Elements**: Comment on the use of shapes, text boxes, images, and other design elements.\n"
+    prompt += "- **Consistency**: Look for consistency in design, font usage, color schemes, etc.\n"
+    prompt += "- **Overall Impact**: Consider the overall impact and effectiveness of the slide layout.\n\n"
+
+    prompt += "Provide detailed feedback on the layout, highlighting both strengths and areas for improvement. "
+    prompt += "Suggest specific changes or modifications that could enhance the layout's visual appeal and effectiveness.\n\n"
+
+    prompt += "Feedback: "
+
+    return prompt
