@@ -1,5 +1,7 @@
-from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST
 from typing import Any, Dict
+
+from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST
+
 DIVIDER = "*" * 50
 
 
@@ -46,8 +48,6 @@ def build_create_layout_prompt(input_data: str) -> str:
     prompt += "Answer: "
 
     return prompt
-
-
 
 
 # def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]
