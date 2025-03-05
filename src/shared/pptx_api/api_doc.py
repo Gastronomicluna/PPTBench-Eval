@@ -200,3 +200,14 @@ CHOOSE_API_LIST = [
         example="choose_shape(0)",
     ),
 ]
+
+INSERT_API_LIST = [
+    API(
+        name="insert_text",
+        parameters="text: str",
+        description="Insert text into the selected shape.",
+        parameters_description="It takes one parameter 'text', which is a string.",
+        notes="The shape must be selected before calling this function.",
+        example="insert_text('Hello, World!')",
+    ),
+]
