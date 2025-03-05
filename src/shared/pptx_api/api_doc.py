@@ -181,3 +181,22 @@ ADD_SHAPE_API_LIST = [
         example="add_picture(1000000, 1000000, 1000000, 1000000, 'path/to/image.jpg')",
     ),
 ]
+
+CHOOSE_API_LIST = [
+    API(
+        name="choose_slide",
+        parameters="slide_id: int",
+        description="Choose a slide to work with.",
+        parameters_description="It takes one parameter 'slide_id', which is the index of the slide to choose.",
+        notes="The slide_id value can be found with the key 'slide_id' in the JSON data.",
+        example="choose_slide(0)",
+    ),
+    API(
+        name="choose_shape",
+        parameters="shape_id: int",
+        description="Choose a shape to work with.",
+        parameters_description="It takes one parameter 'shape_id', which is the index of the shape to choose.",
+        notes="The shape_id value can be found with the key 'shape_id' in the JSON data. The slide must be selected before calling this function.",
+        example="choose_shape(0)",
+    ),
+]
