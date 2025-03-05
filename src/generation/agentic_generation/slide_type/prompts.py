@@ -1,24 +1,33 @@
 from src.shared.pptx_api.api_doc import ADD_SHAPE_API_LIST
-
+from typing import Any, Dict
 DIVIDER = "*" * 50
 
 
-def build_create_layout_prompt() -> str:
+def build_create_layout_prompt(input_data: str) -> str:
     """
     Generate a detailed prompt for designing a layout using the available APIs,
-    with the input data serving as a guide for the structure and layout elements.
+    with the content serving as the input and a provided image as the background.
+
+    Args:
+        input_data (str): The content of the slide that will guide the layout design.
 
     Returns:
         str: A well-structured prompt to guide the layout creation using available APIs.
     """
     prompt = ""
-    prompt += "Your task is to design a layout based on the provided guidelines. "
-    prompt += "The layout should incorporate an image as the background and should follow the structure based on the input data's key message.\n\n"
+    prompt += "Your task is to design a layout based on the provided content. "
+    prompt += "The layout should incorporate the provided image as the background, and you should structure the content in a visually appealing and organized way.\n\n"
+
+    prompt += f"{DIVIDER}\n\n"
+
+    # Adding the content of the slide as part of the prompt
+    prompt += "### Slide Content:\n"
+    prompt += f"{input_data}\n\n"
 
     prompt += f"{DIVIDER}\n\n"
 
     prompt += "### Available APIs for Layout Creation:\n"
-    prompt += "You can use the following APIs to build the layout. Each API serves a specific purpose for adding various shapes, text, and other elements to the slide.\n"
+    prompt += "You can use the following APIs to build the layout. These APIs will allow you to add shapes, text, and other elements to organize the content effectively.\n"
     for api in ADD_SHAPE_API_LIST:
         prompt += f"- **{api.name}**\n"
         prompt += f"  - **Description**: {api.description}\n"
@@ -30,9 +39,15 @@ def build_create_layout_prompt() -> str:
     prompt += f"{DIVIDER}\n\n"
 
     prompt += "### Layout Instructions:\n"
-    prompt += "Create a layout design using the APIs above. Focus on balancing elements visually while ensuring that the background image complements the overall structure. "
-    prompt += "You are encouraged to utilize a variety of shapes and text elements to achieve an effective layout that aligns with the message structure of the provided content.\n"
+    prompt += "Design the layout using the provided content, ensuring the content is organized clearly and efficiently. "
+    prompt += "The background image is already provided, so your task is to structure the content around it, ensuring it complements the image. "
+    prompt += "Use shapes, text, and other design elements to emphasize key points, create a balanced flow, and ensure readability.\n"
 
     prompt += "Answer: "
 
     return prompt
+
+
+
+
+# def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]
