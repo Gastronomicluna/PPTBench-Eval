@@ -9,20 +9,25 @@ from src.shared.pptx_api.api_doc import (
 DIVIDER = "*" * 50
 
 
-def build_create_layout_prompt(input_data: str) -> str:
+def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
     """
     Generate a detailed prompt for designing a layout using the available APIs,
     with the content serving as the input and a provided image as the background.
 
     Args:
         input_data (str): The content of the slide that will guide the layout design.
+        image (bool, optional): Whether to include instructions about using
+            the provided image as background. Defaults to True.
 
     Returns:
         str: A well-structured prompt to guide the layout creation using available APIs.
     """
     prompt = ""
     prompt += "Your task is to design a layout based on the provided content. "
-    prompt += "The layout should incorporate the provided image as the background, and you should structure the content in a visually appealing and organized way.\n\n"
+    if image:
+        prompt += "The layout should incorporate the provided image as the background, and you should structure the content in a visually appealing and organized way.\n\n"
+    else:
+        prompt += "You should structure the content in a visually appealing and organized way.\n\n"
 
     prompt += f"{DIVIDER}\n\n"
 
@@ -55,7 +60,8 @@ def build_create_layout_prompt(input_data: str) -> str:
 
     prompt += "### Layout Instructions:\n"
     prompt += "Design the layout using the provided content, ensuring the content is organized clearly and efficiently. "
-    prompt += "The background image is already provided, so your task is to structure the content around it, ensuring it complements the image. "
+    if image:
+        prompt += "The background image is already provided, so your task is to structure the content around it, ensuring it complements the image. "
     prompt += "Use shapes, text, and other design elements to emphasize key points, create a balanced flow, and ensure readability.\n"
 
     prompt += "Answer: "
@@ -64,7 +70,9 @@ def build_create_layout_prompt(input_data: str) -> str:
 
 
 def build_fill_content_prompt(
-    slide_json: Dict[str, Any], input_data: Optional[str] = None
+    slide_json: Dict[str, Any], 
+    input_data: Optional[str] = None, 
+    image: bool = True
 ) -> str:
     """
     Generate a prompt for filling content into a predefined slide layout.
@@ -73,6 +81,8 @@ def build_fill_content_prompt(
         slide_json (Dict[str, Any]): The JSON representation of the slide layout.
         input_data (Optional[str], optional): The content that needs to be placed
             into the slide. Defaults to None.
+        image (bool, optional): Whether to include instructions about 
+            working with images in the slide. Defaults to True.
 
     Returns:
         str: A well-structured prompt to guide content placement into the layout.
@@ -132,9 +142,9 @@ def build_fill_content_prompt(
     prompt += "- Analyze the slide layout and identify appropriate places for different parts of the content.\n"
     prompt += "- Use the Selection APIs to choose where to place content and the Insertion APIs to add content.\n"
     prompt += "- Ensure that the content is distributed logically across the slide.\n"
-    prompt += (
-        "- Maintain readability and visual hierarchy in your placement decisions.\n"
-    )
+    if image:
+        prompt += "- If there are images in the layout, ensure your content complements them rather than competing with them.\n"
+    prompt += "- Maintain readability and visual hierarchy in your placement decisions.\n"
     prompt += "- If there's any content that doesn't fit naturally, suggest modifications to either the content or layout.\n"
     prompt += "- Return a structured response indicating what content should go in which placeholder.\n\n"
 
