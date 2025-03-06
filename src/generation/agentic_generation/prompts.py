@@ -175,7 +175,7 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
 
 
 def main():
-    from src.shared.utils import get_notes_from_json_data
+    from src.shared.utils import get_texts_from_json_data
 
     slide_json = {
         "slide_width": 9144000,
@@ -240,7 +240,7 @@ def main():
         },
     }
 
-    input_data = get_notes_from_json_data(slide_json)
+    input_data = get_texts_from_json_data(slide_json)
     print(build_create_layout_prompt(input_data))
 
 
