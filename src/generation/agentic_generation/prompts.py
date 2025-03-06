@@ -176,12 +176,73 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
 
 def main():
     from src.shared.utils import get_notes_from_json_data
-    
-    slide_json = {"slide_width": 9144000, "slide_height": 6858000, "measurement_unit": "emu", "slide": {"slide_id": 288, "slide_name": "", "shapes": [{"name": "", "shape_id": 117, "shape_type": "PICTURE", "measurement_unit": "emu", "height": 4764240, "width": 7086600, "left": 1066680, "top": 407880, "auto_shape_type": "RECTANGLE", "image_path": "dataset/extracted_images/PASRENDEHQURXKYRMXJNQOK44A7UMSZV/32/image_32_1.png"}, {"name": "", "shape_id": 118, "shape_type": "AUTO_SHAPE", "measurement_unit": "emu", "height": 459720, "width": 7467480, "left": 762120, "top": 5257800, "text": "(page 23; section 3119B.4)", "font_details": [{"paragraph_index": 0, "run_index": 0, "text": "(page 23; section 3119B.4)", "font_name": "Times New Roman", "font_size": 24.0}]}], "notes": {"text": "Shall be posted in a prominent place around spa pool.\nRead spa caution sign carefully to make sure it has approved verbiage. Can be more strict- not less.", "font_details": [{"paragraph_index": 0, "run_index": 0, "text": "Shall be posted in a prominent place around spa pool.", "font_name": "Times New Roman", "font_size": 12.0}, {"paragraph_index": 1, "run_index": 0, "text": "Read spa caution sign carefully to make sure it has approved verbiage. Can be more strict- not less.", "font_name": "Times New Roman", "font_size": 12.0}]}}}
-    
+
+    slide_json = {
+        "slide_width": 9144000,
+        "slide_height": 6858000,
+        "measurement_unit": "emu",
+        "slide": {
+            "slide_id": 288,
+            "slide_name": "",
+            "shapes": [
+                {
+                    "name": "",
+                    "shape_id": 117,
+                    "shape_type": "PICTURE",
+                    "measurement_unit": "emu",
+                    "height": 4764240,
+                    "width": 7086600,
+                    "left": 1066680,
+                    "top": 407880,
+                    "auto_shape_type": "RECTANGLE",
+                    "image_path": "dataset/extracted_images/PASRENDEHQURXKYRMXJNQOK44A7UMSZV/32/image_32_1.png",
+                },
+                {
+                    "name": "",
+                    "shape_id": 118,
+                    "shape_type": "AUTO_SHAPE",
+                    "measurement_unit": "emu",
+                    "height": 459720,
+                    "width": 7467480,
+                    "left": 762120,
+                    "top": 5257800,
+                    "text": "(page 23; section 3119B.4)",
+                    "font_details": [
+                        {
+                            "paragraph_index": 0,
+                            "run_index": 0,
+                            "text": "(page 23; section 3119B.4)",
+                            "font_name": "Times New Roman",
+                            "font_size": 24.0,
+                        }
+                    ],
+                },
+            ],
+            "notes": {
+                "text": "Shall be posted in a prominent place around spa pool.\nRead spa caution sign carefully to make sure it has approved verbiage. Can be more strict- not less.",
+                "font_details": [
+                    {
+                        "paragraph_index": 0,
+                        "run_index": 0,
+                        "text": "Shall be posted in a prominent place around spa pool.",
+                        "font_name": "Times New Roman",
+                        "font_size": 12.0,
+                    },
+                    {
+                        "paragraph_index": 1,
+                        "run_index": 0,
+                        "text": "Read spa caution sign carefully to make sure it has approved verbiage. Can be more strict- not less.",
+                        "font_name": "Times New Roman",
+                        "font_size": 12.0,
+                    },
+                ],
+            },
+        },
+    }
+
     input_data = get_notes_from_json_data(slide_json)
     print(build_create_layout_prompt(input_data))
-    
+
+
 if __name__ == "__main__":
     main()
-    
