@@ -63,13 +63,15 @@ def build_create_layout_prompt(input_data: str) -> str:
     return prompt
 
 
-def build_fill_content_prompt(slide_json: Dict[str, Any], input_data: Optional[str] = None) -> str:
+def build_fill_content_prompt(
+    slide_json: Dict[str, Any], input_data: Optional[str] = None
+) -> str:
     """
     Generate a prompt for filling content into a predefined slide layout.
 
     Args:
         slide_json (Dict[str, Any]): The JSON representation of the slide layout.
-        input_data (Optional[str], optional): The content that needs to be placed 
+        input_data (Optional[str], optional): The content that needs to be placed
             into the slide. Defaults to None.
 
     Returns:
