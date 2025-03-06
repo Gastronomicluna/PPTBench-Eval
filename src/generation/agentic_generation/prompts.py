@@ -70,9 +70,7 @@ def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
 
 
 def build_fill_content_prompt(
-    slide_json: Dict[str, Any], 
-    input_data: Optional[str] = None, 
-    image: bool = True
+    slide_json: Dict[str, Any], input_data: Optional[str] = None, image: bool = True
 ) -> str:
     """
     Generate a prompt for filling content into a predefined slide layout.
@@ -81,7 +79,7 @@ def build_fill_content_prompt(
         slide_json (Dict[str, Any]): The JSON representation of the slide layout.
         input_data (Optional[str], optional): The content that needs to be placed
             into the slide. Defaults to None.
-        image (bool, optional): Whether to include instructions about 
+        image (bool, optional): Whether to include instructions about
             working with images in the slide. Defaults to True.
 
     Returns:
@@ -144,7 +142,9 @@ def build_fill_content_prompt(
     prompt += "- Ensure that the content is distributed logically across the slide.\n"
     if image:
         prompt += "- If there are images in the layout, ensure your content complements them rather than competing with them.\n"
-    prompt += "- Maintain readability and visual hierarchy in your placement decisions.\n"
+    prompt += (
+        "- Maintain readability and visual hierarchy in your placement decisions.\n"
+    )
     prompt += "- If there's any content that doesn't fit naturally, suggest modifications to either the content or layout.\n"
     prompt += "- Return a structured response indicating what content should go in which placeholder.\n\n"
 
