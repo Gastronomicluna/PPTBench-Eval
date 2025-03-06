@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from src.shared.pptx_api.api_doc import (
     ADD_SHAPE_API_LIST,
@@ -63,13 +63,14 @@ def build_create_layout_prompt(input_data: str) -> str:
     return prompt
 
 
-def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> str:
+def build_fill_content_prompt(slide_json: Dict[str, Any], input_data: Optional[str] = None) -> str:
     """
     Generate a prompt for filling content into a predefined slide layout.
 
     Args:
-        input_data (str): The content that needs to be placed into the slide.
         slide_json (Dict[str, Any]): The JSON representation of the slide layout.
+        input_data (Optional[str], optional): The content that needs to be placed 
+            into the slide. Defaults to None.
 
     Returns:
         str: A well-structured prompt to guide content placement into the layout.
@@ -81,10 +82,11 @@ def build_fill_content_prompt(input_data: str, slide_json: Dict[str, Any]) -> st
     prompt += f"{DIVIDER}\n\n"
 
     # Adding the content of the slide as part of the prompt
-    prompt += "### Content to Place in the Slide:\n"
-    prompt += f"{input_data}\n\n"
+    if input_data:
+        prompt += "### Content to Place in the Slide:\n"
+        prompt += f"{input_data}\n\n"
 
-    prompt += f"{DIVIDER}\n\n"
+        prompt += f"{DIVIDER}\n\n"
 
     # Adding the slide layout information
     prompt += "### Slide Layout Structure:\n"
