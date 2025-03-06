@@ -169,6 +169,6 @@ def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
     prompt += '  "feedback": "Your overall feedback including strengths, weaknesses, and suggestions."\n'
     prompt += "}\n"
     prompt += "```\n\n"
-    prompt += "Feedback: "
+    prompt += "Your response: "
 
     return prompt
