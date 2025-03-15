@@ -7,5 +7,9 @@ from src.shared.pptx_api.api_doc import API
 from .prompts import build_create_layout_prompt
 
 
-def create_layout(text_input: str, image_path: Path) -> List[API]:
+def create_presentation(
+    text_input: str,
+    image_path: Path,
+    presentation_path: Path,
+) -> None:
     pass
