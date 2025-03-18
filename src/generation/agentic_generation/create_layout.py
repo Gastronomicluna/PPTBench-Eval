@@ -109,3 +109,24 @@ def run_api_list(
     presentation_path: Path,
 ) -> None:
     pass
+
+
+def main() -> None:
+    text_input = """
+    All ETA Grantees are expected to report outcomes achieved through the Grant. I\u2019d like to take just a minute here to mention that in addition to the ROI that I will discuss here, outcomes should include those tracked for the purpose of reporting on the Common Measures which are include entered employment, job retention, and average earnings for Adults and for youth, the Common Measures include placement in employment or education, attainment of a degree or certificate, and literacy and numeracy gains. 
+    """
+    image_path = Path("datasets/w18.jpg")
+    model_name = "gpt-4o"
+    provider = "api"
+    
+    api_list = generate_api_list(
+        text_input=text_input,
+        image_path=image_path,
+        model_name=model_name,
+        provider=provider,
+    )
+    
+    print(api_list)
+    
+if __name__ == "__main__":
+    main()
