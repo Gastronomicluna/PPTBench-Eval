@@ -78,6 +78,7 @@ def generate_api_list(
                 images=[image_path],
                 json_mode=json_mode,
             )
+            print(llm_answer)
         except Exception as e:
             raise RuntimeError(f"Error calling vision model: {str(e)}")
 
@@ -88,7 +89,7 @@ def generate_api_list(
         llm_answer_str = (
             json.dumps(llm_answer) if isinstance(llm_answer, dict) else llm_answer
         )
-
+        # print(llm_answer_str)
         # Parse the API calls from the response
         api_calls = str_to_list(llm_answer_str)
 
