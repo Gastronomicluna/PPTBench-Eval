@@ -33,10 +33,10 @@ def generate_api_list(
     json_mode: bool = False,
 ) -> List[str]:
     """Generate a list of API calls based on text input and an image.
-    
+
     This function creates a prompt based on the text input, sends it along with
     the image to a vision model, and processes the response to extract API calls.
-    
+
     Args:
         text_input: The textual input to guide presentation creation.
         image_path: Path to the image file to be processed.
@@ -45,12 +45,12 @@ def generate_api_list(
             "openai", or "anthropic". Defaults to "ollama".
         temperature: Sampling temperature for the model. Defaults to 0.5.
         max_tokens: Maximum number of tokens for the response. Defaults to 3200.
-        json_mode: Whether to use JSON mode for the model response. 
+        json_mode: Whether to use JSON mode for the model response.
             Defaults to False.
-            
+
     Returns:
         A list of API call strings.
-        
+
     Raises:
         ValueError: If no API calls could be generated or the model response
             is invalid.
@@ -61,7 +61,7 @@ def generate_api_list(
         # Validate image path exists
         if not image_path.exists():
             raise FileNotFoundError(f"Image file not found: {image_path}")
-            
+
         # Create the prompt
         prompt = build_create_layout_prompt(
             input_data=text_input,
@@ -80,15 +80,15 @@ def generate_api_list(
             )
         except Exception as e:
             raise RuntimeError(f"Error calling vision model: {str(e)}")
-        
+
         # Process the model response
         if llm_answer is None:
             raise ValueError("Received empty response from vision model")
-            
+
         llm_answer_str = (
             json.dumps(llm_answer) if isinstance(llm_answer, dict) else llm_answer
         )
-        
+
         # Parse the API calls from the response
         api_calls = str_to_list(llm_answer_str)
 
@@ -96,7 +96,7 @@ def generate_api_list(
             raise ValueError("No API calls generated from model response")
 
         return api_calls
-        
+
     except json.JSONDecodeError as e:
         raise ValueError(f"Error parsing model response as JSON: {str(e)}")
     except Exception as e:
