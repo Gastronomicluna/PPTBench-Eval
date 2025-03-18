@@ -27,7 +27,19 @@ def generate_api_list(
     temperature: float = 0.5,
     max_tokens: int = 3200,
 ) -> List[str]:
-    pass
+    prompt = build_create_layout_prompt(
+        input_data=text_input,
+    )
+
+    api_list = call_vision_model(
+        prompt=prompt,
+        model_name=model_name,
+        provider=provider,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        images=[image_path],
+    )
+    return api_list
 
 
 def run_api_list(
