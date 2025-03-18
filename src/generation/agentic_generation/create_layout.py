@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal, List
+from typing import List, Literal
 
 from src.shared.llm import call_vision_model
 from src.shared.pptx_api.api_doc import API
@@ -17,6 +17,7 @@ def create_presentation(
     max_tokens: int = 3200,
 ) -> None:
     pass
+
 
 def generate_api_list(
     text_input: str,
