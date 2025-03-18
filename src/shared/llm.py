@@ -61,8 +61,15 @@ def call_vision_model(
     temperature: float = 0.1,
     max_tokens: int = 3200,
     images: Union[
-        str, List[str], Path, List[Path], bytes, List[bytes], 
-        Image.Image, List[Image.Image], None
+        str,
+        List[str],
+        Path,
+        List[Path],
+        bytes,
+        List[bytes],
+        Image.Image,
+        List[Image.Image],
+        None,
     ] = None,
     json_mode: bool = False,
     timeout: Optional[int] = 120,
@@ -77,9 +84,9 @@ def call_vision_model(
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        images (Union[str, List[str], Path, List[Path], bytes, List[bytes], 
+        images (Union[str, List[str], Path, List[Path], bytes, List[bytes],
                Image.Image, List[Image.Image], None]):
-            Image file paths (as strings or Path objects), bytes, PIL Images, 
+            Image file paths (as strings or Path objects), bytes, PIL Images,
             or lists of any of these. If None, runs in text-only mode.
         json_mode (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
