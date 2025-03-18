@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import time
+from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Union
 
 import ollama
@@ -60,7 +61,8 @@ def call_vision_model(
     temperature: float = 0.1,
     max_tokens: int = 3200,
     images: Union[
-        str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None
+        str, List[str], Path, List[Path], bytes, List[bytes], 
+        Image.Image, List[Image.Image], None
     ] = None,
     json_mode: bool = False,
     timeout: Optional[int] = 120,
@@ -75,8 +77,10 @@ def call_vision_model(
         prompt (str): The text prompt for the model.
         temperature (float): Sampling temperature for the model.
         max_tokens (int): Maximum number of tokens in the response.
-        images (Union[str, List[str], bytes, List[bytes], Image.Image, List[Image.Image], None]):
-            Image file paths, bytes, PIL Images, or lists of any of these. If None, runs in text-only mode.
+        images (Union[str, List[str], Path, List[Path], bytes, List[bytes], 
+               Image.Image, List[Image.Image], None]):
+            Image file paths (as strings or Path objects), bytes, PIL Images, 
+            or lists of any of these. If None, runs in text-only mode.
         json_mode (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
         retry (int, optional): Number of retry attempts. Defaults to 3.
@@ -93,10 +97,11 @@ def call_vision_model(
 
         # Validate and process all images
         for img in images:
-            if isinstance(img, str):
-                if not os.path.exists(img):
-                    raise ValueError(f"Image file not found: {img}")
-                processed_images.append(img)
+            if isinstance(img, (str, Path)):
+                img_path = str(img) if isinstance(img, Path) else img
+                if not os.path.exists(img_path):
+                    raise ValueError(f"Image file not found: {img_path}")
+                processed_images.append(img_path)
             elif isinstance(img, bytes):
                 processed_images.append(img)
             elif isinstance(img, Image.Image):
@@ -106,7 +111,7 @@ def call_vision_model(
                 processed_images.append(img_byte_arr.getvalue())
             else:
                 raise ValueError(
-                    f"Invalid image type: {type(img)}. Expected str, bytes, or PIL Image."
+                    f"Invalid image type: {type(img)}. Expected str, Path, bytes, or PIL Image."
                 )
 
     if provider == "ollama":
