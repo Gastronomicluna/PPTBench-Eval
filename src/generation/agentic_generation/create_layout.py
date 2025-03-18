@@ -15,6 +15,7 @@ def create_presentation(
     provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
     temperature: float = 0.5,
     max_tokens: int = 3200,
+    json_mode: bool = False,
 ) -> None:
     pass
 
@@ -26,6 +27,7 @@ def generate_api_list(
     provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
     temperature: float = 0.5,
     max_tokens: int = 3200,
+    json_mode: bool = False,
 ) -> List[str]:
     prompt = build_create_layout_prompt(
         input_data=text_input,
@@ -38,6 +40,7 @@ def generate_api_list(
         temperature=temperature,
         max_tokens=max_tokens,
         images=[image_path],
+        json_mode=json_mode,
     )
     return api_list
 
