@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal
+from typing import Literal, List
 
 from src.shared.llm import call_vision_model
 from src.shared.pptx_api.api_doc import API
@@ -18,3 +18,12 @@ def create_presentation(
 ) -> None:
     pass
 
+def generate_api_list(
+    text_input: str,
+    image_path: Path,
+    model_name: str,
+    provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
+    temperature: float = 0.5,
+    max_tokens: int = 3200,
+) -> List[str]:
+    pass
