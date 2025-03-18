@@ -1,11 +1,13 @@
+import json
 from pathlib import Path
 from typing import List, Literal
 
 from src.shared.llm import call_vision_model
 from src.shared.pptx_api.api_doc import API
 from src.shared.utils import str_to_list
+
 from .prompts import build_create_layout_prompt
-import json
+
 
 def create_presentation(
     text_input: str,
@@ -49,8 +51,10 @@ def generate_api_list(
 
     if not api_calls:
         raise ValueError("No API calls generated")
-    
+
     return api_calls
+
+
 def run_api_list(
     api_list: List[str],
     presentation_path: Path,
