@@ -118,15 +118,16 @@ def main() -> None:
     image_path = Path("datasets/w18.jpg")
     model_name = "gpt-4o"
     provider = "api"
-    
+
     api_list = generate_api_list(
         text_input=text_input,
         image_path=image_path,
         model_name=model_name,
         provider=provider,
     )
-    
+
     print(api_list)
-    
+
+
 if __name__ == "__main__":
     main()
