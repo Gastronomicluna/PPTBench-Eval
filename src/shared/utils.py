@@ -20,14 +20,16 @@ from .pptx_api.api_doc import API, API_LIST
 T = TypeVar("T")
 
 
-def get_api_list_prompt() -> str:
+def get_api_list_prompt(
+    api_list: List[API] = API_LIST,
+    ) -> str:
     """
     Get the API list prompt with emphasis on using only the provided functions.
 
     Returns:
         str: The API list as a formatted string with usage restrictions.
     """
-    api_list_str = api_to_string(API_LIST)
+    api_list_str = api_to_string(api_list)
     prompt = (
         "IMPORTANT: You are ONLY allowed to use the following functions. "
         "Any other functions or operations are not allowed:\n"
