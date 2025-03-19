@@ -22,7 +22,7 @@ T = TypeVar("T")
 
 def get_api_list_prompt(
     api_list: List[API] = API_LIST,
-    ) -> str:
+) -> str:
     """
     Get the API list prompt with emphasis on using only the provided functions.
 
