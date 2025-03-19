@@ -6,6 +6,7 @@ from src.shared.pptx_api.api_doc import (
     INSERT_API_LIST,
 )
 from src.shared.utils import get_api_list_prompt
+
 DIVIDER = "*" * 50
 
 
@@ -98,26 +99,8 @@ def build_fill_content_prompt(
     prompt += (
         "You can use the following APIs to place content into the slide layout:\n\n"
     )
-
-    # Adding CHOOSE_API_LIST to the available APIs
-    prompt += "#### Selection APIs:\n"
-    for api in CHOOSE_API_LIST:
-        prompt += f"- **{api.name}**\n"
-        prompt += f"  - **Description**: {api.description}\n"
-        prompt += f"  - **Parameters**: {api.parameters_description}\n"
-        prompt += f"  - **Notes**: {api.notes}\n"
-        prompt += f"  - **Example**: {api.example}\n"
-        prompt += "\n"
-
-    # Adding INSERT_API_LIST to the available APIs
-    prompt += "#### Insertion APIs:\n"
-    for api in INSERT_API_LIST:
-        prompt += f"- **{api.name}**\n"
-        prompt += f"  - **Description**: {api.description}\n"
-        prompt += f"  - **Parameters**: {api.parameters_description}\n"
-        prompt += f"  - **Notes**: {api.notes}\n"
-        prompt += f"  - **Example**: {api.example}\n"
-        prompt += "\n"
+    prompt += get_api_list_prompt(ADD_SHAPE_API_LIST)
+    prompt += get_api_list_prompt(CHOOSE_API_LIST)
 
     prompt += f"{DIVIDER}\n\n"
 
