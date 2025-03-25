@@ -139,6 +139,7 @@ def build_prompt_for_text_to_slide(
     """
     divider = "#" * 80
     example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
+    
     prompt = ""
     prompt += f"{query}\n"
     prompt += get_api_list_prompt()

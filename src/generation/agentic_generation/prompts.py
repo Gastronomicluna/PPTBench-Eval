@@ -1,5 +1,5 @@
 from typing import Any, Dict, Optional
-
+import json
 from src.shared.pptx_api.api_doc import (
     ADD_SHAPE_API_LIST,
     CHOOSE_API_LIST,
@@ -8,7 +8,15 @@ from src.shared.pptx_api.api_doc import (
 from src.shared.utils import get_api_list_prompt
 
 DIVIDER = "*" * 50
-
+GENERATION_EXAMPLES = {
+    "functions": [
+        "choose_slide(0)",
+        "choose_shape(1)",
+        "set_width(1000000)",
+        "insert_text('Hello, World!')",
+        "create_slide(1)",
+    ]
+}
 
 def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
     """
@@ -23,6 +31,8 @@ def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
     Returns:
         str: A well-structured prompt to guide the layout creation using available APIs.
     """
+    example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
+    
     prompt = ""
     prompt += "Your task is to design a layout based on the provided content. "
     if image:
