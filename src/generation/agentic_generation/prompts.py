@@ -1,5 +1,6 @@
-from typing import Any, Dict, Optional
 import json
+from typing import Any, Dict, Optional
+
 from src.shared.pptx_api.api_doc import (
     ADD_SHAPE_API_LIST,
     CHOOSE_API_LIST,
@@ -18,6 +19,7 @@ GENERATION_EXAMPLES = {
     ]
 }
 
+
 def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
     """
     Generate a detailed prompt for designing a layout using the available APIs,
@@ -32,7 +34,7 @@ def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
         str: A well-structured prompt to guide the layout creation using available APIs.
     """
     example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
-    
+
     prompt = ""
     prompt += "Your task is to design a layout based on the provided content. "
     if image:
