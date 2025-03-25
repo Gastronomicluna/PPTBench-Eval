@@ -114,8 +114,7 @@ def run_api_list(
 
 def main() -> None:
     text_input = """
-    All ETA Grantees are expected to report outcomes achieved through the Grant. I\u2019d like to take just a minute here to mention that in addition to the ROI that I will discuss here, outcomes should include those tracked for the purpose of reporting on the Common Measures which are include entered employment, job retention, and average earnings for Adults and for youth, the Common Measures include placement in employment or education, attainment of a degree or certificate, and literacy and numeracy gains. 
-    """
+Deep within the heart of the Whispering Forest, where sunlight danced through emerald leaves and the air hummed with secrets, there stood an ancient oak. Its gnarled roots twisted like serpents, and its branches reached skyward as if yearning to touch the stars.    """
     image_path = Path("datasets/w18.jpg")
     model_name = "gpt-4o"
     provider = "api"
