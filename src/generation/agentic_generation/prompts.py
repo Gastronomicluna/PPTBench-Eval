@@ -22,115 +22,138 @@ GENERATION_EXAMPLES = {
 
 def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
     """
-    Generate a detailed prompt for designing a layout using the available APIs,
-    with the content serving as the input and a provided image as the background.
+    Build the prompt for creating a slide layout based on the provided content.
 
     Args:
-        input_data (str): The content of the slide that will guide the layout design.
+        input_data (str): The content of the slide that will guide the layout
+            design.
         image (bool, optional): Whether to include instructions about using
             the provided image as background. Defaults to True.
 
     Returns:
-        str: A well-structured prompt to guide the layout creation using available APIs.
+        str: The prompt for layout creation.
     """
+    divider = "*" * 50
     example_json_str = json.dumps(GENERATION_EXAMPLES, indent=2)
 
     prompt = ""
-    prompt += "Your task is to design a layout based on the provided content. "
+    # Start with task description
+    prompt += "Your task is to design a layout based on the provided content.\n"
+
+    # API documentation section
+    prompt += "Available APIs:\n"
+    prompt += get_api_list_prompt(ADD_SHAPE_API_LIST)
+    prompt += get_api_list_prompt(CHOOSE_API_LIST)
+    prompt += get_api_list_prompt(INSERT_API_LIST)
+
+    # Instructions section
+    prompt += "Instructions:\n"
+    prompt += "- Return a JSON dictionary with a single 'functions' key containing an array of function calls\n"
+    prompt += "- Each function call in the array should be a string with the function name and parameters\n"
+    prompt += "- The functions should be in the order they should be executed\n"
+    prompt += "- Do not include any additional text or explanations\n"
+    prompt += "- Abide by JSON formatting rules\n"
+
+    # Task-specific instructions
     if image:
-        prompt += "The layout should incorporate the provided image as the background, and you should structure the content in a visually appealing and organized way.\n\n"
-    else:
-        prompt += "You should structure the content in a visually appealing and organized way.\n\n"
+        prompt += (
+            "- The layout should incorporate the provided image as the background\n"
+        )
+    prompt += "- Structure the content in a visually appealing and organized way\n\n"
 
-    prompt += f"{DIVIDER}\n\n"
+    # Examples section
+    prompt += "Examples:\n"
+    prompt += f"{example_json_str}\n\n"
 
-    # Adding the content of the slide as part of the prompt
-    prompt += "### Slide Content:\n"
+    # Content section
+    prompt += f"{divider}\n"
+    prompt += "Slide Content:\n"
     prompt += f"{input_data}\n\n"
 
-    prompt += f"{DIVIDER}\n\n"
-
-    prompt += "### Available APIs for Layout Creation:\n"
-    prompt += get_api_list_prompt(ADD_SHAPE_API_LIST)
-    prompt += get_api_list_prompt(CHOOSE_API_LIST)
-
-    prompt += f"{DIVIDER}\n\n"
-
-    prompt += "### Layout Instructions:\n"
-    prompt += "Design the layout using the provided content, ensuring the content is organized clearly and efficiently. "
+    # Design guidance section
+    prompt += f"{divider}\n"
+    prompt += "Design Guidelines:\n"
+    prompt += "- Organize content clearly and efficiently\n"
     if image:
-        prompt += "The background image is already provided, so your task is to structure the content around it, ensuring it complements the image. "
-    prompt += "Use shapes, text, and other design elements to emphasize key points, create a balanced flow, and ensure readability.\n"
+        prompt += "- Structure content around the background image to complement it\n"
+    prompt += "- Use appropriate shapes, text, and other design elements\n"
+    prompt += "- Emphasize key points and create a balanced flow\n"
+    prompt += "- Ensure readability of all content\n"
+    prompt += "- Use a consistent color scheme throughout the slide\n"
+    prompt += (
+        "- If content is unavailable, use placeholder text and clearly label it\n\n"
+    )
 
-    prompt += "Answer: "
+    # Answer section
+    prompt += "Answer:\n"
 
     return prompt
 
 
-def build_fill_content_prompt(
-    slide_json: Dict[str, Any], input_data: Optional[str] = None, image: bool = True
-) -> str:
-    """
-    Generate a prompt for filling content into a predefined slide layout.
+# def build_fill_content_prompt(
+#     slide_json: Dict[str, Any], input_data: Optional[str] = None, image: bool = True
+# ) -> str:
+#     """
+#     Generate a prompt for filling content into a predefined slide layout.
 
-    Args:
-        slide_json (Dict[str, Any]): The JSON representation of the slide layout.
-        input_data (Optional[str], optional): The content that needs to be placed
-            into the slide. Defaults to None.
-        image (bool, optional): Whether to include instructions about
-            working with images in the slide. Defaults to True.
+#     Args:
+#         slide_json (Dict[str, Any]): The JSON representation of the slide layout.
+#         input_data (Optional[str], optional): The content that needs to be placed
+#             into the slide. Defaults to None.
+#         image (bool, optional): Whether to include instructions about
+#             working with images in the slide. Defaults to True.
 
-    Returns:
-        str: A well-structured prompt to guide content placement into the layout.
-    """
-    prompt = ""
-    prompt += "Your task is to fill the provided slide layout with the given content. "
-    prompt += "You need to distribute the content appropriately among the available shapes and text boxes in the layout.\n\n"
+#     Returns:
+#         str: A well-structured prompt to guide content placement into the layout.
+#     """
+#     prompt = ""
+#     prompt += "Your task is to fill the provided slide layout with the given content. "
+#     prompt += "You need to distribute the content appropriately among the available shapes and text boxes in the layout.\n\n"
 
-    prompt += f"{DIVIDER}\n\n"
+#     prompt += f"{DIVIDER}\n\n"
 
-    # Adding the content of the slide as part of the prompt
-    if input_data:
-        prompt += "### Content to Place in the Slide:\n"
-        prompt += f"{input_data}\n\n"
+#     # Adding the content of the slide as part of the prompt
+#     if input_data:
+#         prompt += "### Content to Place in the Slide:\n"
+#         prompt += f"{input_data}\n\n"
 
-        prompt += f"{DIVIDER}\n\n"
+#         prompt += f"{DIVIDER}\n\n"
 
-    # Adding the slide layout information
-    prompt += "### Slide Layout Structure:\n"
-    prompt += "Below is the current layout of the slide with placeholders for content. "
-    prompt += (
-        "You need to determine what content goes where based on the structure.\n\n"
-    )
-    prompt += f"{slide_json}\n\n"
+#     # Adding the slide layout information
+#     prompt += "### Slide Layout Structure:\n"
+#     prompt += "Below is the current layout of the slide with placeholders for content. "
+#     prompt += (
+#         "You need to determine what content goes where based on the structure.\n\n"
+#     )
+#     prompt += f"{slide_json}\n\n"
 
-    prompt += f"{DIVIDER}\n\n"
+#     prompt += f"{DIVIDER}\n\n"
 
-    # Adding available APIs for content insertion and selection
-    prompt += "### Available APIs for Content Placement:\n"
-    prompt += (
-        "You can use the following APIs to place content into the slide layout:\n\n"
-    )
-    prompt += get_api_list_prompt(ADD_SHAPE_API_LIST)
-    prompt += get_api_list_prompt(CHOOSE_API_LIST)
+#     # Adding available APIs for content insertion and selection
+#     prompt += "### Available APIs for Content Placement:\n"
+#     prompt += (
+#         "You can use the following APIs to place content into the slide layout:\n\n"
+#     )
+#     prompt += get_api_list_prompt(ADD_SHAPE_API_LIST)
+#     prompt += get_api_list_prompt(CHOOSE_API_LIST)
 
-    prompt += f"{DIVIDER}\n\n"
+#     prompt += f"{DIVIDER}\n\n"
 
-    prompt += "### Content Placement Instructions:\n"
-    prompt += "- Analyze the slide layout and identify appropriate places for different parts of the content.\n"
-    prompt += "- Use the Selection APIs to choose where to place content and the Insertion APIs to add content.\n"
-    prompt += "- Ensure that the content is distributed logically across the slide.\n"
-    if image:
-        prompt += "- If there are images in the layout, ensure your content complements them rather than competing with them.\n"
-    prompt += (
-        "- Maintain readability and visual hierarchy in your placement decisions.\n"
-    )
-    prompt += "- If there's any content that doesn't fit naturally, suggest modifications to either the content or layout.\n"
-    prompt += "- Return a structured response indicating what content should go in which placeholder.\n\n"
+#     prompt += "### Content Placement Instructions:\n"
+#     prompt += "- Analyze the slide layout and identify appropriate places for different parts of the content.\n"
+#     prompt += "- Use the Selection APIs to choose where to place content and the Insertion APIs to add content.\n"
+#     prompt += "- Ensure that the content is distributed logically across the slide.\n"
+#     if image:
+#         prompt += "- If there are images in the layout, ensure your content complements them rather than competing with them.\n"
+#     prompt += (
+#         "- Maintain readability and visual hierarchy in your placement decisions.\n"
+#     )
+#     prompt += "- If there's any content that doesn't fit naturally, suggest modifications to either the content or layout.\n"
+#     prompt += "- Return a structured response indicating what content should go in which placeholder.\n\n"
 
-    prompt += "Answer: "
+#     prompt += "Answer: "
 
-    return prompt
+#     return prompt
 
 
 def build_feedback_prompt(slide_json: Dict[str, Any]) -> str:
