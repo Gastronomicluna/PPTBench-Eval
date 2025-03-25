@@ -193,7 +193,7 @@ def main():
                         {
                             "paragraph_index": 0,
                             "run_index": 0,
-                            "text": "(page 23; section 3119B.4)",
+                            "text": "Deep within the heart of the Whispering Forest, where sunlight danced through emerald leaves and the air hummed with secrets, there stood an ancient oak. Its gnarled roots twisted like serpents, and its branches reached skyward as if yearning to touch the stars.",
                             "font_name": "Times New Roman",
                             "font_size": 24.0,
                         }
