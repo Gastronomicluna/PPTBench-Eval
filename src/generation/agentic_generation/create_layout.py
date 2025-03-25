@@ -4,11 +4,10 @@ from pathlib import Path
 from typing import List, Literal
 
 from src.shared.llm import call_vision_model
-from src.shared.pptx_api.api_doc import API
 from src.shared.utils import str_to_list
 
 from .prompts import build_create_layout_prompt
-
+from src.shared.parse_answer import parse_api_calls
 
 def create_presentation(
     text_input: str,
@@ -86,12 +85,7 @@ def generate_api_list(
         if llm_answer is None:
             raise ValueError("Received empty response from vision model")
 
-        llm_answer_str = (
-            json.dumps(llm_answer) if isinstance(llm_answer, dict) else llm_answer
-        )
-        # print(llm_answer_str)
-        # Parse the API calls from the response
-        api_calls = str_to_list(llm_answer_str)
+        api_calls = parse_api_calls(llm_answer)
 
         if not api_calls:
             raise ValueError("No API calls generated from model response")
@@ -124,6 +118,7 @@ Deep within the heart of the Whispering Forest, where sunlight danced through em
         image_path=image_path,
         model_name=model_name,
         provider=provider,
+        json_mode=True,
     )
 
     print(api_list)
