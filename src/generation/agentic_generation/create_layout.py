@@ -4,10 +4,11 @@ from pathlib import Path
 from typing import List, Literal
 
 from src.shared.llm import call_vision_model
+from src.shared.parse_answer import parse_api_calls
 from src.shared.utils import str_to_list
 
 from .prompts import build_create_layout_prompt
-from src.shared.parse_answer import parse_api_calls
+
 
 def create_presentation(
     text_input: str,
