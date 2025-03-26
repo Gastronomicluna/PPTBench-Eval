@@ -78,6 +78,8 @@ def build_prompt(
     slide_json: Dict[str, Any],
     content_images: List[str] = [],
     template_dir: Path = DEFAULT_TEMPLATE_DIR,
+    height: int = None,
+    width: int = None,
 ) -> str:
     """
     Build the prompt for the given query.
@@ -87,8 +89,10 @@ def build_prompt(
         slide_json (Dict[str, Any]): The JSON data for the slide.
         task (Literal["note_to_slide", "multimedia_to_slide", "screenshot_to_slide", "text_to_slide"]):
             The task to build the prompt for.
-        content_images (List[str], optional): The list of content images. Defaults to
-        template_dir (Path, optional): The path to the template directory. Defaults to None.
+        content_images (List[str], optional): The list of content images. Defaults to [].
+        template_dir (Path, optional): The path to the template directory. Defaults to DEFAULT_TEMPLATE_DIR.
+        height (int, optional): The height of the slide. Defaults to None.
+        width (int, optional): The width of the slide. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -100,6 +104,8 @@ def build_prompt(
             notes=notes,
             content_images=content_images,
             template_dir=template_dir,
+            height=height,
+            width=width,
         )
     if task == "multimedia_to_slide":
         texts = get_texts_from_json_data(slide_json)
@@ -108,15 +114,25 @@ def build_prompt(
             content_images=content_images,
             texts=texts,
             template_dir=template_dir,
+            height=height,
+            width=width,
         )
     if task == "screenshot_to_slide":
         return build_prompt_for_screenshot_to_slide(
-            query=query, content_images=content_images, template_dir=template_dir
+            query=query, 
+            content_images=content_images, 
+            template_dir=template_dir,
+            height=height,
+            width=width,
         )
     if task == "text_to_slide":
         texts = get_texts_from_json_data(slide_json)
         return build_prompt_for_text_to_slide(
-            query=query, texts=texts, template_dir=template_dir
+            query=query, 
+            texts=texts, 
+            template_dir=template_dir,
+            height=height,
+            width=width,
         )
     raise ValueError(f"Invalid task: {task}")
 
@@ -125,6 +141,8 @@ def build_prompt_for_text_to_slide(
     query: str,
     texts: List[str],
     template_dir: Path = DEFAULT_TEMPLATE_DIR,
+    height: int = None,
+    width: int = None,
 ) -> str:
     """
     Build the prompt for the given query for the text_to_slide task.
@@ -133,6 +151,8 @@ def build_prompt_for_text_to_slide(
         query (str): The query to build the prompt for.
         texts (List[str]): The list of texts.
         template_dir (Path): The path to the template directory.
+        height (int, optional): The height of the slide. Defaults to None.
+        width (int, optional): The width of the slide. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -152,6 +172,8 @@ def build_prompt_for_text_to_slide(
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
+    if height is not None and width is not None:
+        prompt += f"Slide dimensions: Width={width}, Height={height}\n\n"
     prompt += "Texts:\n"
     for text in texts:
         prompt += f"{text}\n"
@@ -170,6 +192,8 @@ def build_prompt_for_screenshot_to_slide(
     query: str,
     content_images: List[str] = [],
     template_dir: Path = DEFAULT_TEMPLATE_DIR,
+    height: int = None,
+    width: int = None,
 ) -> str:
     """
     Build the prompt for the given query for the screenshot_to_slide task.
@@ -178,6 +202,8 @@ def build_prompt_for_screenshot_to_slide(
         query (str): The query to build the prompt for.
         content_images (List[str], optional): The list of content images. Defaults to [].
         template_dir (Path, optional): The path to the template directory. Defaults to None.
+        height (int, optional): The height of the slide. Defaults to None.
+        width (int, optional): The width of the slide. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -196,6 +222,8 @@ def build_prompt_for_screenshot_to_slide(
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
+    if height is not None and width is not None:
+        prompt += f"Slide dimensions: Width={width}, Height={height}\n\n"
     if content_images != []:
         prompt += "The first image is the screenshot you need to convert to a slide.\n"
         prompt += "The remaining images are materials you can use, and their paths are "
@@ -217,15 +245,19 @@ def build_prompt_for_multimedia_to_slide(
     content_images: List[str] = [],
     texts: List[str] = [],
     template_dir: Path = DEFAULT_TEMPLATE_DIR,
+    height: int = None,
+    width: int = None,
 ) -> str:
     """
     Build the prompt for the given query for the multimedia_to_slide task.
 
     Args:
         query (str): The query to build the prompt for.
-        slide_json (Dict[str, Any]): The JSON data for the slide.
         content_images (List[str], optional): The list of content images. Defaults to [].
+        texts (List[str], optional): The list of texts. Defaults to [].
         template_dir (Path, optional): The path to the template directory. Defaults to None.
+        height (int, optional): The height of the slide. Defaults to None.
+        width (int, optional): The width of the slide. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -244,6 +276,8 @@ def build_prompt_for_multimedia_to_slide(
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
+    if height is not None and width is not None:
+        prompt += f"Slide dimensions: Width={width}, Height={height}\n\n"
     if texts != []:
         prompt += "Texts:\n"
         for text in texts:
@@ -269,15 +303,19 @@ def build_prompt_for_note_to_slide(
     notes: str,
     content_images: List[str] = [],
     template_dir: Path = DEFAULT_TEMPLATE_DIR,
+    height: int = None,
+    width: int = None,
 ) -> str:
     """
     Build the prompt for the given query for the note_to_slide task.
 
     Args:
         query (str): The query to build the prompt for.
-        slide_json (Dict[str, Any]): The JSON data for the slide.
+        notes (str): The notes to include in the prompt.
         content_images (List[str], optional): The list of content images. Defaults to [].
         template_dir (Path, optional): The path to the template directory. Defaults to None.
+        height (int, optional): The height of the slide. Defaults to None.
+        width (int, optional): The width of the slide. Defaults to None.
 
     Returns:
         str: The prompt for the query.
@@ -296,6 +334,8 @@ def build_prompt_for_note_to_slide(
     prompt += "Examples:\n"
     prompt += f"{example_json_str}\n\n"
     prompt += f"{divider}\n"
+    if height is not None and width is not None:
+        prompt += f"Slide dimensions: Width={width}, Height={height}\n\n"
     prompt += "Notes:\n"
     prompt += f"{notes}\n\n"
     prompt += f"{divider}\n"
