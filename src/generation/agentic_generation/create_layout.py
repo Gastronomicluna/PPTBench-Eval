@@ -146,20 +146,19 @@ def generate_api_list(
 def main() -> None:
     text_input = """
 Deep within the heart of the Whispering Forest, where sunlight danced through emerald leaves and the air hummed with secrets, there stood an ancient oak. Its gnarled roots twisted like serpents, and its branches reached skyward as if yearning to touch the stars.    """
-    image_path = Path("datasets/w18.jpg")
+    image_path = Path("datasets/Picture1.jpg")
     model_name = "gpt-4o"
     provider = "api"
 
-    api_list = generate_api_list(
+    presentation_path = Path("datasets/Presentation1.pptx")
+
+    create_presentation(
         text_input=text_input,
         image_path=image_path,
         model_name=model_name,
+        presentation_path=presentation_path,
         provider=provider,
-        json_mode=True,
     )
-
-    print(api_list)
-
 
 if __name__ == "__main__":
     main()
