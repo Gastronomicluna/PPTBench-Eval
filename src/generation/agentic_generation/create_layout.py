@@ -15,6 +15,7 @@ def create_presentation(
     image_path: Path,
     model_name: str,
     presentation_path: Path,
+    output_path: Path,
     provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
     temperature: float = 0.5,
     max_tokens: int = 3200,
@@ -45,7 +46,7 @@ def create_presentation(
     """
     try:
         # Generate a list of API calls
-        api_list = generate_api_list(
+        api_calls = generate_api_calls(
             text_input=text_input,
             image_path=image_path,
             model_name=model_name,
@@ -57,8 +58,9 @@ def create_presentation(
 
         # Create the PowerPoint presentation
         generate_pptx(
-            api_list=api_list,
+            api_calls=api_calls,
             presentation_path=presentation_path,
+            output_path=output_path,
         )
 
     except Exception as e:
@@ -66,7 +68,7 @@ def create_presentation(
         raise
 
 
-def generate_api_list(
+def generate_api_calls(
     text_input: str,
     image_path: Path,
     model_name: str,
@@ -139,7 +141,7 @@ def generate_api_list(
     except json.JSONDecodeError as e:
         raise ValueError(f"Error parsing model response as JSON: {str(e)}")
     except Exception as e:
-        logging.error(f"Unexpected error in generate_api_list: {str(e)}")
+        logging.error(f"Unexpected error in generate_api_calls: {str(e)}")
         raise
 
 
@@ -151,13 +153,14 @@ Deep within the heart of the Whispering Forest, where sunlight danced through em
     provider = "api"
 
     presentation_path = Path("datasets/Presentation1.pptx")
-
+    output_path = Path("datasets/output.pptx")
     create_presentation(
         text_input=text_input,
         image_path=image_path,
         model_name=model_name,
         presentation_path=presentation_path,
         provider=provider,
+        output_path=output_path,
     )
 
 
