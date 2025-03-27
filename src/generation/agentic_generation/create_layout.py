@@ -169,6 +169,8 @@ Deep within the heart of the Whispering Forest, where sunlight danced through em
         presentation_path=presentation_path,
         provider=provider,
         output_path=output_path,
+        slide_height=6858000,
+        slide_width=12192000,
     )
 
 
