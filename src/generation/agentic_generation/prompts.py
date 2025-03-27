@@ -72,8 +72,12 @@ def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
     prompt += "Design Guidelines:\n"
     prompt += "- Organize content clearly and efficiently\n"
     if image:
-        prompt += "- The image provided is already the slide background, don't add it again\n"
-        prompt += "- Structure content to work well with the existing background image\n"
+        prompt += (
+            "- The image provided is already the slide background, don't add it again\n"
+        )
+        prompt += (
+            "- Structure content to work well with the existing background image\n"
+        )
     prompt += "- Use appropriate shapes, text, and other design elements\n"
     prompt += "- Emphasize key points and create a balanced flow\n"
     prompt += "- Ensure readability of all content\n"
