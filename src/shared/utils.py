@@ -9,11 +9,11 @@ from ast import literal_eval
 from functools import wraps
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, TypeVar, Union
-from pptx.util import Length
 
 import httpx
 import pandas as pd
 from pdf2image import convert_from_path
+from pptx.util import Length
 from thefuzz import fuzz
 
 from .pptx_api.api_doc import API, API_LIST
@@ -39,6 +39,8 @@ def get_api_list_prompt(
         "Do not attempt to use any other functions or operations.\n\n"
     )
     return prompt
+
+
 def unit_conversion(value: Length | None, unit: str) -> int | float:
     """
     Converts a Length object to a specified unit.

@@ -37,9 +37,7 @@ class NotesExtractor:
                 font = run.font
                 font_name = font.name if font.name else "Default"
                 # Extract font size in points without conversion
-                font_size = (
-                    font.size.pt if font.size else 12
-                )  # Default size 12pt
+                font_size = font.size.pt if font.size else 12  # Default size 12pt
                 font_details.append(
                     {
                         "paragraph_index": p_idx,

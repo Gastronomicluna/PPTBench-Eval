@@ -2,11 +2,7 @@
 
 import logging
 
-from pptx.enum.shapes import (
-    MSO_AUTO_SHAPE_TYPE,
-    MSO_SHAPE_TYPE,
-    PP_PLACEHOLDER_TYPE,
-)
+from pptx.enum.shapes import MSO_AUTO_SHAPE_TYPE, MSO_SHAPE_TYPE, PP_PLACEHOLDER_TYPE
 from pptx.shapes.autoshape import Shape as AutoShape
 from pptx.shapes.base import BaseShape
 from pptx.shapes.connector import Connector
@@ -133,9 +129,7 @@ class BaseAutoShapeExtractor(BaseShapeExtractor):
                 font = run.font
                 font_name = font.name if font.name else "Default"
                 # Extract font size in points without conversion
-                font_size = (
-                    font.size.pt if font.size else 12
-                )  # Default size 12pt
+                font_size = font.size.pt if font.size else 12  # Default size 12pt
                 font_details.append(
                     {
                         "paragraph_index": p_idx,
@@ -291,9 +285,7 @@ class MovieExtractor(BaseShapeExtractor):
 
 
 class GraphicFrameExtractor(BaseShapeExtractor):
-    def __init__(
-        self, shape: GraphicFrame, measurement_unit: str = "pt"
-    ) -> None:
+    def __init__(self, shape: GraphicFrame, measurement_unit: str = "pt") -> None:
         super().__init__(shape, measurement_unit)
 
     def extract_shape(self) -> dict:
@@ -309,9 +301,7 @@ class GraphicFrameExtractor(BaseShapeExtractor):
 
 
 class GroupShapeExtractor(BaseShapeExtractor):
-    def __init__(
-        self, shape: GroupShape, measurement_unit: str = "pt"
-    ) -> None:
+    def __init__(self, shape: GroupShape, measurement_unit: str = "pt") -> None:
         super().__init__(shape, measurement_unit)
 
     def extract_group_shapes(self) -> list:
@@ -327,9 +317,7 @@ class GroupShapeExtractor(BaseShapeExtractor):
         group_shape_data = []
 
         for nested_shape in self._shape.shapes:  # type: ignore[attr-defined]
-            extractor = shape_extractor_factory(
-                nested_shape, self._measurement_unit
-            )
+            extractor = shape_extractor_factory(nested_shape, self._measurement_unit)
             shape_data = extractor.extract_shape()
             group_shape_data.append(shape_data)
 

@@ -21,10 +21,10 @@ GENERATION_EXAMPLES = {
 
 
 def build_create_layout_prompt(
-    input_data: str, 
-    slide_width: int = 9144000, 
-    slide_height: int = 6858000, 
-    image: bool = True
+    input_data: str,
+    slide_width: int = 9144000,
+    slide_height: int = 6858000,
+    image: bool = True,
 ) -> str:
     """
     Build the prompt for creating a slide layout based on the provided content.
@@ -32,9 +32,9 @@ def build_create_layout_prompt(
     Args:
         input_data (str): The content of the slide that will guide the layout
             design.
-        slide_width (int, optional): Width of the slide in EMU units. 
+        slide_width (int, optional): Width of the slide in EMU units.
             Defaults to 9144000.
-        slide_height (int, optional): Height of the slide in EMU units. 
+        slide_height (int, optional): Height of the slide in EMU units.
             Defaults to 6858000.
         image (bool, optional): Whether to include instructions about using
             the provided image as background. Defaults to True.
@@ -50,9 +50,11 @@ def build_create_layout_prompt(
     prompt += "Your task is to design a layout based on the provided content.\n"
 
     # Slide dimensions information
-    prompt += f"Slide dimensions: width={slide_width}, height={slide_height} EMU units.\n"
+    prompt += (
+        f"Slide dimensions: width={slide_width}, height={slide_height} EMU units.\n"
+    )
     prompt += "Note: 914400 EMU = 1 inch, 36000 EMU = 1 point\n\n"
-    
+
     # API documentation section
     prompt += "Available APIs:\n"
     prompt += get_api_list_prompt(ADD_SHAPE_API_LIST)
@@ -273,11 +275,13 @@ def main():
     }
 
     input_data = get_texts_from_json_data(slide_json)
-    print(build_create_layout_prompt(
-        input_data,
-        slide_width=slide_json["slide_width"],
-        slide_height=slide_json["slide_height"]
-    ))
+    print(
+        build_create_layout_prompt(
+            input_data,
+            slide_width=slide_json["slide_width"],
+            slide_height=slide_json["slide_height"],
+        )
+    )
 
 
 if __name__ == "__main__":

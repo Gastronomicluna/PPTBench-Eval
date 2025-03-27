@@ -4,7 +4,6 @@ from pptx.presentation import Presentation
 from pptx.slide import Slide
 
 from ..utils import unit_conversion
-
 from .factories import shape_extractor_factory
 from .notes_extractor import NotesExtractor
 
@@ -126,9 +125,7 @@ class PowerPointShapeExtractor:
         """
         slides = []
         for slide in self._ppt.slides:
-            slide_extractor = SlideShapeExtractor(
-                slide, self._measurement_unit
-            )
+            slide_extractor = SlideShapeExtractor(slide, self._measurement_unit)
             slides.append(slide_extractor.extract_slide())
         return slides
 
