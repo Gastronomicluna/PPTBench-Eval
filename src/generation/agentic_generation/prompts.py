@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from src.shared.pptx_api.api_doc import (
     ADD_SHAPE_API_LIST,
