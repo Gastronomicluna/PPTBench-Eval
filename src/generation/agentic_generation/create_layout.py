@@ -6,10 +6,8 @@ from typing import List, Literal
 from src.shared.llm import call_vision_model
 from src.shared.parse_answer import parse_api_calls
 
-from .prompts import build_create_layout_prompt
 from ..generate_pptx import generate_pptx
-# from src.shared.utils import str_to_list
-
+from .prompts import build_create_layout_prompt
 
 
 def create_presentation(
@@ -143,7 +141,6 @@ def generate_api_list(
     except Exception as e:
         logging.error(f"Unexpected error in generate_api_list: {str(e)}")
         raise
-
 
 
 def main() -> None:
