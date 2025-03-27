@@ -28,6 +28,7 @@ python-pptx = "^1.0.2"
 pdf2image = "^1.17.0"
 kaggle = "^1.6.17"
 ipykernel = "^6.29.5"
+black = "^25.1.0"
 
 
 [[tool.poetry.source]]
@@ -36,7 +37,6 @@ url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
 priority = "primary"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.10.0"
 isort = "^5.13.2"
 
 [tool.black]
