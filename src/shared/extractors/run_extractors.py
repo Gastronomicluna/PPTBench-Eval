@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def run_extractors(pptx_path: str, measurement_unit: str = "pt") -> dict:
+def run_extractors(pptx_path: str, measurement_unit: str = "emu") -> dict:
     """Run extractors on the given PowerPoint file.
 
     Args:
@@ -38,40 +38,6 @@ def run_extractors(pptx_path: str, measurement_unit: str = "pt") -> dict:
 
 # Example usage
 if __name__ == "__main__":
-    import json
-    from pathlib import Path
-
-    # Directory containing PowerPoint files
-    input_dir = Path(
-        "/Users/tyrionhuu/projects/research_projects/PPTBench-Eval/layout_examples"
-    )
-
-    # Directory to save extraction results
-    output_dir = Path(
-        "/Users/tyrionhuu/projects/research_projects/PPTBench-Eval//extracted_data"
-    )
-    output_dir.mkdir(exist_ok=True)
-
-    # Get all PowerPoint files
-    pptx_files = list(input_dir.glob("*.pptx"))
-    logger.info(f"Found {len(pptx_files)} PowerPoint files to process")
-
-    # Process each file
-    for pptx_file in pptx_files:
-        logger.info(f"Processing {pptx_file.name}")
-
-        try:
-            # Extract data
-            extracted_data = run_extractors(str(pptx_file))
-
-            # Save as JSON
-            output_file = output_dir / f"{pptx_file.stem}.json"
-            with open(output_file, "w") as f:
-                json.dump(extracted_data, f, indent=2)
-
-            logger.info(f"Saved to {output_file}")
-
-        except Exception as e:
-            logger.error(f"Error processing {pptx_file.name}: {str(e)}")
-
-    logger.info("All files processed")
+    pptx_path = "datasets/output.pptx"
+    extracted_info = run_extractors(pptx_path)
+    print(extracted_info)
