@@ -7,7 +7,7 @@ from src.shared.llm import call_vision_model
 from src.shared.parse_answer import parse_api_calls
 
 from .prompts import build_create_layout_prompt
-
+from ..generate_pptx import generate_pptx
 # from src.shared.utils import str_to_list
 
 
@@ -22,7 +22,50 @@ def create_presentation(
     max_tokens: int = 3200,
     json_mode: bool = False,
 ) -> None:
-    pass
+    """Create a PowerPoint presentation based on text input and an image.
+
+    This function generates a list of API calls based on the text input and image,
+    and then creates a PowerPoint presentation using the API calls.
+
+    Args:
+        text_input: The textual input to guide presentation creation.
+        image_path: Path to the image file to be processed.
+        model_name: The name of the vision model to use.
+        presentation_path: Path to save the generated PowerPoint presentation.
+        provider: The provider of the vision model. Options are "api", "ollama",
+            "openai", or "anthropic". Defaults to "ollama".
+        temperature: Sampling temperature for the model. Defaults to 0.5.
+        max_tokens: Maximum number of tokens for the response. Defaults to 3200.
+        json_mode: Whether to use JSON mode for the model response.
+            Defaults to False.
+
+    Raises:
+        ValueError: If no API calls could be generated or the model response
+            is invalid.
+        FileNotFoundError: If the image file does not exist.
+        RuntimeError: If there's an issue with the model call.
+    """
+    try:
+        # Generate a list of API calls
+        api_list = generate_api_list(
+            text_input=text_input,
+            image_path=image_path,
+            model_name=model_name,
+            provider=provider,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            json_mode=json_mode,
+        )
+
+        # Create the PowerPoint presentation
+        generate_pptx(
+            api_list=api_list,
+            presentation_path=presentation_path,
+        )
+
+    except Exception as e:
+        logging.error(f"Unexpected error in create_presentation: {str(e)}")
+        raise
 
 
 def generate_api_list(
@@ -101,12 +144,6 @@ def generate_api_list(
         logging.error(f"Unexpected error in generate_api_list: {str(e)}")
         raise
 
-
-def run_api_list(
-    api_list: List[str],
-    presentation_path: Path,
-) -> None:
-    pass
 
 
 def main() -> None:
