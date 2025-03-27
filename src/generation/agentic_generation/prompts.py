@@ -55,10 +55,7 @@ def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
     prompt += "- Abide by JSON formatting rules\n"
 
     # Task-specific instructions
-    if image:
-        prompt += (
-            "- The layout should incorporate the provided image as the background\n"
-        )
+    # Removed the instruction about incorporating the provided image as background
     prompt += "- Structure the content in a visually appealing and organized way\n\n"
 
     # Examples section
@@ -75,7 +72,8 @@ def build_create_layout_prompt(input_data: str, image: bool = True) -> str:
     prompt += "Design Guidelines:\n"
     prompt += "- Organize content clearly and efficiently\n"
     if image:
-        prompt += "- Structure content around the background image to complement it\n"
+        prompt += "- The image provided is already the slide background, don't add it again\n"
+        prompt += "- Structure content to work well with the existing background image\n"
     prompt += "- Use appropriate shapes, text, and other design elements\n"
     prompt += "- Emphasize key points and create a balanced flow\n"
     prompt += "- Ensure readability of all content\n"
