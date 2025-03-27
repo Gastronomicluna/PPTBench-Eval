@@ -18,7 +18,7 @@ def create_presentation(
     provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
     temperature: float = 0.5,
     max_tokens: int = 3200,
-    json_mode: bool = False,
+    json_mode: bool = True,
 ) -> None:
     """Create a PowerPoint presentation based on text input and an image.
 
