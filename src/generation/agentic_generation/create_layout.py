@@ -55,7 +55,7 @@ def create_presentation(
             max_tokens=max_tokens,
             json_mode=json_mode,
         )
-
+        print(api_calls)
         # Create the PowerPoint presentation
         generate_pptx(
             api_calls=api_calls,
@@ -123,7 +123,7 @@ def generate_api_calls(
                 images=[image_path],
                 json_mode=json_mode,
             )
-            print(llm_answer)
+            # print(llm_answer)
         except Exception as e:
             raise RuntimeError(f"Error calling vision model: {str(e)}")
 
