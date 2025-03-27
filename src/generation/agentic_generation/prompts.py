@@ -22,7 +22,7 @@ GENERATION_EXAMPLES = {
 
 def build_create_layout_prompt(
     input_data: str,
-    slide_width: int = 12192000,
+    slide_width: int = 9144000,
     slide_height: int = 6858000,
     image: bool = True,
 ) -> str:

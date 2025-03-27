@@ -76,6 +76,8 @@ def generate_api_calls(
     temperature: float = 0.5,
     max_tokens: int = 3200,
     json_mode: bool = False,
+    slide_width: int = 9144000,
+    slide_height: int = 6858000,
 ) -> List[str]:
     """Generate a list of API calls based on text input and an image.
 
@@ -110,6 +112,8 @@ def generate_api_calls(
         # Create the prompt
         prompt = build_create_layout_prompt(
             input_data=text_input,
+            slide_height=slide_height,
+            slide_width=slide_width,
         )
 
         # Call the vision model
