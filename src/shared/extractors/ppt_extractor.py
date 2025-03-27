@@ -3,7 +3,7 @@
 from pptx.presentation import Presentation
 from pptx.slide import Slide
 
-from pptbench.utils import unit_conversion
+from ..utils import unit_conversion
 
 from .factories import shape_extractor_factory
 from .notes_extractor import NotesExtractor

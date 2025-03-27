@@ -14,7 +14,7 @@ from pptx.shapes.graphfrm import GraphicFrame
 from pptx.shapes.group import GroupShape
 from pptx.shapes.picture import Movie, Picture
 
-from pptbench.utils import unit_conversion
+from ..utils import unit_conversion
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

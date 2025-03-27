@@ -5,7 +5,7 @@ import os
 
 from pptx import Presentation
 
-from pptbench.extractors.ppt_extractor import PowerPointShapeExtractor
+from .ppt_extractor import PowerPointShapeExtractor
 
 # Configure logging to include DEBUG level
 logging.basicConfig(level=logging.INFO)

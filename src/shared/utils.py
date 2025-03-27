@@ -9,6 +9,7 @@ from ast import literal_eval
 from functools import wraps
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, TypeVar, Union
+from pptx.util import Length
 
 import httpx
 import pandas as pd
@@ -38,6 +39,33 @@ def get_api_list_prompt(
         "Do not attempt to use any other functions or operations.\n\n"
     )
     return prompt
+def unit_conversion(value: Length | None, unit: str) -> int | float:
+    """
+    Converts a Length object to a specified unit.
+
+    Args:
+        value (Length | None): The Length object to convert.
+        unit (str): The unit to convert to. Options are 'cm', 'inches', 'in', 'inch', 'pt', 'emu'.
+
+    Returns:
+        int | float: The converted value in the specified unit.
+
+    Raises:
+        ValueError: If the value is None or if the unit is invalid.
+    """
+    if value is None:
+        raise ValueError("Value cannot be None")
+
+    if unit == "cm":
+        return value.cm
+    elif unit == "inches" or unit == "in" or unit == "inch":
+        return value.inches
+    elif unit == "pt":
+        return value.pt
+    elif unit == "emu":
+        return value.emu
+    else:
+        raise ValueError(f"Invalid measurement unit: {unit}")
 
 
 class TimeoutException(Exception):
