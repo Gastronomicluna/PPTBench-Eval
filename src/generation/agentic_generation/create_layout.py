@@ -20,6 +20,8 @@ def create_presentation(
     temperature: float = 0.5,
     max_tokens: int = 3200,
     json_mode: bool = True,
+    slide_width: int = 9144000,
+    slide_height: int = 6858000,
 ) -> None:
     """Create a PowerPoint presentation based on text input and an image.
 
@@ -54,6 +56,8 @@ def create_presentation(
             temperature=temperature,
             max_tokens=max_tokens,
             json_mode=json_mode,
+            slide_width=slide_width,
+            slide_height=slide_height,
         )
         print(api_calls)
         # Create the PowerPoint presentation
