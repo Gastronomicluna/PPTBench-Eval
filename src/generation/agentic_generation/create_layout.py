@@ -59,7 +59,7 @@ def create_presentation(
         # Create the PowerPoint presentation
         generate_pptx(
             api_calls=api_calls,
-            presentation_path=presentation_path,
+            pptx_path=presentation_path,
             output_path=output_path,
         )
 
