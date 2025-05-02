@@ -3,7 +3,7 @@ import logging
 import os
 import time
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 import pandas as pd
 
@@ -20,7 +20,7 @@ def main(
     ollama_mode: bool = True,
     test_mode: bool = False,
     job_delay: float = 0.5,
-    sample_size: int = 2,
+    sample_size: Optional[int] = None,
     llm_generate: bool = True,
     generate_pptx: bool = True,
 ) -> None:
@@ -174,9 +174,8 @@ if __name__ == "__main__":
     main(
         max_workers=4,
         ollama_mode=False,
-        test_mode=True,
+        test_mode=False,
         job_delay=0.5,
-        sample_size=20,
         llm_generate=True,
         generate_pptx=True,  # Set to False to skip PPTX generation
     )
