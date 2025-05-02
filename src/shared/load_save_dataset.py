@@ -3,8 +3,8 @@ from typing import Literal, Optional
 
 import pandas as pd
 from huggingface_hub import HfApi
-from modelscope import MsDataset
-from modelscope.utils.constant import DownloadMode
+# from modelscope import MsDataset
+# from modelscope.utils.constant import DownloadMode
 
 from datasets import Dataset, load_dataset, load_from_disk
 
@@ -140,75 +140,75 @@ def load_save_huggingface_dataset_df(
     return None
 
 
-def load_save_modelscope_dataset(
-    dataset_name: str, dataset_path: Optional[str] = None, force_download: bool = False
-) -> Optional[Dataset]:
-    """
-    Load and save a ModelScope dataset to disk.
+# def load_save_modelscope_dataset(
+#     dataset_name: str, dataset_path: Optional[str] = None, force_download: bool = False
+# ) -> Optional[Dataset]:
+#     """
+#     Load and save a ModelScope dataset to disk.
 
-    Args:
-        dataset_name (str): The name of the dataset to load.
-        dataset_path (Optional[str]): The path to save the dataset to. If None,
-            dataset will be loaded using default cache directory.
-        force_download (bool): If True, download and replace existing dataset.
+#     Args:
+#         dataset_name (str): The name of the dataset to load.
+#         dataset_path (Optional[str]): The path to save the dataset to. If None,
+#             dataset will be loaded using default cache directory.
+#         force_download (bool): If True, download and replace existing dataset.
 
-    Returns:
-        Optional[Dataset]: The loaded dataset if successful, None otherwise.
-    """
-    try:
-        download_mode = (
-            DownloadMode.FORCE_REDOWNLOAD
-            if force_download
-            else DownloadMode.REUSE_DATASET_IF_EXISTS
-        )
-        logger.info(
-            f"Loading dataset {dataset_name} with download_mode={download_mode}"
-        )
-        dataset = MsDataset.load(
-            dataset_name,
-            subset_name="default",
-            download_mode=download_mode,
-            cache_dir=dataset_path if dataset_path else None,
-        )
-        logger.info("Successfully loaded dataset")
-        return dataset["train"]
-    except Exception as e:
-        logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
-        raise
+#     Returns:
+#         Optional[Dataset]: The loaded dataset if successful, None otherwise.
+#     """
+#     try:
+#         download_mode = (
+#             DownloadMode.FORCE_REDOWNLOAD
+#             if force_download
+#             else DownloadMode.REUSE_DATASET_IF_EXISTS
+#         )
+#         logger.info(
+#             f"Loading dataset {dataset_name} with download_mode={download_mode}"
+#         )
+#         dataset = MsDataset.load(
+#             dataset_name,
+#             subset_name="default",
+#             download_mode=download_mode,
+#             cache_dir=dataset_path if dataset_path else None,
+#         )
+#         logger.info("Successfully loaded dataset")
+#         return dataset["train"]
+#     except Exception as e:
+#         logger.error(f"Error loading dataset {dataset_name}: {str(e)}")
+#         raise
 
 
-def load_save_modelscope_dataset_df(
-    dataset_name: str,
-    dataset_path: Optional[str] = None,
-    force_download: bool = False,
-) -> Optional[pd.DataFrame]:
-    """
-    Load and save a ModelScope dataset to disk as a pandas DataFrame.
+# def load_save_modelscope_dataset_df(
+#     dataset_name: str,
+#     dataset_path: Optional[str] = None,
+#     force_download: bool = False,
+# ) -> Optional[pd.DataFrame]:
+#     """
+#     Load and save a ModelScope dataset to disk as a pandas DataFrame.
 
-    Args:
-        dataset_name (str): The name of the dataset to load.
-        dataset_path (Optional[str]): The path to save the dataset to. If None,
-            dataset will be loaded using default cache directory.
-        force_download (bool): If True, download and replace existing dataset.
+#     Args:
+#         dataset_name (str): The name of the dataset to load.
+#         dataset_path (Optional[str]): The path to save the dataset to. If None,
+#             dataset will be loaded using default cache directory.
+#         force_download (bool): If True, download and replace existing dataset.
 
-    Returns:
-        Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if successful,
-        None otherwise.
-    """
-    try:
-        dataset = load_save_modelscope_dataset(
-            dataset_name=dataset_name,
-            dataset_path=dataset_path,
-            force_download=force_download,
-        )
-        if dataset:
-            df = pd.DataFrame(dataset)
-            logger.info(f"Dataset converted to DataFrame with shape {df.shape}")
-            return df
-    except Exception as e:
-        logger.error(f"Error loading dataset: {str(e)}")
-        raise
-    return None
+#     Returns:
+#         Optional[pd.DataFrame]: The loaded dataset as a pandas DataFrame if successful,
+#         None otherwise.
+#     """
+#     try:
+#         dataset = load_save_modelscope_dataset(
+#             dataset_name=dataset_name,
+#             dataset_path=dataset_path,
+#             force_download=force_download,
+#         )
+#         if dataset:
+#             df = pd.DataFrame(dataset)
+#             logger.info(f"Dataset converted to DataFrame with shape {df.shape}")
+#             return df
+#     except Exception as e:
+#         logger.error(f"Error loading dataset: {str(e)}")
+#         raise
+#     return None
 
 
 def load_save_dataset_df(
@@ -236,12 +236,12 @@ def load_save_dataset_df(
             dataset_path=dataset_path,
             force_download=force_download,
         )
-    elif source == "modelscope":
-        return load_save_modelscope_dataset_df(
-            dataset_name=dataset_name,
-            dataset_path=dataset_path,
-            force_download=force_download,
-        )
+    # elif source == "modelscope":
+    #     return load_save_modelscope_dataset_df(
+    #         dataset_name=dataset_name,
+    #         dataset_path=dataset_path,
+    #         force_download=force_download,
+    #     )
     else:
         raise ValueError(f"Unsupported source: {source}")
 
