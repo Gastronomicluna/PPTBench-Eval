@@ -28,7 +28,7 @@ API_LLM_MODELS = [
     # ("api", "llama-3.2-90b-vision-instruct"),
     # ("ollama", "llama3.2-vision:11b"),
     # ("ollama", "llava:13b"),
-    ("ollama", "llama3.2-vision:90b"),
+    # ("ollama", "llama3.2-vision:90b"),
     # ("ollama", "llava:34b"),
     # ("ollama", "minicpm-v"),
 ]
