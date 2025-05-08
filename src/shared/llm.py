@@ -34,7 +34,7 @@ API_LLM_MODELS = [
 ]
 
 # API key and model directory configuration
-key = "sk-f1fCP1wFI4K1pQYJORkJF3K9tg1MINok28GAsCsSFIjvajjS"
+key = "sk-1PT7t5fUrKlWuv6vu7t2XY8LVYjDgB7hTzAzpF4piD7Ir6SV"
 
 if key.strip() == "":
     key = input("Please enter your API key: ")
