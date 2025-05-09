@@ -70,8 +70,23 @@ def evaluate_df(
 
 if __name__ == "__main__":
     # Example usage
-    image_path = "data/generation_results/gpt-4o-2024-11-20/png/ec08174b0e10decc19058921a5bce7ad/slide_1.png"
-    model_name = "gemini-2.0-flash"
-    provider = "api"
-    score = evaluate_single_image(image_path, model_name=model_name, provider=provider) 
-    print(f"Score for {score}")
+    # image_path = "data/generation_results/gpt-4o-2024-11-20/png/ec08174b0e10decc19058921a5bce7ad/slide_1.png"
+    # model_name = "gemini-2.0-flash"
+    # provider = "api"
+    # score = evaluate_single_image(image_path, model_name=model_name, provider=provider) 
+    # print(f"Score for {score}")
+    
+    from src.shared.load_save_dataset import load_save_dataset_df
+
+    dataset_name = "tyrionhuu/PPTBench-Generation"
+    dataset_path = "data/PPTBench-Generation"
+    csv_path = "data/" + "generation_results.csv"
+
+    df = load_save_dataset_df(
+        dataset_name=dataset_name,
+        dataset_path=dataset_path,
+        force_download=False,
+        source="huggingface",
+    )
+    
+    print(df.info())
