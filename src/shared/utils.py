@@ -390,7 +390,7 @@ def process_model(
         logging.error("Ollama not running. Please start the server. %s", e)
         return pd.DataFrame()
     except Exception as e:
-        logging.error(f"Error processing {model_name}: {str(e)}")
+        logging.error(f"Error processing {model_name}: {str(e)}", exc_info=True)
         return pd.DataFrame()  # Return empty DataFrame on error
 
 
