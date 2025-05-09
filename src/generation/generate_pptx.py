@@ -58,7 +58,7 @@ def generate_pptx_files_csv(
             logger.error("Failed to save the updated CSV file")
             return pd.DataFrame()
     except Exception as e:
-        logger.error(f"Error processing CSV file: {str(e)}")
+        logger.error(f"Error processing CSV file: {str(e)}", exc_info=True)
         return pd.DataFrame()
 
 
