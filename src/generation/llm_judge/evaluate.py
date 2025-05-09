@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Union
 import pandas as pd
 from src.shared.llm import call_vision_model
+from tqdm import tqdm
 
 from .prompts import PROMPT_TEMPLATE
 from .utils import extract_score
@@ -77,7 +78,7 @@ def evaluate_df(
     image_base_dir = Path(image_base_dir)
     scores = []
 
-    for idx, row in dataframe.iterrows():
+    for idx, row in tqdm(dataframe.iterrows(), total=len(dataframe), desc="Evaluating generation tasks"):
         image_hash = row["hash"]
         slide_number = row["slide_number"]
         slide_filename = f"slide_{slide_number}.png"
