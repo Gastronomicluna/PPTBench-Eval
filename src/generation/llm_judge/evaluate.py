@@ -140,6 +140,27 @@ def evaluate_df(
     return output_df
 
 
+def df_score_0_100(
+    df: pd.DataFrame, score_column: str = "score"
+) -> float:
+    """
+    Convert a DataFrame of 0-5 scores to a single float in the 0-100 range.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing the score column.
+        score_column (str): Name of the score column.
+
+    Returns:
+        float: The mean score mapped to 0-100.
+    """
+    valid_scores = df[score_column].dropna()
+    if valid_scores.empty:
+        return 0.0
+    mean_0_5 = valid_scores.mean()
+    score_0_100 = (mean_0_5 / 5) * 100
+    return score_0_100
+
+
 if __name__ == "__main__":
     # Example usage
     # image_path = "data/generation_results/gpt-4o-2024-11-20/png/ec08174b0e10decc19058921a5bce7ad/slide_1.png"
