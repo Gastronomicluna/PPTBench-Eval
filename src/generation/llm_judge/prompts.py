@@ -32,8 +32,7 @@ Your response must follow the format below:
 Note you must return the score in the format [[x]] where x is a integer from 0 to 5.
 Your response:
 """.format(
-    scoring_criteria=SCORING_CRITERIA,
-    response_format=RESPONSE_FORMAT
+    scoring_criteria=SCORING_CRITERIA, response_format=RESPONSE_FORMAT
 )
 if __name__ == "__main__":
     print(PROMPT_TEMPLATE)
