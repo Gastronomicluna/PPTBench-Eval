@@ -30,6 +30,7 @@ Your response must follow the format below:
 {response_format}
 
 Note you must return the score in the format [[x]] where x is a integer from 0 to 5.
+Your response:
 """.format(
     scoring_criteria=SCORING_CRITERIA,
     response_format=RESPONSE_FORMAT
