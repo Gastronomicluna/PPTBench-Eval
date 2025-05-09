@@ -37,7 +37,7 @@ def evaluate_single_image(
         temperature=temperature,
         max_tokens=max_tokens,
         prompt=PROMPT_TEMPLATE,
-        image=image_path,
+        images=image_path,
     )
 
     # Extract the score from the response
@@ -46,3 +46,11 @@ def evaluate_single_image(
         raise ValueError("Failed to extract a valid score from the response.")
 
     return score
+
+if __name__ == "__main__":
+    # Example usage
+    image_path = "data/generation_results/gpt-4o-2024-11-20/png/ec08174b0e10decc19058921a5bce7ad/slide_1.png"
+    model_name = "gemini-2.0-flash"
+    provider = "api"
+    score = evaluate_single_image(image_path, model_name=model_name, provider=provider) 
+    print(f"Score for {score}")
