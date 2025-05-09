@@ -63,12 +63,13 @@ def evaluate_single_image(
 
 def evaluate_df(
     dataframe: pd.DataFrame,
-    image_base_dir: Union[str, Path],
+    image_dir_model: str,
+    image_base_dir: Union[str, Path] = "data/generation_results",
     model_name: str = "gemini-2.0-flash",
     provider: str = "api",
     temperature: float = 0.0,
     max_tokens: int = 2048,
-    output_csv_path: Union[str, Path] = "data/generation_results/scores.csv",\
+    output_csv_base_dir: Union[str, Path] = "data/generation_results",
     overwrite: bool = False,
 ) -> pd.DataFrame:
     """
@@ -93,7 +94,7 @@ def evaluate_df(
     image_base_dir = Path(image_base_dir)
     scores = []
 
-    for idx, row in tqdm(
+    for _, row in tqdm(
         dataframe.iterrows(),
         total=len(dataframe),
         desc="Evaluating generation tasks"
@@ -101,7 +102,7 @@ def evaluate_df(
         image_hash = row["hash"]
         slide_number = row["slide_number"]
         slide_filename = f"slide_{slide_number}.png"
-        image_path = image_base_dir / image_hash / slide_filename
+        image_path = image_base_dir / image_dir_model / "png" / image_hash / slide_filename
         if not image_path.exists():
             logging.warning(f"Image not found: {image_path}. Assigning score 0.")
             score = 0
@@ -124,6 +125,7 @@ def evaluate_df(
     dataframe = dataframe.copy()
     dataframe["score"] = scores
     output_df = dataframe[["hash", "slide_number", "score"]]
+    output_csv_path = Path(output_csv_base_dir) / image_dir_model + "_scores.csv"
     output_csv_path = Path(output_csv_path)
     if output_csv_path.exists() and not overwrite:
         logging.error(
@@ -163,7 +165,7 @@ if __name__ == "__main__":
     model_name = "gemini-2.0-flash"
     provider = "api"
     temperature = 0.0
-    max_tokens = 2048
+    max_tokens = 8096
     output_csv_path = "data/generation_results/scores.csv"
     overwrite = True
     evaluate_df(
