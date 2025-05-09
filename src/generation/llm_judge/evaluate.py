@@ -3,6 +3,12 @@ from typing import Union
 import pandas as pd
 from src.shared.llm import call_vision_model
 from tqdm import tqdm
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
 
 from .prompts import PROMPT_TEMPLATE
 from .utils import extract_score
@@ -30,6 +36,9 @@ def evaluate_single_image(
     """
     # Ensure the image path is a string
     image_path = str(image_path)
+    logging.info(
+        f"Evaluating image: {image_path} with model: {model_name}, provider: {provider}"
+    )
 
     # Call the model with the image and prompt
     response = call_vision_model(
@@ -44,8 +53,12 @@ def evaluate_single_image(
     # Extract the score from the response
     score = extract_score(response)
     if score is None:
+        logging.error(
+            f"Failed to extract a valid score from the response for image: {image_path}"
+        )
         raise ValueError("Failed to extract a valid score from the response.")
 
+    logging.info(f"Score for {image_path}: {score}")
     return score
 
 def evaluate_df(
@@ -70,7 +83,9 @@ def evaluate_df(
     Returns:
         pd.DataFrame: DataFrame with the evaluation scores added.
     """
+    logging.info("Starting evaluation of DataFrame with %d rows.", len(dataframe))
     if "hash" not in dataframe.columns:
+        logging.error("The DataFrame must contain a 'hash' column for evaluation.")
         raise ValueError(
             "The DataFrame must contain a 'hash' column for evaluation."
         )
@@ -92,6 +107,9 @@ def evaluate_df(
                 max_tokens=max_tokens,
             )
         except Exception as e:
+            logging.error(
+                f"Error evaluating image {image_path}: {e}", exc_info=True
+            )
             score = None
         scores.append(score)
 
@@ -100,10 +118,14 @@ def evaluate_df(
     output_df = dataframe[["hash", "slide_number", "score"]]
     output_csv_path = Path(output_csv_path)
     if output_csv_path.exists() and not overwrite:
+        logging.error(
+            f"{output_csv_path} already exists. Use overwrite=True to overwrite."
+        )
         raise FileExistsError(
             f"{output_csv_path} already exists. Use overwrite=True to overwrite."
         )
     output_df.to_csv(output_csv_path, index=False)
+    logging.info(f"Saved evaluation results to {output_csv_path}")
     return output_df
 
 if __name__ == "__main__":
