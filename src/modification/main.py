@@ -137,7 +137,7 @@ def main(
                 else:
                     logging.error(f"Failed to process {model_name} after retries")
             except Exception as e:
-                logging.error(f"Error processing {model_name}: {str(e)}")
+                logging.error(f"Error processing {model_name}: {str(e)}", exc_info=True)
 
     print("Formatting answers...")
 
