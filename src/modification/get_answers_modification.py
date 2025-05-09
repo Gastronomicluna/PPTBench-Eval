@@ -100,9 +100,43 @@ def get_answer_single_modification(
             task = row["task"]
             description = row["description"]
             image_data = row["image"]
-            shape_to_modify = json.loads(row["shape_to_modify"])
-            json_data = json.loads(row["json_data"])
-            ground_truth = json.loads(row["ground_truth"])
+
+            # Robustly parse shape_to_modify
+            try:
+                shape_to_modify = json.loads(row["shape_to_modify"])
+            except json.JSONDecodeError as e:
+                logging.warning(
+                    f"Malformed JSON in shape_to_modify: {row['shape_to_modify']}. "
+                    "Attempting to fix single quotes."
+                )
+                try:
+                    shape_to_modify = json.loads(
+                        row["shape_to_modify"].replace("'", '"')
+                    )
+                except Exception as e2:
+                    logging.error(
+                        f"Failed to parse shape_to_modify after fix: {e2}. "
+                        "Using original string."
+                    )
+                    shape_to_modify = row["shape_to_modify"]
+
+            # Robustly parse json_data
+            try:
+                json_data = json.loads(row["json_data"])
+            except Exception as e:
+                logging.error(
+                    f"Failed to parse json_data: {row['json_data']}. Error: {e}"
+                )
+                json_data = row["json_data"]
+
+            # Robustly parse ground_truth
+            try:
+                ground_truth = json.loads(row["ground_truth"])
+            except Exception as e:
+                logging.error(
+                    f"Failed to parse ground_truth: {row['ground_truth']}. Error: {e}"
+                )
+                ground_truth = row["ground_truth"]
 
             image_bytes = get_image_bytes(image_data) if not pure_text else None
 
@@ -128,7 +162,6 @@ def get_answer_single_modification(
                 kwargs["images"] = image_bytes
 
             llm_answer = call_vision_model(**kwargs)
-            # llm_answer_str = llm_answer if not json_mode else json.dumps(llm_answer)
             llm_answer_str = (
                 json.dumps(llm_answer) if isinstance(llm_answer, dict) else llm_answer
             )
@@ -138,9 +171,21 @@ def get_answer_single_modification(
                 "file_hash": file_hash,
                 "subcategory": subcategory,
                 "task": task,
-                "shape_to_modify": json.dumps(shape_to_modify),
-                "json_data": json.dumps(json_data),
-                "ground_truth": json.dumps(ground_truth),
+                "shape_to_modify": (
+                    json.dumps(shape_to_modify)
+                    if not isinstance(shape_to_modify, str)
+                    else shape_to_modify
+                ),
+                "json_data": (
+                    json.dumps(json_data)
+                    if not isinstance(json_data, str)
+                    else json_data
+                ),
+                "ground_truth": (
+                    json.dumps(ground_truth)
+                    if not isinstance(ground_truth, str)
+                    else ground_truth
+                ),
                 "llm_answer": llm_answer_str,
                 "error": None,
             }
@@ -158,24 +203,46 @@ def get_answer_single_modification(
                 "file_hash": file_hash,
                 "subcategory": subcategory,
                 "task": task,
-                "shape_to_modify": json.dumps(shape_to_modify),
-                "json_data": json.dumps(json_data),
-                "ground_truth": json.dumps(ground_truth),
+                "shape_to_modify": (
+                    json.dumps(shape_to_modify)
+                    if not isinstance(shape_to_modify, str)
+                    else shape_to_modify
+                ),
+                "json_data": (
+                    json.dumps(json_data)
+                    if not isinstance(json_data, str)
+                    else json_data
+                ),
+                "ground_truth": (
+                    json.dumps(ground_truth)
+                    if not isinstance(ground_truth, str)
+                    else ground_truth
+                ),
                 "llm_answer": None,
                 "error": str(e),
             }
         except Exception as e:
             logging.warning(f"Error occurred: {str(e)}")
-            # logging.error(traceback.format_exc())
-
             return {
-                "hash": hash_value,
-                "file_hash": file_hash,
-                "subcategory": subcategory,
-                "task": task,
-                "shape_to_modify": json.dumps(shape_to_modify),
-                "json_data": json.dumps(json_data),
-                "ground_truth": json.dumps(ground_truth),
+                "hash": hash_value if "hash_value" in locals() else None,
+                "file_hash": file_hash if "file_hash" in locals() else None,
+                "subcategory": subcategory if "subcategory" in locals() else None,
+                "task": task if "task" in locals() else None,
+                "shape_to_modify": (
+                    json.dumps(shape_to_modify)
+                    if "shape_to_modify" in locals() and not isinstance(shape_to_modify, str)
+                    else shape_to_modify if "shape_to_modify" in locals() else None
+                ),
+                "json_data": (
+                    json.dumps(json_data)
+                    if "json_data" in locals() and not isinstance(json_data, str)
+                    else json_data if "json_data" in locals() else None
+                ),
+                "ground_truth": (
+                    json.dumps(ground_truth)
+                    if "ground_truth" in locals() and not isinstance(ground_truth, str)
+                    else ground_truth if "ground_truth" in locals() else None
+                ),
                 "llm_answer": None,
                 "error": str(e),
             }
