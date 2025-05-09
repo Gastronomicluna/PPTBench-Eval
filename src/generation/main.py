@@ -117,7 +117,7 @@ def main(
                         model_name=model_name,
                         provider=provider,
                         temperature=0.0,
-                        max_tokens=2048,
+                        max_tokens=8096,
                         json_mode=True,
                         timeout=60,
                         csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
@@ -173,7 +173,7 @@ def main(
 if __name__ == "__main__":
     main(
         max_workers=4,
-        ollama_mode=True,
+        ollama_mode=False,
         test_mode=False,
         job_delay=0.5,
         llm_generate=True,
