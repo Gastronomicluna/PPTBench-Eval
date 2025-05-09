@@ -230,7 +230,8 @@ def get_answer_single_modification(
                 "task": task if "task" in locals() else None,
                 "shape_to_modify": (
                     json.dumps(shape_to_modify)
-                    if "shape_to_modify" in locals() and not isinstance(shape_to_modify, str)
+                    if "shape_to_modify" in locals()
+                    and not isinstance(shape_to_modify, str)
                     else shape_to_modify if "shape_to_modify" in locals() else None
                 ),
                 "json_data": (
