@@ -80,7 +80,8 @@ def evaluate_df(
     for idx, row in dataframe.iterrows():
         image_hash = row["hash"]
         slide_number = row["slide_number"]
-        image_path = image_base_dir / image_hash / "slide_" + str(slide_number) + ".png"
+        slide_filename = f"slide_{slide_number}.png"
+        image_path = image_base_dir / image_hash / slide_filename
         try:
             score = evaluate_single_image(
                 image_path=image_path,
