@@ -93,24 +93,32 @@ def evaluate_df(
     image_base_dir = Path(image_base_dir)
     scores = []
 
-    for idx, row in tqdm(dataframe.iterrows(), total=len(dataframe), desc="Evaluating generation tasks"):
+    for idx, row in tqdm(
+        dataframe.iterrows(),
+        total=len(dataframe),
+        desc="Evaluating generation tasks"
+    ):
         image_hash = row["hash"]
         slide_number = row["slide_number"]
         slide_filename = f"slide_{slide_number}.png"
         image_path = image_base_dir / image_hash / slide_filename
-        try:
-            score = evaluate_single_image(
-                image_path=image_path,
-                model_name=model_name,
-                provider=provider,
-                temperature=temperature,
-                max_tokens=max_tokens,
-            )
-        except Exception as e:
-            logging.error(
-                f"Error evaluating image {image_path}: {e}", exc_info=True
-            )
-            score = None
+        if not image_path.exists():
+            logging.warning(f"Image not found: {image_path}. Assigning score 0.")
+            score = 0
+        else:
+            try:
+                score = evaluate_single_image(
+                    image_path=image_path,
+                    model_name=model_name,
+                    provider=provider,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+            except Exception as e:
+                logging.error(
+                    f"Error evaluating image {image_path}: {e}", exc_info=True
+                )
+                score = None
         scores.append(score)
 
     dataframe = dataframe.copy()
