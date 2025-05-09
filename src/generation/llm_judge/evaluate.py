@@ -1,10 +1,12 @@
 from pathlib import Path
 from typing import Union
-from .prompts import (
-    PROMPT_TEMPLATE,
-)
-from .utils import extract_score
+
 from src.shared.llm import call_vision_model
+
+from .prompts import PROMPT_TEMPLATE
+from .utils import extract_score
+
+
 def evaluate_single_image(
     image_path: Union[str, Path],
     model_name: str = "gemini-2.0-flash",
