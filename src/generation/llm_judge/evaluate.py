@@ -140,9 +140,7 @@ def evaluate_df(
     return output_df
 
 
-def df_score_0_100(
-    df: pd.DataFrame, score_column: str = "score"
-) -> float:
+def df_score_0_100(df: pd.DataFrame, score_column: str = "score") -> float:
     """
     Convert a DataFrame of 0-5 scores to a single float in the 0-100 range.
 
