@@ -1,9 +1,11 @@
+import logging
 from pathlib import Path
 from typing import Union
+
 import pandas as pd
-from src.shared.llm import call_vision_model
 from tqdm import tqdm
-import logging
+
+from src.shared.llm import call_vision_model
 
 logging.basicConfig(
     level=logging.INFO,
@@ -61,6 +63,7 @@ def evaluate_single_image(
     logging.info(f"Score for {image_path}: {score}")
     return score
 
+
 def evaluate_df(
     dataframe: pd.DataFrame,
     image_dir_model: str,
@@ -80,29 +83,27 @@ def evaluate_df(
         provider (str): Provider of the model (e.g., "openai", "huggingface").
         temperature (float, optional): Temperature for the model. Defaults to 0.0.
         max_tokens (int, optional): Maximum tokens for the model. Defaults to 2048.
-        
+
     Returns:
         pd.DataFrame: DataFrame with the evaluation scores added.
     """
     logging.info("Starting evaluation of DataFrame with %d rows.", len(dataframe))
     if "hash" not in dataframe.columns:
         logging.error("The DataFrame must contain a 'hash' column for evaluation.")
-        raise ValueError(
-            "The DataFrame must contain a 'hash' column for evaluation."
-        )
-        
+        raise ValueError("The DataFrame must contain a 'hash' column for evaluation.")
+
     image_base_dir = Path(image_base_dir)
     scores = []
 
     for _, row in tqdm(
-        dataframe.iterrows(),
-        total=len(dataframe),
-        desc="Evaluating generation tasks"
+        dataframe.iterrows(), total=len(dataframe), desc="Evaluating generation tasks"
     ):
         image_hash = row["hash"]
         slide_number = row["slide_number"]
         slide_filename = f"slide_{slide_number}.png"
-        image_path = image_base_dir / image_dir_model / "png" / image_hash / slide_filename
+        image_path = (
+            image_base_dir / image_dir_model / "png" / image_hash / slide_filename
+        )
         if not image_path.exists():
             logging.warning(f"Image not found: {image_path}. Assigning score 0.")
             score = 0
@@ -138,14 +139,15 @@ def evaluate_df(
     logging.info(f"Saved evaluation results to {output_csv_path}")
     return output_df
 
+
 if __name__ == "__main__":
     # Example usage
     # image_path = "data/generation_results/gpt-4o-2024-11-20/png/ec08174b0e10decc19058921a5bce7ad/slide_1.png"
     # model_name = "gemini-2.0-flash"
     # provider = "api"
-    # score = evaluate_single_image(image_path, model_name=model_name, provider=provider) 
+    # score = evaluate_single_image(image_path, model_name=model_name, provider=provider)
     # print(f"Score for {score}")
-    
+
     from src.shared.load_save_dataset import load_save_dataset_df
 
     dataset_name = "tyrionhuu/PPTBench-Generation"
@@ -158,9 +160,9 @@ if __name__ == "__main__":
         force_download=False,
         source="huggingface",
     )
-    
-    df=df.head(5)
-    
+
+    df = df.head(5)
+
     image_base_dir = Path("data/generation_results/gpt-4o-2024-11-20/png")
     model_name = "gemini-2.0-flash"
     provider = "api"
