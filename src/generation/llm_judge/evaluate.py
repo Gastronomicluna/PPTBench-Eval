@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Union
-
+import pandas as pd
 from src.shared.llm import call_vision_model
 
 from .prompts import PROMPT_TEMPLATE
@@ -46,6 +46,27 @@ def evaluate_single_image(
         raise ValueError("Failed to extract a valid score from the response.")
 
     return score
+
+def evaluate_df(
+    dataframe: pd.DataFrame,
+    model_name: str = "gemini-2.0-flash",
+    provider: str = "api",
+    temperature: float = 0.0,
+    max_tokens: int = 2048,
+) -> pd.DataFrame:
+    """
+    Evaluate a DataFrame of images using the specified model and provider.
+    Args:
+        dataframe (pd.DataFrame): DataFrame containing image paths.
+        model_name (str): Name of the model to use for evaluation.
+        provider (str): Provider of the model (e.g., "openai", "huggingface").
+        temperature (float, optional): Temperature for the model. Defaults to 0.0.
+        max_tokens (int, optional): Maximum tokens for the model. Defaults to 2048.
+        
+    Returns:
+        pd.DataFrame: DataFrame with the evaluation scores added.
+    """
+    pass
 
 if __name__ == "__main__":
     # Example usage
