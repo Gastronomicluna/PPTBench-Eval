@@ -49,10 +49,13 @@ def evaluate_single_image(
 
 def evaluate_df(
     dataframe: pd.DataFrame,
+    image_base_dir: Union[str, Path],
     model_name: str = "gemini-2.0-flash",
     provider: str = "api",
     temperature: float = 0.0,
     max_tokens: int = 2048,
+    output_csv_path: Union[str, Path] = "data/generation_results/scores.csv",\
+    overwrite: bool = False,
 ) -> pd.DataFrame:
     """
     Evaluate a DataFrame of images using the specified model and provider.
@@ -66,7 +69,40 @@ def evaluate_df(
     Returns:
         pd.DataFrame: DataFrame with the evaluation scores added.
     """
-    pass
+    if "hash" not in dataframe.columns:
+        raise ValueError(
+            "The DataFrame must contain a 'hash' column for evaluation."
+        )
+        
+    image_base_dir = Path(image_base_dir)
+    scores = []
+
+    for idx, row in dataframe.iterrows():
+        image_hash = row["hash"]
+        slide_number = row["slide_number"]
+        image_path = image_base_dir / image_hash / "slide_" + str(slide_number) + ".png"
+        try:
+            score = evaluate_single_image(
+                image_path=image_path,
+                model_name=model_name,
+                provider=provider,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+        except Exception as e:
+            score = None
+        scores.append(score)
+
+    dataframe = dataframe.copy()
+    dataframe["score"] = scores
+    output_df = dataframe[["hash", "slide_number", "score"]]
+    output_csv_path = Path(output_csv_path)
+    if output_csv_path.exists() and not overwrite:
+        raise FileExistsError(
+            f"{output_csv_path} already exists. Use overwrite=True to overwrite."
+        )
+    output_df.to_csv(output_csv_path, index=False)
+    return output_df
 
 if __name__ == "__main__":
     # Example usage
@@ -89,4 +125,21 @@ if __name__ == "__main__":
         source="huggingface",
     )
     
-    print(df.info())
+    df.sample(5)
+    image_base_dir = Path("data/generation_results/gpt-4o-2024-11-20/png")
+    model_name = "gemini-2.0-flash"
+    provider = "api"
+    temperature = 0.0
+    max_tokens = 2048
+    output_csv_path = "data/generation_results/scores.csv"
+    overwrite = True
+    evaluate_df(
+        dataframe=df,
+        image_base_dir=image_base_dir,
+        model_name=model_name,
+        provider=provider,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        output_csv_path=output_csv_path,
+        overwrite=overwrite,
+    )
