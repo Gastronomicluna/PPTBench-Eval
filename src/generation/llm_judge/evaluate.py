@@ -181,15 +181,16 @@ if __name__ == "__main__":
     )
 
     df = df.head(5)
-    image_base_dir = Path("data/generation_results/gpt-4o-2024-11-20/png")
+    image_base_dir = Path("data/generation_results")
     model_name = "gemini-2.0-flash"
     provider = "api"
     temperature = 0.0
     max_tokens = 8096
-    output_csv_base_dir = "data/generation_results/"
+    output_csv_base_dir = "data/generation_results"
     overwrite = True
     output = evaluate_df(
         dataframe=df,
+        image_dir_model="gpt-4o-2024-11-20",
         image_base_dir=image_base_dir,
         model_name=model_name,
         provider=provider,
