@@ -30,6 +30,7 @@ kaggle = "^1.6.17"
 ipykernel = "^6.29.5"
 black = "^25.1.0"
 aiohttp = "^3.11.15"
+tiktoken = "^0.9.0"
 
 
 [[tool.poetry.source]]
