@@ -181,21 +181,23 @@ if __name__ == "__main__":
     )
 
     df = df.head(5)
-
     image_base_dir = Path("data/generation_results/gpt-4o-2024-11-20/png")
     model_name = "gemini-2.0-flash"
     provider = "api"
     temperature = 0.0
     max_tokens = 8096
-    output_csv_path = "data/generation_results/scores.csv"
+    output_csv_base_dir = "data/generation_results/"
     overwrite = True
-    evaluate_df(
+    output = evaluate_df(
         dataframe=df,
         image_base_dir=image_base_dir,
         model_name=model_name,
         provider=provider,
         temperature=temperature,
         max_tokens=max_tokens,
-        output_csv_path=output_csv_path,
+        output_csv_base_dir=output_csv_base_dir,
         overwrite=overwrite,
     )
+    
+    score = df_score_0_100(output, score_column="score")
+    print(f"Score: {score}")
