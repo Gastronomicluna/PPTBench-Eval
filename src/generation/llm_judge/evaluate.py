@@ -65,7 +65,6 @@ def evaluate_single_image(
 
 
 def evaluate_df(
-    dataframe: pd.DataFrame,
     image_dir_model: str,
     image_base_dir: Union[str, Path] = "data/generation_results",
     model_name: str = "gemini-2.0-flash",
@@ -76,41 +75,52 @@ def evaluate_df(
     overwrite: bool = False,
 ) -> pd.DataFrame:
     """
-    Evaluate a DataFrame of images using the specified model and provider.
+    Evaluate all images in the specified directory without checking through dataframe.
+    
     Args:
-        dataframe (pd.DataFrame): DataFrame containing image paths.
+        dataframe (pd.DataFrame): DataFrame used only for output structure.
+        image_dir_model (str): Name of the model directory containing the images.
+        image_base_dir (Union[str, Path]): Base directory containing image folders.
+            Defaults to "data/generation_results".
         model_name (str): Name of the model to use for evaluation.
-        provider (str): Provider of the model (e.g., "openai", "huggingface").
-        temperature (float, optional): Temperature for the model. Defaults to 0.0.
-        max_tokens (int, optional): Maximum tokens for the model. Defaults to 2048.
-
+            Defaults to "gemini-2.0-flash".
+        provider (str): Provider of the model. Defaults to "api".
+        temperature (float): Temperature for the model. Defaults to 0.0.
+        max_tokens (int): Maximum tokens for the model. Defaults to 2048.
+        output_csv_base_dir (Union[str, Path]): Directory to save the CSV output.
+            Defaults to "data/generation_results".
+        overwrite (bool): Whether to overwrite existing output files.
+            Defaults to False.
+    
     Returns:
-        pd.DataFrame: DataFrame with the evaluation scores added.
+        pd.DataFrame: DataFrame with evaluation scores.
     """
-    logging.info("Starting evaluation of DataFrame with %d rows.", len(dataframe))
-    if "hash" not in dataframe.columns:
-        logging.error("The DataFrame must contain a 'hash' column for evaluation.")
-        raise ValueError("The DataFrame must contain a 'hash' column for evaluation.")
-
+    logging.info("Starting evaluation of images in directory")
+    
     image_base_dir = Path(image_base_dir)
-    scores = []
-
-    for _, row in tqdm(
-        dataframe.iterrows(), total=len(dataframe), desc="Evaluating generation tasks"
-    ):
-        image_hash = row["hash"]
-        slide_number = row["slide_number"]
-        slide_filename = f"slide_{slide_number}.png"
-        image_path = (
-            image_base_dir / image_dir_model / "png" / image_hash / slide_filename
-        )
-        if not image_path.exists():
-            logging.warning(f"Image not found: {image_path}. Assigning score 0.")
-            score = 0
-        else:
+    model_dir = image_base_dir / image_dir_model
+    png_dir = model_dir / "png"
+    
+    if not png_dir.exists():
+        logging.error(f"Image directory not found: {png_dir}")
+        raise FileNotFoundError(f"Image directory not found: {png_dir}")
+    
+    results = []
+    
+    # Walk through all hash directories
+    for hash_dir in tqdm(list(png_dir.iterdir()), desc="Evaluating image directories"):
+        if not hash_dir.is_dir():
+            continue
+            
+        image_hash = hash_dir.name
+        
+        # Process all slides in this hash directory
+        for slide_file in sorted(hash_dir.glob("slide_*.png")):
+            slide_number = int(slide_file.stem.split('_')[1])
+            
             try:
                 score = evaluate_single_image(
-                    image_path=image_path,
+                    image_path=slide_file,
                     model_name=model_name,
                     provider=provider,
                     temperature=temperature,
@@ -118,16 +128,21 @@ def evaluate_df(
                 )
             except Exception as e:
                 logging.error(
-                    f"Error evaluating image {image_path}: {e}", exc_info=True
+                    f"Error evaluating image {slide_file}: {e}", exc_info=True
                 )
                 score = None
-        scores.append(score)
-
-    dataframe = dataframe.copy()
-    dataframe["score"] = scores
-    output_df = dataframe[["hash", "slide_number", "score"]]
-    output_csv_path = Path(output_csv_base_dir) / image_dir_model + "_scores.csv"
-    output_csv_path = Path(output_csv_path)
+                
+            results.append({
+                "hash": image_hash,
+                "slide_number": slide_number,
+                "score": score
+            })
+    
+    # Create output dataframe from results
+    output_df = pd.DataFrame(results)
+    
+    # Save output to CSV
+    output_csv_path = Path(output_csv_base_dir) / f"{image_dir_model}_scores.csv"
     if output_csv_path.exists() and not overwrite:
         logging.error(
             f"{output_csv_path} already exists. Use overwrite=True to overwrite."
@@ -135,6 +150,10 @@ def evaluate_df(
         raise FileExistsError(
             f"{output_csv_path} already exists. Use overwrite=True to overwrite."
         )
+        
+    # Create output directory if it doesn't exist
+    output_csv_path.parent.mkdir(parents=True, exist_ok=True)
+    
     output_df.to_csv(output_csv_path, index=False)
     logging.info(f"Saved evaluation results to {output_csv_path}")
     return output_df
@@ -160,37 +179,15 @@ def df_score_0_100(df: pd.DataFrame, score_column: str = "score") -> float:
 
 
 if __name__ == "__main__":
-    # Example usage
-    # image_path = "data/generation_results/gpt-4o-2024-11-20/png/ec08174b0e10decc19058921a5bce7ad/slide_1.png"
-    # model_name = "gemini-2.0-flash"
-    # provider = "api"
-    # score = evaluate_single_image(image_path, model_name=model_name, provider=provider)
-    # print(f"Score for {score}")
-
-    from src.shared.load_save_dataset import load_save_dataset_df
-
-    dataset_name = "tyrionhuu/PPTBench-Generation"
-    dataset_path = "data/PPTBench-Generation"
-    csv_path = "data/" + "generation_results.csv"
-
-    df = load_save_dataset_df(
-        dataset_name=dataset_name,
-        dataset_path=dataset_path,
-        force_download=False,
-        source="huggingface",
-    )
-
-    df = df.head(5)
     image_base_dir = Path("data/generation_results")
     model_name = "gemini-2.0-flash"
     provider = "api"
     temperature = 0.0
     max_tokens = 8096
-    output_csv_base_dir = "data/generation_results"
+    output_csv_base_dir = "data/generation_results/scores"
     overwrite = True
     output = evaluate_df(
-        dataframe=df,
-        image_dir_model="gpt-4o-2024-11-20",
+        image_dir_model="llava:13b",
         image_base_dir=image_base_dir,
         model_name=model_name,
         provider=provider,
@@ -202,3 +199,8 @@ if __name__ == "__main__":
     
     score = df_score_0_100(output, score_column="score")
     print(f"Score: {score}")
+
+    # csv_path = Path("data/generation_results/scores/gemma3:12b_scores.csv")
+    # df = pd.read_csv(csv_path)
+    # score = df_score_0_100(df, score_column="score")
+    # print(f"Score: {score}")

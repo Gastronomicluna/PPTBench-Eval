@@ -155,7 +155,7 @@ def main(
                 generate_pptx_files_csv(
                     csv_path=csv_path,
                     output_dir=results_dir,
-                    overwrite=False,
+                    overwrite=True,
                 )
                 print(f"Generated PPTX files for {model_name}")
             else:
@@ -173,9 +173,9 @@ def main(
 if __name__ == "__main__":
     main(
         max_workers=4,
-        ollama_mode=False,
+        ollama_mode=True,
         test_mode=False,
         job_delay=0.5,
-        llm_generate=True,
-        generate_pptx=False,  # Set to False to skip PPTX generation
+        llm_generate=False,
+        generate_pptx=True,  # Set to False to skip PPTX generation
     )

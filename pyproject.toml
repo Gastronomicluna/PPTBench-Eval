@@ -31,6 +31,7 @@ ipykernel = "^6.29.5"
 black = "^25.1.0"
 aiohttp = "^3.11.15"
 tiktoken = "^0.9.0"
+seaborn = "^0.13.2"
 
 
 [[tool.poetry.source]]

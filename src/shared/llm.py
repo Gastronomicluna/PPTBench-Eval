@@ -12,6 +12,7 @@ from ollama import Options
 from openai import OpenAI
 from PIL import Image
 from requests.exceptions import ConnectionError
+import tiktoken
 
 from .utils import TimeoutException, with_timeout
 
@@ -20,7 +21,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 API_LLM_MODELS = [
     # ("api", "claude-3-7-sonnet-202502192-all"),
     ("api", "gpt-4o-2024-11-20"),
-    # ("api", "o3-mini"),
+    ("api", "gemma-3-12b-it"),
     # ("api", "o1-2024-12-17"),
     ("api", "gemini-2.0-flash"),
     # ("api", "gemini-2.0-flash-thinking-exp"),
@@ -31,6 +32,7 @@ API_LLM_MODELS = [
     # ("ollama", "llama3.2-vision:90b"),
     # ("ollama", "llava:34b"),
     # ("ollama", "minicpm-v"),
+    ("ollama", "gemma3:12b"),
 ]
 
 # API key and model directory configuration
@@ -54,6 +56,73 @@ def encode_image(image_path: str) -> str:
     return encoded
 
 
+def enforce_token_limit(
+    prompt: str,
+    images: Optional[List[Any]] = None,
+    model_name: str = "gpt-4o",
+    max_input_tokens: int = 8000
+) -> str:
+    """Enforces token limit by truncating the prompt if necessary.
+    
+    Args:
+        prompt (str): The text prompt to be processed.
+        images (Optional[List[Any]]): List of images. Each image counts as 
+            additional tokens.
+        model_name (str): Name of the model to consider for tokenization.
+        max_input_tokens (int): Maximum allowed input tokens.
+        
+    Returns:
+        str: Truncated prompt if necessary, original otherwise.
+    """
+    # Estimate image tokens - different models have different token usages for images
+    image_token_count = 0
+    if images:
+        # Approximate token counts for common model types
+        if "gpt-4" in model_name or "gpt-4o" in model_name:
+            # GPT-4V/GPT-4o uses ~85 tokens per 512x512 image
+            image_token_count = len(images) * 85
+        elif "gemini" in model_name:
+            # Gemini uses ~250 tokens per image
+            image_token_count = len(images) * 250
+        elif "llava" in model_name or "llama" in model_name:
+            # LLaVA/Llama uses ~256 tokens per image
+            image_token_count = len(images) * 256
+        else:
+            # Default conservative estimate for other models
+            image_token_count = len(images) * 300
+    
+    # Get appropriate tokenizer
+    try:
+        if "gpt-3.5" in model_name or "gpt-4" in model_name or "gpt-4o" in model_name:
+            encoding = tiktoken.encoding_for_model(model_name)
+        else:
+            # Default to cl100k_base for other models
+            encoding = tiktoken.get_encoding("cl100k_base")
+        
+        # Count tokens in the prompt
+        text_tokens = len(encoding.encode(prompt))
+        total_tokens = text_tokens + image_token_count
+        
+        # Check if truncation is needed
+        if total_tokens > max_input_tokens:
+            # Calculate how many text tokens we need to remove
+            excess_tokens = total_tokens - max_input_tokens
+            target_text_tokens = text_tokens - excess_tokens
+            
+            if target_text_tokens <= 0:
+                # Extreme case: images alone exceed the limit, truncate to minimal prompt
+                return "Describe the image(s)."
+            
+            # Truncate text to meet the token limit
+            truncated_text = encoding.decode(encoding.encode(prompt)[:target_text_tokens])
+            return truncated_text + "\n[Note: Prompt was truncated to fit token limits]"
+        
+        return prompt
+    except Exception as e:
+        logging.warning(f"Error in token counting, using original prompt: {str(e)}")
+        return prompt
+
+
 def call_vision_model(
     model_name: str = "llama3.2-vision:11b",
     provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
@@ -74,6 +143,8 @@ def call_vision_model(
     json_mode: bool = False,
     timeout: Optional[int] = 120,
     retry: int = 3,
+    enforce_tokens: bool = True,
+    max_input_tokens: int = 8000,
 ) -> Union[str, Dict[str, Any]]:
     """
     Routes the call to the appropriate vision model provider and returns the response.
@@ -91,6 +162,8 @@ def call_vision_model(
         json_mode (bool): Whether the response should be in JSON format.
         timeout (Optional[int], optional): Timeout for the HTTP request. Defaults to None.
         retry (int, optional): Number of retry attempts. Defaults to 3.
+        enforce_tokens (bool): Whether to enforce token limits. Defaults to True.
+        max_input_tokens (int): Maximum allowed input tokens. Defaults to 8000.
 
     Returns:
         str: The generated response from the vision model.
@@ -120,6 +193,15 @@ def call_vision_model(
                 raise ValueError(
                     f"Invalid image type: {type(img)}. Expected str, Path, bytes, or PIL Image."
                 )
+    
+    # Enforce token limits if requested
+    if enforce_tokens:
+        prompt = enforce_token_limit(
+            prompt=prompt, 
+            images=processed_images, 
+            model_name=model_name,
+            max_input_tokens=max_input_tokens
+        )
 
     if provider == "ollama":
         return generate_with_image_ollama(
