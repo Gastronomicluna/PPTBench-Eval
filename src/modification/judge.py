@@ -146,7 +146,7 @@ def judge_answer(
     """
     json_path = build_json_path(
         file_hash=file_hash,
-        json_dir=BASE_DIR / "dataset" / "json",  # Use absolute path with BASE_DIR
+        json_dir=BASE_DIR / "datasets" / "json",  # Use absolute path with BASE_DIR
     )
     if not json_path.exists():
         raise FileNotFoundError(f"JSON file not found at {json_path}")
