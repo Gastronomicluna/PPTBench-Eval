@@ -22,6 +22,7 @@ def main(
     test_mode: bool = False,
     non_magic_mode: bool = False,
     job_delay: float = 0.5,
+    pure_text: bool = False,  #只使用文本进行检测
 ) -> None:
     """Main entry point for the detection pipeline.
 
@@ -67,6 +68,10 @@ def main(
 
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "detection_results"
+    if pure_text:
+        csv_suffix = f"-puretext.csv"
+    else:
+        csv_suffix = f".csv"
 
     os.makedirs(results_dir, exist_ok=True)
 
@@ -122,8 +127,9 @@ def main(
                     max_tokens=2048,
                     json_mode=True,
                     timeout=60,
-                    csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
+                    csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
                     overwrite=False,
+                    pure_text=pure_text,
                 )
             ] = (provider, model_name)
             time.sleep(job_delay)  # Add delay between job submissions
@@ -139,7 +145,7 @@ def main(
 
     # Format answers with file existence check
     for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
+        csv_path = results_dir / f"{model_name.replace('.', '-')}{csv_suffix}"
         if csv_path.exists():
             results_df = format_answer_csv(
                 csv_path=csv_path,
@@ -154,7 +160,7 @@ def main(
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
         results_df = judge_answer_df(
-            csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
+            csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
             overwrite=True,
         )
         print(f"Judged {len(results_df)} entries")
@@ -164,7 +170,7 @@ def main(
     # Evaluate answers and combine results
     evaluation_results = []
     for _, model_name in models_to_run:
-        judged_df = pd.read_csv(results_dir / f"{model_name.replace('.', '-')}.csv")
+        judged_df = pd.read_csv(results_dir / f"{model_name.replace('.', '-')}{csv_suffix}")
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
         evaluation_results.append(eval_df)
@@ -179,6 +185,7 @@ if __name__ == "__main__":
     main(
         max_workers=4,
         ollama_mode=False,
-        test_mode=False,
+        test_mode=True,
         job_delay=0.5,
+        pure_text=False,
     )

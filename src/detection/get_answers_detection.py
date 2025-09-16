@@ -25,6 +25,7 @@ def get_answers_detection(
     csv_path: Optional[Path] = None,
     overwrite: bool = False,
     pure_text: bool = False,
+    # ablation_mode: str = "both", # 控制输入的信息来源,"text_only", "image_only", or "both"
 ) -> pd.DataFrame:
     """
     Get the answer to a single description and return the result.
@@ -59,6 +60,7 @@ def get_answers_detection(
         csv_path=csv_path,
         overwrite=overwrite,
         pure_text=pure_text,
+        # ablation_mode=ablation_mode,
     )
 
 
