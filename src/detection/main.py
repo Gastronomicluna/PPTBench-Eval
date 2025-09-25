@@ -23,6 +23,7 @@ def main(
     non_magic_mode: bool = False,
     job_delay: float = 0.5,
     pure_text: bool = False,  #只使用文本进行检测
+    pure_picture: bool = False,  #只使用图片进行检测
 ) -> None:
     """Main entry point for the detection pipeline.
 
@@ -70,6 +71,8 @@ def main(
     results_dir = project_root / "data" / "detection_results"
     if pure_text:
         csv_suffix = f"-puretext.csv"
+    elif pure_picture:
+        csv_suffix = f"-purepicture.csv"
     else:
         csv_suffix = f".csv"
 
@@ -130,6 +133,7 @@ def main(
                     csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
                     overwrite=False,
                     pure_text=pure_text,
+                    pure_picture=pure_picture,
                 )
             ] = (provider, model_name)
             time.sleep(job_delay)  # Add delay between job submissions
@@ -185,7 +189,8 @@ if __name__ == "__main__":
     main(
         max_workers=4,
         ollama_mode=False,
-        test_mode=True,
+        test_mode=False,
         job_delay=0.5,
         pure_text=False,
+        pure_picture=True,
     )

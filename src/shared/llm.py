@@ -29,18 +29,27 @@ API_LLM_MODELS = [
     # ("api", "llama-3.2-90b-vision-instruct"),
     # ("api", "Qwen/Qwen2.5-VL-72B-Instruct")
     # ("api", "Qwen/Qwen2.5-VL-7B-Instruct"),
-    ("api", "Qwen/Qwen2.5-VL-32B-Instruct"),
-    # ("ollama", "llama3.2-vision:11b"),
+    # ("api", "Qwen/Qwen2.5-VL-32B-Instruct"),
+    # ("api", "Qwen/Qwen3-8B"),
+    # ("api", "Pro/Qwen/Qwen2.5-VL-7B-Instruct"),
+    ("ollama", "llama3.2-vision:11b"),
     # ("ollama", "llava:13b"),
     # ("ollama", "llama3.2-vision:90b"),
     # ("ollama", "llava:34b"),
     # ("ollama", "minicpm-v"),
     # ("ollama", "gemma3:12b"),
+    # ("vllm","Qwen3-8B"),
+    # ("vllm","gemma-3-12b-it")
+    # ("vllm", "llama3.2-vision:11b"),
 ]
 
 # API key and model directory configuration
 # key = "sk-65IkFgAwuKnxZB8YpVA4hRTnyAro5uv9rxSqtDS2LEqZqnd7"
-key = "ms-4d45dcf5-cbdc-4d3d-8403-d7e88f43007d"
+# key = "ms-4d45dcf5-cbdc-4d3d-8403-d7e88f43007d" #魔搭
+# key = "sk-chvctyyrtoweuqenhlosjxaivbtgfatdzmdjycmnwdcnwrzo" #硅基流动
+# key = "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" #openrouter
+# key = "sk-kGQfdwzO1nfhxUZyPHqJCBfepl3Rp5SiSC5jF9knChP6Npo6" #mn api
+key = "sk-pVA22A5BLLx3huZgE7Cd6b28F834418fA2EaC79043Cf7a29" #aihubmix
 
 if key.strip() == "":
     key = input("Please enter your API key: ")
@@ -129,7 +138,7 @@ def enforce_token_limit(
 
 def call_vision_model(
     model_name: str = "llama3.2-vision:11b",
-    provider: Literal["api", "ollama", "openai", "anthropic"] = "ollama",
+    provider: Literal["api", "ollama", "openai", "anthropic","vllm"] = "ollama",
     prompt: str = "",
     temperature: float = 0.1,
     max_tokens: int = 3200,
@@ -233,6 +242,17 @@ def call_vision_model(
         raise NotImplementedError("OpenAI API integration is not implemented yet.")
     elif provider == "anthropic":
         raise NotImplementedError("Anthropic API integration is not implemented yet.")
+    elif provider == "vllm":
+        return generate_with_vllm_api(
+            model_name=model_name,
+            prompt=prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            images=processed_images,
+            json_mode=json_mode,
+            timeout=timeout,
+            retry=retry,
+        )
     else:
         raise ValueError(f"Unsupported provider: {provider}")
 
@@ -350,7 +370,11 @@ def generate_with_api(
             def _generate():
                 client = OpenAI(
                     # base_url="https://api2.aigcbest.top/v1",
-                    base_url="https://api-inference.modelscope.cn/v1/",
+                    # base_url="https://api-inference.modelscope.cn/v1/",
+                    # base_url="https://api.siliconflow.cn/v1",
+                    # base_url="https://openrouter.ai/api/v1",
+                    # base_url="https://cf.mnapi.com/v1",
+                    base_url="https://aihubmix.com/v1",
                     api_key=key,
                 )
                 messages = generate_api_messages(images=images, prompt=prompt)
@@ -390,6 +414,89 @@ def generate_with_api(
 
     # If we get here, all retries failed
     raise Exception(f"All {retry} attempts failed. Last error: {str(last_error)}")
+
+
+
+def generate_with_vllm_api(
+    model_name: str,
+    prompt: str,
+    temperature: float,
+    max_tokens: int,
+    images: Optional[List[str | bytes]] = None,
+    json_mode: bool = False,
+    timeout: int = 30,  # Default 30 seconds
+    retry: int = 3,
+) -> Union[str, Dict[str, Any]]:
+    """
+    Generates a response using the API with optional images.
+
+    Args:
+        model_name (str): The name of the model to use.
+        prompt (str): The text prompt for the model.
+        temperature (float): Sampling temperature for the model.
+        max_tokens (int): Maximum number of tokens in the response.
+        images (Optional[list[str | bytes]]): Paths to image files or image data.
+            If None, runs in text-only mode.
+        json_mode (bool): Whether the response should be in JSON format.
+        timeout (int): Maximum time to wait for the response.
+        retry (int): Number of retry attempts. Defaults to 3.
+
+    Returns:
+        str: The generated response from the API.
+    """
+    last_error = None
+    for attempt in range(retry):
+        try:
+
+            @with_timeout(timeout)
+            def _generate():
+                client = OpenAI(
+                    # base_url="https://api2.aigcbest.top/v1",
+                    # base_url="https://api-inference.modelscope.cn/v1/",
+                    # base_url="https://api.siliconflow.cn/v1",
+                    # base_url="https://openrouter.ai/api/v1",
+                    # base_url="https://cf.mnapi.com/v1",
+                    base_url="http://127.0.0.1:8000/v1",
+                    api_key=key,
+                )
+                messages = generate_api_messages(images=images, prompt=prompt)
+                response = client.chat.completions.create(
+                    model=model_name,
+                    messages=messages,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    response_format={"type": "json_object"} if json_mode else None,
+                    seed=42,
+                )
+                return response.choices[0].message.content
+
+            response_str = _generate()
+            if json_mode:
+                try:
+                    return json.loads(response_str)
+                except json.JSONDecodeError:
+                    return response_str
+            return response_str
+        except (TimeoutException, ConnectionError, Exception) as e:
+            last_error = e
+            if "EOF" in str(e) or isinstance(e, ConnectionError):
+                logging.warning(
+                    f"Attempt {attempt + 1}/{retry}: Connection error occurred: {str(e)}"
+                )
+                time.sleep(2 * (attempt + 1))  # Exponential backoff
+                continue
+
+            if attempt == retry - 1:  # Last attempt
+                if isinstance(e, TimeoutException):
+                    raise TimeoutError(f"Request timed out after {timeout} seconds")
+                logging.error(f"Error in generate_with_api: {str(e)}")
+                raise
+            logging.warning(f"Attempt {attempt + 1}/{retry} failed: {str(e)}")
+            time.sleep(1)
+
+    # If we get here, all retries failed
+    raise Exception(f"All {retry} attempts failed. Last error: {str(last_error)}")
+
 
 
 def generate_api_messages(

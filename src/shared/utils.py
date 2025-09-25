@@ -355,6 +355,7 @@ def process_model(
     csv_path: Union[str, Path],
     overwrite: bool = False,
     pure_text: bool = False,
+    pure_picture: bool = False,  #只使用图片进行检测
 ) -> pd.DataFrame:
     """Process a single model's answers.
 
@@ -385,6 +386,7 @@ def process_model(
             csv_path=csv_path,
             overwrite=overwrite,
             pure_text=pure_text,
+            pure_picture=pure_picture,
         )
         print(f"Processed {len(results_df)} entries")
         return results_df

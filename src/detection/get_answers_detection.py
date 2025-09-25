@@ -25,6 +25,7 @@ def get_answers_detection(
     csv_path: Optional[Path] = None,
     overwrite: bool = False,
     pure_text: bool = False,
+    pure_picture: bool = False,  #只使用图片进行检测
     # ablation_mode: str = "both", # 控制输入的信息来源,"text_only", "image_only", or "both"
 ) -> pd.DataFrame:
     """
@@ -60,6 +61,7 @@ def get_answers_detection(
         csv_path=csv_path,
         overwrite=overwrite,
         pure_text=pure_text,
+        pure_picture=pure_picture,
         # ablation_mode=ablation_mode,
     )
 
@@ -74,6 +76,7 @@ def get_answer_single_detection(
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
     pure_text: bool = False,
+    pure_picture: bool = False,  #只使用图片进行检测
 ) -> Dict[str, Any]:
     """
     Get the answer to a single description and return the result.
@@ -103,7 +106,7 @@ def get_answer_single_detection(
             task = row["task"]
             description = row["description"]
             image_data = row["image"]
-            json_data = json.loads(row["json_data"])
+            json_data = json.loads(row["json_data"]) if not pure_picture else None
             try:
                 ground_truth = json.loads(row["ground_truth"])
             except json.JSONDecodeError:

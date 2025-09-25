@@ -25,6 +25,7 @@ def get_answers_understanding(
     csv_path: Optional[Path] = None,
     overwrite: bool = False,
     pure_text: bool = False,
+    pure_picture: bool = False,  #只使用图片进行检测
 ) -> pd.DataFrame:
     """
     Get the answer to a single description and return the result.
@@ -59,6 +60,7 @@ def get_answers_understanding(
         csv_path=csv_path,
         overwrite=overwrite,
         pure_text=pure_text,
+        pure_picture=pure_picture,
     )
 
 
@@ -72,6 +74,7 @@ def get_answer_single_understanding(
     timeout: Optional[int] = None,
     retry: Optional[int] = None,
     pure_text: bool = False,
+    pure_picture: bool = False,  #只使用图片进行检测
 ) -> Dict[str, Any]:
     """
     Get the answer to a single description and return the result.
@@ -102,7 +105,7 @@ def get_answer_single_understanding(
             question = row["question"]
             options = row["options"]
             image_data = row["image"]
-            json_content = json.loads(row["json_content"])
+            json_content = json.loads(row["json_content"]) if not pure_picture else None
             # ground_truth = json.loads(row["ground_truth"])
             ground_truth = row["ground_truth"]
 
