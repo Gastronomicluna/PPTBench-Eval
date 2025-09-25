@@ -174,8 +174,8 @@ if __name__ == "__main__":
     main(
         max_workers=4,
         ollama_mode=False,
-        test_mode=True,
+        test_mode=False,
         job_delay=0.5,
-        llm_generate=True,
+        llm_generate=True, 
         generate_pptx=True,  # Set to False to skip PPTX generation
     )

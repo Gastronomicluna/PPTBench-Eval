@@ -15,6 +15,7 @@ import pandas as pd
 from pdf2image import convert_from_path
 from pptx.util import Length
 from thefuzz import fuzz
+import platform
 
 from .pptx_api.api_doc import API, API_LIST
 
@@ -168,6 +169,39 @@ def check_unoconv_installation() -> bool:
         return False
 
 
+def find_soffice() -> str:
+    """
+    尝试找到 LibreOffice 的 soffice 可执行文件路径
+    """
+    # 先查 PATH
+    soffice = shutil.which("soffice")
+    if soffice:
+        return soffice
+
+    system = platform.system()
+    possible_paths = []
+    if system == "Windows":
+        possible_paths = [
+            r"C:\Program Files\LibreOffice\program\soffice.exe",
+            r"D:\code\liberoffice\program\soffice.exe",
+        ]
+    elif system == "Darwin":  # macOS
+        possible_paths = [
+            "/Applications/LibreOffice.app/Contents/MacOS/soffice",
+        ]
+    else:  # Linux
+        possible_paths = [
+            "/usr/bin/soffice",
+            "/usr/local/bin/soffice",
+        ]
+
+    for path in possible_paths:
+        if os.path.exists(path):
+            return path
+
+    raise FileNotFoundError("未找到 LibreOffice (soffice)，请确认已安装并加入 PATH")
+
+
 def pptx_to_png(
     pptx_path: str,
     output_dir: str,
@@ -175,71 +209,131 @@ def pptx_to_png(
     remove_pdf: bool = True,
 ) -> None:
     """
-    Convert a PowerPoint file to PNG images.
+    将 PPTX 转换为 PNG 文件（逐页导出）
 
     Args:
-        pptx_path (str): The path to the PowerPoint file.
-        output_dir (str): The directory to save the PNG images.
-        dpi (int, optional): The DPI of the PNG images. Defaults to 300.
-        remove_pdf (bool, optional): Whether to remove the PDF file after conversion. Defaults to True.
-
-    Raises:
-        RuntimeError: If unoconv is not installed or accessible
-        subprocess.CalledProcessError: If conversion fails
+        pptx_path: PPTX 文件路径
+        output_dir: 输出 PNG 文件的目录
+        dpi: 输出分辨率
+        remove_pdf: 是否在转换后删除中间 PDF 文件
     """
     if not os.path.exists(pptx_path):
         raise FileNotFoundError(f"PPTX file does not exist: {pptx_path}")
 
-    if not check_unoconv_installation():
-        raise RuntimeError(
-            "unoconv is not installed or not accessible. "
-            "Please install it using: sudo apt-get install unoconv"
-        )
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
 
     # Create presentation-specific directory
     pptx_name = os.path.splitext(os.path.basename(pptx_path))[0]
     ppt_output_dir = os.path.join(output_dir, pptx_name)
     os.makedirs(ppt_output_dir, exist_ok=True)
 
-    # Convert PPTX -> PDF using unoconv
+    # Convert PPTX -> PDF using unoconv 
     base_name, _ = os.path.splitext(pptx_path)
     pdf_path = f"{base_name}.pdf"
 
     try:
-        print(f"Converting {pptx_path} to PDF...")
-        result = subprocess.run(
-            ["unoconv", "-f", "pdf", pptx_path],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        if result.stderr:
-            print(f"Warning during conversion: {result.stderr}")
-        print(f"Created PDF: {pdf_path}")
+        system = platform.system()
+        if system in ["Linux", "Darwin"] and shutil.which("unoconv"):
+            # Linux/macOS 优先使用 unoconv
+            cmd = ["unoconv", "-f", "pdf", pptx_path]
+        else:
+            # 其它情况使用 soffice
+            soffice = find_soffice()
+            cmd = [
+                soffice,
+                "--headless",
+                "--convert-to", "pdf",
+                "--outdir", os.path.dirname(pptx_path),
+                pptx_path,
+            ]
+
+        subprocess.run(cmd, check=True)
+
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to convert PPTX to PDF: {str(e)}")
+        raise RuntimeError(f"Failed to convert PPTX to PDF: {e}")
 
-    # 2. Convert PDF -> Images (one per PDF page) using pdf2image
-    # -----------------------------------------------------------
-    print(f"Converting PDF pages to images at {dpi} DPI...")
+    # PDF → PNG
     pages = convert_from_path(pdf_path, dpi=dpi)
-
     for i, page in enumerate(pages):
-        # Save each page as a PNG (you could choose 'JPEG' if preferred)
         output_filename = os.path.join(ppt_output_dir, f"slide_{i+1}.png")
         page.save(output_filename, "PNG")
-        print(f"Saved image: {output_filename}")
 
-    # 3. Optionally remove the intermediate PDF
-    # -----------------------------------------
     if remove_pdf and os.path.exists(pdf_path):
         os.remove(pdf_path)
-        print(f"Removed intermediate PDF: {pdf_path}")
 
-    print("Conversion complete!")
+
+# def pptx_to_png(
+#     pptx_path: str,
+#     output_dir: str,
+#     dpi: int = 300,
+#     remove_pdf: bool = True,
+# ) -> None:
+#     """
+#     Convert a PowerPoint file to PNG images.
+
+#     Args:
+#         pptx_path (str): The path to the PowerPoint file.
+#         output_dir (str): The directory to save the PNG images.
+#         dpi (int, optional): The DPI of the PNG images. Defaults to 300.
+#         remove_pdf (bool, optional): Whether to remove the PDF file after conversion. Defaults to True.
+
+#     Raises:
+#         RuntimeError: If unoconv is not installed or accessible
+#         subprocess.CalledProcessError: If conversion fails
+#     """
+#     if not os.path.exists(pptx_path):
+#         raise FileNotFoundError(f"PPTX file does not exist: {pptx_path}")
+
+#     if not check_unoconv_installation():
+#         raise RuntimeError(
+#             "unoconv is not installed or not accessible. "
+#             "Please install it using: sudo apt-get install unoconv"
+#         )
+
+#     if not os.path.exists(output_dir):
+#         os.makedirs(output_dir, exist_ok=True)
+
+#     # Create presentation-specific directory
+#     pptx_name = os.path.splitext(os.path.basename(pptx_path))[0]
+#     ppt_output_dir = os.path.join(output_dir, pptx_name)
+#     os.makedirs(ppt_output_dir, exist_ok=True)
+
+#     # Convert PPTX -> PDF using unoconv
+#     base_name, _ = os.path.splitext(pptx_path)
+#     pdf_path = f"{base_name}.pdf"
+
+#     try:
+#         print(f"Converting {pptx_path} to PDF...")
+#         result = subprocess.run(
+#             ["unoconv", "-f", "pdf", pptx_path],
+#             check=True,
+#             capture_output=True,
+#             text=True,
+#         )
+#         if result.stderr:
+#             print(f"Warning during conversion: {result.stderr}")
+#         print(f"Created PDF: {pdf_path}")
+#     except subprocess.CalledProcessError as e:
+#         raise RuntimeError(f"Failed to convert PPTX to PDF: {str(e)}")
+
+#     # 2. Convert PDF -> Images (one per PDF page) using pdf2image
+#     # -----------------------------------------------------------
+#     print(f"Converting PDF pages to images at {dpi} DPI...")
+#     pages = convert_from_path(pdf_path, dpi=dpi)
+
+#     for i, page in enumerate(pages):
+#         # Save each page as a PNG (you could choose 'JPEG' if preferred)
+#         output_filename = os.path.join(ppt_output_dir, f"slide_{i+1}.png")
+#         page.save(output_filename, "PNG")
+#         print(f"Saved image: {output_filename}")
+
+#     # 3. Optionally remove the intermediate PDF
+#     # -----------------------------------------
+#     if remove_pdf and os.path.exists(pdf_path):
+#         os.remove(pdf_path)
+#         print(f"Removed intermediate PDF: {pdf_path}")
+
+#     print("Conversion complete!")
 
 
 def get_image_bytes(image_data: dict | bytes) -> bytes:

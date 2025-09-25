@@ -23,11 +23,12 @@ API_LLM_MODELS = [
     # ("api", "gpt-4o-2024-11-20"),
     # ("api", "gemma-3-12b-it"),
     # ("api", "o1-2024-12-17"),
-    # ("api", "gemini-2.0-flash"),
+    ("api", "gemini-2.0-flash"),
     # ("api", "gemini-2.0-flash-thinking-exp"),
     # ("api", "qwen-vl-max-0809"),
     # ("api", "llama-3.2-90b-vision-instruct"),
-    ("api", "Qwen/Qwen2.5-VL-72B-Instruct")
+    # ("api", "Qwen/Qwen2.5-VL-72B-Instruct")
+    # ("api", "Qwen/Qwen2.5-VL-7B-Instruct")
     # ("ollama", "llama3.2-vision:11b"),
     # ("ollama", "llava:13b"),
     # ("ollama", "llama3.2-vision:90b"),
@@ -38,7 +39,8 @@ API_LLM_MODELS = [
 
 # API key and model directory configuration
 # key = "sk-65IkFgAwuKnxZB8YpVA4hRTnyAro5uv9rxSqtDS2LEqZqnd7"
-key = "ms-3491465b-27aa-4cb5-b96d-7297a92e0d18"
+# key = "ms-3491465b-27aa-4cb5-b96d-7297a92e0d18"
+key = "sk-pVA22A5BLLx3huZgE7Cd6b28F834418fA2EaC79043Cf7a29"
 
 if key.strip() == "":
     key = input("Please enter your API key: ")
@@ -348,7 +350,8 @@ def generate_with_api(
             def _generate():
                 client = OpenAI(
                     # base_url="https://api2.aigcbest.top/v1",
-                    base_url="https://api-inference.modelscope.cn/v1/",
+                    # base_url="https://api-inference.modelscope.cn/v1/",
+                    base_url="https://aihubmix.com/v1",
                     api_key=key,
                 )
                 messages = generate_api_messages(images=images, prompt=prompt)
