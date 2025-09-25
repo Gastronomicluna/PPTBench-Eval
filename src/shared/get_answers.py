@@ -21,6 +21,7 @@ def get_answers(
     csv_path: Optional[Path] = None,
     overwrite: bool = False,
     pure_text: bool = False,
+    pure_picture: bool = False,  #只使用图片进行检测
 ) -> pd.DataFrame:
     """
     Get answers to the questions in the DataFrame.
@@ -123,6 +124,7 @@ def get_answers(
                 timeout=timeout,
                 retry=retry,
                 pure_text=pure_text,
+                pure_picture=pure_picture,  #只使用图片进行检测
             )
             result_data.append(result)
 

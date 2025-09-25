@@ -22,6 +22,8 @@ def main(
     test_mode: bool = False,
     target_task: Optional[str] = "table understanding",
     job_delay: float = 0.5,
+    pure_text: bool = False,  #只使用文本进行检测
+    pure_picture: bool = False,  #只使用图片进行检测
 ) -> None:
     project_root = get_project_root()
 
@@ -50,6 +52,13 @@ def main(
     dataset_path = "data/PPTBench-Understanding"
     results_dir = project_root / "data" / "understanding_results"
     os.makedirs(results_dir, exist_ok=True)
+
+    if pure_text:
+        csv_suffix = f"-puretext.csv"
+    elif pure_picture:
+        csv_suffix = f"-purepicture.csv"
+    else:
+        csv_suffix = f".csv"
 
     print("Loading dataset...")
     df = load_save_dataset_df(
@@ -96,8 +105,10 @@ def main(
                     max_tokens=2048,
                     json_mode=True,
                     timeout=60,
-                    csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
+                    csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
                     overwrite=False,
+                    pure_text=pure_text,
+                    pure_picture=pure_picture,
                 )
             ] = (provider, model_name)
             time.sleep(job_delay)  # Add delay between job submissions
@@ -112,7 +123,7 @@ def main(
     print("Formatting answers...")
 
     for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
+        csv_path = results_dir / f"{model_name.replace('.', '-')}{csv_suffix}"
         if csv_path.exists():
             results_df = format_answer_csv(
                 csv_path=csv_path,
@@ -127,7 +138,7 @@ def main(
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
         results_df = judge_answer_df(
-            csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
+            csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
             overwrite=True,
         )
         print(f"Judged {len(results_df)} entries")
@@ -137,7 +148,7 @@ def main(
     # Evaluate answers and combine results
     evaluation_results = []
     for _, model_name in models_to_run:
-        judged_df = pd.read_csv(results_dir / f"{model_name.replace('.', '-')}.csv")
+        judged_df = pd.read_csv(results_dir / f"{model_name.replace('.', '-')}{csv_suffix}")
         eval_df = evaluate_answers(judged_df)
         eval_df["model"] = model_name
         evaluation_results.append(eval_df)
@@ -157,4 +168,6 @@ if __name__ == "__main__":
         test_mode=False,
         # target_task="table understanding",
         job_delay=0.5,
+        pure_text=True,
+        pure_picture=False,
     )
