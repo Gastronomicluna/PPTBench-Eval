@@ -79,6 +79,13 @@ def main(
 
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "generation_results"
+
+    if pure_text:
+        csv_suffix = f"-puretext.csv"
+    elif pure_picture:
+        csv_suffix = f"-purepicture.csv"
+    else:
+        csv_suffix = f".csv"
     # input_pptx_dir = Path("/Users/tyrionhuu/projects/research_projects/PPTBench/dataset")
     os.makedirs(results_dir, exist_ok=True)
 
@@ -187,7 +194,8 @@ if __name__ == "__main__":
         ollama_mode=False,
         test_mode=False,
         job_delay=0.5,
-        llm_generate=False,
-        generate_pptx=True,  # Set to False to skip PPTX generation
-        pure_text=False,
+        llm_generate=True,
+        generate_pptx=False,  # Set to False to skip PPTX generation
+        pure_text=False, # Set to True to indicate pure text generation
+        pure_picture=False,  #只使用图片进行检测
     )

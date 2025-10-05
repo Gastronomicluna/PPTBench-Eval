@@ -21,6 +21,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 API_LLM_MODELS = [
     # ("api", "claude-3-7-sonnet-202502192-all"),
     ("api", "gpt-4o-2024-11-20"),
+    ("api", "gpt-4o-2024-11-20"),
     # ("api", "gemma-3-12b-it"),
     # ("api", "o1-2024-12-17"),
     # ("api", "gemini-2.0-flash"),
@@ -52,7 +53,7 @@ key = "sk-65IkFgAwuKnxZB8YpVA4hRTnyAro5uv9rxSqtDS2LEqZqnd7" #钱多多
 # key = "sk-chvctyyrtoweuqenhlosjxaivbtgfatdzmdjycmnwdcnwrzo" #硅基流动
 # key = "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" #openrouter
 # key = "sk-kGQfdwzO1nfhxUZyPHqJCBfepl3Rp5SiSC5jF9knChP6Npo6" #mn api
-# key = "sk-pVA22A5BLLx3huZgE7Cd6b28F834418fA2EaC79043Cf7a29" #aihubmix
+# # key = "sk-pVA22A5BLLx3huZgE7Cd6b28F834418fA2EaC79043Cf7a29" #aihubmix
 
 if key.strip() == "":
     key = input("Please enter your API key: ")

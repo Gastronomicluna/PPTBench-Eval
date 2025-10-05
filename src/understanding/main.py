@@ -168,6 +168,6 @@ if __name__ == "__main__":
         test_mode=False,
         # target_task="table understanding",
         job_delay=0.5,
-        pure_text=True,
-        pure_picture=False,
+        pure_text=False,
+        pure_picture=True,
     )
