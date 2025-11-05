@@ -182,3 +182,73 @@ def generate_pptx(
     else:
         # print(f"api_calls is not a list: {api_calls}")
         return False
+
+
+def main() -> None:
+    output_path = Path("example.pptx")  # 生成的 PPT 文件路径
+    pptx_path = None  # 如果不基于已有 PPT 模板，可设为 None
+
+    # 2. API 调用列表
+    # api_calls = [
+    #     'create_slide(0)',
+    #     'choose_slide(256)',
+    #     'choose_shape(2)',
+    #     "insert_text('U.S. Department of Transportation\\\\nFederal Railroad Administration')",
+    #     'choose_shape(3)',
+    #     "insert_text('Overview of Proposed Rail Legislation\\\\n\\\\nKevin R. Blackwell\\\\nFRA Hazmat Division\\\\nWashington, DC')"
+    # ]
+
+    # api_calls = [
+    #     'create_slide(0)',
+    #     'choose_slide(256)',
+    #     'choose_shape(2)',
+    #     "insert_text('Under Dispenser Containment')",
+    #     # 'choose_slide(256)',
+    #     # 'choose_shape(3)',
+    #     # "insert_text('')",
+    #     'create_slide(8)',
+    #     'choose_slide(257)',
+    #     'choose_shape(2)',
+    #     "insert_text('Under Dispenser Containment')",
+    #     'choose_slide(257)',
+    #     'choose_shape(3)',
+    #     # "add_picture(1500000, 1000000, 6000000, 4000000, 'dataset/extracted_images/W7RJCH3WN2DEJH5CHAXOMF7RX3AFE3PW/17/image_17_2.jpg')"
+    #     "add_picture(141, 48, 432, 324, 'dataset/extracted_images/W7RJCH3WN2DEJH5CHAXOMF7RX3AFE3PW/17/image_17_2.jpg')"
+    # ]
+
+    # api_calls = [
+    # "create_slide(6)",
+    # "add_text_box(0, 0, 960, 150, ' ')",
+    # "set_font_color('0D253F')", 
+    # "set_font_size(1)",
+    
+    # "add_text_box(100, 350, 760, 100, 'PROJECT INITIATIVE: Q4 REVIEW')",
+    # "set_font_size(40)",
+    # "set_font('Lato')",
+    # "set_font_color('66ccff')",
+    
+    # "add_text_box(100, 480, 760, 500, 'A Professional Corporate Presentation')",
+    # "set_font_size(24)",
+    # "set_font('Lato')",
+    # "set_font_color('4A4A4A')",
+    # ]
+    
+    api_calls = [
+        "create_slide(6)",
+        "add_picture(0, 0, 720, 540, 'dataset/Picture1.jpg')",
+        "add_text_box(60, 220, 600, 100, 'Your Title Over the Image')",
+        "set_font_color('66ccff')",
+        "set_font_size(44)",
+        "set_font(font_name='Arial Black')",
+
+    ]
+
+    success = generate_pptx(api_calls=api_calls, pptx_path=pptx_path, output_path=output_path)
+
+    if success:
+        print(f"PPT successfully generated: {output_path}")
+    else:
+        print("Failed to generate PPT.")
+
+if __name__ == "__main__":
+    main()

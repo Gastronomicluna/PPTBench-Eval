@@ -23,6 +23,8 @@ def main(
     sample_size: Optional[int] = None,
     llm_generate: bool = True,
     generate_pptx: bool = True,
+    pure_text: bool = False,
+    pure_picture: bool = False,  #只使用图片进行检测
 ) -> None:
     """Main entry point for the detection pipeline.
 
@@ -67,6 +69,13 @@ def main(
 
     dataset_name = "tyrionhuu/PPTBench-Generation"
     dataset_path = "data/PPTBench-Generation"
+
+    if pure_text:
+        csv_suffix = f"-puretext.csv"
+    elif pure_picture:
+        csv_suffix = f"-purepicture.csv"
+    else:
+        csv_suffix = f".csv"
 
     # Update results_dir to be relative to project root
     results_dir = project_root / "data" / "generation_results"
@@ -120,7 +129,9 @@ def main(
                         max_tokens=8096,
                         json_mode=True,
                         timeout=60,
-                        csv_path=results_dir / f"{model_name.replace('.', '-')}.csv",
+                        csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
+                        pure_text=pure_text,
+                        pure_picture=pure_picture,
                     )
                 ] = (provider, model_name)
                 time.sleep(job_delay)
@@ -137,7 +148,7 @@ def main(
     print("Formatting answers...")
 
     for _, model_name in models_to_run:
-        csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
+        csv_path = results_dir / f"{model_name.replace('.', '-')}{csv_suffix}"
         if csv_path.exists():
             results_df = format_answer_csv(
                 csv_path=csv_path,
@@ -150,7 +161,7 @@ def main(
     print("Generating PPTX files...")
     if generate_pptx:
         for _, model_name in models_to_run:
-            csv_path = results_dir / f"{model_name.replace('.', '-')}.csv"
+            csv_path = results_dir / f"{model_name.replace('.', '-')}{csv_suffix}"
             if csv_path.exists():
                 generate_pptx_files_csv(
                     csv_path=csv_path,
@@ -178,4 +189,5 @@ if __name__ == "__main__":
         job_delay=0.5,
         llm_generate=True, 
         generate_pptx=True,  # Set to False to skip PPTX generation
+        pure_text=False,
     )

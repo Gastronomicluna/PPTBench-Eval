@@ -22,6 +22,13 @@ SLIDES: Optional[List[Slide]] = None
 SHAPES: Optional[List[BaseShape]] = None
 TEXT_DETAILS: Dict[str, Any] = {}
 
+SLIDE_WIDTH_JSON = 720.0
+SLIDE_HEIGHT_JSON = 540.0
+
+# PPT 标准尺寸 EMU
+SLIDE_WIDTH_EMU = 9144000  # 10 inches
+SLIDE_HEIGHT_EMU = 6858000  # 7.5 inches
+
 
 def api_executor_pptx(
     lines: List[str],
@@ -296,14 +303,21 @@ def add_text_box(
         height: The height of the text box.
         text: Optional text to add to the text box.
     """
+    global CURRENT_SHAPE
     try:
+                # 🔹 坐标映射：JSON 坐标 -> EMU
+        left_emu = left * SLIDE_WIDTH_EMU / SLIDE_WIDTH_JSON
+        top_emu = top * SLIDE_HEIGHT_EMU / SLIDE_HEIGHT_JSON
+        width_emu = width * SLIDE_WIDTH_EMU / SLIDE_WIDTH_JSON
+        height_emu = height * SLIDE_HEIGHT_EMU / SLIDE_HEIGHT_JSON
         text_box: BaseShape = CURRENT_SLIDE.shapes.add_textbox(
-            Length(left),
-            Length(top),
-            Length(width),
-            Length(height),
+            Length(left_emu),
+            Length(top_emu),
+            Length(width_emu),
+            Length(height_emu),
         )
         text_box.text = text
+        CURRENT_SHAPE = text_box
         set_text_details(text_box)
         return None
     except Exception as e:
@@ -315,7 +329,7 @@ def add_picture(
     top: int,
     width: int,
     height: int,
-    image_file: Optional[str] = None,
+    image_path: Optional[str] = None,
 ) -> Optional[str]:
     """Add a picture to a slide.
 
@@ -327,16 +341,28 @@ def add_picture(
         image_file: The path to the image file to add.
     """
     global CURRENT_SLIDE, CURRENT_SHAPE
+    
     try:
-        img_path = os.path.abspath(image_file)
+        img_file = os.path.abspath(image_path)
+        # print("DEBUG: CURRENT_SLIDE =", CURRENT_SLIDE)
+
+        if not os.path.exists(img_file):
+            return f"Failed to add picture: image file not found at '{img_file}'."
+
+        # 🔹 坐标映射：JSON 坐标 -> EMU
+        left_emu = left * SLIDE_WIDTH_EMU / SLIDE_WIDTH_JSON
+        top_emu = top * SLIDE_HEIGHT_EMU / SLIDE_HEIGHT_JSON
+        width_emu = width * SLIDE_WIDTH_EMU / SLIDE_WIDTH_JSON
+        height_emu = height * SLIDE_HEIGHT_EMU / SLIDE_HEIGHT_JSON
         picture: Picture = CURRENT_SLIDE.shapes.add_picture(
-            img_path,
-            Length(left),
-            Length(top),
-            Length(width),
-            Length(height),
+            img_file,
+            Length(left_emu),
+            Length(top_emu),
+            Length(width_emu),
+            Length(height_emu),
         )
         CURRENT_SHAPE = picture
+        # print(f"Added picture at: left={left}, top={top}, width={width}, height={height}")
         return None
     except Exception as e:
         return f"Failed to add picture to slide: {str(e)}"

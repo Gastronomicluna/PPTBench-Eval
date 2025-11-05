@@ -32,25 +32,27 @@ API_LLM_MODELS = [
     # ("api", "Qwen/Qwen2.5-VL-32B-Instruct"),
     # ("api", "Qwen/Qwen3-8B"),
     # ("api", "Pro/Qwen/Qwen2.5-VL-7B-Instruct"),
-    ("ollama", "llama3.2-vision:11b"),
+    # ("ollama", "llama3-2-vision-11b"),
     # ("ollama", "llava:13b"),
     # ("ollama", "llama3.2-vision:90b"),
-    # ("ollama", "llava:34b"),
+    # ("ollama", "llava-34b"),
+    # ("ollama", "llava-7b")
     # ("ollama", "minicpm-v"),
     # ("ollama", "gemma3:12b"),
+    # ("ollama", "gemma3-12b"),
     # ("vllm","Qwen3-8B"),
     # ("vllm","gemma-3-12b-it")
     # ("vllm", "llama3.2-vision:11b"),
 ]
 
 # API key and model directory configuration
-# key = "sk-65IkFgAwuKnxZB8YpVA4hRTnyAro5uv9rxSqtDS2LEqZqnd7"
+key = "sk-65IkFgAwuKnxZB8YpVA4hRTnyAro5uv9rxSqtDS2LEqZqnd7" #钱多多
 # key = "ms-3491465b-27aa-4cb5-b96d-7297a92e0d18"
 # key = "ms-4d45dcf5-cbdc-4d3d-8403-d7e88f43007d" #魔搭
 # key = "sk-chvctyyrtoweuqenhlosjxaivbtgfatdzmdjycmnwdcnwrzo" #硅基流动
 # key = "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" #openrouter
 # key = "sk-kGQfdwzO1nfhxUZyPHqJCBfepl3Rp5SiSC5jF9knChP6Npo6" #mn api
-key = "sk-pVA22A5BLLx3huZgE7Cd6b28F834418fA2EaC79043Cf7a29" #aihubmix
+# key = "sk-pVA22A5BLLx3huZgE7Cd6b28F834418fA2EaC79043Cf7a29" #aihubmix
 
 if key.strip() == "":
     key = input("Please enter your API key: ")
@@ -370,12 +372,12 @@ def generate_with_api(
             @with_timeout(timeout)
             def _generate():
                 client = OpenAI(
-                    # base_url="https://api2.aigcbest.top/v1",
+                    base_url="https://api2.aigcbest.top/v1",
                     # base_url="https://api-inference.modelscope.cn/v1/",
                     # base_url="https://api.siliconflow.cn/v1",
                     # base_url="https://openrouter.ai/api/v1",
                     # base_url="https://cf.mnapi.com/v1",
-                    base_url="https://aihubmix.com/v1",
+                    # base_url="https://aihubmix.com/v1",
                     api_key=key,
                 )
                 messages = generate_api_messages(images=images, prompt=prompt)
@@ -452,12 +454,12 @@ def generate_with_vllm_api(
             @with_timeout(timeout)
             def _generate():
                 client = OpenAI(
-                    # base_url="https://api2.aigcbest.top/v1",
+                    base_url="https://api2.aigcbest.top/v1",
                     # base_url="https://api-inference.modelscope.cn/v1/",
                     # base_url="https://api.siliconflow.cn/v1",
                     # base_url="https://openrouter.ai/api/v1",
                     # base_url="https://cf.mnapi.com/v1",
-                    base_url="http://127.0.0.1:8000/v1",
+                    # base_url="http://127.0.0.1:8000/v1",
                     api_key=key,
                 )
                 messages = generate_api_messages(images=images, prompt=prompt)
