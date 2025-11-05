@@ -100,6 +100,32 @@ def format_style_detection_answer(
     return answer
 
 
+# def format_layout_detection_answer(
+#     answer: Union[str, Dict[str, Any]],
+# ) -> str:
+#     """
+#     Format the detected layout for layout detection tasks.
+
+#     Args:
+#         answer (Union[str, Dict[str, Any]]): The detected layout.
+
+#     Returns:
+#         Dict[str, int]: The formatted answer.
+#     """
+#     try:
+#         if isinstance(answer, str):
+#             json_answer = parse_json_answer(answer)
+#         else:
+#             json_answer = answer
+#         answer = json_answer["answer"]
+#     except Exception as e:
+#         raise Exception(f"Error formatting style detection answer: {e}")
+    
+#     json_str = json.dumps(answer, ensure_ascii=False)
+#     # print(json_str)
+
+#     return json_str
+
 def format_layout_detection_answer(
     answer: Union[str, Dict[str, Any]],
 ) -> str:
@@ -120,3 +146,8 @@ def format_layout_detection_answer(
     except Exception as e:
         raise Exception(f"Error formatting layout detection answer: {e}")
     return json.dumps(json_answer)
+
+
+if __name__ == "__main__":
+    ans={"reasoning": "The slide contains only one shape, a text box with the title \"Medical Office Processes\". Therefore, this is the most dominant element on the slide.", "answer": {"left": "1981080", "top": "2286000", "width": "5181840", "height": "1312920"}}
+    print(format_answer(ans, "layout detection"))

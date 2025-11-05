@@ -102,7 +102,7 @@ def main(
                     model_name=model_name,
                     provider=provider,
                     temperature=0.0,
-                    max_tokens=2048,
+                    max_tokens=8196,
                     json_mode=True,
                     timeout=60,
                     csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
@@ -169,5 +169,5 @@ if __name__ == "__main__":
         # target_task="table understanding",
         job_delay=0.5,
         pure_text=False,
-        pure_picture=True,
+        pure_picture=False,
     )

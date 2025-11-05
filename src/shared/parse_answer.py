@@ -96,6 +96,7 @@ def main():
         '{"functions": ["create_slide()", "add_text_box(50000, 50000, 8000000, 1000000, \'Text\')"]}',
         '["create_slide()", "add_text_box(50000, 50000, 8000000, 1000000, \'Text\')"]',
         '{"function1": "create_slide()", "function2": "add_text_box(50000, 50000, 8000000, 1000000, \'Text\')"}',
+        '{"reasoning": "Some reasoning here.", "functions": ["create_slide()", "add_text_box(50000, 50000, 8000000, 1000000, \'Text\')"]}',
     ]
 
     for i, test_case in enumerate(test_cases):
