@@ -161,6 +161,22 @@ API_LIST = [
         notes="The slide must be selected before calling this function, and it does not require a shape to be selected.",
         example="set_notes_font('Arial')",
     ),
+    API(
+        name="set_text_align",
+        parameters="align_style: str",
+        description="Set the horizontal alignment of the text in the selected shape.",
+        parameters_description="It takes one parameter 'align_style', which must be a string specifying the alignment: 'LEFT', 'CENTER', 'RIGHT', or 'JUSTIFY'.",
+        notes="The shape must be selected *before* calling this function (using `choose_shape`). This alignment is applied to all paragraphs within the currently selected shape, and *only* affects that shape.",
+        example="set_text_align('CENTER')",
+    ),
+    API(
+        name="set_word_wrap",
+        parameters="wrap: bool = True",
+        description="Enables or disables automatic word wrapping for the text within the currently selected shape.",
+        parameters_description="It takes one optional boolean parameter 'wrap'. Set to True to enable word wrapping (this is the default), or False to disable it.",
+        notes="A shape that can contain text (like a textbox or an autoshape) must be selected before calling this function.",
+        example="set_word_wrap(True)",
+    ),
 ]
 
 ADD_SHAPE_API_LIST = [

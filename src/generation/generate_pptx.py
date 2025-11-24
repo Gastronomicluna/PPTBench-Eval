@@ -233,16 +233,102 @@ def main() -> None:
     # "set_font_color('4A4A4A')",
     # ]
     
+
+    # #title页的函数调用模板
+    # api_calls = [
+    #     "create_slide(6)",
+    #     "add_picture(0, 0, 720, 540, 'dataset/A modern, geometric design featuring a central rounded frame bordered by blocks of navy, pastel pink, and light blue.jpg')", # Background Image
+    #     "add_text_box(60, 160, 600, 100, 'Science, Technology, Engineering\\nand Mathematics Talent\\nExpansion Program (STEP)')", # Our Main Title
+    #     "set_font_color('483D8B')",
+    #     "set_font_size(32)",
+    #     'set_text_align("CENTER")',
+    #     "set_font(font_name='Arial Black')",
+
+    #     "add_text_box(110, 280, 500, 50, 'National Science Foundation Directorate for Education & Human Resources Division of Undergraduate Education (DUE)')", #our Subtitle Description
+    #     "set_font_color('2F4F4F')",
+    #     "set_word_wrap(True)",
+    #     "set_font_size(24)",
+    #     "set_font(font_name='Calibri')",
+
+    #     "add_text_box(210, 415, 300, 30, 'November 18, 2009')",
+    #     "set_text_align('CENTER')",
+    #     "set_font_color('696969')",
+    #     "set_font_size(18)",
+    #     "set_font(font_name='Calibri')"
+    # ]
+
+    # #分点解释类的ppt模板
+    # api_calls = [
+    #     "create_slide(6)",
+    #     "add_picture(0, 0, 720, 540, 'dataset/A modern, geometric design featuring a central rounded frame bordered by blocks of navy, pastel pink, and light blue.jpg')",
+    #     # --- Part 2: 添加和设置页面标题 ---
+    #     "add_text_box(80, 70, 560, 60, 'Some Guiding Principles (Water 2025)')",
+    #     "set_text_align('CENTER')",
+    #     "set_font_color('483D8B')",  # 与主标题颜色一致，保持视觉重点
+    #     "set_font_size(28)",
+    #     "set_font(font_name='Arial Black')",
+    #     # --- Part 3: 添加和设置分点介绍内容 ---
+    #     "add_text_box(100, 130, 520, 360, "
+    #     "'• Recognize and respect state, tribal, and federal water rights, contracts, and interstate compacts or decrees of the United States Supreme Court that allocate the right to use water.\\n\\n' "
+    #     "'• Maintain and modernize existing water facilities so they will continue to provide water and power.\\n\\n' "
+    #     "'• Enhance water conservation, use efficiency, and resource monitoring to allow existing water supplies to be used more effectively.\\n\\n')",
+    #     "set_text_align('LEFT')",
+    #     "set_word_wrap(True)",
+    #     "set_font_color('2F4F4F')", 
+    #     "set_font_size(22)",
+    #     "set_font(font_name='Calibri')"
+    # ]
+
+
+
+    # #图标+解释类的ppt模板
+    # api_calls = [
+    #     # --- Part 1: Set up the slide with the standard background ---
+    #     "create_slide(6)",
+    #     "add_picture(0, 0, 720, 540, 'dataset/A modern, geometric design featuring a central rounded frame bordered by blocks of navy, pastel pink, and light blue.jpg')",
+
+    #     # --- Part 2: Add the main image to the left side ---
+    #     # Centered vertically with generous padding around it
+    #     "add_picture(60, 70, 280, 400, 'dataset/extracted_images/5GLBKNRC3EXYC6UNLASJOTJJ7XBA7MA6/2/image_2_1.jpg')", # Replace with your image path
+
+    #     # --- Part 3: Add the title text box to the right ---
+    #     "add_text_box(380, 90, 280, 80, '“Tosoiba” - Land of sparkling waters')",
+    #     "set_word_wrap(True)",
+    #     "set_font_color('483D8B')",  # Primary color for emphasis
+    #     "set_font_size(32)",
+    #     "set_font(font_name='Arial Black')",
+        
+    #     # --- Part 4: Add the description text box below the title ---
+    #     "add_text_box(380, 240, 280, 150, 'Understanding the hydro-geology in and around Monsanto’s operations has been a key component of our business for decades now.')",
+    #     "set_word_wrap(True)",
+    #     "set_font_color('2F4F4F')",  # Secondary color for body text
+    #     "set_font_size(18)",
+    #     "set_font(font_name='Calibri')",
+    # ]
+
     api_calls = [
-        "create_slide(6)",
-        "add_picture(0, 0, 720, 540, 'dataset/Picture1.jpg')",
-        "add_text_box(60, 220, 600, 100, 'Your Title Over the Image')",
-        "set_font_color('66ccff')",
-        "set_font_size(44)",
-        "set_font(font_name='Arial Black')",
+    "create_slide(6)",
+    "add_picture(0, 0, 720, 540, 'dataset/A modern, geometric design featuring a central rounded frame bordered by blocks of navy, pastel pink, and light blue.jpg')",
+    # --- Part 2: Add and set the page title ---
+    "add_text_box(80, 70, 560, 60, 'Some Guiding Principles (Water 2025)')",
+    "set_text_align('CENTER')",
+    "set_font_color('483D8B')",  # Same color as the main title for visual emphasis
+    "set_font_size(28)",
+    "set_font(font_name='Arial Black')",
+    # --- Part 3: Add and set the bullet point content ---
+    "add_text_box(100, 130, 520, 360, "
+    "'• Recognize and respect state, tribal, and federal water rights, contracts, and interstate compacts or decrees of the United States Supreme Court that allocate the right to use water.\\n\\n' "
+    "'• Maintain and modernize existing water facilities so they will continue to provide water and power.\\n\\n' "
+    "'• Enhance water conservation, use efficiency, and resource monitoring to allow existing water supplies to be used more effectively.\\n\\n')",
+    "set_text_align('LEFT')",
+    "set_word_wrap(True)",
+    "set_font_color('2F4F4F')", 
+    "set_font_size(22)",
+    "set_font(font_name='Calibri')"
+]
 
-    ]
 
+    print(api_calls)
     success = generate_pptx(api_calls=api_calls, pptx_path=pptx_path, output_path=output_path)
 
     if success:

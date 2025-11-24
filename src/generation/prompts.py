@@ -147,7 +147,81 @@ QUERY_EXAMPLE = [
     "Generate slides from multimedia content, with the given information."
 ]
 
-Cot = True
+API_FUNCTIONS_TEMPLATES = {
+    "title template": [
+        "create_slide(6)",
+        "add_picture(0, 0, 720, 540, 'dataset/A modern, geometric design featuring a central rounded frame bordered by blocks of navy, pastel pink, and light blue.jpg')", # Background Image
+        "add_text_box(60, 160, 600, 100, 'Science, Technology, Engineering\\nand Mathematics Talent\\nExpansion Program (STEP)')", # Our Main Title
+        "set_font_color('483D8B')",
+        "set_font_size(32)",
+        'set_text_align("CENTER")',
+        "set_font(font_name='Arial Black')",
+
+        "add_text_box(110, 280, 500, 50, 'National Science Foundation Directorate for Education & Human Resources Division of Undergraduate Education (DUE)')", #our Subtitle Description
+        "set_font_color('2F4F4F')",
+        "set_word_wrap(True)",
+        "set_font_size(24)",
+        "set_font(font_name='Calibri')",
+
+        "add_text_box(210, 415, 300, 30, 'November 18, 2009')",
+        "set_text_align('CENTER')",
+        "set_font_color('696969')",
+        "set_font_size(18)",
+        "set_font(font_name='Calibri')"
+    ],
+    "bullet_points template":[
+        "create_slide(6)",
+        "add_picture(0, 0, 720, 540, 'dataset/A modern, geometric design featuring a central rounded frame bordered by blocks of navy, pastel pink, and light blue.jpg')",
+        # --- Part 2: Add and set the page title ---
+        "add_text_box(80, 70, 560, 60, 'Some Guiding Principles (Water 2025)')",
+        "set_text_align('CENTER')",
+        "set_font_color('483D8B')",  # Same color as the main title for visual emphasis
+        "set_font_size(28)",
+        "set_font(font_name='Arial Black')",
+        # --- Part 3: Add and set the bullet point content ---
+        "add_text_box(100, 130, 520, 360, "
+        "'• Recognize and respect state, tribal, and federal water rights, contracts, and interstate compacts or decrees of the United States Supreme Court that allocate the right to use water.\\n\\n' "
+        "'• Maintain and modernize existing water facilities so they will continue to provide water and power.\\n\\n' "
+        "'• Enhance water conservation, use efficiency, and resource monitoring to allow existing water supplies to be used more effectively.\\n\\n')",
+        "set_text_align('LEFT')",
+        "set_word_wrap(True)",
+        "set_font_color('2F4F4F')", 
+        "set_font_size(22)",
+        "set_font(font_name='Calibri')"
+    ],
+    "image_with_description template":[
+        # --- Part 1: Set up the slide with the standard background ---
+        "create_slide(6)",
+        "add_picture(0, 0, 720, 540, 'dataset/A modern, geometric design featuring a central rounded frame bordered by blocks of navy, pastel pink, and light blue.jpg')",
+        # --- Part 2: Add the main image to the left side ---
+        # Centered vertically with generous padding around it
+        "add_picture(60, 70, 280, 400, 'dataset/extracted_images/5GLBKNRC3EXYC6UNLASJOTJJ7XBA7MA6/2/image_2_1.jpg')", # Replace with your image path
+        # --- Part 3: Add the title text box to the right ---
+        "add_text_box(380, 90, 280, 80, '“Tosoiba” - Land of sparkling waters')",
+        "set_word_wrap(True)",
+        "set_font_color('483D8B')",  # Primary color for emphasis
+        "set_font_size(32)",
+        "set_font(font_name='Arial Black')",
+        # --- Part 4: Add the description text box below the title ---
+        "add_text_box(380, 240, 280, 150, 'Understanding the hydro-geology in and around Monsanto’s operations has been a key component of our business for decades now.')",
+        "set_word_wrap(True)",
+        "set_font_color('2F4F4F')",  # Secondary color for body text
+        "set_font_size(18)",
+        "set_font(font_name='Calibri')",
+    ]
+}
+
+BACKUP_NAME = {
+    "A modern, geometric design featuring a central rounded frame bordered by blocks of navy, pastel pink, and light blue.jpg",
+    "A clean, minimal border design depicting line art of various blue and white office and business-related items scattered around a central empty space.jpg",
+    "A minimalist, aesthetic background featuring abstract sage green shapes and delicate black line art of botanical elements.jpg",
+    "A modern and playful background featuring a central light grey area bordered by abstract blue liquid shapes and scattered geometric elements like circles, lines, and dots.jpg",
+    "An abstract and dynamic presentation template featuring a clean white background with a diagonal cluster of contrasting geometric shapes, lines, and dots in red, navy blue, and teal.jpg",
+    "Flat Simple Blue White Ppt Background.jpg",
+    "Watercolor textured blue background .jpg"
+}
+
+Cot = False
 
 # Default template directory path
 DEFAULT_TEMPLATE_DIR = Path(__file__).parent / "json_templates"
@@ -294,7 +368,7 @@ def build_prompt_for_text_to_slide(
         example_json_str_cot1 = json.dumps(GENERATION_EXAMPLES_COT1, indent=2)
         example_json_str_cot2 = json.dumps(GENERATION_EXAMPLES_COT2, indent=2)
         example_json_str_cot3 = json.dumps(GENERATION_EXAMPLES_COT3, indent=2)
-        design_guide = json.dumps(DESIGN_GUIDANCE, indent=2)
+        templates = json.dumps(API_FUNCTIONS_TEMPLATES, indent=2)
         prompt = ""
         prompt += f"{query}\n"
         prompt += get_api_list_prompt()
@@ -325,10 +399,13 @@ def build_prompt_for_text_to_slide(
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"Warning: Could not load slide layout examples: {e}")
         prompt += f"{divider}\n"
-        prompt += "The following are guidelines for slide design. Please generate the slide content based on these principles:\n"
-        prompt += f"{design_guide}\n\n"
+        prompt += "We have provided three PPT design templates below. Please use these as a direct guide for the generation process. You should work by directly modifying the content within a template's sequence of API calls, while preserving its overall structure and order:\n"
+        prompt += f"{templates}\n\n"
+        prompt += "Additionally, we have provided several background images that you can use. Their filenames are listed below. Note that all image files are in the dataset folder directory:\n"
+        prompt += f"{BACKUP_NAME}\n\n"
+        prompt += f"{divider}\n"
         prompt += f"Query: {query}\n"
-        prompt += "Answer:\n"
+        prompt += "Answer(JSON only, sanitized, without control characters):"
     else:
         prompt = ""
         prompt += f"{query}\n"
@@ -386,7 +463,7 @@ def build_prompt_for_screenshot_to_slide(
         example_json_str_cot1 = json.dumps(GENERATION_EXAMPLES_COT1, indent=2)
         example_json_str_cot2 = json.dumps(GENERATION_EXAMPLES_COT2, indent=2)
         example_json_str_cot3 = json.dumps(GENERATION_EXAMPLES_COT3, indent=2)
-        design_guide = json.dumps(DESIGN_GUIDANCE, indent=2)
+        templates = json.dumps(API_FUNCTIONS_TEMPLATES, indent=2)
         prompt = ""
         prompt += f"{query}\n"
         prompt += get_api_list_prompt()
@@ -419,10 +496,13 @@ def build_prompt_for_screenshot_to_slide(
             except (FileNotFoundError, json.JSONDecodeError) as e:
                 print(f"Warning: Could not load slide layout examples: {e}")
         prompt += f"{divider}\n"
-        prompt += "The following are guidelines for slide design. Please generate the slide content based on these principles:\n"
-        prompt += f"{design_guide}\n\n"
+        prompt += "We have provided three PPT design templates below. Please use these as a direct guide for the generation process. You should work by directly modifying the content within a template's sequence of API calls, while preserving its overall structure and order:\n"
+        prompt += f"{templates}\n\n"
+        prompt += "Additionally, we have provided several background images that you can use. Their filenames are listed below. Note that all image files are in the dataset folder directory:\n"
+        prompt += f"{BACKUP_NAME}\n\n"
+        prompt += f"{divider}\n"
         prompt += f"Query: {query}\n"
-        prompt += "Answer:\n"
+        prompt += "Answer(JSON only, sanitized, without control characters):"    
     else:
         prompt = ""
         prompt += f"{query}\n"
@@ -484,7 +564,7 @@ def build_prompt_for_multimedia_to_slide(
         example_json_str_cot1 = json.dumps(GENERATION_EXAMPLES_COT1, indent=2)
         example_json_str_cot2 = json.dumps(GENERATION_EXAMPLES_COT2, indent=2)
         example_json_str_cot3 = json.dumps(GENERATION_EXAMPLES_COT3, indent=2)
-        design_guide = json.dumps(DESIGN_GUIDANCE, indent=2)
+        templates = json.dumps(API_FUNCTIONS_TEMPLATES, indent=2)
         prompt = ""
         prompt += f"{query}\n"
         prompt += get_api_list_prompt()
@@ -521,10 +601,13 @@ def build_prompt_for_multimedia_to_slide(
             except (FileNotFoundError, json.JSONDecodeError) as e:
                 print(f"Warning: Could not load slide layout examples: {e}")
         prompt += f"{divider}\n"
-        prompt += "The following are guidelines for slide design. Please generate the slide content based on these principles:\n"
-        prompt += f"{design_guide}\n\n"
+        prompt += "We have provided three PPT design templates below. Please use these as a direct guide for the generation process. You should work by directly modifying the content within a template's sequence of API calls, while preserving its overall structure and order:\n"
+        prompt += f"{templates}\n\n"
+        prompt += "Additionally, we have provided several background images that you can use. Their filenames are listed below. Note that all image files are in the dataset folder directory:\n"
+        prompt += f"{BACKUP_NAME}\n\n"
+        prompt += f"{divider}\n"
         prompt += f"Query: {query}\n"
-        prompt += "Answer:\n"
+        prompt += "Answer(JSON only, sanitized, without control characters):"
     else:
         prompt = ""
         prompt += f"{query}\n"
@@ -590,7 +673,7 @@ def build_prompt_for_note_to_slide(
         example_json_str_cot1 = json.dumps(GENERATION_EXAMPLES_COT1, indent=2)
         example_json_str_cot2 = json.dumps(GENERATION_EXAMPLES_COT2, indent=2)
         example_json_str_cot3 = json.dumps(GENERATION_EXAMPLES_COT3, indent=2)
-        design_guide = json.dumps(DESIGN_GUIDANCE, indent=2)
+        templates = json.dumps(API_FUNCTIONS_TEMPLATES, indent=2)
         prompt = ""
         prompt += f"{query}\n"
         prompt += get_api_list_prompt()
@@ -625,10 +708,13 @@ def build_prompt_for_note_to_slide(
             except (FileNotFoundError, json.JSONDecodeError) as e:
                 print(f"Warning: Could not load slide layout examples: {e}")
         prompt += f"{divider}\n"
-        prompt += "The following are guidelines for slide design. Please generate the slide content based on these principles:\n"
-        prompt += f"{design_guide}\n\n"
+        prompt += "We have provided three PPT design templates below. Please use these as a direct guide for the generation process. You should work by directly modifying the content within a template's sequence of API calls, while preserving its overall structure and order:\n"
+        prompt += f"{templates}\n\n"
+        prompt += "Additionally, we have provided several background images that you can use. Their filenames are listed below. Note that all image files are in the dataset folder directory:\n"
+        prompt += f"{BACKUP_NAME}\n\n"
+        prompt += f"{divider}\n"
         prompt += f"Query: {query}\n"
-        prompt += "Answer:\n"
+        prompt += "Answer(JSON only, sanitized, without control characters):"
     else:
         prompt = ""
         prompt += f"{query}\n"

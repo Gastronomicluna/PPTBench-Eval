@@ -11,6 +11,8 @@ from pptx.shapes.base import BaseShape
 from pptx.shapes.picture import Picture
 from pptx.slide import Slide
 from pptx.util import Length, Pt
+from pptx.enum.text import PP_ALIGN
+from typing import Literal, Optional
 
 from .utils import api_in_list
 
@@ -492,6 +494,55 @@ def set_font_style(
         return None
     except Exception as e:
         return f"Failed to set font style of shape: {str(e)}"
+    
+def set_text_align(
+    align_style: Literal["CENTER", "LEFT", "RIGHT", "JUSTIFY"]
+) -> Optional[str]:
+    """
+    Set the horizontal alignment of the text in a shape.
+    
+    Args:
+        align_style: The alignment style to set.
+    """
+    try:
+        # 1. 映射字符串到 python-pptx 的枚举值
+        if align_style == "CENTER":
+            alignment = PP_ALIGN.CENTER
+        elif align_style == "LEFT":
+            alignment = PP_ALIGN.LEFT
+        elif align_style == "RIGHT":
+            alignment = PP_ALIGN.RIGHT
+        elif align_style == "JUSTIFY":
+            alignment = PP_ALIGN.JUSTIFY
+        else:
+            return f"Invalid alignment style: {align_style}"
+
+        # 2. 遍历所有段落并应用对齐
+        for paragraph in CURRENT_SHAPE.text_frame.paragraphs:
+            paragraph.alignment = alignment
+            
+        return None
+    except Exception as e:
+        return f"Failed to set text alignment: {str(e)}"
+    
+def set_word_wrap(
+    wrap: bool = True,
+) -> Optional[str]:
+    """为当前选定的形状设置文本的自动换行属性。
+
+    Args:
+        wrap: 设置为 True 以开启自动换行，设置为 False 以关闭。
+    """
+    global CURRENT_SHAPE
+    try:
+        # 首先检查当前形状是否支持文本框属性
+        if not hasattr(CURRENT_SHAPE, "text_frame"):
+            return "当前形状没有文本框，无法设置自动换行。"
+
+        CURRENT_SHAPE.text_frame.word_wrap = wrap
+        return None
+    except Exception as e:
+        return f"设置自动换行失败: {str(e)}"
 
 
 def set_font(

@@ -187,7 +187,7 @@ if __name__ == "__main__":
     output_csv_base_dir = "data/generation_results/scores"
     overwrite = True
     output = evaluate_df(
-        image_dir_model="gemini-2-0-flash",
+        image_dir_model="gpt-4o-2024-11-20",
         image_base_dir=image_base_dir,
         model_name=model_name,
         provider=provider,
