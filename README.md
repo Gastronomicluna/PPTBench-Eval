@@ -8,6 +8,21 @@ PPTBench is a benchmark for evaluating how Large Language Models (LLMs) perform 
 - **Dataset caching:** Built-in helpers download/cached benchmark data locally and verify versions when pulling from Hugging Face Hub.
 - **Parallel execution:** Task runners support configurable worker pools for faster multi-model evaluation.
 
+## 🌐 Dataset Access (Hugging Face Collection)
+
+All benchmark datasets used in PPTBench are publicly available on Hugging Face:
+
+👉 **Hugging Face Collection:**  
+**https://hf.co/collections/tyrionhuu/pptbench**
+
+This collection hosts:
+- PPTBench-Detection  
+- PPTBench-Understanding  
+- PPTBench-Modification  
+- PPTBench-Generation  
+
+Each task module automatically downloads/caches its required subset from this collection under the `data/` directory.
+
 ## Repository structure
 - `src/shared/`: Core utilities for dataset loading/saving, answer parsing, formatting (CSV/API), generic evaluation, and LLM client helpers.
 - `src/detection/`: Pipelines, prompts, and evaluators for PPT content detection tasks.
