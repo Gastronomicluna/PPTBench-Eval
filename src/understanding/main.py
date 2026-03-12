@@ -3,6 +3,7 @@ import logging
 import os
 import time
 from datetime import datetime
+from functools import partial
 from typing import Dict, Optional
 
 import pandas as pd
@@ -24,6 +25,9 @@ def main(
     job_delay: float = 0.5,
     pure_text: bool = False,  #只使用文本进行检测
     pure_picture: bool = False,  #只使用图片进行检测
+    openqa_mode: bool = False,  #使用OpenQA评测形式
+    judge_model: Optional[str] = None,  #OpenQA评判模型
+    judge_provider: Optional[str] = None,  #OpenQA评判模型提供商
 ) -> None:
     project_root = get_project_root()
 
@@ -57,6 +61,8 @@ def main(
         csv_suffix = f"-puretext.csv"
     elif pure_picture:
         csv_suffix = f"-purepicture.csv"
+    elif openqa_mode:
+        csv_suffix = f"-openqa.csv"
     else:
         csv_suffix = f".csv"
 
@@ -94,10 +100,15 @@ def main(
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {}
         for provider, model_name in models_to_run:
+            # 使用 partial 绑定 openqa_mode 参数，避免修改 process_model 签名
+            function_with_openqa = partial(
+                get_answers_understanding,
+                openqa_mode=openqa_mode,
+            )
             futures[
                 executor.submit(
                     process_model,
-                    function=get_answers_understanding,
+                    function=function_with_openqa,
                     df=df,
                     model_name=model_name,
                     provider=provider,
@@ -137,10 +148,38 @@ def main(
 
     # Judge answers and save to CSV
     for _, model_name in models_to_run:
-        results_df = judge_answer_df(
-            csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
-            overwrite=True,
-        )
+        if openqa_mode:
+            # OpenQA模式需要指定评判模型
+            if judge_model is None:
+                # 默认使用第一个可用的非当前测试模型作为评判器
+                available_judges = [m for p, m in models_to_run if m != model_name]
+                if available_judges:
+                    current_judge_model = available_judges[0]
+                    current_judge_provider = next(
+                        p for p, m in models_to_run if m == current_judge_model
+                    )
+                else:
+                    # 如果没有其他模型，使用同一个模型自评
+                    current_judge_model = model_name
+                    current_judge_provider = next(
+                        p for p, m in models_to_run if m == model_name
+                    )
+            else:
+                current_judge_model = judge_model
+                current_judge_provider = judge_provider or "ollama"
+            
+            results_df = judge_answer_df(
+                csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
+                overwrite=True,
+                openqa_mode=True,
+                judge_model=current_judge_model,
+                judge_provider=current_judge_provider,
+            )
+        else:
+            results_df = judge_answer_df(
+                csv_path=results_dir / f"{model_name.replace('.', '-')}{csv_suffix}",
+                overwrite=True,
+            )
         print(f"Judged {len(results_df)} entries")
 
     print("Evaluating answers...")
@@ -170,4 +209,7 @@ if __name__ == "__main__":
         job_delay=0.5,
         pure_text=False,
         pure_picture=False,
+        openqa_mode=True,  #设置为True启用OpenQA评测
+        judge_model="gemini-2.0-flash",  #OpenQA评判模型
+        judge_provider="api",  #OpenQA评判模型提供商
     )

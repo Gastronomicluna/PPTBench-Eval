@@ -164,8 +164,8 @@ def get_answer_single_detection(
             return {
                 "hash": row["hash"],
                 "file_hash": row.get("file_hash", ""),  # Add this field
-                "subcategory": row.get("subcategory", ""),
                 "task": row.get("task", ""),
+                "subcategory": row.get("subcategory", ""),
                 "json_data": row.get("json_data", ""),  # Add this field
                 "ground_truth": ground_truth,
                 "llm_answer": None,
@@ -177,8 +177,8 @@ def get_answer_single_detection(
             return {
                 "hash": row["hash"],
                 "file_hash": row.get("file_hash", ""),  # Add this field
-                "subcategory": row.get("subcategory", ""),
                 "task": row.get("task", ""),
+                "subcategory": row.get("subcategory", ""),
                 "json_data": row.get("json_data", ""),  # Add this field
                 "ground_truth": ground_truth,
                 "llm_answer": None,

@@ -10,7 +10,10 @@ import pandas as pd
 from ..shared.get_answers import get_answers
 from ..shared.llm import call_vision_model
 from ..shared.utils import get_image_bytes
-from .prompts import build_prompt
+from .prompts import build_openqa_prompt, build_prompt
+
+# 全局变量存储 openqa_mode 状态
+_openqa_mode = False
 
 
 def get_answers_understanding(
@@ -26,6 +29,7 @@ def get_answers_understanding(
     overwrite: bool = False,
     pure_text: bool = False,
     pure_picture: bool = False,  #只使用图片进行检测
+    openqa_mode: bool = False,
 ) -> pd.DataFrame:
     """
     Get the answer to a single description and return the result.
@@ -44,6 +48,9 @@ def get_answers_understanding(
     Returns:
         pd.DataFrame: DataFrame containing hash, ground_truth, and llm_answer.
     """
+    global _openqa_mode
+    _openqa_mode = openqa_mode
+
     if df.empty:
         logging.warning("Empty DataFrame provided, returning empty DataFrame")
         return pd.DataFrame()
@@ -98,6 +105,8 @@ def get_answer_single_understanding(
 
     while attempts <= max_attempts:
         try:
+            global _openqa_mode
+
             hash_value = row["hash"]
             file_hash = row["file_hash"]
             # subcategory = row["subcategory"]
@@ -112,11 +121,17 @@ def get_answer_single_understanding(
             # Extract image bytes from dictionary format
             image_bytes = get_image_bytes(image_data) if not pure_text else None
 
-            prompt = build_prompt(
-                question=question,
-                options=options,
-                slide_json=json_content,
-            )
+            if _openqa_mode:
+                prompt = build_openqa_prompt(
+                    question=question,
+                    slide_json=json_content,
+                )
+            else:
+                prompt = build_prompt(
+                    question=question,
+                    options=options,
+                    slide_json=json_content,
+                )
 
             kwargs = {
                 "model_name": model_name,
@@ -141,6 +156,8 @@ def get_answer_single_understanding(
                 "file_hash": file_hash,
                 # "subcategory": subcategory,
                 "task": task,
+                "question": question,
+                "options": row["options"] if "options" in row else None,
                 "ground_truth": ground_truth,
                 "llm_answer": llm_answer_str,
                 "error": None,
@@ -159,6 +176,8 @@ def get_answer_single_understanding(
                 "file_hash": file_hash,
                 # "subcategory": subcategory,
                 "task": row.get("task", ""),
+                "question": row.get("question", ""),
+                "options": row.get("options", None),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": None,
                 "error": str(e),
@@ -171,6 +190,8 @@ def get_answer_single_understanding(
                 "file_hash": file_hash,
                 # "subcategory": subcategory,
                 "task": row.get("task", ""),
+                "question": row.get("question", ""),
+                "options": row.get("options", None),
                 "ground_truth": row.get("ground_truth", ""),
                 "llm_answer": None,
                 "error": str(e),
